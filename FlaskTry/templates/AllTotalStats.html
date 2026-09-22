@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lab Statistics and Financial Analytics - Prosthetics Lab Management System">
+    <meta name="keywords" content="Lab Stats, Analytics, Financial Reports, Prosthetics Lab, Healthcare Management">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Lab Statistics & Analytics - Prosthetics Lab</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='AllTotalStats.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body>
+    <div class="animated-bg"></div>
+
+    <div class="page-container">
+        <header class="page-header">
+            <div class="header-content">
+                <a href="/HomePage" class="back-btn">
+                    <i class="fas fa-home"></i> Back to Menu
+                </a>
+                <div class="header-title">
+                    <h1><i class="fas fa-chart-pie"></i> Lab Statistics & Analytics</h1>
+                    <p>Comprehensive financial overview and performance metrics</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            {% if error %}
+            <div class="alert-container">
+                <div class="alert alert-error fade-in">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div class="alert-content">
+                        <h3>Error</h3>
+                        <p>{{ error }}</p>
+                    </div>
+                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if result %}
+            <div class="stats-section">
+                <div class="stats-message">
+                    <i class="fas fa-info-circle"></i>
+                    <p>{{ message }}</p>
+                </div>
+
+                <div class="summary-cards">
+                    {% set last_row = result[-1] %}
+                    <div class="summary-card total-profit">
+                        <div class="card-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Net Profit</h3>
+                            <p class="card-value {% if last_row[-1] > 0 %}positive{% elif last_row[-1] < 0 %}negative{% else %}neutral{% endif %}">
+                                {{ "{:,.2f}".format(last_row[-1]) }} DA
+                            </p>
+                            <span class="card-label">
+                                {% if last_row[-1] > 0 %}
+                                <i class="fas fa-arrow-up"></i> Profitable
+                                {% elif last_row[-1] < 0 %}
+                                <i class="fas fa-arrow-down"></i> Loss
+                                {% else %}
+                                <i class="fas fa-minus"></i> Break Even
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="summary-card khalsa-paid">
+                        <div class="card-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Paid (Khalsa)</h3>
+                            <p class="card-value">
+                                {{ "{:,.2f}".format(last_row[2] + last_row[4] + last_row[6] + last_row[8] + last_row[10]) }} DA
+                            </p>
+                            <span class="card-label">All payments received</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-card unpaid">
+                        <div class="card-icon">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Unpaid (Not Khalsa)</h3>
+                            <p class="card-value">
+                                {{ "{:,.2f}".format(last_row[3] + last_row[5] + last_row[7] + last_row[9] + last_row[11]) }} DA
+                            </p>
+                            <span class="card-label">Pending payments</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-card fade-in">
+                    <div class="table-header">
+                        <div class="header-left">
+                            <h2><i class="fas fa-table"></i> Monthly Financial Summary</h2>
+                            <span class="result-count">{{ result|length }} records</span>
+                        </div>
+                        <button class="export-btn" onclick="exportToCSV()">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                    </div>
+
+                    <div class="table-scroll">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th><span class="th-content">Month</span></th>
+                                    <th><span class="th-content">Year</span></th>
+
+                                    <th colspan="2" class="section-header patient-header">
+                                        <i class="fas fa-users"></i> Patients
+                                    </th>
+
+                                    <th colspan="2" class="section-header dentist-header">
+                                        <i class="fas fa-tooth"></i> Dentists
+                                    </th>
+
+                                    <th colspan="2" class="section-header pro-header">
+                                        <i class="fas fa-user-md"></i> Prosthetists
+                                    </th>
+
+                                    <th colspan="2" class="section-header inventory-header">
+                                        <i class="fas fa-boxes"></i> Inventory (Sel3a)
+                                    </th>
+
+                                    <th colspan="2" class="section-header others-header">
+                                        <i class="fas fa-ellipsis-h"></i> Others
+                                    </th>
+
+                                    <th><span class="th-content profit-header">💰 Net Profit</span></th>
+                                </tr>
+                                <tr class="sub-headers">
+                                    <th></th>
+                                    <th></th>
+                                    <th><span class="sub-header-text">Paid</span></th>
+                                    <th><span class="sub-header-text">Unpaid</span></th>
+                                    <th><span class="sub-header-text">Paid</span></th>
+                                    <th><span class="sub-header-text">Unpaid</span></th>
+                                    <th><span class="sub-header-text">Paid</span></th>
+                                    <th><span class="sub-header-text">Unpaid</span></th>
+                                    <th><span class="sub-header-text">Paid</span></th>
+                                    <th><span class="sub-header-text">Unpaid</span></th>
+                                    <th><span class="sub-header-text">Paid</span></th>
+                                    <th><span class="sub-header-text">Unpaid</span></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in result %}
+                                <tr class="table-row-animate {% if row[-1] > 0 %}profit-positive{% elif row[-1] < 0 %}profit-negative{% else %}profit-neutral{% endif %}">
+                                    <td class="month-cell"><strong>{{ row[0] }}</strong></td>
+                                    <td class="year-cell"><strong>{{ row[1] }}</strong></td>
+
+                                    <td class="paid-cell">{{ "{:,.0f}".format(row[2]) }}</td>
+                                    <td class="unpaid-cell">{{ "{:,.0f}".format(row[3]) }}</td>
+
+                                    <td class="paid-cell">{{ "{:,.0f}".format(row[4]) }}</td>
+                                    <td class="unpaid-cell">{{ "{:,.0f}".format(row[5]) }}</td>
+
+                                    <td class="paid-cell">{{ "{:,.0f}".format(row[6]) }}</td>
+                                    <td class="unpaid-cell">{{ "{:,.0f}".format(row[7]) }}</td>
+
+                                    <td class="paid-cell">{{ "{:,.0f}".format(row[8]) }}</td>
+                                    <td class="unpaid-cell">{{ "{:,.0f}".format(row[9]) }}</td>
+
+                                    <td class="paid-cell">{{ "{:,.0f}".format(row[10]) }}</td>
+                                    <td class="unpaid-cell">{{ "{:,.0f}".format(row[11]) }}</td>
+
+                                    <td class="profit-cell">
+                                        <span class="profit-badge {% if row[-1] > 0 %}positive{% elif row[-1] < 0 %}negative{% else %}neutral{% endif %}">
+                                            {{ "{:,.0f}".format(row[-1]) }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-footer">
+                        <div class="footer-info">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Scroll right to see all columns • All amounts in DA (Algerian Dinars)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insights-section">
+                    <div class="insight-card">
+                        <div class="insight-icon patient">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h3>Patient Revenue</h3>
+                            <p class="insight-value">
+                                {{ "{:,.0f}".format(result[-1][2] + result[-1][3]) }} DA
+                            </p>
+                            <span class="insight-status">From patient services</span>
+                        </div>
+                    </div>
+
+                    <div class="insight-card">
+                        <div class="insight-icon dentist">
+                            <i class="fas fa-tooth"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h3>Dentist Revenue</h3>
+                            <p class="insight-value">
+                                {{ "{:,.0f}".format(result[-1][4] + result[-1][5]) }} DA
+                            </p>
+                            <span class="insight-status">From dentist services</span>
+                        </div>
+                    </div>
+
+                    <div class="insight-card">
+                        <div class="insight-icon pro">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h3>Prosthetist Revenue</h3>
+                            <p class="insight-value">
+                                {{ "{:,.0f}".format(result[-1][6] + result[-1][7]) }} DA
+                            </p>
+                            <span class="insight-status">From prosthetist services</span>
+                        </div>
+                    </div>
+
+                    <div class="insight-card">
+                        <div class="insight-icon inventory">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h3>Inventory Revenue</h3>
+                            <p class="insight-value">
+                                {{ "{:,.0f}".format(result[-1][8] + result[-1][9]) }} DA
+                            </p>
+                            <span class="insight-status">From inventory sales</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h2>No Statistics Available</h2>
+                <p>There are no lab statistics to display yet. Data will appear once services are recorded.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Export table to CSV
+        function exportToCSV() {
+            const table = document.querySelector('.data-table');
+            if(!table) return;
+            const rows = Array.from(table.querySelectorAll('tr'));
+            let csv = [];
+
+            rows.forEach(row => {
+                const cells = Array.from(row.querySelectorAll('th, td'));
+                const rowData = cells.map(cell => `"${cell.textContent.trim()}"`).join(',');
+                csv.push(rowData);
+            });
+
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Lab-Statistics-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        // Ripple effect for buttons
+        function createRipple(e) {
+            const button = e.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+
+            button.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        }
+
+        // Add ripple effect to buttons
+        document.querySelectorAll('.back-btn, .export-btn').forEach(item => {
+            item.addEventListener('click', function(e) {
+                createRipple(e);
+            });
+        });
+
+        // Auto-scroll to table on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const table = document.querySelector('.table-card');
+            if (table) {
+                setTimeout(() => {
+                    table.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+        });
+
+        // Close alert on button click
+        document.querySelectorAll('.alert-close').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.closest('.alert-container').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+
+</html>

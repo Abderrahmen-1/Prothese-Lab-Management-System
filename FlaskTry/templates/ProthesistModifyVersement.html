@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Prothesist Management System - Modify Versement">
+    <meta name="keywords" content="Prothesist, Prosthetics, Versement, Lab Management, Flask">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Modify Versement - Prothesist Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaProFile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='ProthesistModifyVersement.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+
+{% if message %}
+<p>{{ message }}</p>
+{% endif %}
+
+<div class="animated-bg"></div>
+
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-tooth"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>ProLab Hub</h1>
+                    <p>Prosthetics Lab Management System</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="/ProKhedma" class="nav-btn back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Prothesist
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Modify Versement</h2>
+                <div class="header-accent"></div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <div class="menu-group">
+                    <h3 class="group-title">Navigation</h3>
+                    <a href="/ProAllkhedma" class="menu-item all-item">
+                        <i class="fas fa-list-alt"></i>
+                        <span>All Khedma</span>
+                    </a>
+                    <a href="/ProKhedma" class="menu-item get-item">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Main</span>
+                    </a>
+                </div>
+
+                <div class="menu-group">
+                    <h3 class="group-title">Form Info</h3>
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i>
+                        <div class="info-content">
+                            <p><strong>Khedma Source:</strong> Select either "patient" or "dentist"</p>
+                            <p><strong>Versement:</strong> The payment amount to modify</p>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Welcome Section -->
+            <div class="form-header">
+                <div class="form-header-icon">
+                    <i class="fas fa-pencil-alt"></i>
+                </div>
+                <div class="form-header-content">
+                    <h1>Modify Versement</h1>
+                    <p>Update payment information for prothesist services</p>
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <div class="form-container">
+                <form action="/ProModifyVersement" method="POST" class="modify-form" id="modifyVersementForm">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                    <!-- Prothesist Information Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <i class="fas fa-user-circle"></i>
+                            <h2>Prothesist Information</h2>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ProthesistName">
+                                <i class="fas fa-user"></i> Prothesist Name
+                                <span class="required">*</span>
+                            </label>
+                            <input
+                                    type="text"
+                                    id="ProthesistName"
+                                    name="ProthesistName"
+                                    placeholder="Enter the prothesist name"
+                                    required
+                                    class="form-input"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ProthesistNumber">
+                                <i class="fas fa-id-card"></i> Prothesist Number
+                                <span class="required">*</span>
+                            </label>
+                            <input
+                                    type="text"
+                                    id="ProthesistNumber"
+                                    name="ProthesistNumber"
+                                    placeholder="Enter the prothesist number"
+                                    required
+                                    class="form-input"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Khedma Source Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <i class="fas fa-list"></i>
+                            <h2>Khedma Information</h2>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="KhedmaSource">
+                                <i class="fas fa-layer-group"></i> Khedma Source
+                                <span class="required">*</span>
+                            </label>
+                            <div class="select-wrapper">
+                                <select
+                                        id="KhedmaSource"
+                                        name="khedmaSource"
+                                        required
+                                        class="form-select"
+                                        onchange="handleSourceChange()"
+                                >
+                                    <option value="">-- Select Source --</option>
+                                    <option value="patient">Patient</option>
+                                    <option value="dentist">Dentist</option>
+                                </select>
+                                <span class="select-icon">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </span>
+                            </div>
+                        </div>
+
+                        <!-- Patient Source Section -->
+                        <div id="PatientSource" class="source-section hidden">
+                            <div class="form-group">
+                                <label for="PatientNumber">
+                                    <i class="fas fa-hospital-user"></i> Patient Number
+                                    <span class="required">*</span>
+                                </label>
+                                <input
+                                        type="text"
+                                        id="PatientNumber"
+                                        name="PatientNumber"
+                                        placeholder="Enter the patient number"
+                                        class="form-input"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="PatientKhedmaName">
+                                    <i class="fas fa-briefcase"></i> Service ID
+                                    <span class="required">*</span>
+                                </label>
+                                <input
+                                        type="text"
+                                        id="PatientKhedmaName"
+                                        name="ServiceID"
+                                        placeholder="You find it in the first column of the patient-history table"
+                                        class="form-input"
+                                >
+                            </div>
+
+                        </div>
+
+                        <!-- Dentist Source Section -->
+                        <div id="DentistSource" class="source-section hidden">
+                            <div class="form-group">
+                                <label for="DentistName">
+                                    <i class="fas fa-user-md"></i> Dentist Name
+                                    <span class="required">*</span>
+                                </label>
+                                <input
+                                        type="text"
+                                        id="DentistName"
+                                        name="DentistName"
+                                        placeholder="Enter the dentist name"
+                                        class="form-input"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="DentistNumber">
+                                    <i class="fas fa-id-badge"></i> Khedma Number (ID)
+                                    <span class="required">*</span>
+                                </label>
+                                <input
+                                        type="text"
+                                        id="DentistNumber"
+                                        name="DentistNumber"
+                                        placeholder="Enter the Khedma number (ID)"
+                                        class="form-input"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="DentistKhedmaName">
+                                    <i class="fas fa-briefcase"></i> Khedma ID
+                                    <span class="required">*</span>
+                                </label>
+                                <input
+                                        type="text"
+                                        id="DentistKhedmaName"
+                                        name="DServiceID"
+                                        placeholder="You can find it in the first column from the dentists-history"
+                                        class="form-input"
+                                >
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Versement Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <h2>Payment Information</h2>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="VersaValue">
+                                <i class="fas fa-coins"></i> Versement Amount
+                                <span class="required">*</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input
+                                        type="number"
+                                        id="VersaValue"
+                                        name="VersaValue"
+                                        placeholder="Enter the amount to add"
+                                        required
+                                        step="0.01"
+                                        min="0"
+                                        class="form-input currency-input"
+                                >
+                                <span class="input-suffix">DZD</span>
+                            </div>
+                            <small class="form-help">Enter the payment amount you want to add or modify</small>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="reset" class="btn btn-secondary">
+                            <i class="fas fa-redo"></i> Clear Form
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i> Confirm Modification
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="info-cards-section">
+                <div class="info-card success-card">
+                    <div class="card-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Tip</h3>
+                        <p>Ensure all information is accurate before confirming the modification</p>
+                    </div>
+                </div>
+
+                <div class="info-card info-card-blue">
+                    <div class="card-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Data Security</h3>
+                        <p>All modifications are logged and can be audited for compliance</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script>
+    // Handle source change
+    function handleSourceChange() {
+        const source = document.getElementById('KhedmaSource').value.toLowerCase();
+        const patientSection = document.getElementById('PatientSource');
+        const dentistSection = document.getElementById('DentistSource');
+
+        // Reset sections
+        patientSection.classList.add('hidden');
+        dentistSection.classList.add('hidden');
+
+        // Clear inputs
+        document.getElementById('PatientNumber').value = '';
+        document.getElementById('DentistName').value = '';
+        document.getElementById('DentistNumber').value = '';
+
+        // Show appropriate section
+        if (source === 'patient') {
+            patientSection.classList.remove('hidden');
+            document.getElementById('PatientNumber').focus();
+        } else if (source === 'dentist') {
+            dentistSection.classList.remove('hidden');
+            document.getElementById('DentistName').focus();
+        }
+    }
+
+    // Form validation
+    document.getElementById('modifyVersementForm').addEventListener('submit', function(e) {
+        const source = document.getElementById('KhedmaSource').value;
+
+        if (!source) {
+            e.preventDefault();
+            alert('Please select a Khedma source');
+            return false;
+        }
+
+        if (source === 'patient' && !document.getElementById('PatientNumber').value) {
+            e.preventDefault();
+            alert('Please enter the patient number');
+            return false;
+        }
+
+        if (source === 'dentist') {
+            if (!document.getElementById('DentistName').value) {
+                e.preventDefault();
+                alert('Please enter the dentist name');
+                return false;
+            }
+            if (!document.getElementById('DentistNumber').value) {
+                e.preventDefault();
+                alert('Please enter the khedma number');
+                return false;
+            }
+        }
+
+        // Show success feedback
+        const formData = new FormData(this);
+        console.log('Form submitted with data:', Object.fromEntries(formData));
+    });
+
+    // Input formatting
+    document.getElementById('VersaValue').addEventListener('input', function(e) {
+        if (this.value < 0) {
+            this.value = 0;
+        }
+    });
+
+    // Add ripple effect to buttons
+    function createRipple(e) {
+        const button = e.currentTarget;
+        const ripple = document.createElement('span');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.classList.add('ripple');
+
+        button.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    }
+
+    document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('click', createRipple);
+    });
+</script>
+
+</body>
+
+</html>

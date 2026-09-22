@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Service Registration Form">
+    <meta name="keywords" content="Service, Form, Management, Flask">
+    <meta name="author" content="Services Management Team">
+    <title>Add New Service</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='AddService.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="animated-bg"></div>
+
+<div class="container">
+    <header class="header">
+        <div class="header-glow"></div>
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-file-circle-plus"></i>
+                    <div class="logo-ring"></div>
+                </div>
+                <div class="logo-text">
+                    <h1>New Service</h1>
+                    <p>Service Registration Form</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="/OtherServices" class="nav-btn back-btn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    {% if error %}
+    <div class="alert-container">
+        <div class="alert alert-error fade-in-slow">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div class="alert-content">
+                <h3>Error</h3>
+                <p>{{ error }}</p>
+            </div>
+            <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if message %}
+    <div class="alert-container">
+        <div class="alert alert-success fade-in-slow">
+            <i class="fas fa-check-circle"></i>
+            <div class="alert-content">
+                <h3>Success</h3>
+                <p>{{ message }}</p>
+            </div>
+            <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="form-container">
+        <div class="form-card">
+            <div class="form-header">
+                <h2><i class="fas fa-pen-to-square"></i> Register New Service</h2>
+                <p>Fill in the details below to add a new service to the system</p>
+            </div>
+
+            <form action="/AddService" method="POST" class="service-form" id="serviceForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                <div class="form-group" style="animation-delay: 0.1s">
+                    <label for="ServiceName" class="form-label">
+                        <span class="label-text">Service Provider Name</span>
+                        <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input
+                            type="text"
+                            id="ServiceName"
+                            name="ServiceName"
+                            placeholder="Enter the service provider's name"
+                            required
+                            class="form-input"
+                        >
+                    </div>
+                    <span class="input-hint">Full name of the service provider</span>
+                </div>
+
+                <div class="form-group" style="animation-delay: 0.15s">
+                    <label for="ServiceNumber" class="form-label">
+                        <span class="label-text">Phone Number</span>
+                        <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-phone"></i>
+                        <input
+                            type="tel"
+                            id="ServiceNumber"
+                            name="ServiceNumber"
+                            placeholder="Enter phone number"
+                            required
+                            class="form-input"
+                        >
+                    </div>
+                    <span class="input-hint">Contact number for the service provider</span>
+                </div>
+
+                <div class="form-group" style="animation-delay: 0.2s">
+                    <label for="ServiceFunction" class="form-label">
+                        <span class="label-text">Service Type</span>
+                        <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-briefcase"></i>
+                        <input
+                            type="text"
+                            id="ServiceFunction"
+                            name="ServiceFunction"
+                            placeholder="e.g., Cleaning, Driver, Maintenance"
+                            required
+                            class="form-input"
+                        >
+                    </div>
+                    <span class="input-hint">Type of service provided</span>
+                </div>
+
+                <div class="form-group" style="animation-delay: 0.25s">
+                    <label for="ServiceDate" class="form-label">
+                        <span class="label-text">Service Date</span>
+                        <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-calendar"></i>
+                        <input
+                            type="date"
+                            id="ServiceDate"
+                            name="ServiceDate"
+                            required
+                            class="form-input"
+                        >
+                    </div>
+                    <span class="input-hint">When the service is scheduled</span>
+                </div>
+
+                <div class="form-group" style="animation-delay: 0.3s">
+                    <label for="ServicePrice" class="form-label">
+                        <span class="label-text">Service Price</span>
+                        <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-dollar-sign"></i>
+                        <input
+                            type="number"
+                            id="ServicePrice"
+                            name="ServicePrice"
+                            placeholder="Enter the service price"
+                            required
+                            step="0.01"
+                            min="0"
+                            class="form-input"
+                        >
+                    </div>
+                    <span class="input-hint">Total service cost</span>
+                </div>
+
+                <div class="form-group" style="animation-delay: 0.35s">
+                    <label for="ServiceKhalsa" class="form-label">
+                        <span class="label-text">Payment Status</span>
+                        <span class="required">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-credit-card"></i>
+                        <select
+                            id="ServiceKhalsa"
+                            name="ServiceKhalsa"
+                            oninput="handleKhalsaChange()"
+                            required
+                            class="form-input form-select"
+                        >
+                            <option value="">-- Select Payment Status --</option>
+                            <option value="yes">Khalsa (Fully Paid)</option>
+                            <option value="no">Not Khalsa (Pending Payment)</option>
+                        </select>
+                    </div>
+                    <span class="input-hint">Is the service fully paid or pending?</span>
+                </div>
+
+                <div id="VersaGroup" class="form-group conditional-group" style="display: none; animation-delay: 0.4s">
+                    <label for="ServiceVersa" class="form-label">
+                        <span class="label-text">Advance Payment Made?</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-hand-holding-dollar"></i>
+                        <select
+                            id="ServiceVersa"
+                            name="ServiceVersa"
+                            oninput="handleVersaChange()"
+                            class="form-input form-select"
+                        >
+                            <option value="">-- Select --</option>
+                            <option value="yes">Yes (Advance Paid)</option>
+                            <option value="no">No (No Advance)</option>
+                        </select>
+                    </div>
+                    <span class="input-hint">Has an advance payment been made?</span>
+                </div>
+
+                <div id="PriceGroup" class="form-group conditional-group" style="display: none; animation-delay: 0.45s">
+                    <label for="VersaService" class="form-label">
+                        <span class="label-text">Advance Amount</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-coins"></i>
+                        <input
+                            type="number"
+                            id="VersaService"
+                            name="VersaService"
+                            placeholder="Enter advance payment amount"
+                            step="0.01"
+                            min="0"
+                            class="form-input"
+                        >
+                    </div>
+                    <span class="input-hint">Amount of advance payment received</span>
+                </div>
+
+                <div class="form-actions" style="animation-delay: 0.5s">
+                    <button type="reset" class="btn btn-secondary">
+                        <i class="fas fa-rotate-left"></i> Clear
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Confirm & Add Service
+                    </button>
+                </div>
+
+                <div class="form-info" style="animation-delay: 0.55s">
+                    <i class="fas fa-info-circle"></i>
+                    <p>All fields marked with <span class="required">*</span> are required. Make sure all information is accurate before submitting.</p>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Handle Khalsa (Payment Status) change
+    function handleKhalsaChange() {
+        const khalsaValue = document.getElementById("ServiceKhalsa").value.toLowerCase();
+        const versaGroup = document.getElementById("VersaGroup");
+        const priceGroup = document.getElementById("PriceGroup");
+
+        if (khalsaValue === "no") {
+            versaGroup.style.display = "block";
+            versaGroup.classList.add('slide-in');
+        } else {
+            versaGroup.style.display = "none";
+            priceGroup.style.display = "none";
+            document.getElementById("ServiceVersa").value = "";
+            document.getElementById("VersaService").value = "";
+        }
+    }
+
+    // Handle Versa (Advance Payment) change
+    function handleVersaChange() {
+        const versaValue = document.getElementById("ServiceVersa").value.toLowerCase();
+        const priceGroup = document.getElementById("PriceGroup");
+
+        if (versaValue === "yes") {
+            priceGroup.style.display = "block";
+            priceGroup.classList.add('slide-in');
+        } else {
+            priceGroup.style.display = "none";
+            document.getElementById("VersaService").value = "";
+        }
+    }
+
+    // Form validation and submission
+    document.getElementById("serviceForm").addEventListener("submit", function(e) {
+        const khalsa = document.getElementById("ServiceKhalsa").value;
+
+        if (!khalsa) {
+            e.preventDefault();
+            showNotification("Please select a payment status", "error");
+            return false;
+        }
+
+        // Add loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        submitBtn.disabled = true;
+
+        setTimeout(() => {
+            this.submit();
+        }, 500);
+    });
+
+    // Show notification function
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <i class="fas fa-${type === 'error' ? 'circle-exclamation' : 'circle-check'}"></i>
+            <span>${message}</span>
+        `;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    // Set today's date as default
+    document.getElementById("ServiceDate").valueAsDate = new Date();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="All Khedma - Complete Work Registry for Prosthetics Lab">
+    <meta name="keywords" content="Prosthetics, Work Management, Khedma Registry">
+    <title>All Khedma - Prosthetics Lab Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='ALLKhedma.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="animated-bg"></div>
+
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>All Khedma</h1>
+                    <p>Complete Work Registry</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="/Khedma" class="nav-btn back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Khedma
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>View Options</h2>
+                <div class="header-accent"></div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <!-- Filter Group -->
+                <div class="menu-group">
+                    <h3 class="group-title">📋 Display Modes</h3>
+
+                    <a href="javascript:void(0);" onclick="ShowMainKhedmaTable(); return false;"
+                       class="menu-item active-item" data-table="MainTable">
+                        <i class="fas fa-th"></i>
+                        <span>Main Table</span>
+                        <span class="badge badge-primary">All</span>
+                    </a>
+
+                    <a href="javascript:void(0);" onclick="Show_Ordered_Khedma_TableASC(); return false;"
+                       class="menu-item asc-item" data-table="ASCTable">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Oldest First</span>
+                        <span class="badge badge-info">📅</span>
+                    </a>
+
+                    <a href="javascript:void(0);" onclick="Show_Ordered_Khedma_TableDESC(); return false;"
+                       class="menu-item desc-item" data-table="DESCTable">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>Newest First</span>
+                        <span class="badge badge-warning">📅</span>
+                    </a>
+
+                    <a href="javascript:void(0);" onclick="Show_Ordered_Khedma_TableDeadLine(); return false;"
+                       class="menu-item deadline-item" data-table="DeadLineTable">
+                        <i class="fas fa-calendar-exclamation"></i>
+                        <span>By Deadline</span>
+                        <span class="badge badge-danger">⏰</span>
+                    </a>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="menu-group">
+                    <h3 class="group-title">📊 Statistics</h3>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-list-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Total Items</p>
+                            <p class="stat-value" id="totalItems">--</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="menu-group">
+                    <h3 class="group-title">🔗 Navigation</h3>
+                    <a href="/Khedma" class="menu-item nav-back-item">
+                        <i class="fas fa-home"></i>
+                        <span>Back to Khedma</span>
+                    </a>
+                    <a href="/HomePage" class="menu-item nav-home-item">
+                        <i class="fas fa-house"></i>
+                        <span>Main Menu</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h2 class="hero-title">
+                            <span class="title-icon">📊</span>
+                            Complete Work Registry
+                        </h2>
+                        <p class="hero-description">
+                            Access all work items in your prosthetics laboratory. Sort by date, deadline, or status to
+                            find exactly what you need.
+                        </p>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="floating-shape shape-1"></div>
+                        <div class="floating-shape shape-2"></div>
+                        <i class="fas fa-folder-open hero-icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Display Area -->
+            <div class="display-area">
+                <!-- Main Table Container -->
+                <div class="table-container" id="MainTable"
+                     style="display: {% if result %}block{% else %}none{% endif %};">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <i class="fas fa-table"></i>
+                            <h3>Main Registry</h3>
+                        </div>
+                        <div class="table-info">
+                            <span class="info-badge">All Items</span>
+                        </div>
+                    </div>
+                    {% if result %}
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><i class="fas fa-id-card"></i>Service ID</th>
+                                <th><i class="fas fa-teeth"></i>Service Type</th>
+                                <th><i class="fas fa-user-md"></i>Dentist Name</th>
+                                <th><i class="fas fa-hashtag"></i>Patient Number</th>
+                                <th><i class="fas fa-dollar-sign"></i>Price</th>
+                                <th><i class="fas fa-money-bill-wave"></i>Payed?</th>
+                                <th><i class="fas fa-calendar-alt"></i>Enter Date</th>
+                                <th><i class="fas fa-check-circle"></i>Finished?</th>
+                                <th><i class="fas fa-user-ninja"></i>Prothesist Name</th>
+                                <th><i class="fas fa-phone"></i>Prothesist Number</th>
+                                <th><i class="fas fa-calendar-check"></i> DeadLine</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in result %}
+                            <tr class="table-row" style="animation-delay: {{ loop.index * 0.05 }}s;">
+                                <td><span class="cell-content">{{ row[0] }}</span></td>
+                                <td><span class="cell-content">{{ row[2] }}</span></td>
+                                <td><span class="cell-content">{{ row[3] }}</span></td>
+                                <td><span class="cell-content">{{ row[4] }}</span></td>
+                                <td><span class="cell-content">{{ row[5] }}</span></td>
+                                <td><span class="cell-content">{{ row[6] }}</span></td>
+                                <td><span class="cell-content">{{ row[7] }}</span></td>
+                                <td><span class="cell-content">{{ row[8] }}</span></td>
+                                <td><span class="cell-content">{{ row[9] }}</span></td>
+                                <td><span class="cell-content">{{ row[10] }}</span></td>
+                                <td><span class="cell-content">{{ row[11] }}</span></td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-table">
+                        <i class="fas fa-inbox"></i>
+                        <p>No data available</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Oldest to Newest Table -->
+                <div class="table-container" id="ASCTable" style="display: {% if asc %}block{% else %}none{% endif %};">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <i class="fas fa-arrow-up"></i>
+                            <h3>Ordered: Oldest to Newest</h3>
+                        </div>
+                        <div class="table-info">
+                            <span class="info-badge info-asc">Sorted by Date</span>
+                        </div>
+                    </div>
+                    {% if asc %}
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><i class="fas fa-id-card"></i>Service ID</th>
+                                <th><i class="fas fa-teeth"></i>Service Type</th>
+                                <th><i class="fas fa-user-md"></i>Dentist Name</th>
+                                <th><i class="fas fa-hashtag"></i>Patient Number</th>
+                                <th><i class="fas fa-dollar-sign"></i>Price</th>
+                                <th><i class="fas fa-money-bill-wave"></i>Payed?</th>
+                                <th><i class="fas fa-calendar-alt"></i>Enter Date</th>
+                                <th><i class="fas fa-check-circle"></i>Finished?</th>
+                                <th><i class="fas fa-user-ninja"></i>Prothesist Name</th>
+                                <th><i class="fas fa-phone"></i>Prothesist Number</th>
+                                <th><i class="fas fa-calendar-check"></i> DeadLine</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in asc %}
+                            <tr class="table-row" style="animation-delay: {{ loop.index * 0.05 }}s;">
+                                <td><span class="cell-content">{{ row[0] }}</span></td>
+                                <td><span class="cell-content">{{ row[2] }}</span></td>
+                                <td><span class="cell-content">{{ row[3] }}</span></td>
+                                <td><span class="cell-content">{{ row[4] }}</span></td>
+                                <td><span class="cell-content">{{ row[5] }}</span></td>
+                                <td><span class="cell-content">{{ row[6] }}</span></td>
+                                <td><span class="cell-content">{{ row[7] }}</span></td>
+                                <td><span class="cell-content">{{ row[8] }}</span></td>
+                                <td><span class="cell-content">{{ row[9] }}</span></td>
+                                <td><span class="cell-content">{{ row[10] }}</span></td>
+                                <td><span class="cell-content">{{ row[11] }}</span></td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-table">
+                        <i class="fas fa-inbox"></i>
+                        <p>No data available</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Newest to Oldest Table -->
+                <div class="table-container" id="DESCTable"
+                     style="display: {% if desc %}block{% else %}none{% endif %};">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <i class="fas fa-arrow-down"></i>
+                            <h3>Ordered: Newest to Oldest</h3>
+                        </div>
+                        <div class="table-info">
+                            <span class="info-badge info-desc">Sorted by Date</span>
+                        </div>
+                    </div>
+                    {% if desc %}
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><i class="fas fa-id-card"></i>Service ID</th>
+                                <th><i class="fas fa-teeth"></i>Service Type</th>
+                                <th><i class="fas fa-user-md"></i>Dentist Name</th>
+                                <th><i class="fas fa-hashtag"></i>Patient Number</th>
+                                <th><i class="fas fa-dollar-sign"></i>Price</th>
+                                <th><i class="fas fa-money-bill-wave"></i>Payed?</th>
+                                <th><i class="fas fa-calendar-alt"></i>Enter Date</th>
+                                <th><i class="fas fa-check-circle"></i>Finished?</th>
+                                <th><i class="fas fa-user-ninja"></i>Prothesist Name</th>
+                                <th><i class="fas fa-phone"></i>Prothesist Number</th>
+                                <th><i class="fas fa-calendar-check"></i> DeadLine</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in desc %}
+                            <tr class="table-row" style="animation-delay: {{ loop.index * 0.05 }}s;">
+                                <td><span class="cell-content">{{ row[0] }}</span></td>
+                                <td><span class="cell-content">{{ row[2] }}</span></td>
+                                <td><span class="cell-content">{{ row[3] }}</span></td>
+                                <td><span class="cell-content">{{ row[4] }}</span></td>
+                                <td><span class="cell-content">{{ row[5] }}</span></td>
+                                <td><span class="cell-content">{{ row[6] }}</span></td>
+                                <td><span class="cell-content">{{ row[7] }}</span></td>
+                                <td><span class="cell-content">{{ row[8] }}</span></td>
+                                <td><span class="cell-content">{{ row[9] }}</span></td>
+                                <td><span class="cell-content">{{ row[10] }}</span></td>
+                                <td><span class="cell-content">{{ row[11] }}</span></td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-table">
+                        <i class="fas fa-inbox"></i>
+                        <p>No data available</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Deadline Table -->
+                <div class="table-container" id="DeadLineTable"
+                     style="display: {% if DeadLine %}block{% else %}none{% endif %};">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <i class="fas fa-calendar-exclamation"></i>
+                            <h3>Ordered by Deadline</h3>
+                        </div>
+                        <div class="table-info">
+                            <span class="info-badge info-deadline">Urgent First</span>
+                        </div>
+                    </div>
+                    {% if DeadLine %}
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><i class="fas fa-id-card"></i>Service ID</th>
+                                <th><i class="fas fa-teeth"></i>Service Type</th>
+                                <th><i class="fas fa-user-md"></i>Dentist Name</th>
+                                <th><i class="fas fa-hashtag"></i>Patient Number</th>
+                                <th><i class="fas fa-dollar-sign"></i>Price</th>
+                                <th><i class="fas fa-money-bill-wave"></i>Payed?</th>
+                                <th><i class="fas fa-calendar-alt"></i>Enter Date</th>
+                                <th><i class="fas fa-check-circle"></i>Finished?</th>
+                                <th><i class="fas fa-user-ninja"></i>Prothesist Name</th>
+                                <th><i class="fas fa-phone"></i>Prothesist Number</th>
+                                <th><i class="fas fa-calendar-check"></i> DeadLine</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in DeadLine %}
+                            <tr class="table-row" style="animation-delay: {{ loop.index * 0.05 }}s;">
+                                <td><span class="cell-content">{{ row[0] }}</span></td>
+                                <td><span class="cell-content">{{ row[2] }}</span></td>
+                                <td><span class="cell-content">{{ row[3] }}</span></td>
+                                <td><span class="cell-content">{{ row[4] }}</span></td>
+                                <td><span class="cell-content">{{ row[5] }}</span></td>
+                                <td><span class="cell-content">{{ row[6] }}</span></td>
+                                <td><span class="cell-content">{{ row[7] }}</span></td>
+                                <td><span class="cell-content">{{ row[8] }}</span></td>
+                                <td><span class="cell-content">{{ row[9] }}</span></td>
+                                <td><span class="cell-content">{{ row[10] }}</span></td>
+                                <td><span class="cell-content">{{ row[11] }}</span></td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-table">
+                        <i class="fas fa-inbox"></i>
+                        <p>No data available</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- No Data State -->
+                {% if not result and not asc and not desc and not DeadLine %}
+                <div class="no-data-container">
+                    <div class="no-data-icon">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <h2>No Information Available</h2>
+                    <p>Please select a display mode from the sidebar to get started</p>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // Show Main Table
+    function ShowMainKhedmaTable() {
+        switchTable('MainTable');
+        updateActiveButton('MainTable');
+        updateTotalItems();
+    }
+
+    // Show Oldest to Newest
+    function Show_Ordered_Khedma_TableASC() {
+        switchTable('ASCTable');
+        updateActiveButton('ASCTable');
+        updateTotalItems();
+    }
+
+    // Show Newest to Oldest
+    function Show_Ordered_Khedma_TableDESC() {
+        switchTable('DESCTable');
+        updateActiveButton('DESCTable');
+        updateTotalItems();
+    }
+
+    // Show Deadline Table
+    function Show_Ordered_Khedma_TableDeadLine() {
+        switchTable('DeadLineTable');
+        updateActiveButton('DeadLineTable');
+        updateTotalItems();
+    }
+
+    // Switch table display
+    function switchTable(tableId) {
+        console.log('📊 Switching to table:', tableId);
+        const tables = document.querySelectorAll('.table-container');
+        tables.forEach(table => {
+            table.style.display = 'none';
+            table.classList.remove('fade-in');
+        });
+
+        const targetTable = document.getElementById(tableId);
+        if (targetTable) {
+            targetTable.style.display = 'block';
+            targetTable.classList.add('fade-in');
+            console.log('✅ Table displayed successfully');
+        } else {
+            console.error('❌ Table not found:', tableId);
+        }
+    }
+
+    // Update active menu button
+    function updateActiveButton(tableId) {
+        const buttons = document.querySelectorAll('.menu-item[data-table]');
+        buttons.forEach(btn => {
+            btn.classList.remove('active-item');
+            if (btn.getAttribute('data-table') === tableId) {
+                btn.classList.add('active-item');
+            }
+        });
+    }
+
+    // Count total items in current visible table
+    function updateTotalItems() {
+        let total = 0;
+        const visibleTable = document.querySelector('.table-container[style*="display: block"] tbody');
+        if (visibleTable) {
+            total = visibleTable.querySelectorAll('tr').length;
+        }
+        const totalElement = document.getElementById('totalItems');
+        if (totalElement) {
+            totalElement.textContent = total || '--';
+        }
+    }
+
+    // Ripple effect for buttons
+    function createRipple(e) {
+        const button = e.currentTarget;
+        const ripple = document.createElement('span');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.classList.add('ripple');
+
+        button.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Attach ripple effect to all clickable items
+        document.querySelectorAll('.menu-item, .nav-btn').forEach(item => {
+            item.addEventListener('click', createRipple);
+        });
+
+        // Check which tables have data and show the first one
+        const tables = ['MainTable', 'ASCTable', 'DESCTable', 'DeadLineTable'];
+        let found = false;
+
+        for (let tableId of tables) {
+            const table = document.getElementById(tableId);
+            const tbody = table ? table.querySelector('tbody') : null;
+
+            if (tbody && tbody.rows.length > 0) {
+                if (!found) {
+                    switchTable(tableId);
+                    updateActiveButton(tableId);
+                    found = true;
+                } else {
+                    table.style.display = 'none';
+                }
+            }
+        }
+
+        // Update total items count
+        updateTotalItems();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1160 @@
+/* ===========================
+   DENTIST STATUS MODIFICATION
+   Modern Professional Design
+   Blue Theme with Premium Styling
+   =========================== */
+
+:root {
+    /* Primary Colors - Blue Palette */
+    --primary: #2563eb;
+    --primary-light: #3b82f6;
+    --primary-lighter: #60a5fa;
+    --primary-dark: #1e40af;
+
+    /* Secondary Colors */
+    --success: #10b981;
+    --success-light: #34d399;
+    --warning: #f59e0b;
+    --warning-light: #fbbf24;
+    --danger: #ef4444;
+    --danger-light: #f87171;
+    --info: #0891b2;
+    --info-light: #06b6d4;
+
+    /* Neutral Colors */
+    --bg-dark: #0f172a;
+    --bg-light: #f8fafc;
+    --text-dark: #0f172a;
+    --text-light: #64748b;
+    --border: #e2e8f0;
+    --border-light: #f1f5f9;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(37, 99, 235, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(37, 99, 235, 0.15);
+    --shadow-xl: 0 20px 25px -5px rgba(37, 99, 235, 0.2);
+
+    /* Transitions */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===========================
+   Base Styles
+   =========================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Animated Gradient Background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    opacity: 0.03;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ===========================
+   Header Section
+   =========================== */
+
+.HeadClass {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 2rem;
+    box-shadow: var(--shadow-xl);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 3rem;
+}
+
+/* Header Glow Effect */
+.HeadClass::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: floatGlow 8s ease-in-out infinite;
+}
+
+@keyframes floatGlow {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(30px, -30px); }
+}
+
+.HeadClass::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    pointer-events: none;
+}
+
+.HeadClass {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.HeadClass a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    animation: slideInLeft 0.6s ease;
+}
+
+.HeadClass a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transition: left 0.3s ease;
+    z-index: -1;
+}
+
+.HeadClass a:hover::before {
+    left: 100%;
+}
+
+.HeadClass a:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+}
+
+.HeadClass a:active {
+    transform: translateY(0);
+}
+
+.HeadClass a i::before {
+    content: '\f060';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+.HeadClass h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+    animation: slideInDown 0.6s ease 0.1s both;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.HeadClass h1 i {
+    font-size: 2.2rem;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* ===========================
+   Form Container
+   =========================== */
+
+form {
+    max-width: 700px;
+    margin: 0 auto 3rem;
+    background: white;
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    animation: fadeInCard 0.6s ease 0.2s both;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+}
+
+form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--info) 100%);
+}
+
+@keyframes fadeInCard {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================
+   Form Labels
+   =========================== */
+
+label {
+    display: block;
+    margin: 1.5rem 0 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary);
+    position: relative;
+    animation: fadeInUp 0.5s ease forwards;
+    letter-spacing: 0.3px;
+}
+
+label::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background: var(--danger);
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(0.8);
+    }
+}
+
+/* ===========================
+   Form Inputs
+   =========================== */
+
+input[type="text"] {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-dark);
+    background: white;
+    transition: var(--transition);
+    position: relative;
+    animation: slideInRight 0.5s ease forwards;
+}
+
+input[type="text"]:nth-of-type(1) { animation-delay: 0.1s; }
+input[type="text"]:nth-of-type(2) { animation-delay: 0.2s; }
+input[type="text"]:nth-of-type(3) { animation-delay: 0.3s; }
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+input[type="text"]::placeholder {
+    color: var(--text-light);
+    opacity: 0.7;
+    font-weight: 400;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1), inset 0 0 0 1px rgba(37, 99, 235, 0.05);
+    transform: translateY(-2px);
+}
+
+input[type="text"]:hover:not(:focus) {
+    border-color: var(--primary-light);
+    background: linear-gradient(135deg, white 0%, rgba(37, 99, 235, 0.02) 100%);
+}
+
+input[type="text"]:disabled {
+    background: var(--bg-light);
+    color: var(--text-light);
+    cursor: not-allowed;
+}
+
+/* ===========================
+   Form Button
+   =========================== */
+
+button[type="submit"] {
+    width: 100%;
+    padding: 1rem 2rem;
+    margin-top: 1.5rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+button[type="submit"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+button[type="submit"]:hover::before {
+    left: 100%;
+}
+
+button[type="submit"]:hover {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+button[type="submit"]:active {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+button[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+button[type="submit"] i {
+    font-size: 1.1rem;
+    animation: slideDown 0.4s ease;
+}
+
+button[type="submit"]:hover i {
+    animation: bounce 0.6s ease;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ===========================
+   Success/Error Messages
+   =========================== */
+
+.message-container {
+    max-width: 700px;
+    margin: 2rem auto 3rem;
+    animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert-message {
+    padding: 1.25rem;
+    border-radius: 8px;
+    border-left: 4px solid;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.5s ease, fadeOut 0.5s ease 5s forwards;
+}
+
+.alert-message i {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.alert-message::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+/* Success Message */
+.alert-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    border-left-color: var(--success);
+}
+
+.alert-success i::before {
+    content: '\f058';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+/* Error Message */
+.alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border-left-color: var(--danger);
+}
+
+.alert-error i::before {
+    content: '\f057';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+/* Warning Message */
+.alert-warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+    border-left-color: var(--warning);
+}
+
+.alert-warning i::before {
+    content: '\f071';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+/* ===========================
+   Validation Errors
+   =========================== */
+
+.validation-error {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 2px solid var(--danger);
+    border-radius: 8px;
+    color: var(--danger);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    animation: shake 0.5s ease, fadeInUp 0.5s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.validation-error::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.2), transparent);
+    animation: shimmer 2s infinite;
+}
+
+.validation-error i {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 20%, 30%, 40%, 50%, 60%, 70%, 80%, 90% { transform: translateX(-5px); }
+    15%, 25%, 35%, 45%, 55%, 65%, 75%, 85%, 95% { transform: translateX(5px); }
+}
+
+/* ===========================
+   Responsive Design
+   =========================== */
+
+@media (max-width: 768px) {
+    .HeadClass {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .HeadClass a {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .HeadClass h1 {
+        font-size: 1.5rem;
+        order: -1;
+    }
+
+    form {
+        padding: 2rem;
+        max-width: 100%;
+        margin: 0 1.5rem 3rem;
+    }
+
+    label {
+        font-size: 0.95rem;
+        margin: 1.25rem 0 0.6rem;
+    }
+
+    input[type="text"] {
+        padding: 0.875rem;
+        margin-bottom: 1.25rem;
+        font-size: 0.95rem;
+    }
+
+    button[type="submit"] {
+        padding: 0.875rem 1.75rem;
+        font-size: 0.95rem;
+        margin-top: 1.25rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .HeadClass {
+        padding: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .HeadClass h1 {
+        font-size: 1.25rem;
+    }
+
+    .HeadClass a {
+        font-size: 0.85rem;
+        padding: 0.65rem 1.25rem;
+    }
+
+    form {
+        padding: 1.5rem;
+        margin: 0 1rem 2rem;
+    }
+
+    label {
+        font-size: 0.9rem;
+        margin: 1rem 0 0.5rem;
+    }
+
+    input[type="text"] {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    button[type="submit"] {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+    }
+
+    .alert-message {
+        padding: 1rem;
+        font-size: 0.9rem;
+        margin: 1.5rem 1rem;
+    }
+}
+
+/* ===========================
+   Accessibility
+   =========================== */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+input[type="text"]:focus-visible,
+button[type="submit"]:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    form {
+        background: #1e293b;
+        border-color: #334155;
+    }
+
+    input[type="text"] {
+        background: #0f172a;
+        border-color: #334155;
+        color: white;
+    }
+
+    input[type="text"]:focus {
+        background: #1e293b;
+    }
+
+    input[type="text"]:hover:not(:focus) {
+        background: rgba(37, 99, 235, 0.1);
+    }
+
+    label {
+        color: var(--primary-light);
+    }
+}
+
+/* ===========================
+   Print Styles
+   =========================== */
+
+@media print {
+    body::before {
+        display: none;
+    }
+
+    .HeadClass {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+
+    form {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+    }
+
+    button[type="submit"] {
+        display: none;
+    }
+
+    .message-container {
+        display: none;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   Dentist Status Modification
+   ========================================================= */
+
+/* ---------- GENERAL OVERFLOW PROTECTION ---------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.status-form,
+.message-container {
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   LARGE TABLETS / SMALL LAPTOPS
+   ========================================================= */
+@media (max-width: 1100px) {
+
+    .HeadClass {
+        width: 92%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .status-form {
+        width: 90%;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .message-container {
+        width: 90%;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .HeadClass h1 {
+        font-size: 2rem;
+    }
+
+    .back-link {
+        font-size: 0.9rem;
+    }
+
+    .form-group label {
+        font-size: 0.95rem;
+    }
+
+    .form-input,
+    #Statue {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .submit-btn {
+        width: 100%;
+    }
+}
+
+
+/* =========================================================
+   TABLETS
+   ========================================================= */
+@media (max-width: 768px) {
+
+    .HeadClass {
+        width: 94%;
+        padding: 20px;
+        margin: 20px auto;
+        text-align: center;
+    }
+
+    .HeadClass h1 {
+        font-size: 1.7rem;
+        line-height: 1.3;
+        margin-top: 15px;
+    }
+
+    .back-link {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        min-height: 45px;
+        padding: 11px 15px;
+        font-size: 0.85rem;
+    }
+
+    .status-form {
+        width: 94%;
+        max-width: 650px;
+        margin: 25px auto;
+        padding: 25px;
+    }
+
+    .form-group {
+        width: 100%;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+    }
+
+    #Statue {
+        width: 100%;
+        min-height: 48px;
+        font-size: 16px;
+    }
+
+    .field-hint {
+        font-size: 0.78rem;
+        line-height: 1.4;
+    }
+
+    .submit-btn {
+        width: 100%;
+        min-height: 48px;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+
+    .message-container {
+        width: 94%;
+        max-width: 650px;
+        margin: 20px auto;
+    }
+
+    .alert-message {
+        width: 100%;
+        padding: 15px;
+        font-size: 0.85rem;
+    }
+
+    .validation-error {
+        width: 100%;
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+}
+
+
+/* =========================================================
+   PHONES
+   ========================================================= */
+@media (max-width: 480px) {
+
+    body {
+        padding: 0;
+    }
+
+    .HeadClass {
+        width: 94%;
+        margin: 15px auto;
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .HeadClass h1 {
+        font-size: 1.35rem;
+        line-height: 1.35;
+        margin: 12px 0 0;
+    }
+
+    .HeadClass h1 i {
+        font-size: 1.1rem;
+    }
+
+    .back-link {
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 12px;
+        font-size: 0.78rem;
+        justify-content: center;
+    }
+
+    .status-form {
+        width: 94%;
+        margin: 18px auto;
+        padding: 18px;
+        border-radius: 14px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 0.82rem;
+        line-height: 1.4;
+    }
+
+    .form-group label i {
+        flex-shrink: 0;
+    }
+
+    #Statue {
+        width: 100%;
+        min-height: 48px;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 10px;
+    }
+
+    #Statue::placeholder {
+        font-size: 0.78rem;
+    }
+
+    .field-hint {
+        display: block;
+        margin-top: 7px;
+        font-size: 0.7rem;
+        line-height: 1.4;
+    }
+
+    .submit-btn {
+        width: 100%;
+        min-height: 48px;
+        padding: 12px;
+        font-size: 0.8rem;
+        line-height: 1.3;
+    }
+
+    .message-container {
+        width: 94%;
+        margin: 15px auto;
+    }
+
+    .alert-message {
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
+        width: 100%;
+        padding: 13px;
+        font-size: 0.75rem;
+        line-height: 1.45;
+        border-radius: 10px;
+    }
+
+    .alert-message i {
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .validation-error {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        width: 100%;
+        padding: 12px;
+        font-size: 0.75rem;
+        line-height: 1.4;
+        border-radius: 10px;
+    }
+
+    .validation-error i {
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+@media (max-width: 360px) {
+
+    .HeadClass {
+        width: 95%;
+        padding: 13px;
+    }
+
+    .HeadClass h1 {
+        font-size: 1.15rem;
+    }
+
+    .back-link {
+        font-size: 0.7rem;
+        padding: 9px 10px;
+    }
+
+    .status-form {
+        width: 95%;
+        padding: 14px;
+    }
+
+    .form-group label {
+        font-size: 0.75rem;
+    }
+
+    #Statue {
+        min-height: 45px;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    #Statue::placeholder {
+        font-size: 0.7rem;
+    }
+
+    .field-hint {
+        font-size: 0.65rem;
+    }
+
+    .submit-btn {
+        min-height: 45px;
+        padding: 10px;
+        font-size: 0.72rem;
+    }
+
+    .alert-message,
+    .validation-error {
+        font-size: 0.68rem;
+        padding: 10px;
+    }
+}
+
+
+/* =========================================================
+   LANDSCAPE PHONES
+   ========================================================= */
+@media (max-width: 768px) and (orientation: landscape) {
+
+    .HeadClass {
+        padding: 14px 20px;
+    }
+
+    .HeadClass h1 {
+        font-size: 1.4rem;
+    }
+
+    .status-form {
+        max-width: 650px;
+        padding: 20px;
+    }
+
+    .back-link {
+        width: auto;
+        display: inline-flex;
+    }
+
+    #Statue {
+        min-height: 46px;
+    }
+
+    .submit-btn {
+        min-height: 46px;
+    }
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+@media (hover: none) and (pointer: coarse) {
+
+    .back-link,
+    .submit-btn {
+        min-height: 44px;
+    }
+
+    #Statue {
+        min-height: 46px;
+    }
+}

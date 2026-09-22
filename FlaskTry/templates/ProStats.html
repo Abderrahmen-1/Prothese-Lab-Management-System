@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Prothesist Management System - Statistics Page">
+    <meta name="keywords" content="Statistics, Analytics, Prothesist, Prosthetics, Lab Management, Flask">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Statistics - Prothesist Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaProFile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='ProStats.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="animated-bg"></div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-tooth"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>ProLab Hub</h1>
+                        <p>Prosthetics Lab Management System</p>
+                    </div>
+                </div>
+                <nav class="header-nav">
+                    <a href="/ProKhedma" class="nav-btn back-btn">
+                        <i class="fas fa-arrow-left"></i> Back to Prothesist
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Statistics</h2>
+                    <div class="header-accent"></div>
+                </div>
+
+                <nav class="sidebar-menu">
+                    <div class="menu-group">
+                        <h3 class="group-title">Views</h3>
+                        <!-- BUG FIX #16: Use proper data attributes for JavaScript selection -->
+                        <a href="/ProAllkhedma"  class="menu-item all-item" data-table="SearchTable">
+                            <i class="fas fa-search"></i>
+                            <span>Search Results</span>
+                        </a>
+
+                        <a href="/ProTotal"  class="menu-item finish-item" data-table="TotalTable">
+                            <i class="fas fa-sum"></i>
+                            <span>Total Summary</span>
+                        </a>
+                        <a href="/ProStat"  class="menu-item get-item" data-table="StatTable">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Statistics Table</span>
+                        </a>
+                    </div>
+
+                    <div class="menu-group">
+                        <h3 class="group-title">Export</h3>
+                        <a href="/ProStatPDF" class="menu-item stat-item">
+                            <i class="fas fa-file-pdf"></i>
+                            <span>Download PDF</span>
+                            <span class="badge badge-stat">PDF</span>
+                        </a>
+                    </div>
+                </nav>
+            </aside>
+
+            <main class="content">
+                <div class="stats-header">
+                    <div class="stats-header-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="stats-header-content">
+                        <h1>Prothesist Statistics</h1>
+                        <p>Comprehensive analytics and performance metrics for all prothesists</p>
+                    </div>
+                </div>
+
+                <div class="search-section">
+                    <form action="{{ url_for('ProSearchPage') }}" method="POST" class="search-form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search"></i>
+                            <input
+                                type="text"
+                                name="SearchBar"
+                                placeholder="Search prothesist by name..."
+                                class="search-input"
+                                required
+                            >
+                        </div>
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </form>
+                </div>
+
+                <div class="messages-section">
+                    {% if message %}
+                    <div class="alert alert-success fade-in-slow">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="alert-content">
+                            <h3>{{ message }}</h3>
+                        </div>
+                        <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    {% endif %}
+
+                    {% if error %}
+                    <div class="alert alert-error fade-in-slow">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div class="alert-content">
+                            <h3>{{ error }}</h3>
+                        </div>
+                        <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="table-area">
+
+                    <!-- SearchTable -->
+                    <div id="SearchTable" class="table-container active" data-table="SearchTable">
+                        <div class="table-header">
+                            <h2>
+                                <i class="fas fa-search"></i> Search Results
+                            </h2>
+                            <div class="table-actions">
+                                <button class="btn-icon" title="Refresh" type="button">
+                                    <i class="fas fa-sync"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {% if result %} <!--and not result is mapping %} -->
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Patient Number</th>
+                                        <th>Dentist Name</th>
+                                        <th>Prothesist Name</th>
+                                        <th>Prothesist Number</th>
+                                        <th>Date</th>
+                                        <th>Khedma Type</th>
+                                        <th>Price</th>
+                                        <th>Versa</th>
+                                        <th>B9aw</th>
+                                        <th>Khalsa</th>
+                                        <th>Finished</th>
+                                        <th>User_id</th>
+                                        <th>Dead Line</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if result|length > 0 %}
+                                        {% for row in result %}
+                                        <tr>
+                                            {% for item in row %}
+                                            <td>{{ item }}</td>
+                                            {% endfor %}
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="14" class="empty-state">No results found</td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-footer">
+                            <p>Total Records: <strong>{{ result|length if result else 0 }}</strong></p>
+                        </div>
+                        {% else %}
+                        <div class="empty-message">
+                            <i class="fas fa-inbox"></i>
+                            <p>Perform a search to view results</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- TotalTable -->
+                    <div id="TotalTable" class="table-container hidden" data-table="TotalTable">
+                        <div class="table-header">
+                            <h2>
+                                <i class="fas fa-sum"></i> Total Summary
+                            </h2>
+                        </div>
+                        {% if total %}
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Prothesist Name</th>
+                                        <th>Prothesist Number</th>
+                                        <th>Versement (Paid)</th>
+                                        <th>B9awlo (Remaining)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if total|length > 0 %}
+                                        {% for pro, value in total.items() %}
+                                        <tr>
+                                            <td>
+                                                <div class="cell-content">
+                                                    <i class="fas fa-user"></i>
+                                                    {{ value[0] if value[0] else pro }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <code>{{ value[1] if value[1] else '-' }}</code>
+                                            </td>
+                                            <td>
+                                                <span class="badge-value">{{ value[2]|int }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge-value secondary">{{ value[3]|int }}</span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="4" class="empty-state">No data available</td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-footer">
+                            <p>Total Prothesists: <strong>{{ total|length if total else 0 }}</strong></p>
+                        </div>
+                        {% else %}
+                        <div class="empty-message">
+                            <i class="fas fa-inbox"></i>
+                            <p>No data available for Total Summary</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- StatTable -->
+                    <div id="StatTable" class="table-container hidden" data-table="StatTable">
+                        <div class="table-header">
+                            <h2>
+                                <i class="fas fa-chart-bar"></i> Statistics Table
+                            </h2>
+                        </div>
+                        {% if result and result is mapping %}
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Prothesist Name</th>
+                                        <th>Prothesist Number</th>
+                                        <th>Total Khedma</th>
+                                        <th>Khalsa (Paid)</th>
+                                        <th>Machi Khalsa (Unpaid)</th>
+                                        <th>Month</th>
+                                        <th>Year</th>
+                                        <th>User-id</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if result|length > 0 %}
+                                        {% for dentist, values in result.items() %}
+                                        {% for item in values %}
+                                        <tr>
+                                            {% for v in item %}
+                                            <td>{{ v }}</td>
+                                            {% endfor %}
+                                        </tr>
+                                        {% endfor %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="8" class="empty-state">No data available</td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-footer">
+                            <p>Data Points: <strong>{{ result|length if result else 0 }}</strong></p>
+                        </div>
+                        {% else %}
+                        <div class="empty-message">
+                            <i class="fas fa-inbox"></i>
+                            <p>No statistical data available</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+<script>
+function handleTableSwitch(tableId, element) {
+    document.querySelectorAll('.table-container').forEach(t => {
+        t.classList.add('hidden');
+        t.classList.remove('active');
+    });
+
+    const selectedTable = document.getElementById(tableId);
+
+    if (selectedTable) {
+        selectedTable.classList.remove('hidden');
+        selectedTable.classList.add('active');
+    }
+
+    document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+
+    if (element) {
+        element.classList.add('active');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    let activated = false;
+
+    function tryActivate(id) {
+        const table = document.getElementById(id);
+
+        // ✅ safer detection (no more fragile selector)
+        if (table && table.querySelector('tbody tr')) {
+            handleTableSwitch(id, document.querySelector(`[data-table="${id}"]`));
+            activated = true;
+            return true;
+        }
+        return false;
+    }
+
+    // Try in priority order
+    tryActivate('StatTable') ||
+    tryActivate('SearchTable') ||
+    tryActivate('MostTable') ||
+    tryActivate('LessTable') ||
+    tryActivate('TotalTable');
+
+    // 🔥 CRITICAL FIX: fallback
+    if (!activated) {
+        handleTableSwitch('SearchTable', document.querySelector('[data-table="SearchTable"]'));
+    }
+
+    // ✅ Search validation
+    const searchForm = document.querySelector('.search-form');
+    if (searchForm) {
+        searchForm.addEventListener('submit', e => {
+            const input = searchForm.querySelector('.search-input');
+            if (!input.value.trim()) {
+                e.preventDefault();
+                alert('Please enter a name');
+            }
+        });
+    }
+
+    // ✅ Auto hide alerts
+    document.querySelectorAll('.alert').forEach(alert => {
+        setTimeout(() => {
+            alert.style.opacity = '0';
+            setTimeout(() => alert.style.display = 'none', 500);
+        }, 8000);
+    });
+
+});
+</script>
+
+</body>
+
+</html>

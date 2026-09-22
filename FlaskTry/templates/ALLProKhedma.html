@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khedma Database Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='ALLProKhedma.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="animated-bg"></div>
+
+<div class="container">
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Khedma Hub</h1>
+                    <p>Database Management System</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="/ProKhedma" class="nav-btn back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Menu
+                </a>
+                <a href="/AllProthesistHistory" class="nav-btn history-btn">
+                    <i class="fas fa-history"></i> History
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Dynamic Search Section container -->
+    <div id="search-bar-container">
+        {% if not asc and not desc and not most and not less %}
+        <div class="search-section">
+            <form action="{{ url_for('Proallkhedma') }}" method="POST" class="search-form" id="search-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                <div class="search-wrapper">
+                    <i class="fas fa-search"></i>
+
+                    <input
+                            type="text"
+                            name="SearchBar"
+                            placeholder="Search prothesist by name... or by number..."
+                            class="search-input"
+                    >
+
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-magnifying-glass"></i>
+                        Search
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>View Options</h2>
+                <div class="header-accent"></div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <div class="menu-group">
+                    <h3 class="group-title">Display Tables</h3>
+                    <a href="/ProAllkhedma" class="menu-item all-item ajax-link">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Main Table</span>
+                        <span class="badge">View</span>
+                    </a>
+
+                    <a href="/ProKhedmaByDateASC" class="menu-item asc-item ajax-link">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Oldest First</span>
+                        <span class="badge badge-asc">ASC</span>
+                    </a>
+
+                    <a href="/ProKhedmaByDateDESC" class="menu-item desc-item ajax-link">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>Newest First</span>
+                        <span class="badge badge-desc">DESC</span>
+                    </a>
+
+                    <a href="/ProMostKhedma"
+                       class="menu-item stat-item ajax-link">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Most Khedma</span>
+                    </a>
+
+                    <a href="/ProLessKhedma"
+                       class="menu-item khalsa-item ajax-link">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>Less Khedma</span>
+                    </a>
+                </div>
+
+                <div class="menu-group">
+                    <h3 class="group-title">Management</h3>
+
+                    <a href="/ProGetKhedma" class="menu-item get-item">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>New Khedma</span>
+                        <span class="badge badge-get">Add</span>
+                    </a>
+
+                    <a href="{{ url_for('DeleteProKhedma') }}" class="menu-item delete-patient-item">
+                        <i class="fas fa-user-minus"></i>
+                        <span>Delete Patient</span>
+                        <span class="badge badge-delete">Delete</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+
+            {% if message or error %}
+            <div class="alert-container">
+                {% if error %}
+                <div class="alert alert-error fade-in-slow">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div class="alert-content">
+                        <h3>Error</h3>
+                        <p>{{ error }}</p>
+                    </div>
+                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                {% endif %}
+
+                {% if message %}
+                <div class="alert alert-success fade-in-slow">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="alert-content">
+                        <h3>Success</h3>
+                        <p>{{ message }}</p>
+                    </div>
+                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <div class="table-section fade-in" id="table-section">
+
+                <!-- MAIN TABLE -->
+                <div class="TableContainer" id="MainTable"
+                     style="display: {% if result %}block{% else %}none{% endif %};">
+                    <div class="table-header">
+                        <h3><i class="fas fa-list-alt"></i> Main Registry</h3>
+                        <p>Complete work order database</p>
+                    </div>
+                    {% if result %}
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Patient number</th>
+                                <th>Dentist</th>
+                                <th>Prosthesist</th>
+                                <th>Prosthesist ID</th>
+                                <th>Khedma</th>
+                                <th>Price</th>
+                                <th>Versa</th>
+                                <th>B9aw</th>
+                                <th>Khalsa</th>
+                                <th>Finished</th>
+                                <th>Date</th>
+                                <th>Deadline</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in result %}
+                            <tr class="data-row">
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+                                <td>{{ row[13] }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
+                        <span class="record-count"><i class="fas fa-info-circle"></i> Total Records: <strong>{{ result|length }}</strong></span>
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <h3>No Data Available</h3>
+                        <p>No main registry records found.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- ASC TABLE (OLDEST FIRST) -->
+                <div class="TableContainer" id="ASCTable" style="display: {% if asc %}block{% else %}none{% endif %};">
+                    <div class="table-header">
+                        <h3><i class="fas fa-arrow-up"></i> Ordered: Oldest to Newest</h3>
+                        <p>Chronological ascending order</p>
+                    </div>
+                    {% if asc %}
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Patient number</th>
+                                <th>Dentist</th>
+                                <th>Prosthesist</th>
+                                <th>Prosthesist ID</th>
+                                <th>Khedma</th>
+                                <th>Price</th>
+                                <th>Versa</th>
+                                <th>B9aw</th>
+                                <th>Khalsa</th>
+                                <th>Finished</th>
+                                <th>Date</th>
+                                <th>Deadline</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in asc %}
+                            <tr class="data-row">
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+                                <td>{{ row[13] }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
+                        <span class="record-count"><i class="fas fa-info-circle"></i> Total Records: <strong>{{ asc|length }}</strong></span>
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <h3>No Data Available</h3>
+                        <p>No records in oldest to newest order.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- DESC TABLE (NEWEST FIRST) -->
+                <div class="TableContainer" id="DESCTable"
+                     style="display: {% if desc %}block{% else %}none{% endif %};">
+                    <div class="table-header">
+                        <h3><i class="fas fa-arrow-down"></i> Ordered: Newest to Oldest</h3>
+                        <p>Chronological descending order</p>
+                    </div>
+                    {% if desc %}
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Patient number</th>
+                                <th>Dentist</th>
+                                <th>Prosthesist</th>
+                                <th>Prosthesist ID</th>
+                                <th>Khedma</th>
+                                <th>Price</th>
+                                <th>Versa</th>
+                                <th>B9aw</th>
+                                <th>Khalsa</th>
+                                <th>Finished</th>
+                                <th>Date</th>
+                                <th>Deadline</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in desc %}
+                            <tr class="data-row">
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+                                <td>{{ row[13] }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
+                        <span class="record-count"><i class="fas fa-info-circle"></i> Total Records: <strong>{{ desc|length }}</strong></span>
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <h3>No Data Available</h3>
+                        <p>No records in newest to oldest order.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- MostTable -->
+                <div id="MostTable"
+                     class="TableContainer"
+                     style="display: {% if most and most_name %}block{% else %}none{% endif %};"
+                     data-table="MostTable">
+                    <div class="table-header">
+                        <h3><i class="fas fa-arrow-up"></i> Most Khedma</h3>
+                        <p>Prothesist with the highest number of khedma records</p>
+                        {% if most and most_name %}
+                        <div class="highlight-badge">
+                            <span>{{ most_name }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if most and not most is mapping %}
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Patient number</th>
+                                <th>Dentist</th>
+                                <th>Prosthesist</th>
+                                <th>Prosthesist ID</th>
+                                <th>Khedma</th>
+                                <th>Price</th>
+                                <th>Versa</th>
+                                <th>B9aw</th>
+                                <th>Khalsa</th>
+                                <th>Finished</th>
+                                <th>Date</th>
+                                <th>Deadline</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if most|length > 0 %}
+                            {% for row in most %}
+                            <tr>
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+                                <td>{{ row[13] }}</td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="14" class="empty-state">No data available</td>
+                            </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
+                            <span class="record-count">
+                                <i class="fas fa-info-circle"></i>
+                                Total Records: <strong>{{ most|length if most else 0 }}</strong>
+                            </span>
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <h3>No Data Available</h3>
+                        <p>No data available for Most Khedma.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- LessTable -->
+                <div id="LessTable"
+                     class="TableContainer"
+                     style="display: {% if less and less_name %}block{% else %}none{% endif %};"
+                     data-table="LessTable">
+                    <div class="table-header">
+                        <h3><i class="fas fa-arrow-down"></i> Less Khedma</h3>
+                        <p>Prothesist with the lowest number of khedma records</p>
+                        {% if less and not less is mapping and less_name %}
+                        <div class="highlight-badge">
+                            <span>{{ less_name }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if less and not less is mapping %}
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Patient number</th>
+                                <th>Dentist</th>
+                                <th>Prosthesist</th>
+                                <th>Prosthesist ID</th>
+                                <th>Khedma</th>
+                                <th>Price</th>
+                                <th>Versa</th>
+                                <th>B9aw</th>
+                                <th>Khalsa</th>
+                                <th>Finished</th>
+                                <th>Date</th>
+                                <th>Deadline</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if less|length > 0 %}
+                            {% for row in less %}
+                            <tr>
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+                                <td>{{ row[13] }}</td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="14" class="empty-state">No data available</td>
+                            </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
+                            <span class="record-count">
+                                <i class="fas fa-info-circle"></i>
+                                Total Records: <strong>{{ less|length if less else 0 }}</strong>
+                            </span>
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <h3>No Data Available</h3>
+                        <p>No data available for Less Khedma.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // =========================================================
+    // Ripple effect
+    // =========================================================
+    function createRipple(e) {
+        const button = e.currentTarget;
+        const ripple = document.createElement('span');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.classList.add('ripple');
+
+        button.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    }
+
+    // =========================================================
+    // Show only the selected local table
+    // =========================================================
+    function handleTableSwitch(tableId, element) {
+        document.querySelectorAll('.TableContainer').forEach(table => {
+            table.classList.remove('active');
+            table.classList.add('hidden');
+        });
+
+        const selectedTable = document.getElementById(tableId);
+
+        if (selectedTable) {
+            selectedTable.classList.remove('hidden');
+            selectedTable.classList.add('active');
+        }
+
+        document.querySelectorAll('.sidebar-menu .menu-item').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        if (element) {
+            element.classList.add('active');
+        }
+    }
+
+    // =========================================================
+    // Row animations
+    // =========================================================
+    function applyRowAnimations() {
+        const rows = document.querySelectorAll('.data-row');
+
+        rows.forEach((row, index) => {
+            row.style.animationDelay = (index * 0.05) + 's';
+        });
+    }
+
+    // =========================================================
+    // Initial setup
+    // =========================================================
+    document.addEventListener('DOMContentLoaded', function () {
+        applyRowAnimations();
+
+        document.querySelectorAll('.menu-item, .nav-btn').forEach(item => {
+            item.addEventListener('click', function (e) {
+                createRipple(e);
+            });
+        });
+
+        // Make sure local tables are hidden initially.
+        document.querySelectorAll('#MostTable, #LessTable').forEach(table => {
+            table.classList.add('hidden');
+            table.classList.remove('active');
+        });
+    });
+
+    // =========================================================
+    // Existing AJAX links (Main / Oldest / Newest)
+    // =========================================================
+    document.querySelectorAll('.ajax-link').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const targetUrl = this.getAttribute('href');
+            const sectionContainer = document.getElementById('table-section');
+
+            if (!sectionContainer) {
+                window.location.href = targetUrl;
+                return;
+            }
+
+            sectionContainer.style.opacity = '0.4';
+
+            fetch(targetUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Request failed: ' + response.status);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newSection = doc.getElementById('table-section');
+
+                    if (newSection) {
+                        sectionContainer.innerHTML = newSection.innerHTML;
+                        applyRowAnimations();
+                    }
+
+                    sectionContainer.style.opacity = '1';
+                    window.history.pushState(null, '', targetUrl);
+                })
+                .catch(err => {
+                    console.error('AJAX Load Error:', err);
+                    sectionContainer.style.opacity = '1';
+                });
+        });
+    });
+</script>
+
+</body>
+</html>

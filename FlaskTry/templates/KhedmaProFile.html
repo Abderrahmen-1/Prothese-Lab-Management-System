@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Prothesist Management System for Prosthetics Lab">
+    <meta name="keywords" content="Prothesist, Prosthetics, Lab Management, Flask">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Prothesist Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaProFile.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+
+
+<div class="animated-bg"></div>
+
+<div class="container">
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-tooth"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>ProLab Hub</h1>
+                    <p>Prosthetics Lab Management System</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="/HomePage" class="nav-btn back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Menu
+                </a>
+                <a href="/AllProthesistHistory" class="nav-btn history-btn">
+                    <i class="fas fa-history"></i> History
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Actions</h2>
+                <div class="header-accent"></div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <div class="menu-group">
+                    <h3 class="group-title">View Khedma</h3>
+                    <a href="/ProAllkhedma" class="menu-item all-item">
+                        <i class="fas fa-list-alt"></i>
+                        <span>All Khedma</span>
+                        <span class="badge">All</span>
+                    </a>
+
+                    <a href="/ProFinished" class="menu-item finish-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Finished</span>
+                        <span class="badge badge-finish">Done</span>
+                    </a>
+
+                    <a href="/ProKhalsa" class="menu-item khalsa-item">
+                        <i class="fas fa-coins"></i>
+                        <span>Khalsa</span>
+                        <span class="badge badge-khalsa">Pay</span>
+                    </a>
+                </div>
+
+                <div class="menu-group">
+                    <h3 class="group-title">Management</h3>
+                    <a href="/ProGetKhedma" class="menu-item get-item">
+                        <i class="fas fa-handshake"></i>
+                        <span>Get Khedma</span>
+                        <span class="badge badge-get">In</span>
+                    </a>
+                    <a href="/ProModifyVersement" class="menu-item get-item">
+                        <i class="fas fa-handshake"></i>
+                        <span>Modify Versement</span>
+                        <span class="badge badge-get">In</span>
+                    </a>
+                </div>
+
+                <div class="menu-group">
+                    <h3 class="group-title">Analytics</h3>
+                    <a href="/ProStat" class="menu-item stat-item">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Statistics</span>
+                        <span class="badge badge-stat">Stats</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            {% if message %}
+            <div class="alert-container">
+                <div class="alert alert-success fade-in-slow">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="alert-content">
+                        <h3>Success</h3>
+                        <p>{{ message }}</p>
+                    </div>
+                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="welcome-section">
+                <div class="welcome-card fade-in">
+                    <div class="welcome-icon">
+                        <i class="fas fa-briefcase-medical"></i>
+                    </div>
+                    <div class="welcome-content">
+                        <h2>Welcome to Prothesist Hub</h2>
+                        <p>Manage your prosthetics work orders, track progress, and access comprehensive analytics all in one place.</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box stat-all fade-in">
+                        <div class="stat-icon">
+                            <i class="fas fa-list-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>All Khedma</h3>
+                            <p>View complete records</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-box stat-finished fade-in">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Finished Work</h3>
+                            <p>Completed orders</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-box stat-khalsa fade-in">
+                        <div class="stat-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Khalsa</h3>
+                            <p>Payment settlements</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-box stat-stats fade-in">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Analytics</h3>
+                            <p>Detailed reports</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-actions-section">
+                <h2 class="section-title">
+                    <i class="fas fa-bolt"></i> Quick Actions
+                </h2>
+                <div class="quick-actions-grid">
+                    <a href="/ProAllkhedma" class="quick-action-card all-card">
+                        <div class="qac-icon">
+                            <i class="fas fa-list-alt"></i>
+                        </div>
+                        <h3>Show All Khedma</h3>
+                        <p>Browse complete work records</p>
+                        <div class="qac-arrow"><i class="fas fa-arrow-right"></i></div>
+                    </a>
+
+                    <a href="/ProFinished" class="quick-action-card finish-card">
+                        <div class="qac-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>Finished Orders</h3>
+                        <p>View all completed work</p>
+                        <div class="qac-arrow"><i class="fas fa-arrow-right"></i></div>
+                    </a>
+
+                    <a href="/ProKhalsa" class="quick-action-card khalsa-card">
+                        <div class="qac-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <h3>Khalsa</h3>
+                        <p>Manage payments</p>
+                        <div class="qac-arrow"><i class="fas fa-arrow-right"></i></div>
+                    </a>
+
+                    <a href="/ProGetKhedma" class="quick-action-card get-card">
+                        <div class="qac-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3>Get Khedma</h3>
+                        <p>Receive new work orders</p>
+                        <div class="qac-arrow"><i class="fas fa-arrow-right"></i></div>
+                    </a>
+                    <a href="/ProModifyVersement" class="quick-action-card get-card">
+                        <div class="qac-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3>Modify Versement</h3>
+                        <p>Receive new work orders</p>
+                        <div class="qac-arrow"><i class="fas fa-arrow-right"></i></div>
+                    </a>
+
+                    <a href="/ProStat" class="quick-action-card stat-card">
+                        <div class="qac-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h3>Statistics</h3>
+                        <p>View detailed analytics</p>
+                        <div class="qac-arrow"><i class="fas fa-arrow-right"></i></div>
+                    </a>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</div>
+
+<script>
+    // Ripple effect function
+    function createRipple(e) {
+        const button = e.currentTarget;
+        const ripple = document.createElement('span');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.classList.add('ripple');
+
+        button.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    }
+
+    // Menu click handler
+    document.querySelectorAll('.menu-item, .nav-btn, .quick-action-card').forEach(item => {
+        item.addEventListener('click', function(e) {
+            createRipple(e);
+
+            if (this.tagName === 'A' && this.getAttribute('href') !== '#') {
+                document.querySelector('.content').style.opacity = '0.5';
+            }
+        });
+    });
+
+    // Stagger animation for stat boxes and quick action cards
+    document.querySelectorAll('.stat-box').forEach((box, i) => {
+        box.style.animationDelay = (i * 0.1) + 's';
+    });
+
+    document.querySelectorAll('.quick-action-card').forEach((card, i) => {
+        card.style.animationDelay = (i * 0.1) + 's';
+    });
+</script>
+
+</body>
+</html>

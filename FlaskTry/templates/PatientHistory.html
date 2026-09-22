@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Patient History Records - Prosthetics Lab Management System">
+    <meta name="keywords" content="Patient History, Records, Prosthetics Lab, Healthcare Management">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Patient History - Prosthetics Lab</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='PatientHistory.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <div class="page-container">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Patient History</h1>
+                        <p>Track and review patient records over time</p>
+                    </div>
+                </div>
+                <nav class="header-nav">
+                    <a href="/Patient" class="nav-btn back-btn">
+                        <i class="fas fa-arrow-left"></i> Back to Patients
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="search-card">
+                    <div class="search-header">
+                        <h2><i class="fas fa-search"></i> Search Patient History</h2>
+                        <p>Enter a patient name to view their specific history</p>
+                    </div>
+
+                    <form action="/PatientHistory" method="POST" class="search-form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                        <div class="search-wrapper">
+                            <div class="input-group">
+                                <i class="fas fa-user-circle"></i>
+                                <input
+                                    type="text"
+                                    name="SearchName"
+                                    placeholder="Enter patient's name... or the patient number... "
+                                    class="search-input"
+                                >
+                            </div>
+                            <button type="submit" class="search-btn">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="quick-actions">
+                        <a href="/AllPatientsHistory" class="action-btn all-history">
+                            <i class="fas fa-list"></i>
+                            <span>Show All History</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message Alert -->
+            {% if message %}
+            <div class="alert-container">
+                <div class="alert alert-info fade-in">
+                    <i class="fas fa-info-circle"></i>
+                    <div class="alert-content">
+                        <h3>{{ message }}</h3>
+                    </div>
+                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Tables Section -->
+            <div class="tables-section">
+                <!-- All History Table -->
+                <div id="AllHistory" style="display: {% if HistoryPatient %}none{% else %}block{% endif %};" class="table-wrapper">
+                    {% if History %}
+                    <div class="table-card fade-in">
+                        <div class="table-header highlight-primary">
+                            <div class="header-left">
+                                <h2><i class="fas fa-file-alt"></i> Complete Patient History</h2>
+                                <span class="result-count">{{ History|length }} records</span>
+                            </div>
+                        </div>
+
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th><span class="th-content">Service ID</span></th>
+                                        <th><span class="th-content">First Name</span></th>
+                                        <th><span class="th-content">Last Name</span></th>
+                                        <th><span class="th-content">Patient Number</span></th>
+                                        <th><span class="th-content">Enter Date</span></th>
+                                        <th><span class="th-content">Service Type</span></th>
+                                        <th><span class="th-content">Price</span></th>
+                                        <th><span class="th-content">Versement</span></th>
+                                        <th><span class="th-content">Rest</span></th>
+                                        <th><span class="th-content">Status</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in History %}
+                                    <tr class="table-row-animate">
+                                        <td>{{ row[0] }}</td>
+                                        <td>{{ row[2] }}</td>
+                                        <td>{{ row[3] }}</td>
+                                        <td>{{ row[4] }}</td>
+                                        <td>{{ row[5] }}</td>
+                                        <td>{{ row[6] }}</td>
+                                        <td>{{ row[7] }}</td>
+                                        <td>{{ row[8] }}</td>
+                                        <td>{{ row[9] }}</td>
+                                        <td>{{ row[10] }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if not History %}
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <h2>No History Available</h2>
+                        <p>There are no patient records available yet</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Individual Patient History Table -->
+                <div id="PatientHistory" style="display: {% if HistoryPatient %}block{% else %}none{% endif %};" class="table-wrapper">
+                    {% if HistoryPatient %}
+                    <div class="table-card fade-in">
+                        <div class="table-header highlight-success">
+                            <div class="header-left">
+                                <h2><i class="fas fa-user-check"></i> Patient Search Results</h2>
+                                <span class="result-count">{{ HistoryPatient|length }} records found</span>
+                            </div>
+                        </div>
+
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th><span class="th-content">Service ID</span></th>
+                                        <th><span class="th-content">First Name</span></th>
+                                        <th><span class="th-content">Last Name</span></th>
+                                        <th><span class="th-content">Patient Number</span></th>
+                                        <th><span class="th-content">Enter Date</span></th>
+                                        <th><span class="th-content">Service Type</span></th>
+                                        <th><span class="th-content">Price</span></th>
+                                        <th><span class="th-content">Versement</span></th>
+                                        <th><span class="th-content">Rest</span></th>
+                                        <th><span class="th-content">Status</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in HistoryPatient %}
+                                    <tr class="table-row-animate">
+                                        <td>{{ row[0] }}</td>
+                                        <td>{{ row[2] }}</td>
+                                        <td>{{ row[3] }}</td>
+                                        <td>{{ row[4] }}</td>
+                                        <td>{{ row[5] }}</td>
+                                        <td>{{ row[6] }}</td>
+                                        <td>{{ row[7] }}</td>
+                                        <td>{{ row[8] }}</td>
+                                        <td>{{ row[9] }}</td>
+                                        <td>{{ row[10] }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if not HistoryPatient and message %}
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h2>No Results Found</h2>
+                        <p>Try searching with a different patient name</p>
+                        <a href="/PatientHistory" class="empty-action">
+                            <i class="fas fa-redo"></i> Clear Search
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Ripple effect for buttons
+        function createRipple(e) {
+            const button = e.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+
+            button.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        }
+
+        // Add ripple effect to buttons
+        document.querySelectorAll('.search-btn, .nav-btn, .action-btn').forEach(item => {
+            item.addEventListener('click', function(e) {
+                createRipple(e);
+            });
+        });
+
+        // Auto-scroll to table on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const activeTable = document.querySelector('.table-card');
+            if (activeTable) {
+                setTimeout(() => {
+                    activeTable.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+        });
+
+        // Close alert on button click
+        document.querySelectorAll('.alert-close').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Prosthetics Lab Khedma (Work) Management System">
+    <meta name="keywords" content="Prosthetics, Lab Management, Work Tracking, Khedma">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Khedma Management - Prosthetics Lab</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaFile.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-flask-vial"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Khedma Hub</h1>
+                        <p>Prosthetics Lab Work Management</p>
+                    </div>
+                </div>
+                <nav class="header-nav">
+                    <a href="/HomePage" class="nav-btn back-btn">
+                        <i class="fas fa-arrow-left"></i> Back to Menu
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Work Actions</h2>
+                    <div class="header-accent"></div>
+                </div>
+
+                <nav class="sidebar-menu">
+                    <!-- Work Status Group -->
+                    <div class="menu-group">
+                        <h3 class="group-title">📊 Work Status</h3>
+
+                        <a href="/Finished" class="menu-item finish-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Completed Work</span>
+                            <span class="badge badge-success">✓</span>
+                        </a>
+
+                        <a href="/Khalsa" class="menu-item khalsa-item">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Paid (Khalsa)</span>
+                            <span class="badge badge-khalsa">💰</span>
+                        </a>
+
+                        <a href="/Allkhedma" class="menu-item all-item">
+                            <i class="fas fa-list"></i>
+                            <span>All Work Items</span>
+                            <span class="badge badge-all">All</span>
+                        </a>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="menu-group">
+                        <h3 class="group-title">📈 Quick Stats</h3>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="stat-content">
+                                <p class="stat-label">Total Items</p>
+                                <p class="stat-value">--</p>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="content">
+                <!-- Alerts -->
+                {% if message %}
+                <div class="alert-container">
+                    <div class="alert alert-success fade-in-slow">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="alert-content">
+                            <h3>Success</h3>
+                            <p>{{ message }}</p>
+                        </div>
+                        <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Hero Section -->
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <div class="hero-text">
+                            <h2 class="hero-title">
+                                <span class="title-icon">⚙️</span>
+                                Lab Work Management
+                            </h2>
+                            <p class="hero-description">
+                                Track and manage all prosthetic work orders with precision. Monitor completion status,
+                                payment status, and deadlines in real-time.
+                            </p>
+                            <div class="hero-stats">
+                                <div class="hero-stat">
+                                    <i class="fas fa-hourglass-half"></i>
+                                    <a href="/Allkhedma">Pending Work</a>
+                                </div>
+                                <div class="hero-stat">
+                                    <i class="fas fa-check-double"></i>
+                                    <span>Completed</span>
+                                </div>
+                                <div class="hero-stat">
+                                    <i class="fas fa-clock"></i>
+                                    <a href="/KhedmaByDeadLine">Deadlines</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hero-visual">
+                            <div class="floating-shape shape-1"></div>
+                            <div class="floating-shape shape-2"></div>
+                            <div class="floating-shape shape-3"></div>
+                            <i class="fas fa-microscope hero-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature Cards -->
+                <div class="feature-cards">
+                    <div class="feature-card">
+                        <div class="feature-icon finish-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>Completed Work</h3>
+                        <p>View all finished prosthetic items and their completion details.</p>
+                        <a href="/Finished" class="feature-btn">
+                            View Finished <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon khalsa-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <h3>Payment Status</h3>
+                        <p>Check items that have been paid and manage outstanding payments.</p>
+                        <a href="/Khalsa" class="feature-btn">
+                            View Payments <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon all-icon">
+                            <i class="fas fa-list-check"></i>
+                        </div>
+                        <h3>All Work Items</h3>
+                        <p>Complete overview of all work items across all statuses and stages.</p>
+                        <a href="/Allkhedma" class="feature-btn">
+                            View All Items <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Info Section -->
+                <div class="info-section">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>Pro Tips</h3>
+                        <ul class="tips-list">
+                            <li>Use the search bar to quickly find specific work items</li>
+                            <li>Monitor deadlines to ensure timely completion</li>
+                            <li>Track payment status for better cash flow management</li>
+                            <li>Filter by completion status to prioritize work</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h3>About Khedma</h3>
+                        <p>Khedma is our comprehensive work management system designed specifically for prosthetics laboratories.
+                        It helps you organize, track, and manage all your laboratory work items efficiently.</p>
+                        <p>Whether you're managing single cases or complex multi-item orders, Khedma provides the tools you need.</p>
+                    </div>
+                </div>
+
+                <!-- Empty State (if needed) -->
+                <div class="empty-state" style="display: none;">
+                    <div class="empty-icon">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <h2>No Data Available</h2>
+                    <p>Use the search bar or select an action from the menu to get started</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Ripple effect for buttons
+        function createRipple(e) {
+            const button = e.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+
+            button.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        }
+
+        // Attach ripple effect to buttons and menu items
+        document.querySelectorAll('.menu-item, .nav-btn, .search-btn, .feature-btn').forEach(item => {
+            item.addEventListener('click', function(e) {
+                createRipple(e);
+            });
+        });
+
+        // Auto-close alert after 5 seconds
+        document.querySelectorAll('.alert').forEach(alert => {
+            setTimeout(() => {
+                alert.style.animation = 'fadeOut 0.5s ease forwards';
+                setTimeout(() => alert.remove(), 500);
+            }, 5000);
+        });
+    </script>
+
+</body>
+
+</html>

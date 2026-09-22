@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A simple web app to display SQL tables using Flask and HTML">
+    <meta name="keywords" content="Flask, Python, SQL, HTML, web app, table display">
+    <meta name="author" content="Your Name">
+    <title>Khalsa Service Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='ServiceKhalsa.css') }}">
+
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <!-- Google Fonts example -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="TopPage">
+    <a href="/OtherServices"> Back To Menu </a>
+    <h1> Service Khalsa </h1>
+</div>
+
+<form action="/Khalsin" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+    <label> Number :</label><br>
+    <input type="text" name="KhalsaNumber" placeholder="Put the number of the person"><br><br>
+
+    <label> Khedma Name :</label><br>
+    <input type="text" name="KhalsaName" placeholder="Put the khedma name ..."><br><br>
+
+    <label> Date :</label><br>
+    <input type="date" name="KhalsaDate" placeholder="Put the date of the khedma "><br><br>
+
+    <button type="submit"> Confirm </button>
+</form>
+
+
+</body>
+</html>

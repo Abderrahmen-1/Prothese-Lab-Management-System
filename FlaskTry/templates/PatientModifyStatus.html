@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Modify Patient Status - Prosthetics Lab Management System">
+    <meta name="keywords" content="Patient Status, Prosthetics, Lab Management, Healthcare">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Patient Status Modification</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='PatientModifyStatus.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header Section -->
+    <div class="HeadClass">
+        <a href="/Patient" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Patients
+        </a>
+        <h1>
+            <i class="fas fa-edit"></i> Status Modification
+        </h1>
+    </div>
+
+    <!-- Main Form Container -->
+    <form action="/PatientStatus/{{ patient_number }}" method="POST" class="status-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <!-- Status Field -->
+        <div class="form-group">
+            <label for="Statue">
+                <i class="fas fa-info-circle"></i> New Status
+            </label>
+            <input
+                type="text"
+                id="Statue"
+                name="Statue"
+                placeholder="Enter the new status (e.g., Completed, In Progress, Pending)"
+                required
+                autocomplete="off"
+            >
+            <small class="field-hint">Update the patient's current status</small>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">
+            <i class="fas fa-check-circle"></i> Confirm Status Update
+        </button>
+    </form>
+
+    <!-- Message Alert Section -->
+    {% if message %}
+    <div class="message-container">
+        <p class="alert-message">
+            <i class="fas fa-check-circle"></i>
+            {{ message }}
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- JavaScript for Enhanced Interactions -->
+    <script>
+        // Form validation on submit
+        document.querySelector('.status-form').addEventListener('submit', function(e) {
+            const status = document.getElementById('Statue').value.trim();
+
+
+            if (!status) {
+                e.preventDefault();
+                showValidationError('Please enter a new status');
+                return;
+            }
+
+            // Add loading state to button
+            const button = document.querySelector('.submit-btn');
+            const originalText = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            setTimeout(() => {
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }, 3000);
+        });
+
+        // Input focus animations
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+
+            // Input validation on change
+            input.addEventListener('change', function() {
+                if (this.value.trim()) {
+                    this.parentElement.classList.add('filled');
+                } else {
+                    this.parentElement.classList.remove('filled');
+                }
+            });
+        });
+
+        // Custom validation error display
+        function showValidationError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'validation-error';
+            errorDiv.innerHTML = `
+                <i class="fas fa-exclamation-circle"></i>
+                <span>${message}</span>
+            `;
+
+            const form = document.querySelector('.status-form');
+            form.insertBefore(errorDiv, form.firstChild);
+
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 4000);
+        }
+
+        // Auto-close success messages after 5 seconds
+        const messageContainer = document.querySelector('.message-container');
+        if (messageContainer) {
+            setTimeout(() => {
+                messageContainer.style.animation = 'fadeOut 0.5s ease forwards';
+                setTimeout(() => messageContainer.remove(), 500);
+            }, 5000);
+        }
+    </script>
+</body>
+
+</html>

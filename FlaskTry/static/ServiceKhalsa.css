@@ -1,0 +1,324 @@
+/* --- Centrage spécifique du formulaire pour cette page --- */
+form {
+    /* Le style précédent l'appliquait déjà, mais on s'assure de l'espacement */
+    margin-top: 50px;
+    border-top: 4px solid var(--secondary-color); /* Une petite barre de couleur en haut */
+}
+
+/* Style spécifique pour l'input date (pour qu'il ressemble aux autres) */
+input[type="date"] {
+    font-family: 'Roboto', sans-serif;
+    color: var(--primary-color);
+}
+
+/* Effet au survol du lien de retour pour la cohérence */
+.TopPage a {
+    display: inline-block;
+    margin-bottom: 10px;
+    transition: transform 0.2s ease;
+}
+
+.TopPage a:hover {
+    transform: translateX(-5px); /* Petit mouvement vers la gauche au survol */
+}
+
+
+/* =========================================================
+   RESPONSIVE DESIGN - SERVICE KHALSA
+   ========================================================= */
+
+/* =========================================================
+   GLOBAL OVERFLOW PROTECTION
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+input,
+button,
+a {
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   SMALL LAPTOP / TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    body {
+        padding: 20px;
+    }
+
+    .TopPage {
+        width: 100%;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .TopPage h1 {
+        font-size: 2rem;
+    }
+
+    form {
+        width: 100%;
+        max-width: 650px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    form input[type="text"],
+    form input[type="date"] {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    form button {
+        max-width: 100%;
+    }
+}
+
+
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    body {
+        padding: 18px 15px;
+    }
+
+    /* Top section */
+    .TopPage {
+        width: 100%;
+        max-width: 100%;
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    .TopPage h1 {
+        font-size: 1.7rem;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    .TopPage a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 10px 16px;
+        max-width: 100%;
+        text-align: center;
+    }
+
+
+    /* Form */
+    form {
+        width: 100%;
+        max-width: 100%;
+        padding: 25px 20px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    form label {
+        display: block;
+        width: 100%;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    form input[type="text"],
+    form input[type="date"] {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        min-height: 46px;
+    }
+
+    form button {
+        width: 100%;
+        min-height: 48px;
+        margin-top: 5px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE PHONE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    body {
+        padding: 15px 12px;
+    }
+
+    /* Header */
+    .TopPage {
+        padding: 17px 15px;
+        margin-bottom: 20px;
+    }
+
+    .TopPage h1 {
+        font-size: 1.4rem;
+        line-height: 1.35;
+    }
+
+    .TopPage a {
+        width: 100%;
+        min-height: 45px;
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+
+
+    /* Form */
+    form {
+        padding: 20px 15px;
+    }
+
+    form label {
+        font-size: 0.85rem;
+    }
+
+    form input[type="text"],
+    form input[type="date"] {
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+
+    form button {
+        width: 100%;
+        min-height: 46px;
+        font-size: 0.85rem;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+    body {
+        padding: 12px 8px;
+    }
+
+    .TopPage {
+        padding: 14px 10px;
+        margin-bottom: 16px;
+    }
+
+    .TopPage h1 {
+        font-size: 1.2rem;
+    }
+
+    .TopPage a {
+        min-height: 44px;
+        font-size: 0.75rem;
+        padding: 9px 10px;
+    }
+
+
+    /* Form */
+    form {
+        padding: 16px 10px;
+    }
+
+    form label {
+        font-size: 0.75rem;
+    }
+
+    form input[type="text"],
+    form input[type="date"] {
+        min-height: 42px;
+        padding: 9px 10px;
+        font-size: 0.75rem;
+    }
+
+    form button {
+        min-height: 44px;
+        font-size: 0.75rem;
+    }
+}
+
+
+/* =========================================================
+   LANDSCAPE PHONES
+   ========================================================= */
+
+@media (max-height: 600px) and (orientation: landscape) {
+
+    body {
+        padding: 12px 20px;
+    }
+
+    .TopPage {
+        padding: 12px 18px;
+        margin-bottom: 15px;
+    }
+
+    .TopPage h1 {
+        font-size: 1.4rem;
+    }
+
+    .TopPage a {
+        min-height: 40px;
+    }
+
+    form {
+        padding: 18px 20px;
+    }
+
+    form input[type="text"],
+    form input[type="date"] {
+        min-height: 42px;
+    }
+
+    form button {
+        min-height: 44px;
+    }
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+    .TopPage a,
+    form input,
+    form button {
+        min-height: 44px;
+    }
+
+    /*
+       Prevent browser zoom on small form controls
+       when using the form on mobile.
+    */
+    form input[type="text"],
+    form input[type="date"] {
+        font-size: 16px;
+    }
+}
+

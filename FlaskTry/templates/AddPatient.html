@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add Patient to Prosthetics Lab Management System">
+    <meta name="keywords" content="Add Patient, Prosthetics Lab, Healthcare Management">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Add Patient - Prosthetics Lab</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='AddPatient.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <div class="page-container">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-content">
+                <a href="/Patient" class="back-btn">
+                    <i class="fas fa-chevron-left"></i>
+                    Back to Patients
+                </a>
+                <div class="header-title">
+                    <h1><i class="fas fa-user-plus"></i> Add New Patient</h1>
+                    <p>Complete patient information and appointment details</p>
+                </div>
+                <div class="header-badge">
+                    <span class="step-indicator">Patient Registration</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Form Container -->
+        <div class="form-container">
+            <form action="/AddPatient" method="POST" class="patient-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <!-- Patient Information Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <div>
+                            <h2>Patient Information</h2>
+                            <p>Basic details about the patient</p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstname">
+                                <i class="fas fa-user"></i> First Name *
+                            </label>
+                            <input
+                                type="text"
+                                id="firstname"
+                                name="PatientFirstName"
+                                placeholder="Enter patient's first name"
+                                required
+                                class="form-input"
+                            >
+                            <div class="input-hint">Required field</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastname">
+                                <i class="fas fa-user"></i> Last Name *
+                            </label>
+                            <input
+                                type="text"
+                                id="lastname"
+                                name="PatientLastName"
+                                placeholder="Enter patient's last name"
+                                required
+                                class="form-input"
+                            >
+                            <div class="input-hint">Required field</div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="uniquenumber">
+                                <i class="fas fa-hashtag"></i> Unique Patient Number *
+                            </label>
+                            <input
+                                type="text"
+                                id="uniquenumber"
+                                name="PatientUnique"
+                                placeholder="Patient ID or reference number"
+                                required
+                                class="form-input"
+                            >
+                            <div class="input-hint">Used for identification</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Work/Service Information Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div>
+                            <h2>Work Information</h2>
+                            <p>Service details and timeline</p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="khedmachoice">
+                                <i class="fas fa-hammer"></i> Service Type (Khedma) *
+                            </label>
+                            <input
+                                type="text"
+                                id="khedmachoice"
+                                name="KhedmaChoice"
+                                placeholder="e.g., Prosthetic limb, Dental prosthetics, etc."
+                                required
+                                class="form-input"
+                            >
+                            <div class="input-hint">What service will be provided?</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="khedmaprice">
+                                <i class="fas fa-coins"></i> Price (DA) *
+                            </label>
+                            <input
+                                type="text"
+                                id="khedmaprice"
+                                name="KhedmaPrice"
+                                placeholder="Cost in Dinars"
+                                required
+                                class="form-input"
+                            >
+                            <div class="input-hint">Service cost</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="startdate">
+                                <i class="fas fa-calendar-check"></i> Start Date *
+                            </label>
+                            <input
+                                type="date"
+                                id="startdate"
+                                name="date"
+                                required
+                                class="form-input"
+                            >
+                            <div class="input-hint">Service start date</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="deadline">
+                                <i class="fas fa-calendar-times"></i> Deadline *
+                            </label>
+                            <input
+                                type="date"
+                                id="deadline"
+                                name="DeadLine"
+                                required
+                                class="form-input"
+                            >
+                            <div class="input-hint">Expected completion date</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Information Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div>
+                            <h2>Payment Status</h2>
+                            <p>Payment information and deposits</p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="khalsa">
+                                <i class="fas fa-check-circle"></i> Paid (Khalsa)? *
+                            </label>
+                            <select
+                                id="khalsa"
+                                name="Khalsa"
+                                class="form-input"
+                                onchange="versaCheckFunction()"
+                                required
+                            >
+                                <option value="">-- Select --</option>
+                                <option value="yes">Yes - Paid</option>
+                                <option value="no">No - Not Paid</option>
+                            </select>
+                            <div class="input-hint">Is the full amount paid?</div>
+                        </div>
+                    </div>
+
+                    <!-- Versa (Deposit) Section - Hidden by default -->
+                    <div id="versaCheck" class="nested-section" style="display: none;">
+                        <div class="nested-header">
+                            <i class="fas fa-hand-holding-dollar"></i>
+                            <span>Deposit Information (Versa)</span>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="versainput">
+                                    <i class="fas fa-percent"></i> Is there a deposit? *
+                                </label>
+                                <select
+                                    id="versainput"
+                                    name="versa"
+                                    class="form-input"
+                                    onchange="showVersaAmount()"
+                                >
+                                    <option value="">-- Select --</option>
+                                    <option value="yes">Yes - There is a deposit</option>
+                                    <option value="no">No - No deposit</option>
+                                </select>
+                                <div class="input-hint">Is a deposit being made?</div>
+                            </div>
+                        </div>
+
+                        <!-- Versa Amount Section -->
+                        <div id="versaAmountSection" class="form-grid" style="display: none;">
+                            <div class="form-group full-width">
+                                <label for="versaamount">
+                                    <i class="fas fa-money-bill"></i> Deposit Amount (DA) *
+                                </label>
+                                <input
+                                    type="text"
+                                    id="versaamount"
+                                    name="Versa"
+                                    placeholder="Enter deposit amount in Dinars"
+                                    class="form-input"
+                                >
+                                <div class="input-hint">Amount paid as deposit</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Prosthetist Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <h2>Other Prosthetist</h2>
+                            <p>If another prosthetist is involved</p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="otherprocheckbox">
+                                <i class="fas fa-person-circle-plus"></i> Is another prosthetist involved? *
+                            </label>
+                            <select
+                                id="otherprocheckbox"
+                                name="OtherPro"
+                                class="form-input"
+                                onchange="OtherProthesists()"
+                                required
+                            >
+                                <option value="">-- Select --</option>
+                                <option value="yes">Yes - Another prosthetist</option>
+                                <option value="no">No - Only main service</option>
+                            </select>
+                            <div class="input-hint">Is this a shared case?</div>
+                        </div>
+                    </div>
+
+                    <!-- Other Prosthetist Details - Hidden by default -->
+                    <div id="OtherProInformations" style="display: none;">
+                        <div class="nested-header">
+                            <i class="fas fa-user-doctor"></i>
+                            <span>Other Prosthetist Details</span>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="proname">
+                                    <i class="fas fa-user"></i> Prosthetist Name *
+                                </label>
+                                <input
+                                    type="text"
+                                    id="proname"
+                                    name="ProName"
+                                    placeholder="Name of the other prosthetist"
+                                    class="form-input"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pronumber">
+                                    <i class="fas fa-phone"></i> Contact Number *
+                                </label>
+                                <input
+                                    type="text"
+                                    id="pronumber"
+                                    name="ProNumber"
+                                    placeholder="Phone number"
+                                    class="form-input"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="proprice">
+                                    <i class="fas fa-coins"></i> Price (DA) *
+                                </label>
+                                <input
+                                    type="text"
+                                    id="proprice"
+                                    name="ProPrice"
+                                    placeholder="Cost for their service"
+                                    class="form-input"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prodate">
+                                    <i class="fas fa-calendar"></i> Start Date *
+                                </label>
+                                <input
+                                    type="date"
+                                    id="prodate"
+                                    name="ProDate"
+                                    class="form-input"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prodeadline">
+                                    <i class="fas fa-calendar-times"></i> Deadline *
+                                </label>
+                                <input
+                                    type="date"
+                                    id="prodeadline"
+                                    name="ProDeadLine"
+                                    class="form-input"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prokhalsa">
+                                    <i class="fas fa-check-circle"></i> Paid (Khalsa)? *
+                                </label>
+                                <select
+                                    id="prokhalsa"
+                                    name="ProKhalsa"
+                                    class="form-input"
+                                    onchange="ProversaCheckFunction()"
+                                >
+                                    <option value="">-- Select --</option>
+                                    <option value="yes">Yes - Paid</option>
+                                    <option value="no">No - Not Paid</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Pro Versa Section -->
+                        <div id="ProversaCheck" class="nested-section" style="display: none;">
+                            <div class="nested-header">
+                                <i class="fas fa-hand-holding-dollar"></i>
+                                <span>Deposit Information</span>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="proversament">
+                                        <i class="fas fa-percent"></i> Is there a deposit? *
+                                    </label>
+                                    <select
+                                        id="proversament"
+                                        name="Proversa"
+                                        class="form-input"
+                                        onchange="showProVersaAmount()"
+                                    >
+                                        <option value="">-- Select --</option>
+                                        <option value="yes">Yes - There is a deposit</option>
+                                        <option value="no">No - No deposit</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Pro Versa Amount -->
+                            <div id="ProversaAmountSection" class="form-grid" style="display: none;">
+                                <div class="form-group full-width">
+                                    <label for="proversamount">
+                                        <i class="fas fa-money-bill"></i> Deposit Amount (DA) *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="proversamount"
+                                        name="ProVersa"
+                                        placeholder="Enter deposit amount in Dinars"
+                                        class="form-input"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <a href="/Patient" class="cancel-btn">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-check"></i> Confirm & Save Patient
+                    </button>
+                </div>
+
+                <!-- Success/Error Messages -->
+                {% if message %}
+                <div class="form-message">
+                    <i class="fas fa-check-circle"></i>
+                    <p>{{ message }}</p>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Toggle versa deposit section
+        function versaCheckFunction() {
+            const khalsa = document.getElementById("khalsa").value.toLowerCase();
+            const versaSection = document.getElementById("versaCheck");
+            versaSection.style.display = (khalsa === "no") ? "block" : "none";
+            // Reset versa inputs when hiding
+            if (khalsa === "yes") {
+                document.getElementById("versainput").value = "";
+                document.getElementById("versaAmountSection").style.display = "none";
+            }
+        }
+
+        // Show versa amount input
+        function showVersaAmount() {
+            const checkValue = document.getElementById("versainput").value.toLowerCase();
+            const amountSection = document.getElementById("versaAmountSection");
+            amountSection.style.display = (checkValue === "yes") ? "block" : "none";
+            if (checkValue !== "yes") {
+                document.getElementById("versaamount").value = "";
+            }
+        }
+
+        // Toggle other prosthetist section
+        function OtherProthesists() {
+            const choice = document.getElementById("otherprocheckbox").value.toLowerCase();
+            const section = document.getElementById("OtherProInformations");
+            section.style.display = (choice === "yes") ? "block" : "none";
+            // Reset fields when hiding
+            if (choice !== "yes") {
+                const inputs = section.querySelectorAll("input, select");
+                inputs.forEach(input => input.value = "");
+            }
+        }
+
+        // Toggle pro versa deposit section
+        function ProversaCheckFunction() {
+            const checkValue = document.getElementById("prokhalsa").value.toLowerCase();
+            const versaSection = document.getElementById("ProversaCheck");
+            versaSection.style.display = (checkValue === "no") ? "block" : "none";
+            // Reset versa inputs
+            if (checkValue === "yes") {
+                document.getElementById("proversament").value = "";
+                document.getElementById("ProversaAmountSection").style.display = "none";
+            }
+        }
+
+        // Show pro versa amount input
+        function showProVersaAmount() {
+            const checkValue = document.getElementById("proversament").value.toLowerCase();
+            const amountSection = document.getElementById("ProversaAmountSection");
+            amountSection.style.display = (checkValue === "yes") ? "block" : "none";
+            if (checkValue !== "yes") {
+                document.getElementById("proversamount").value = "";
+            }
+        }
+
+        // Add smooth scroll behavior and auto-focus on error fields
+        document.addEventListener("DOMContentLoaded", () => {
+            // Smooth transitions on form interactions
+            document.querySelectorAll(".form-input").forEach(input => {
+                input.addEventListener("focus", function() {
+                    this.parentElement.classList.add("focused");
+                });
+                input.addEventListener("blur", function() {
+                    if (!this.value) {
+                        this.parentElement.classList.remove("focused");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

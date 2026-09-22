@@ -1,0 +1,1818 @@
+/* ===========================
+   STATISTICS PAGE - FIXED CSS
+   Professional Data Display - Extends KhedmaProFile.css
+
+   BUG FIXES:
+   - #22: Fixed table width overflow
+   - #21: Improved responsive breakpoints
+   - #23: Better print styles
+   =========================== */
+
+/* ===========================
+   Stats Header
+   =========================== */
+
+.stats-header {
+    background: linear-gradient(135deg, var(--purple) 0%, var(--primary) 100%);
+    color: white;
+    padding: 3rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+    animation: slideInDown 0.6s ease;
+}
+
+.stats-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.stats-header-icon {
+    font-size: 4rem;
+    opacity: 0.9;
+    animation: float 3s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+.stats-header-content {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+}
+
+.stats-header-content h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.stats-header-content p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* ===========================
+   Search Section
+   =========================== */
+
+.search-section {
+    margin-bottom: 2rem;
+    animation: fadeIn 0.5s ease;
+}
+
+.search-form {
+    display: flex;
+    gap: 1rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    flex-wrap: wrap;
+}
+
+.search-input-wrapper {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 1rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    transition: var(--transition);
+}
+
+.search-input-wrapper:focus-within {
+    border-color: var(--primary);
+    background: white;
+}
+
+.search-input-wrapper i {
+    color: var(--primary);
+    font-size: 1.125rem;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: var(--text-light);
+}
+
+.search-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.search-btn:active {
+    transform: translateY(0);
+}
+
+/* ===========================
+   Messages Section
+   =========================== */
+
+.messages-section {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-radius: 8px;
+    border-left: 4px solid;
+    position: relative;
+    overflow: hidden;
+    animation: slideInUp 0.4s ease;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert i {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+.alert-content h3 {
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+.alert-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.alert-close:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+.alert-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    border-left-color: var(--success);
+}
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border-left-color: var(--danger);
+}
+
+.fade-in-slow {
+    animation: fadeInSlow 0.6s ease;
+}
+
+@keyframes fadeInSlow {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================
+   Table Area
+   =========================== */
+
+.table-area {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    animation: fadeIn 0.5s ease;
+    transition: opacity 0.3s ease;
+}
+
+.table-container.hidden {
+    display: none !important;
+    opacity: 0;
+}
+
+.table-container.active {
+    display: block;
+    opacity: 1;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================
+   Table Header
+   =========================== */
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 2px solid var(--border);
+    background: linear-gradient(135deg, var(--bg-light) 0%, white 100%);
+}
+
+.table-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.table-header h2 i {
+    color: var(--primary);
+    font-size: 1.75rem;
+}
+
+.table-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    background: var(--bg-light);
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    font-size: 1rem;
+}
+
+.btn-icon:hover {
+    background: var(--primary);
+    color: white;
+    transform: rotate(180deg);
+}
+
+.highlight-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ===========================
+   Table Wrapper & Styling
+   BUG FIX #22: Fixed overflow issue
+   =========================== */
+
+.table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.data-table {
+    min-width: 1400px;
+    width: max-content;
+    border-collapse: collapse;
+    font-family: 'Inter', sans-serif;
+}
+
+.data-table thead {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.data-table th {
+    padding: 1.1rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    white-space: nowrap;
+}
+
+.data-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.data-table tbody tr:hover {
+    background: var(--bg-light);
+    box-shadow: inset 4px 0 0 var(--primary);
+}
+
+.data-table td {
+    padding: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-dark);
+    word-break: break-word;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background: rgba(16, 185, 129, 0.02);
+}
+
+/* ===========================
+   Table Cell Styling
+   =========================== */
+
+.cell-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cell-content i {
+    color: var(--primary);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+code {
+    background: var(--bg-light);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.badge-value {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge-value.secondary {
+    background: linear-gradient(135deg, var(--info) 0%, #0891b2 100%);
+}
+
+/* ===========================
+   Table Footer
+   =========================== */
+
+.table-footer {
+    padding: 1rem 1.5rem;
+    background: var(--bg-light);
+    border-top: 1px solid var(--border);
+    text-align: right;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+}
+
+.table-footer p {
+    margin: 0;
+}
+
+.table-footer strong {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* ===========================
+   Responsive Tables
+   BUG FIX #21: Improved breakpoints
+   =========================== */
+
+@media (max-width: 768px) {
+    .stats-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .stats-header-icon {
+        font-size: 3rem;
+    }
+
+    .stats-header-content h1 {
+        font-size: 1.75rem;
+    }
+
+    .search-form {
+        flex-direction: column;
+    }
+
+    .search-input-wrapper {
+        min-width: 100%;
+    }
+
+    .search-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .table-actions {
+        align-self: flex-end;
+    }
+
+    .data-table {
+        font-size: 0.75rem;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .table-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .badge-value {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .stats-header {
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+
+    .stats-header-icon {
+        font-size: 2rem;
+    }
+
+    .stats-header-content h1 {
+        font-size: 1.25rem;
+    }
+
+    .stats-header-content p {
+        font-size: 0.875rem;
+    }
+
+    .search-input {
+        font-size: 16px;  /* Prevents zoom on iOS */
+    }
+
+    .data-table {
+        font-size: 0.7rem;
+    }
+
+    .data-table th {
+        font-size: 0.7rem;
+    }
+
+    .table-header {
+        padding: 1rem;
+    }
+
+    .table-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .table-header h2 i {
+        font-size: 1.25rem;
+    }
+
+    .cell-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* ===========================
+   Custom Scrollbar
+   =========================== */
+
+.table-wrapper::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: var(--bg-light);
+    border-radius: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+/* ===========================
+   Print Styles
+   BUG FIX #23: Better print handling
+   =========================== */
+
+@media print {
+    .search-section,
+    .stats-header,
+    .table-header .table-actions,
+    .btn-icon,
+    .sidebar,
+    .header,
+    .nav-btn {
+        display: none !important;
+    }
+
+    .table-container {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid var(--border);
+        margin-bottom: 2rem;
+    }
+
+    .table-header {
+        page-break-inside: avoid;
+        border: 1px solid var(--text-dark);
+        background: white;
+    }
+
+    .table-header h2 {
+        color: var(--text-dark);
+        font-size: 1.2rem;
+    }
+
+    .data-table {
+        font-size: 0.85rem;
+    }
+
+    .data-table thead {
+        background: white;
+        color: var(--text-dark);
+        border: 2px solid var(--text-dark);
+    }
+
+    .data-table th {
+        border: 1px solid var(--text-dark);
+        padding: 0.75rem;
+    }
+
+    .data-table td {
+        border: 1px solid var(--border);
+        padding: 0.75rem;
+    }
+
+    .data-table tbody tr {
+        page-break-inside: avoid;
+    }
+
+    .badge-value {
+        background: white;
+        border: 1px solid var(--text-dark);
+        color: var(--text-dark);
+        padding: 0.3rem 0.6rem;
+    }
+
+    .empty-message {
+        display: none;
+    }
+}
+
+/* ===========================
+   Accessibility & Motion
+   =========================== */
+
+.search-btn:focus-visible,
+.btn-icon:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+.data-table th:nth-child(6),
+.data-table td:nth-child(6) {
+    min-width: 150px;   /* you can change to 200px or 250px */
+    width: 150px;
+    white-space: nowrap;
+}
+
+.data-table th:nth-child(14),
+.data-table td:nth-child(14) {
+    min-width: 150px;   /* you can change to 200px or 250px */
+    width: 150px;
+    white-space: nowrap;
+}
+
+.data-table th:nth-child(8),
+.data-table td:nth-child(8) {
+    min-width: 170px;   /* you can change to 200px or 250px */
+    width: 170px;
+    white-space: nowrap;
+}
+
+.data-table th:nth-child(9),
+.data-table td:nth-child(9) {
+    min-width: 170px;   /* you can change to 200px or 250px */
+    width: 170px;
+    white-space: nowrap;
+}
+
+.data-table th:nth-child(10),
+.data-table td:nth-child(10) {
+    min-width: 170px;   /* you can change to 200px or 250px */
+    width: 170px;
+    white-space: nowrap;
+}
+
+/* ===========================
+   Empty State Messages
+   =========================== */
+
+.empty-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    text-align: center;
+    color: var(--text-light);
+    background: var(--bg-light);
+    border-radius: 10px;
+    margin: 1.5rem;
+    min-height: 200px;
+}
+
+.empty-message i {
+    font-size: 3.5rem;
+    color: var(--border);
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-message p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-dark);
+}
+
+.empty-message small {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin: 0;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem !important;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* ===========================
+   Dark Mode Support
+   =========================== */
+
+@media (prefers-color-scheme: dark) {
+    .search-form {
+        background: var(--bg-dark);
+    }
+
+    .search-input-wrapper {
+        background: rgba(15, 23, 42, 0.8);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .search-input-wrapper:focus-within {
+        background: var(--bg-dark);
+    }
+
+    .search-input {
+        color: white;
+    }
+
+    .table-container {
+        background: var(--bg-dark);
+    }
+
+    .table-header {
+        background: rgba(15, 23, 42, 0.8);
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .table-header h2 {
+        color: white;
+    }
+
+    .btn-icon {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--primary);
+    }
+
+    .btn-icon:hover {
+        background: var(--primary);
+    }
+
+    .data-table th {
+        border-bottom-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .data-table tbody tr {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .data-table tbody tr:hover {
+        background: rgba(16, 185, 129, 0.08);
+    }
+
+    .data-table tbody tr:nth-child(even) {
+        background: rgba(16, 185, 129, 0.03);
+    }
+
+    .data-table td {
+        color: var(--text-light);
+    }
+
+    code {
+        background: rgba(16, 185, 129, 0.15);
+        color: #34d399;
+    }
+
+    .table-footer {
+        background: rgba(15, 23, 42, 0.8);
+        border-top-color: rgba(255, 255, 255, 0.1);
+        color: var(--text-light);
+    }
+
+    .empty-message {
+        background: rgba(15, 23, 42, 0.5);
+    }
+
+    .empty-message p {
+        color: white;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE DESIGN - PROTHESIST STATISTICS
+   ========================================================= */
+
+/* Global protection against horizontal overflow */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+img,
+svg,
+video {
+    max-width: 100%;
+}
+
+.container,
+.main-layout,
+.sidebar,
+.content,
+.table-area,
+.table-container,
+.table-wrapper {
+    min-width: 0;
+}
+
+
+/* =========================================================
+   SMALL LAPTOP / TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .container {
+        width: 94%;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .header {
+        padding: 25px 30px;
+    }
+
+    .header-content {
+        gap: 25px;
+    }
+
+    .logo-text {
+        min-width: 0;
+    }
+
+    .logo-text h1 {
+        font-size: 1.8rem;
+    }
+
+    .logo-text p {
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+
+    .header-nav {
+        flex-shrink: 0;
+    }
+
+    .nav-btn {
+        white-space: nowrap;
+    }
+
+    .main-layout {
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .sidebar {
+        min-width: 0;
+    }
+
+    .sidebar-menu {
+        min-width: 0;
+    }
+
+    .menu-item {
+        min-width: 0;
+    }
+
+    .menu-item span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .content {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .stats-header {
+        width: 100%;
+    }
+
+    .stats-header-content {
+        min-width: 0;
+    }
+
+    .stats-header-content h1 {
+        overflow-wrap: anywhere;
+    }
+
+    .stats-header-content p {
+        overflow-wrap: anywhere;
+    }
+
+    .search-section {
+        width: 100%;
+    }
+
+    .search-form {
+        width: 100%;
+    }
+
+    .search-input-wrapper {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .search-input {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .messages-section {
+        width: 100%;
+    }
+
+    .alert {
+        min-width: 0;
+    }
+
+    .alert-content {
+        min-width: 0;
+    }
+
+    .table-area {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .table-container {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /*
+       The 14-column tables stay wide.
+       The user scrolls horizontally instead of
+       having unreadably compressed columns.
+    */
+    .data-table {
+        min-width: 1400px;
+        width: max-content;
+    }
+
+    .data-table th,
+    .data-table td {
+        white-space: nowrap;
+    }
+
+    .table-footer {
+        width: 100%;
+    }
+}
+
+
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .container {
+        width: 100%;
+    }
+
+    .header {
+        padding: 22px 20px;
+    }
+
+    .header-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+    }
+
+    .logo-section {
+        justify-content: center;
+    }
+
+    .logo-text {
+        min-width: 0;
+    }
+
+    .logo-text h1 {
+        font-size: 1.65rem;
+    }
+
+    .logo-text p {
+        font-size: 0.75rem;
+        line-height: 1.45;
+    }
+
+    .header-nav {
+        width: 100%;
+    }
+
+    .nav-btn {
+        width: 100%;
+        min-height: 46px;
+        justify-content: center;
+        text-align: center;
+    }
+
+
+    /* Main layout becomes vertical */
+    .main-layout {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 20px;
+    }
+
+    .sidebar,
+    .content {
+        width: 100%;
+        min-width: 0;
+    }
+
+
+    /* Sidebar */
+    .sidebar-header {
+        text-align: center;
+    }
+
+    .sidebar-menu {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    }
+
+    .menu-group {
+        width: 100%;
+    }
+
+    .group-title {
+        text-align: left;
+    }
+
+    .menu-item {
+    width: 100%;
+    max-width: 380px;
+    min-height: 60px;
+    }
+
+    .menu-item span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .badge {
+        flex-shrink: 0;
+    }
+
+
+    /* Statistics header */
+    .stats-header {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .stats-header-icon {
+        flex-shrink: 0;
+    }
+
+    .stats-header-content {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .stats-header-content h1 {
+        font-size: 1.45rem;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    .stats-header-content p {
+        font-size: 0.8rem;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+
+    /* Search */
+    .search-section {
+        width: 100%;
+    }
+
+    .search-form {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .search-input-wrapper {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .search-input {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .search-btn {
+        width: 100%;
+        min-height: 46px;
+        justify-content: center;
+    }
+
+
+    /* Alerts */
+    .messages-section {
+        width: 100%;
+    }
+
+    .alert {
+        width: 100%;
+        min-width: 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .alert-content {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .alert-content h3 {
+        overflow-wrap: anywhere;
+    }
+
+    .alert-close {
+        flex-shrink: 0;
+        min-width: 36px;
+        min-height: 36px;
+    }
+
+
+    /* Tables */
+    .table-area {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .table-container {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .table-header {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .table-header h2 {
+        font-size: 1.05rem;
+        line-height: 1.4;
+    }
+
+    .table-actions {
+        flex-shrink: 0;
+    }
+
+    .highlight-badge {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+
+    /*
+       Keep the 14-column tables readable.
+       Swipe left/right inside the table.
+    */
+    .data-table {
+        min-width: 1250px;
+        width: max-content;
+    }
+
+    .data-table th,
+    .data-table td {
+        white-space: nowrap;
+    }
+
+    .table-footer {
+        width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .empty-message {
+        width: 100%;
+        text-align: center;
+    }
+
+    .empty-message p,
+    .empty-message small {
+        overflow-wrap: anywhere;
+    }
+}
+
+
+/* =========================================================
+   MOBILE PHONE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .data-table {
+        min-width: 1400px;
+        width: max-content;
+    }
+
+    .header {
+        padding: 18px 15px;
+    }
+
+    .logo-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .logo-icon {
+        margin: 0 auto;
+    }
+
+    .logo-text h1 {
+        font-size: 1.45rem;
+    }
+
+    .logo-text p {
+        font-size: 0.68rem;
+        line-height: 1.45;
+    }
+
+    .header-nav {
+        width: 100%;
+    }
+
+    .nav-btn {
+        width: 100%;
+        min-height: 46px;
+        font-size: 0.8rem;
+    }
+
+
+    /* Sidebar */
+    .main-layout {
+        gap: 15px;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .sidebar-header {
+        padding: 15px;
+    }
+
+    .sidebar-header h2 {
+        font-size: 1rem;
+    }
+
+    .group-title {
+        font-size: 0.82rem;
+    }
+
+    .menu-item {
+        width: 100%;
+        min-height: 46px;
+        padding: 10px 12px;
+        font-size: 0.8rem;
+    }
+
+    .menu-item i {
+        flex-shrink: 0;
+    }
+
+    .menu-item span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .badge {
+        flex-shrink: 0;
+        font-size: 0.68rem;
+    }
+
+
+    /* Statistics header */
+    .stats-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .stats-header-icon {
+        margin: 0 auto;
+    }
+
+    .stats-header-content {
+        width: 100%;
+    }
+
+    .stats-header-content h1 {
+        font-size: 1.25rem;
+    }
+
+    .stats-header-content p {
+        font-size: 0.74rem;
+        line-height: 1.5;
+    }
+
+
+    /* Search */
+    .search-section {
+        padding: 15px;
+    }
+
+    .search-form {
+        gap: 9px;
+    }
+
+    .search-input {
+        min-height: 44px;
+        font-size: 0.8rem;
+    }
+
+    .search-btn {
+        min-height: 44px;
+        font-size: 0.8rem;
+    }
+
+
+    /* Alerts */
+    .alert {
+        padding: 13px;
+        gap: 9px;
+    }
+
+    .alert-content h3 {
+        font-size: 0.82rem;
+    }
+
+    .alert-close {
+        min-width: 36px;
+        min-height: 36px;
+    }
+
+
+    /* Table header */
+    .table-header {
+        padding: 15px;
+    }
+
+    .table-header h2 {
+        font-size: 0.95rem;
+    }
+
+    .table-actions {
+        width: 100%;
+    }
+
+    .btn-icon {
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    .highlight-badge {
+        font-size: 0.72rem;
+    }
+
+
+    /* Main wide tables */
+    .table-wrapper {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .data-table {
+        min-width: 1200px;
+        width: max-content;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 10px 12px;
+        font-size: 0.72rem;
+        white-space: nowrap;
+    }
+
+
+    /*
+       Total Summary only has 4 columns,
+       so it can be much narrower than the 14-column tables.
+    */
+    #TotalTable .data-table {
+        min-width: 650px;
+    }
+
+
+    /*
+       Statistics table has 9 columns.
+    */
+    #StatTable .data-table {
+        min-width: 850px;
+    }
+
+
+    .table-footer {
+        padding: 10px 15px;
+        font-size: 0.72rem;
+    }
+
+    .empty-message {
+        padding: 35px 15px;
+    }
+
+    .empty-message i {
+        font-size: 2rem;
+    }
+
+    .empty-message p {
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+
+    .empty-message small {
+        font-size: 0.68rem;
+        line-height: 1.5;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+    .header {
+        padding: 15px 10px;
+    }
+
+    .logo-text h1 {
+        font-size: 1.3rem;
+    }
+
+    .logo-text p {
+        font-size: 0.63rem;
+    }
+
+    .nav-btn {
+        min-height: 44px;
+        font-size: 0.74rem;
+    }
+
+
+    /* Sidebar */
+    .sidebar-header {
+        padding: 13px 10px;
+    }
+
+    .sidebar-header h2 {
+        font-size: 0.9rem;
+    }
+
+    .group-title {
+        font-size: 0.75rem;
+    }
+
+    .menu-item {
+        min-height: 44px;
+        padding: 9px 10px;
+        font-size: 0.74rem;
+    }
+
+    .badge {
+        font-size: 0.62rem;
+    }
+
+
+    /* Statistics header */
+    .stats-header-content h1 {
+        font-size: 1.1rem;
+    }
+
+    .stats-header-content p {
+        font-size: 0.67rem;
+    }
+
+
+    /* Search */
+    .search-section {
+        padding: 12px;
+    }
+
+    .search-input {
+        min-height: 42px;
+        font-size: 0.74rem;
+    }
+
+    .search-btn {
+        min-height: 42px;
+        font-size: 0.74rem;
+    }
+
+
+    /* Tables */
+    .table-header {
+        padding: 12px;
+    }
+
+    .table-header h2 {
+        font-size: 0.85rem;
+    }
+
+    .data-table {
+        min-width: 1150px;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 8px 10px;
+        font-size: 0.67rem;
+    }
+
+    #TotalTable .data-table {
+        min-width: 600px;
+    }
+
+    #StatTable .data-table {
+        min-width: 780px;
+    }
+
+    .table-footer {
+        padding: 8px 12px;
+        font-size: 0.65rem;
+    }
+
+    .empty-message {
+        padding: 30px 12px;
+    }
+
+    .empty-message p {
+        font-size: 0.7rem;
+    }
+
+    .empty-message small {
+        font-size: 0.62rem;
+    }
+}
+
+
+/* =========================================================
+   LANDSCAPE PHONES
+   ========================================================= */
+
+@media (max-height: 600px) and (orientation: landscape) {
+
+    .header {
+        padding: 12px 20px;
+    }
+
+    .header-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .logo-section {
+        flex-direction: row;
+        text-align: left;
+    }
+
+    .logo-icon {
+        margin: 0;
+    }
+
+    .header-nav {
+        width: auto;
+    }
+
+    .nav-btn {
+        width: auto;
+    }
+
+    .main-layout {
+        gap: 15px;
+    }
+
+    .sidebar-menu {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .menu-group {
+        min-width: 0;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .data-table {
+        min-width: 1200px;
+    }
+
+    #TotalTable .data-table {
+        min-width: 650px;
+    }
+
+    #StatTable .data-table {
+        min-width: 850px;
+    }
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+    .menu-item,
+    .nav-btn,
+    .search-btn,
+    .btn-icon,
+    .alert-close {
+        min-height: 44px;
+    }
+
+    .table-wrapper {
+        cursor: grab;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table-wrapper:active {
+        cursor: grabbing;
+    }
+}
+
+/* =========================================================
+   FIX MOBILE STATISTICS SIDEBAR
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .sidebar-menu {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 25px !important;
+    }
+
+    .menu-group {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+
+    .group-title {
+        width: 100% !important;
+        margin-bottom: 12px !important;
+    }
+
+    .menu-item {
+        width: 100% !important;
+        max-width: 400px !important;
+        min-height: 60px !important;
+    }
+}
+
+#TotalTable .data-table {
+    width: 100%;
+    min-width: 100%;
+}
+
+@media (max-width: 480px) {
+    #TotalTable .data-table {
+        min-width: 650px;
+    }
+}
+
+@media (max-width: 360px) {
+    #TotalTable .data-table {
+        min-width: 600px;
+    }
+}
+

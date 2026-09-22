@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Khalsa (Paid Work) Management System - Prosthetics Lab">
+    <meta name="keywords" content="Khalsa, Paid Work, Payment Status, Prosthetics Lab">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Khalsa - Paid Work Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaKhalsa.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Khalsa Hub</h1>
+                        <p>Paid Work Management System</p>
+                    </div>
+                </div>
+                <nav class="header-nav">
+                    <a href="/Khedma" class="nav-btn back-btn">
+                        <i class="fas fa-arrow-left"></i> Back to Menu
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Form Section -->
+            <div class="form-section">
+                <div class="form-container">
+                    <div class="form-header">
+                        <div class="form-title">
+                            <i class="fas fa-filter"></i>
+                            <h2>Search Paid Items</h2>
+                        </div>
+                        <p class="form-subtitle">Find and manage paid (Khalsa) work items by patient or dentist</p>
+                    </div>
+
+                    <!-- Alert Messages -->
+                    {% if message %}
+                    <div class="alert-container">
+                        <div class="alert alert-success fade-in">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="alert-content">
+                                <h3>Success</h3>
+                                <p>{{ message }}</p>
+                            </div>
+                            <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <form action="/Khalsa" method="POST" class="search-form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <!-- Choice Selection -->
+                        <div class="form-group">
+                            <label for="Check" class="form-label">
+                                <i class="fas fa-clipboard-list"></i>
+                                Search Type
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="Check" name="Choice" oninput="GetTheChoice()" class="form-select">
+                                    <option value="">-- Select Search Type --</option>
+                                    <option value="patient">Search by Patient</option>
+                                    <option value="dentist">Search by Dentist</option>
+                                </select>
+                                <span class="select-arrow">
+                                    <i class="fas fa-chevron-down"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Patient Choice Section -->
+                        <div id="PatientChoice" class="choice-section patient-section" style="display: none;">
+                            <div class="section-header">
+                                <i class="fas fa-user-injured"></i>
+                                <h3>Patient Information</h3>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="PatientID" class="form-label">
+                                    <i class="fas fa-id-card"></i>
+                                    Patient ID
+                                </label>
+                                <input
+                                    type="text"
+                                    id="PatientID"
+                                    name="PatientID"
+                                    class="form-input"
+                                    placeholder="Enter patient ID"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="PatientKhedma" class="form-label">
+                                    <i class="fas fa-tools"></i>
+                                    Service Number (ID)
+                                </label>
+                                <input
+                                    type="text"
+                                    id="PatientKhedma"
+                                    name="ServiceID"
+                                    class="form-input"
+                                    placeholder="you find it on the first column in patient-history table"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Dentist Choice Section -->
+                        <div id="DentistChoice" class="choice-section dentist-section" style="display: none;">
+                            <div class="section-header">
+                                <i class="fas fa-tooth"></i>
+                                <h3>Dentist Information</h3>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="DentistName" class="form-label">
+                                    <i class="fas fa-user-nurse"></i>
+                                    Dentist Name
+                                </label>
+                                <input
+                                    type="text"
+                                    id="DentistName"
+                                    name="Dentist"
+                                    class="form-input"
+                                    placeholder="Enter dentist name"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="DentistPatientID" class="form-label">
+                                    <i class="fas fa-id-card"></i>
+                                    Patient ID
+                                </label>
+                                <input
+                                    type="text"
+                                    id="DentistPatientID"
+                                    name="DPatientID"
+                                    class="form-input"
+                                    placeholder="Enter patient unique number"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="DentistKhedma" class="form-label">
+                                    <i class="fas fa-tools"></i>
+                                    Service Number (ID)
+                                </label>
+                                <input
+                                    type="text"
+                                    id="DentistKhedma"
+                                    name="DServiceID"
+                                    class="form-input"
+                                    placeholder="you find it on the first column in dentist-history table"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-search"></i>
+                            <span>Search Paid Items</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="info-cards">
+                    <div class="info-card">
+                        <div class="info-icon khalsa">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <h3>What is Khalsa?</h3>
+                        <p>Khalsa refers to work items that have been fully paid. Track and manage all your completed payment transactions here.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon tips">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>Pro Tips</h3>
+                        <ul class="tips-list">
+                            <li>Select either Patient or Dentist to narrow your search</li>
+                            <li>Enter Patient ID for quick lookup</li>
+                            <li>Add service name for more specific results</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section (if applicable) -->
+        <div class="results-section">
+            <div class="results-message">
+                <i class="fas fa-info-circle"></i>
+                <p>Results will appear here after your search</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle choice selection
+        function GetTheChoice() {
+            const choice = document.getElementById("Check").value.toLowerCase();
+            const dentistSection = document.getElementById("DentistChoice");
+            const patientSection = document.getElementById("PatientChoice");
+
+            // Hide both sections
+            dentistSection.style.display = "none";
+            patientSection.style.display = "none";
+
+            // Show selected section with animation
+            if (choice === "patient") {
+                patientSection.style.display = "block";
+                patientSection.classList.add('section-show');
+            } else if (choice === "dentist") {
+                dentistSection.style.display = "block";
+                dentistSection.classList.add('section-show');
+            }
+        }
+
+        // Ripple effect for buttons
+        function createRipple(e) {
+            const button = e.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+
+            button.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        }
+
+        // Attach ripple effect to buttons
+        document.querySelector('.submit-btn')?.addEventListener('click', function(e) {
+            createRipple(e);
+        });
+
+        document.querySelector('.nav-btn')?.addEventListener('click', function(e) {
+            createRipple(e);
+        });
+
+        // Auto-close alert after 5 seconds
+        document.querySelectorAll('.alert').forEach(alert => {
+            setTimeout(() => {
+                alert.style.animation = 'fadeOut 0.5s ease forwards';
+                setTimeout(() => alert.remove(), 500);
+            }, 5000);
+        });
+
+        // Form input validation
+        const inputs = document.querySelectorAll('.form-input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+    </script>
+
+</body>
+
+</html>

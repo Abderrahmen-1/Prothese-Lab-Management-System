@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sel3a Inventory Management - Prosthetics Lab Product Tracking">
+    <meta name="keywords" content="Inventory, Products, Sel3a, Prosthetics Lab">
+    <title>Sel3a - Inventory Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Sel3a.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom Context Menu Styles */
+        .context-menu {
+            position: absolute;
+            z-index: 10000;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            min-width: 160px;
+            animation: fadeInMenu 0.15s ease-out;
+        }
+
+        .context-menu-item {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            text-align: left;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .context-menu-item.delete-action {
+            color: #e63946;
+        }
+
+        .context-menu-item.delete-action:hover {
+            background: #ffebe9;
+            color: #c01927;
+        }
+
+        /* Active row selection state */
+        tr.row-selected {
+            background-color: rgba(230, 57, 70, 0.12) !important;
+        }
+
+        @keyframes fadeInMenu {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+
+<body>
+<!-- Animated Background -->
+<div class="animated-bg"></div>
+
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Sel3a Hub</h1>
+                    <p>Inventory & Products Management</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="/HomePage" class="nav-btn back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Menu
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>View Options</h2>
+                <div class="header-accent"></div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <!-- Display Modes -->
+                <div class="menu-group">
+                    <h3 class="group-title">📊 Display Modes</h3>
+
+                    <a href="javascript:void(0);" onclick="ShowMainTable(); return false;"
+                       class="menu-item main-item active-item" data-table="MainTable">
+                        <i class="fas fa-th"></i>
+                        <span>Main Inventory</span>
+                        <span class="badge badge-primary">All</span>
+                    </a>
+
+                    <a href="javascript:void(0);" onclick="ShowTableByPrice(); return false;"
+                       class="menu-item price-item" data-table="PriceTable">
+                        <i class="fas fa-arrow-down-up"></i>
+                        <span>By Price</span>
+                        <span class="badge badge-warning">💰</span>
+                    </a>
+
+                    <a href="javascript:void(0);" onclick="ShowTableByDate(); return false;" class="menu-item date-item"
+                       data-table="DateTable">
+                        <i class="fas fa-calendar"></i>
+                        <span>By Date</span>
+                        <span class="badge badge-info">📅</span>
+                    </a>
+
+                    <a href="javascript:void(0);" onclick="ShowStatTable(); return false;" class="menu-item stats-item"
+                       data-table="StatTable">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Monthly Stats</span>
+                        <span class="badge badge-info">📊</span>
+                    </a>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="menu-group">
+                    <h3 class="group-title">⚡ Quick Actions</h3>
+
+                    <a href="/AddSel3a" class="menu-item add-item">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Add Product</span>
+                        <span class="badge badge-success">+</span>
+                    </a>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="menu-group">
+                    <h3 class="group-title">📊 Statistics</h3>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Total Products</p>
+                            <p class="stat-value" id="totalProducts">--</p>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h2 class="hero-title">
+                            <span class="title-icon">📦</span>
+                            Inventory Management
+                        </h2>
+                        <p class="hero-description">
+                            Track all products and materials in your prosthetics laboratory. Manage inventory, monitor
+                            costs, and organize by price or date.
+                        </p>
+                        <div class="hero-stats">
+                            <div class="hero-stat">
+                                <i class="fas fa-box"></i>
+                                <span>Products</span>
+                            </div>
+                            <div class="hero-stat">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>Pricing</span>
+                            </div>
+                            <div class="hero-stat">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Timeline</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="floating-shape shape-1"></div>
+                        <div class="floating-shape shape-2"></div>
+                        <i class="fas fa-warehouse hero-icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Display Area -->
+            <div class="display-area">
+                <!-- Main Table -->
+                <div class="table-container" id="MainTable"
+                     style="display: {% if table %}block{% else %}none{% endif %};">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <i class="fas fa-table"></i>
+                            <h3>Main Inventory</h3>
+                        </div>
+                        <div class="table-info">
+                            <span class="info-badge">All Products</span>
+                        </div>
+                    </div>
+                    {% if table %}
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><i class="fas fa-box-open"></i> Product Name</th>
+                                <th><i class="fas fa-dollar-sign"></i> Price</th>
+                                <th><i class="fas fa-calendar"></i> Date</th>
+                                <th><i class="fas fa-credit-card"></i> Khalsa</th>
+                                <th><i class="fas fa-money-bill"></i> Versement</th>
+                                <th><i class="fas fa-coins"></i> B9aw</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in table %}
+                            <tr class="table-row" data-id="{{ row[0] }}"
+                                style="animation-delay: {{ loop.index * 0.05 }}s;">
+                                <td><span class="cell-content">{{ row[2] }}</span></td>
+                                <td><span class="cell-content">{{ row[3] }}</span></td>
+                                <td><span class="cell-content">{{ row[4] }}</span></td>
+                                <td><span class="cell-content">{{ row[5] }}</span></td>
+                                <td><span class="cell-content">{{ row[6] }}</span></td>
+                                <td><span class="cell-content">{{ row[7] }}</span></td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-table">
+                        <i class="fas fa-inbox"></i>
+                        <p>No products available</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Price Table -->
+                <div class="table-container" id="PriceTable"
+                     style="display: {% if Pricetable %}block{% else %}none{% endif %};">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <i class="fas fa-arrow-down-up"></i>
+                            <h3>Sorted by Price (Expensive to Cheap)</h3>
+                        </div>
+                        <div class="table-info">
+                            <span class="info-badge info-price">Price Sorted</span>
+                        </div>
+                    </div>
+                    {% if Pricetable %}
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><i class="fas fa-box-open"></i> Product Name</th>
+                                <th><i class="fas fa-dollar-sign"></i> Price</th>
+                                <th><i class="fas fa-calendar"></i> Date</th>
+                                <th><i class="fas fa-credit-card"></i> Khalsa</th>
+                                <th><i class="fas fa-money-bill"></i> Versement</th>
+                                <th><i class="fas fa-coins"></i> B9aw</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in Pricetable %}
+                            <tr class="table-row" data-id="{{ row[0] }}"
+                                style="animation-delay: {{ loop.index * 0.05 }}s;">
+                                <td><span class="cell-content">{{ row[2] }}</span></td>
+                                <td><span class="cell-content">{{ row[3] }}</span></td>
+                                <td><span class="cell-content">{{ row[4] }}</span></td>
+                                <td><span class="cell-content">{{ row[5] }}</span></td>
+                                <td><span class="cell-content">{{ row[6] }}</span></td>
+                                <td><span class="cell-content">{{ row[7] }}</span></td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-table">
+                        <i class="fas fa-inbox"></i>
+                        <p>No products available</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Date Table -->
+                <div class="table-container" id="DateTable"
+                     style="display: {% if Datetable %}block{% else %}none{% endif %};">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <i class="fas fa-calendar-alt"></i>
+                            <h3>Sorted by Date (Newest First)</h3>
+                        </div>
+                        <div class="table-info">
+                            <span class="info-badge info-date">Date Sorted</span>
+                        </div>
+                    </div>
+                    {% if Datetable %}
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><i class="fas fa-box-open"></i> Product Name</th>
+                                <th><i class="fas fa-dollar-sign"></i> Price</th>
+                                <th><i class="fas fa-calendar"></i> Date</th>
+                                <th><i class="fas fa-credit-card"></i> Khalsa</th>
+                                <th><i class="fas fa-money-bill"></i> Versement</th>
+                                <th><i class="fas fa-coins"></i> B9aw</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in Datetable %}
+                            <tr class="table-row" data-id="{{ row[0] }}"
+                                style="animation-delay: {{ loop.index * 0.05 }}s;">
+                                <td><span class="cell-content">{{ row[2] }}</span></td>
+                                <td><span class="cell-content">{{ row[3] }}</span></td>
+                                <td><span class="cell-content">{{ row[4] }}</span></td>
+                                <td><span class="cell-content">{{ row[5] }}</span></td>
+                                <td><span class="cell-content">{{ row[6] }}</span></td>
+                                <td><span class="cell-content">{{ row[7] }}</span></td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-table">
+                        <i class="fas fa-inbox"></i>
+                        <p>No products available</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Statistics Table -->
+                <div class="table-container" id="StatTable"
+                     style="display: {% if stat_table %}block{% else %}none{% endif %};">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <i class="fas fa-chart-bar"></i>
+                            <h3>Monthly Statistics</h3>
+                        </div>
+                        <div class="table-info">
+                            <span class="info-badge info-stats">Summary</span>
+                        </div>
+                    </div>
+                    {% if stat_table %}
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><i class="fas fa-calendar-days"></i> Month</th>
+                                <th><i class="fas fa-calendar"></i> Year</th>
+                                <th><i class="fas fa-dollar-sign"></i> Payed</th>
+                                <th><i class="fas fa-dollar-sign"></i> Rest</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in stat_table %}
+                            <tr class="table-row" style="animation-delay: {{ loop.index * 0.05 }}s;">
+                                <td><span class="cell-content">{{ row[2] }}</span></td>
+                                <td><span class="cell-content">{{ row[3] }}</span></td>
+                                <td><span class="cell-content stat-value-cell">{{ "%.2f"|format(row[0]) }}</span></td>
+                                <td><span class="cell-content stat-value-cell">{{ "%.2f"|format(row[1]) }}</span></td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-table">
+                        <i class="fas fa-inbox"></i>
+                        <p>No statistics available</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- No Data State -->
+                {% if not table and not Pricetable and not Datetable and not stat_table %}
+                <div class="no-data-container">
+                    <div class="no-data-icon">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <h2>No Products Available</h2>
+                    <p>Start by adding products to your inventory</p>
+                    <a href="/AddSel3a" class="add-btn">
+                        <i class="fas fa-plus"></i> Add First Product
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Custom Floating Context Menu -->
+<div id="custom-context-menu" class="context-menu" style="display: none;">
+
+    <button id="paid-row-btn" class="context-menu-item paid-action">
+        <i class="fas fa-check-circle"></i> Mark as Paid
+    </button>
+
+    <button id="modify-versement-btn" class="context-menu-item versement-action">
+        <i class="fas fa-money-bill-wave"></i> Modify Versement
+    </button>
+
+    <button id="delete-row-btn" class="context-menu-item delete-action">
+        <i class="fas fa-trash-alt"></i> Delete Product
+    </button>
+
+</div>
+
+<script>
+    // Show Main Table
+    function ShowMainTable() {
+        switchTable('MainTable');
+        updateActiveButton('MainTable');
+        updateTotalProducts();
+    }
+
+    // Show By Price
+    function ShowTableByPrice() {
+        switchTable('PriceTable');
+        updateActiveButton('PriceTable');
+        updateTotalProducts();
+    }
+
+    // Show By Date
+    function ShowTableByDate() {
+        switchTable('DateTable');
+        updateActiveButton('DateTable');
+        updateTotalProducts();
+    }
+
+    // Show Stats
+    function ShowStatTable() {
+        switchTable('StatTable');
+        updateActiveButton('StatTable');
+        updateTotalProducts();
+    }
+
+    // Switch table display
+    function switchTable(tableId) {
+        const tables = document.querySelectorAll('.table-container');
+        tables.forEach(table => {
+            table.style.display = 'none';
+            table.classList.remove('fade-in');
+        });
+
+        const targetTable = document.getElementById(tableId);
+        if (targetTable) {
+            targetTable.style.display = 'block';
+            targetTable.classList.add('fade-in');
+        }
+    }
+
+    // Update active menu button
+    function updateActiveButton(tableId) {
+        const buttons = document.querySelectorAll('.menu-item[data-table]');
+        buttons.forEach(btn => {
+            btn.classList.remove('active-item');
+            if (btn.getAttribute('data-table') === tableId) {
+                btn.classList.add('active-item');
+            }
+        });
+    }
+
+    // Count total products in current visible table
+    function updateTotalProducts() {
+        let total = 0;
+        const visibleTable = document.querySelector('.table-container[style*="display: block"] tbody');
+        if (visibleTable) {
+            total = visibleTable.querySelectorAll('tr').length;
+        }
+        const totalElement = document.getElementById('totalProducts');
+        if (totalElement) {
+            totalElement.textContent = total || '--';
+        }
+    }
+
+    // Ripple effect for buttons
+    function createRipple(e) {
+        const button = e.currentTarget;
+        const ripple = document.createElement('span');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.classList.add('ripple');
+
+        button.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    }
+
+    // Initialize Context Menu & Mobile Long Press
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ripple effect
+        document.querySelectorAll('.menu-item, .nav-btn').forEach(item => {
+            item.addEventListener('click', createRipple);
+        });
+
+        // Initial table visibility setup
+        const tables = ['MainTable', 'PriceTable', 'DateTable', 'StatTable'];
+        let found = false;
+
+        for (let tableId of tables) {
+            const table = document.getElementById(tableId);
+            const tbody = table ? table.querySelector('tbody') : null;
+
+            if (tbody && tbody.rows.length > 0) {
+                if (!found) {
+                    switchTable(tableId);
+                    updateActiveButton(tableId);
+                    found = true;
+                } else {
+                    table.style.display = 'none';
+                }
+            }
+        }
+
+        updateTotalProducts();
+
+        // Right Click & Mobile Long-Press Logic
+        const contextMenu = document.getElementById('custom-context-menu');
+
+        const paidBtn = document.getElementById('paid-row-btn');
+        const modifyVersementBtn = document.getElementById('modify-versement-btn');
+        const deleteBtn = document.getElementById('delete-row-btn');
+
+        let targetRow = null;
+        let longPressTimer = null;
+        const LONG_PRESS_DURATION = 500; // 500ms for touch hold
+
+        // Right Click Event Listener (Desktop)
+        document.addEventListener('contextmenu', (e) => {
+            const row = e.target.closest('.table-row');
+            // Ensure context menu applies only to product tables with data-id
+            if (row && row.hasAttribute('data-id')) {
+                e.preventDefault();
+                openContextMenu(e.pageX, e.pageY, row);
+            }
+        });
+
+        // Touch Events for Mobile Long Press
+        document.addEventListener('touchstart', (e) => {
+            const row = e.target.closest('.table-row');
+            if (!row || !row.hasAttribute('data-id')) return;
+
+            const touch = e.touches[0];
+            longPressTimer = setTimeout(() => {
+                openContextMenu(touch.pageX, touch.pageY, row);
+            }, LONG_PRESS_DURATION);
+        }, { passive: true });
+
+        document.addEventListener('touchend', cancelLongPress);
+        document.addEventListener('touchmove', cancelLongPress);
+
+        function cancelLongPress() {
+            if (longPressTimer) {
+                clearTimeout(longPressTimer);
+                longPressTimer = null;
+            }
+        }
+
+        // Display context menu at mouse/touch position
+        function openContextMenu(x, y, row) {
+            if (targetRow) targetRow.classList.remove('row-selected');
+
+            targetRow = row;
+            targetRow.classList.add('row-selected');
+
+            contextMenu.style.left = `${x}px`;
+            contextMenu.style.top = `${y}px`;
+            contextMenu.style.display = 'block';
+        }
+
+        // Dismiss menu on outside clicks
+        document.addEventListener('click', (e) => {
+            if (!contextMenu.contains(e.target)) {
+                hideContextMenu();
+            }
+        });
+
+        function hideContextMenu() {
+            contextMenu.style.display = 'none';
+            if (targetRow) {
+                targetRow.classList.remove('row-selected');
+                targetRow = null;
+            }
+        }
+
+        // Handle Row Deletion Asynchronously
+        deleteBtn.addEventListener('click', async () => {
+            if (!targetRow) return;
+
+            const recordId = targetRow.getAttribute('data-id');
+
+            if (confirm(`Are you sure you want to delete product #${recordId}?`)) {
+                try {
+                    const response = await fetch(`/DeleteSel3a/${recordId}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+
+                    if (response.ok) {
+                        // Find matching rows across Main, Price, and Date tables with the same data-id
+                        const matchingRows = document.querySelectorAll(`tr[data-id="${recordId}"]`);
+
+                        matchingRows.forEach(row => {
+                            row.style.transition = 'all 0.3s ease';
+                            row.style.opacity = '0';
+                            row.style.transform = 'translateX(20px)';
+                            setTimeout(() => {
+                                row.remove();
+                                updateTotalProducts();
+                            }, 300);
+                        });
+
+                        hideContextMenu();
+                    } else {
+                        alert('Failed to delete product record.');
+                        hideContextMenu();
+                    }
+                } catch (err) {
+                    console.error('Delete error:', err);
+                    alert('An error occurred while communicating with the server.');
+                    hideContextMenu();
+                }
+            } else {
+                hideContextMenu();
+            }
+        });
+
+        // Mark product as Paid
+        paidBtn.addEventListener('click', async () => {
+            if (!targetRow) return;
+
+            const recordId = targetRow.getAttribute('data-id');
+
+            if (!confirm(`Mark product #${recordId} as fully paid?`)) {
+                hideContextMenu();
+                return;
+            }
+
+            try {
+                const response = await fetch(`/Sel3aPaid/${recordId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Failed to mark product as paid.');
+                }
+
+            } catch (err) {
+                console.error('Paid error:', err);
+                alert('An error occurred while communicating with the server.');
+            }
+
+            hideContextMenu();
+        });
+
+
+        // Modify Versement
+        modifyVersementBtn.addEventListener('click', async () => {
+        if (!targetRow) return;
+
+        const recordId = targetRow.getAttribute('data-id');
+
+        const newVersement = prompt(
+            `Enter the new versement amount for product #${recordId}:`
+        );
+
+        if (newVersement === null) {
+            hideContextMenu();
+            return;
+        }
+
+        if (newVersement.trim() === '' || isNaN(newVersement)) {
+            alert('Please enter a valid amount.');
+            hideContextMenu();
+            return;
+        }
+
+        try {
+            const response = await fetch(`/ModifySel3aVersement/${recordId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    versement: parseFloat(newVersement)
+                })
+            });
+
+            // Read Flask's response
+            const data = await response.json();
+
+            console.log("Status:", response.status);
+            console.log("Response:", data);
+
+            if (response.ok && data.success) {
+                location.reload();
+            } else {
+                alert(data.error || data.message || 'Failed to modify versement.');
+            }
+
+        } catch (err) {
+            console.error('Versement error:', err);
+            alert('An error occurred while communicating with the server.');
+        }
+
+        hideContextMenu();
+    });
+
+    });
+</script>
+</body>
+
+</html>

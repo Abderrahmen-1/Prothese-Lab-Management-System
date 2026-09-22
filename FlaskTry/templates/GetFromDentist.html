@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Khedma Assignment Form for Prosthetics Lab">
+    <meta name="keywords" content="Khedma, Dentist, Prosthetics, Assignment, Lab Management">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Get Khedma - Assignment Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='GetFromDentist.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+{% if error %}
+<p>{{ error }}</p>
+{% endif %}
+
+<!-- Animated Background -->
+<div class="animated-bg"></div>
+
+<div class="page-container">
+    <!-- Header -->
+    <header class="form-header">
+        <div class="header-content">
+            <a href="/Dentist" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Dentist</span>
+            </a>
+            <div class="header-title">
+                <div class="title-icon">
+                    <i class="fas fa-hand-holding-medical"></i>
+                </div>
+                <div>
+                    <h1>Get Khedma</h1>
+                    <p>Assign dental work from dentist</p>
+                </div>
+            </div>
+            <div class="progress-indicator">
+                <span id="progress-text" class="progress-text">Step 1 of 2</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Form Container -->
+    <main class="form-container">
+        <form action="/GetFromDentist" method="POST" class="khedma-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            <!-- Section 1: Basic Dentist & Patient Information -->
+            <section class="form-section visible" id="section-1" data-section="1">
+                <div class="section-header">
+                    <h2><i class="fas fa-info-circle"></i> Dentist & Patient Details</h2>
+                    <p>Start by selecting the dentist and patient information</p>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Dentist Selection -->
+                    <div class="form-group full-width">
+                        <label for="Dentistinput" class="label-with-icon">
+                            <i class="fas fa-user-md"></i>
+                            <span>Dentist Name</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input
+                                type="text"
+                                id="Dentistinput"
+                                name="Dentistinput"
+                                placeholder="Which dentist are you getting work from?"
+                                class="form-input"
+                                required
+                        >
+                        <span class="field-hint">Enter the name of the dentist</span>
+                    </div>
+
+                    <!-- Patient Information Row -->
+                    <div class="form-group">
+                        <label for="PatientFirstName" class="label-with-icon">
+                            <i class="fas fa-user"></i>
+                            <span>Patient First Name</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input
+                                type="text"
+                                id="PatientFirstName"
+                                name="PatientFirstName"
+                                placeholder="First name"
+                                class="form-input"
+                                required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PatientLastName" class="label-with-icon">
+                            <i class="fas fa-user"></i>
+                            <span>Patient Last Name</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input
+                                type="text"
+                                id="PatientLastName"
+                                name="PatientLastName"
+                                placeholder="Last name"
+                                class="form-input"
+                                required
+                        >
+                    </div>
+
+                    <!-- Patient Unique Number -->
+                    <div class="form-group full-width">
+                        <label for="PatientUnique" class="label-with-icon">
+                            <i class="fas fa-hashtag"></i>
+                            <span>Patient Unique Number</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input
+                                type="text"
+                                id="PatientUnique"
+                                name="PatientUnique"
+                                placeholder="Patient ID or unique number"
+                                class="form-input"
+                                required
+                        >
+                        <span class="field-hint">This helps identify the patient record</span>
+                    </div>
+                </div>
+
+                <div class="section-nav">
+                    <button type="button" class="btn btn-next" onclick="scrollToSection(2)">
+                        <span>Continue to Work Details</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Section 2: Work Details -->
+            <section class="form-section" id="section-2" data-section="2">
+                <div class="section-header">
+                    <h2><i class="fas fa-wrench"></i> Work Details</h2>
+                    <p>Specify the type of work and its details</p>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Work Choice -->
+                    <div class="form-group full-width">
+                        <label for="KhedmaChoice" class="label-with-icon">
+                            <i class="fas fa-tasks"></i>
+                            <span>Type of Work</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input
+                                type="text"
+                                id="KhedmaChoice"
+                                name="KhedmaChoice"
+                                placeholder="e.g., Crown, Bridge, Implant, etc."
+                                class="form-input"
+                                required
+                        >
+                        <span class="field-hint">Describe the work to be done</span>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="form-group">
+                        <label for="KhedmaPrice" class="label-with-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>Price (DA)</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-with-unit">
+                            <input
+                                    type="number"
+                                    id="KhedmaPrice"
+                                    name="KhedmaPrice"
+                                    placeholder="Amount"
+                                    class="form-input"
+                                    required
+                                    min="0"
+                                    step="0.01"
+                            >
+                            <span class="unit">DA</span>
+                        </div>
+                    </div>
+
+                    <!-- Khalsa Status -->
+                    <div class="form-group">
+                        <label for="Khalsa" class="label-with-icon">
+                            <i class="fas fa-check-square"></i>
+                            <span>Payment Status</span>
+                            <span class="required">*</span>
+                        </label>
+                        <select
+                                id="Khalsa"
+                                name="Khalsa"
+                                class="form-input"
+                                required
+                        >
+                            <option value="">Select status</option>
+                            <option value="yes">Paid (Khalsa)</option>
+                            <option value="no">Pending (Not Paid)</option>
+                        </select>
+                    </div>
+
+                    <!-- Dates Row -->
+                    <div class="form-group">
+                        <label for="date" class="label-with-icon">
+                            <i class="fas fa-calendar"></i>
+                            <span>Start Date</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input
+                                type="date"
+                                id="date"
+                                name="date"
+                                class="form-input"
+                                required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DeadLine" class="label-with-icon">
+                            <i class="fas fa-hourglass-end"></i>
+                            <span>Deadline</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input
+                                type="date"
+                                id="DeadLine"
+                                name="DeadLine"
+                                class="form-input"
+                                required
+                        >
+                    </div>
+                </div>
+
+                <!-- Other Prothesist Section -->
+                <div class="conditional-section">
+                    <div class="section-divider"></div>
+
+                    <div class="form-group full-width">
+                        <label for="ProCheck" class="label-with-icon toggle-label">
+                            <i class="fas fa-handshake"></i>
+                            <span>Will another prothesist do this work?</span>
+                        </label>
+                        <input
+                                type="text"
+                                id="ProCheck"
+                                name="OtherPro"
+                                placeholder="Type 'yes' or 'no'"
+                                class="form-input"
+                                oninput="OtherProthesists()"
+                        >
+                        <span class="field-hint">If yes, fill in prothesist details below</span>
+                    </div>
+                </div>
+
+                <!-- Other Prothesist Details (Conditional) -->
+                <div id="OtherProInformations" class="conditional-subsection" style="display:none">
+                    <div class="subsection-header">
+                        <i class="fas fa-user-tie"></i>
+                        <h3>Other Prothesist Information</h3>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="ProName" class="label-with-icon">
+                                <i class="fas fa-user"></i>
+                                <span>Prothesist Name</span>
+                            </label>
+                            <input
+                                    type="text"
+                                    id="ProName"
+                                    name="ProName"
+                                    placeholder="Full name"
+                                    class="form-input"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ProNumber" class="label-with-icon">
+                                <i class="fas fa-phone"></i>
+                                <span>Prothesist Number</span>
+                            </label>
+                            <input
+                                    type="text"
+                                    id="ProNumber"
+                                    name="ProNumber"
+                                    placeholder="Contact number"
+                                    class="form-input"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ProPrice" class="label-with-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>Prothesist Price (DA)</span>
+                            </label>
+                            <div class="input-with-unit">
+                                <input
+                                        type="number"
+                                        id="ProPrice"
+                                        name="ProPrice"
+                                        placeholder="Amount"
+                                        class="form-input"
+                                        min="0"
+                                        step="0.01"
+                                >
+                                <span class="unit">DA</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ProDate" class="label-with-icon">
+                                <i class="fas fa-calendar"></i>
+                                <span>Start Date</span>
+                            </label>
+                            <input
+                                    type="date"
+                                    id="ProDate"
+                                    name="ProDate"
+                                    class="form-input"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ProDeadLine" class="label-with-icon">
+                                <i class="fas fa-hourglass-end"></i>
+                                <span>Deadline</span>
+                            </label>
+                            <input
+                                    type="date"
+                                    id="ProDeadLine"
+                                    name="ProDeadLine"
+                                    class="form-input"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ProPayed" class="label-with-icon">
+                                <i class="fas fa-check-square"></i>
+                                <span>Payment Status</span>
+                            </label>
+                            <select
+                                    id="ProPayed"
+                                    name="ProKhalsa"
+                                    class="form-input"
+                                    onchange="ProPayedFunction()"
+                            >
+                                <option value="">Select status</option>
+                                <option value="yes">Paid (Khalsa)</option>
+                                <option value="no">Pending (Not Paid)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Prothesist Versa Section -->
+                    <div id="ProversaCheck" class="conditional-subsubsection" style="display:none">
+                        <div class="form-group full-width">
+                            <label for="ProVersement" class="label-with-icon">
+                                <i class="fas fa-coins"></i>
+                                <span>Is there a deposit payment (Versa)?</span>
+                            </label>
+                            <select
+                                    id="ProVersement"
+                                    name="Proversa"
+                                    class="form-input"
+                                    onchange="showProVersaAmount()"
+                            >
+                                <option value="" disabled selected>Select Yes or No</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                        <div id="ProversaAmountSection" class="conditional-subsubsection" style="display: none;">
+                            <div class="form-group full-width">
+                                <label for="ProVersa" class="label-with-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>Deposit Amount (DA)</span>
+                                </label>
+                                <div class="input-with-unit">
+                                    <input
+                                            type="number"
+                                            id="ProVersa"
+                                            name="ProVersaAmount"
+                                            placeholder="Amount"
+                                            class="form-input"
+                                            min="0"
+                                            step="0.01"
+                                    >
+                                    <span class="unit">DA</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-nav">
+                    <button type="button" class="btn btn-back" onclick="scrollToSection(1)">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <button type="submit" class="btn btn-submit">
+                        <i class="fas fa-check"></i>
+                        <span>Submit Khedma</span>
+                    </button>
+                </div>
+            </section>
+
+        </form>
+    </main>
+
+</div>
+
+<!-- Scripts -->
+<script>
+    // Smooth scroll to section
+    function scrollToSection(sectionNum) {
+        const section = document.getElementById(`section-${sectionNum}`);
+        if (section) {
+            section.classList.add('visible');
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            updateProgressIndicator(sectionNum);
+        }
+    }
+
+    // Update progress indicator
+    function updateProgressIndicator(step) {
+        const progressText = document.getElementById('progress-text');
+        progressText.textContent = `Step ${step} of 2`;
+    }
+
+    // Other Prothesists Toggle
+    function OtherProthesists() {
+        const choice = document.getElementById("ProCheck").value.toLowerCase();
+        const section = document.getElementById("OtherProInformations");
+
+        if (choice === "yes") {
+            section.style.display = "block";
+            section.classList.add('slide-in');
+        } else {
+            section.classList.remove('slide-in');
+            section.style.display = "none";
+        }
+    }
+
+    // Prothesist Payment Function
+    function ProPayedFunction() {
+        const checkValue = document.getElementById("ProPayed").value.toLowerCase();
+        const section = document.getElementById("ProversaCheck");
+
+        if (checkValue === "yes") {
+            section.style.display = "none";
+        } else if (checkValue === "no") {
+            section.style.display = "block";
+            section.classList.add('slide-in');
+        }
+    }
+
+    // Show Prothesist Versa Amount
+    function showProVersaAmount() {
+        const checkValue = document.getElementById("ProVersement").value.toLowerCase();
+        const section = document.getElementById("ProversaAmountSection");
+
+        if (checkValue === "yes") {
+            section.style.display = "block";
+            section.classList.add('slide-in');
+        } else {
+            section.classList.remove('slide-in');
+            section.style.display = "none";
+        }
+    }
+
+    // Form validation on submit
+    document.querySelector('.khedma-form').addEventListener('submit', function(e) {
+        // Let Flask handle validation on backend
+        // But we can add client-side checks here if needed
+    });
+
+    // Input focus animations
+    document.querySelectorAll('.form-input, select').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.closest('.form-group').classList.add('focused');
+        });
+
+        input.addEventListener('blur', function() {
+            this.closest('.form-group').classList.remove('focused');
+        });
+    });
+
+    // Add filled state when input has value
+    document.querySelectorAll('.form-input, select').forEach(input => {
+        input.addEventListener('input', function() {
+            if (this.value) {
+                this.closest('.form-group').classList.add('filled');
+            } else {
+                this.closest('.form-group').classList.remove('filled');
+            }
+        });
+
+        // Check on load
+        if (input.value) {
+            input.closest('.form-group').classList.add('filled');
+        }
+    });
+
+    // Ripple effect on buttons
+    document.querySelectorAll('.btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+</script>
+
+</body>
+</html>

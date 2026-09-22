@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Delete Dentist Form for Prosthetics Lab Management">
+    <meta name="keywords" content="Dentist, Delete, Management, Lab, Prosthetics">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Delete Dentist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='DeleteDentist.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<!-- Animated Background -->
+<div class="animated-bg"></div>
+
+<div class="page-wrapper">
+    <!-- Header -->
+    <header class="page-header danger-theme">
+        <div class="header-background"></div>
+        <div class="header-content">
+            <a href="/Dentist" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back</span>
+            </a>
+
+            <div class="header-title">
+                <div class="icon-wrapper danger-icon">
+                    <i class="fas fa-user-slash"></i>
+                </div>
+                <div class="title-text">
+                    <h1>Delete Dentist</h1>
+                    <p>Permanently remove a dentist from the system</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="form-wrapper">
+            <!-- Decorative Elements -->
+            <div class="decoration decoration-1"></div>
+            <div class="decoration decoration-2"></div>
+
+            <!-- Warning Banner -->
+            <div class="warning-banner fade-in">
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="warning-content">
+                    <h3>Caution: Permanent Action</h3>
+                    <p>Deleting a dentist record cannot be undone. Please ensure you have confirmed the correct dentist name.</p>
+                </div>
+            </div>
+
+            <!-- Form Container -->
+            <div class="form-card danger-card">
+                <div class="form-header-inner">
+                    <div class="step-indicator">
+                        <div class="step-dot">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                    </div>
+                    <h2>Confirm Deletion</h2>
+                    <p>Enter the dentist's name twice to confirm deletion</p>
+                </div>
+
+                <!-- Messages Section -->
+                {% if message %}
+                <div class="message-container">
+                    <div class="alert alert-info fade-in">
+                        <div class="alert-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="alert-content">
+                            <h3>Notice</h3>
+                            <p>{{ message }}</p>
+                        </div>
+                        <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Form Content -->
+                <form action="/DeleteDentist" method="POST" class="delete-dentist-form" onsubmit="handleSubmit(event)">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                    <!-- First Input: Dentist Name -->
+                    <div class="form-group">
+                        <label for="dentist-name-1" class="form-label">
+                            <span class="label-text">Dentist Name</span>
+                            <span class="required-badge">Required</span>
+                        </label>
+
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <input
+                                type="text"
+                                id="dentist-name-1"
+                                name="DeleteDentist"
+                                class="form-input"
+                                placeholder="Enter the dentist's full name"
+                                required
+                                autocomplete="off"
+                            >
+                            <div class="input-underline danger-underline"></div>
+                        </div>
+
+                        <span class="field-hint">
+                            <i class="fas fa-info-circle"></i>
+                            Type the complete name carefully
+                        </span>
+                    </div>
+
+                    <!-- Confirmation Input: Dentist Name -->
+                    <div class="form-group">
+                        <label for="dentist-name-2" class="form-label">
+                            <span class="label-text">Confirm Dentist Name</span>
+                            <span class="required-badge danger">Confirmation</span>
+                        </label>
+
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <i class="fas fa-check-double"></i>
+                            </div>
+                            <input
+                                type="text"
+                                id="dentist-name-2"
+                                name="ConfirmDeleteDentist"
+                                class="form-input"
+                                placeholder="Re-enter the dentist's name to confirm"
+                                required
+                                autocomplete="off"
+                                oninput="checkMatchingNames()"
+                            >
+                            <div class="input-underline danger-underline"></div>
+                            <div class="match-indicator" id="match-indicator"></div>
+                        </div>
+
+                        <span class="field-hint">
+                            <i class="fas fa-lock"></i>
+                            Must match the name above exactly
+                        </span>
+                    </div>
+
+                    <!-- Match Status Display -->
+                    <div class="match-status-container" id="match-status" style="display: none;">
+                        <div class="match-status" id="match-status-content"></div>
+                    </div>
+
+                    <!-- Additional Safety Check -->
+                    <div class="safety-checklist">
+                        <h3>Safety Checklist</h3>
+                        <div class="checklist-items">
+                            <div class="checklist-item">
+                                <input type="checkbox" id="check-1" class="checklist-input">
+                                <label for="check-1">I have confirmed this is the correct dentist</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="check-2" class="checklist-input">
+                                <label for="check-2">I understand this action cannot be undone</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-cancel" onclick="window.location.href='/Dentist'">
+                            <span class="btn-icon">
+                                <i class="fas fa-times"></i>
+                            </span>
+                            <span class="btn-text">Cancel</span>
+                        </button>
+                        <button type="submit" class="btn btn-delete" id="delete-btn" disabled>
+                            <span class="btn-icon">
+                                <i class="fas fa-trash-alt"></i>
+                            </span>
+                            <span class="btn-text">Delete Dentist</span>
+                            <span class="btn-loader" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </span>
+                        </button>
+                    </div>
+
+                    <!-- Warning Text -->
+                    <div class="form-warning">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>This action will permanently delete all associated records</span>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Information Box -->
+            <div class="info-box fade-in">
+                <h3>Before You Delete</h3>
+                <ul class="info-list">
+                    <li>
+                        <i class="fas fa-database"></i>
+                        <span>All work assignments from this dentist will be affected</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-clock"></i>
+                        <span>Historical records associated will be removed</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-undo"></i>
+                        <span>This action cannot be reversed</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-info-circle"></i>
+                        <span>Consider disabling instead of deleting if possible</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <p>&copy; 2024 Prosthetics Lab Management System. All rights reserved.</p>
+    </footer>
+</div>
+
+<!-- Scripts -->
+<script>
+    // Check if names match
+    function checkMatchingNames() {
+        const input1 = document.getElementById('dentist-name-1').value.trim();
+        const input2 = document.getElementById('dentist-name-2').value.trim();
+        const matchIndicator = document.getElementById('match-indicator');
+        const matchStatus = document.getElementById('match-status');
+        const matchStatusContent = document.getElementById('match-status-content');
+        const deleteBtn = document.getElementById('delete-btn');
+
+        if (input2.length === 0) {
+            matchIndicator.style.display = 'none';
+            matchStatus.style.display = 'none';
+            deleteBtn.disabled = true;
+            return;
+        }
+
+        const isMatching = input1.toLowerCase() === input2.toLowerCase() && input1.length > 0;
+
+        if (isMatching) {
+            matchIndicator.className = 'match-indicator match-success';
+            matchIndicator.innerHTML = '<i class="fas fa-check-circle"></i>';
+            matchIndicator.style.display = 'flex';
+
+            matchStatusContent.className = 'status-success';
+            matchStatusContent.innerHTML = '<i class="fas fa-check-circle"></i> <span>Names match! Deletion is ready.</span>';
+            matchStatus.style.display = 'block';
+
+            deleteBtn.disabled = false;
+        } else {
+            matchIndicator.className = 'match-indicator match-error';
+            matchIndicator.innerHTML = '<i class="fas fa-times-circle"></i>';
+            matchIndicator.style.display = 'flex';
+
+            matchStatusContent.className = 'status-error';
+            matchStatusContent.innerHTML = '<i class="fas fa-times-circle"></i> <span>Names do not match. Please check again.</span>';
+            matchStatus.style.display = 'block';
+
+            deleteBtn.disabled = true;
+        }
+    }
+
+    // Handle form submission
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        const input1 = document.getElementById('dentist-name-1').value.trim();
+        const input2 = document.getElementById('dentist-name-2').value.trim();
+        const check1 = document.getElementById('check-1').checked;
+        const check2 = document.getElementById('check-2').checked;
+        const form = event.target;
+        const submitBtn = form.querySelector('.btn-delete');
+        const btnIcon = submitBtn.querySelector('.btn-icon');
+        const btnLoader = submitBtn.querySelector('.btn-loader');
+
+        // Validation
+        if (!input1.trim()) {
+            showError(document.getElementById('dentist-name-1'), 'Please enter the dentist name');
+            return;
+        }
+
+        if (input1.toLowerCase() !== input2.toLowerCase()) {
+            showError(document.getElementById('dentist-name-2'), 'Names do not match');
+            return;
+        }
+
+        if (!check1 || !check2) {
+            showWarning('Please confirm both safety checks before deleting');
+            return;
+        }
+
+        // Show loading state
+        submitBtn.disabled = true;
+        btnIcon.style.display = 'none';
+        btnLoader.style.display = 'inline';
+
+        // Show confirmation dialog
+        if (confirm(`Are you absolutely sure you want to delete "${input1}"?\n\nThis action cannot be undone.`)) {
+            setTimeout(() => {
+                form.submit();
+            }, 500);
+        } else {
+            submitBtn.disabled = false;
+            btnIcon.style.display = 'inline-flex';
+            btnLoader.style.display = 'none';
+        }
+    }
+
+    // Show error message
+    function showError(input, message) {
+        const group = input.closest('.form-group');
+
+        // Remove existing error
+        const existingError = group.querySelector('.error-message');
+        if (existingError) {
+            existingError.remove();
+        }
+
+        // Add error state
+        input.classList.add('error');
+        group.classList.add('error-state');
+
+        // Create error message
+        const errorMsg = document.createElement('span');
+        errorMsg.className = 'error-message';
+        errorMsg.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+        group.appendChild(errorMsg);
+
+        // Shake animation
+        input.classList.add('shake');
+        setTimeout(() => input.classList.remove('shake'), 500);
+    }
+
+    // Show warning message
+    function showWarning(message) {
+        const form = document.querySelector('.delete-dentist-form');
+
+        // Remove existing warning
+        const existingWarning = form.querySelector('.temp-warning');
+        if (existingWarning) {
+            existingWarning.remove();
+        }
+
+        // Create warning
+        const warningDiv = document.createElement('div');
+        warningDiv.className = 'alert alert-warning temp-warning fade-in';
+        warningDiv.innerHTML = `
+            <div class="alert-icon">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div class="alert-content">
+                <h3>Attention Required</h3>
+                <p>${message}</p>
+            </div>
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+
+        form.insertBefore(warningDiv, form.firstChild);
+    }
+
+    // Clear error on input
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.addEventListener('input', function() {
+            if (this.classList.contains('error')) {
+                this.classList.remove('error');
+                this.closest('.form-group').classList.remove('error-state');
+                const errorMsg = this.closest('.form-group').querySelector('.error-message');
+                if (errorMsg) {
+                    errorMsg.remove();
+                }
+            }
+
+            // Recheck matching names when first input changes
+            if (this.id === 'dentist-name-1') {
+                checkMatchingNames();
+            }
+        });
+
+        // Add focus effect
+        input.addEventListener('focus', function() {
+            this.closest('.form-group').classList.add('focused');
+        });
+
+        input.addEventListener('blur', function() {
+            if (!this.value) {
+                this.closest('.form-group').classList.remove('focused');
+            }
+        });
+
+        // Character feedback
+        input.addEventListener('input', function() {
+            const length = this.value.length;
+            if (length > 0) {
+                this.closest('.form-group').classList.add('has-value');
+            } else {
+                this.closest('.form-group').classList.remove('has-value');
+            }
+        });
+    });
+
+    // Checklist functionality
+    document.querySelectorAll('.checklist-input').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const allChecked = Array.from(document.querySelectorAll('.checklist-input')).every(cb => cb.checked);
+            const deleteBtn = document.getElementById('delete-btn');
+
+            const input1 = document.getElementById('dentist-name-1').value.trim();
+            const input2 = document.getElementById('dentist-name-2').value.trim();
+            const namesMatch = input1.toLowerCase() === input2.toLowerCase() && input1.length > 0;
+
+            if (allChecked && namesMatch) {
+                deleteBtn.disabled = false;
+            } else {
+                deleteBtn.disabled = true;
+            }
+        });
+    });
+
+    // Close alert messages
+    document.querySelectorAll('.alert-close').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const alert = this.closest('.alert');
+            alert.style.animation = 'fadeOut 0.4s ease forwards';
+            setTimeout(() => alert.remove(), 400);
+        });
+    });
+
+    // Ripple effect on buttons
+    document.querySelectorAll('.btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (this.disabled) return;
+
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+
+    // Initial state check
+    window.addEventListener('load', function() {
+        checkMatchingNames();
+    });
+</script>
+
+</body>
+</html>

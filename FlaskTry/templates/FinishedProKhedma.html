@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Prothesist Management System - Finished Khedma Page">
+    <meta name="keywords" content="Finished, Completed, Khedma, Prothesist, Prosthetics, Lab Management, Flask">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Finished Khedma - Prothesist Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaProFile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='FinishedProKhedma.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="animated-bg"></div>
+
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-tooth"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>ProLab Hub</h1>
+                    <p>Prosthetics Lab Management System</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="/ProKhedma" class="nav-btn back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Prothesist
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Finished Khedma</h2>
+                <div class="header-accent"></div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <div class="menu-group">
+                    <h3 class="group-title">Navigation</h3>
+                    <a href="/ProAllkhedma" class="menu-item all-item">
+                        <i class="fas fa-list-alt"></i>
+                        <span>All Khedma</span>
+                    </a>
+                    <a href="/ProKhedma" class="menu-item get-item">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Main</span>
+                    </a>
+                </div>
+
+                <div class="menu-group">
+                    <h3 class="group-title">Information</h3>
+                    <div class="info-box">
+                        <i class="fas fa-check-double"></i>
+                        <div class="info-content">
+                            <p><strong>Mark Finished:</strong> Record completed work orders</p>
+                            <p><strong>Track Progress:</strong> Monitor completion status</p>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Welcome Section -->
+            <div class="form-header finished-header">
+                <div class="form-header-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="form-header-content">
+                    <h1>Mark Khedma as Finished</h1>
+                    <p>Record completed prosthetic work orders and track completion status</p>
+                </div>
+            </div>
+
+            <!-- Success/Error Messages -->
+            {% if message %}
+            <div class="alert-container">
+                <div class="alert alert-success fade-in-slow">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="alert-content">
+                        <h3>Success</h3>
+                        <p>{{ message }}</p>
+                    </div>
+                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Form Section -->
+            <div class="form-container">
+                <form action="/ProFinished" method="POST" class="finished-form" id="finished-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                    <!-- Prothesist Information Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <i class="fas fa-user-circle"></i>
+                            <h2>Prothesist Information</h2>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ProthesistName">
+                                <i class="fas fa-user"></i> Prothesist Name
+                                <span class="required">*</span>
+                            </label>
+                            <input
+                                    type="text"
+                                    id="ProthesistName"
+                                    name="ProthesistName"
+                                    placeholder="Enter prothesist name"
+                                    required
+                                    class="form-input"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ProthesistNumber">
+                                <i class="fas fa-id-card"></i> Prothesist Number
+                                <span class="required">*</span>
+                            </label>
+                            <input
+                                    type="text"
+                                    id="ProthesistNumber"
+                                    name="ProthesistNumber"
+                                    placeholder="Enter prothesist number"
+                                    required
+                                    class="form-input"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Khedma Source Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <i class="fas fa-layer-group"></i>
+                            <h2>Work Order Source</h2>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Choice">
+                                <i class="fas fa-code-branch"></i> Source Type
+                                <span class="required">*</span>
+                            </label>
+                            <div class="select-wrapper">
+                                <select
+                                        id="Choice"
+                                        name="Choice"
+                                        onchange="handleSourceChange()"
+                                        required
+                                        class="form-input"
+                                >
+                                    <option value="" disabled selected>Select source type</option>
+                                    <option value="patient">Patient</option>
+                                    <option value="dentist">Dentist</option>
+                                </select>
+                            </div>
+                            <small class="form-help">
+                                Select whether this work order belongs to a patient or a dentist
+                            </small>
+                        </div>
+
+                        <!-- Patient Choice Section -->
+                        <div id="PatientChoice" class="source-section hidden">
+                            <div class="source-badge">
+                                <i class="fas fa-hospital-user"></i>
+                                <span>Patient Work Order</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="PatientID">
+                                    <i class="fas fa-hospital-user"></i> Patient ID
+                                    <span class="required">*</span>
+                                </label>
+                                <input
+                                        type="text"
+                                        id="PatientID"
+                                        name="PatientID"
+                                        placeholder="Enter patient ID"
+                                        class="form-input"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="PatientKhedmaName">
+                                    <i class="fas fa-briefcase"></i> Service ID
+                                    <span class="required">*</span>
+                                </label>
+                                <input
+                                        type="text"
+                                        id="PatientKhedmaName"
+                                        name="ServiceID"
+                                        placeholder="You can find the service id from the first column in patients-history table"
+                                        class="form-input"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Dentist Choice Section -->
+                        <div id="DentistChoice" class="source-section hidden">
+                            <div class="source-badge">
+                                <i class="fas fa-user-md"></i>
+                                <span>Dentist Work Order</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="DentistName">
+                                    <i class="fas fa-user-md"></i> Dentist Name
+                                    <span class="required">*</span>
+                                </label>
+                                <input
+                                        type="text"
+                                        id="DentistName"
+                                        name="Dentist"
+                                        placeholder="Enter dentist name"
+                                        class="form-input"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="DPatientID">
+                                    <i class="fas fa-hospital-user"></i> Patient ID
+                                    <span class="required">*</span>
+                                </label>
+                                <input
+                                        type="text"
+                                        id="DPatientID"
+                                        name="DPatientID"
+                                        placeholder="Enter patient ID"
+                                        class="form-input"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="DentistKhedmaName">
+                                    <i class="fas fa-briefcase"></i> Service ID
+                                    <span class="required">*</span>
+                                </label>
+                                <input
+                                        type="text"
+                                        id="DentistKhedmaName"
+                                        name="DServiceID"
+                                        placeholder="You can find it in the first column of the dentists-history table"
+                                        class="form-input"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="reset" class="btn btn-secondary">
+                            <i class="fas fa-redo"></i> Clear Form
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i> Mark as Finished
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="info-cards-section">
+                <div class="info-card completion-card">
+                    <div class="card-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Track Completion</h3>
+                        <p>Keep accurate records of all completed work orders for proper workflow management</p>
+                    </div>
+                </div>
+
+                <div class="info-card quality-card">
+                    <div class="card-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Quality Assurance</h3>
+                        <p>Mark work as finished only after quality checks and prothesist verification</p>
+                    </div>
+                </div>
+
+                <div class="info-card report-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Performance Reports</h3>
+                        <p>Generate reports based on finished khedma records for productivity analysis</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script>
+    // Handle source change
+    function handleSourceChange() {
+        const choice = document.getElementById('Choice').value.toLowerCase().trim();
+        const patientSection = document.getElementById('PatientChoice');
+        const dentistSection = document.getElementById('DentistChoice');
+
+        // Reset sections
+        patientSection.classList.add('hidden');
+        dentistSection.classList.add('hidden');
+
+        // Clear inputs
+        clearSectionInputs('patient');
+        clearSectionInputs('dentist');
+
+        // Show appropriate section
+        if (choice === 'patient') {
+            patientSection.classList.remove('hidden');
+            document.getElementById('PatientID').focus();
+        } else if (choice === 'dentist') {
+            dentistSection.classList.remove('hidden');
+            document.getElementById('DentistName').focus();
+        }
+    }
+
+    // Clear section inputs
+    function clearSectionInputs(section) {
+        if (section === 'patient') {
+            document.getElementById('PatientID').value = '';
+            document.getElementById('PatientKhedmaName').value = '';
+        } else if (section === 'dentist') {
+            document.getElementById('DentistName').value = '';
+            document.getElementById('DPatientID').value = '';
+            document.getElementById('DentistKhedmaName').value = '';
+        }
+    }
+
+    // Form validation
+    document.getElementById('finished-form').addEventListener('submit', function(e) {
+        const choice = document.getElementById('Choice').value.toLowerCase().trim();
+
+        if (!choice) {
+            e.preventDefault();
+            showError('Please select a source type (patient or dentist)');
+            return false;
+        }
+
+        if (choice === 'patient') {
+            if (!document.getElementById('PatientID').value) {
+                e.preventDefault();
+                showError('Please enter the patient ID');
+                return false;
+            }
+            if (!document.getElementById('PatientKhedmaName').value) {
+                e.preventDefault();
+                showError('Please enter the khedma name');
+                return false;
+            }
+        } else if (choice === 'dentist') {
+            if (!document.getElementById('DentistName').value) {
+                e.preventDefault();
+                showError('Please enter the dentist name');
+                return false;
+            }
+            if (!document.getElementById('DPatientID').value) {
+                e.preventDefault();
+                showError('Please enter the patient ID');
+                return false;
+            }
+            if (!document.getElementById('DentistKhedmaName').value) {
+                e.preventDefault();
+                showError('Please enter the khedma name');
+                return false;
+            }
+        } else if (choice !== 'patient' && choice !== 'dentist') {
+            e.preventDefault();
+            showError('Please enter either "patient" or "dentist"');
+            return false;
+        }
+    });
+
+    // Show error message
+    function showError(message) {
+        const alertContainer = document.querySelector('.alert-container') || createAlertContainer();
+        const alertHTML = `
+            <div class="alert alert-error fade-in-slow">
+                <i class="fas fa-exclamation-circle"></i>
+                <div class="alert-content">
+                    <h3>Error</h3>
+                    <p>${message}</p>
+                </div>
+                <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+        alertContainer.innerHTML = alertHTML;
+        alertContainer.style.display = 'block';
+        alertContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Create alert container if it doesn't exist
+    function createAlertContainer() {
+        const container = document.createElement('div');
+        container.className = 'alert-container';
+        document.querySelector('.content').insertBefore(container, document.querySelector('.form-container'));
+        return container;
+    }
+
+    // Add ripple effect to buttons
+    function createRipple(e) {
+        const button = e.currentTarget;
+        const ripple = document.createElement('span');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.classList.add('ripple');
+
+        button.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    }
+
+    document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('click', createRipple);
+    });
+
+    // Add stagger animation to info cards
+    document.querySelectorAll('.info-card').forEach((card, i) => {
+        card.style.animationDelay = (i * 0.1) + 's';
+    });
+</script>
+
+</body>
+
+</html>

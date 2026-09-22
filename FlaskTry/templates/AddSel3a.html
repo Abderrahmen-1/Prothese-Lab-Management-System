@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add New Inventory Item - Prosthetics Lab Stock Management">
+    <meta name="keywords" content="Add Inventory, Stock, Sel3a, Lab Materials, Management">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Add Sel3a - Add Inventory Item</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='AddSel3a.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+{% if message %}
+<p>{{ message }}</p>
+{% endif %}
+<!-- Animated Background -->
+<div class="animated-bg"></div>
+
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Add Sel3a</h1>
+                    <p>Add New Inventory Item</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="/Sel3a" class="nav-btn back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Inventory
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="form-wrapper">
+            <!-- Form Container -->
+            <div class="form-container">
+                <div class="form-header">
+                    <div class="form-title">
+                        <i class="fas fa-box"></i>
+                        <h2>New Inventory Item</h2>
+                    </div>
+                    <p class="form-subtitle">Add a new prosthetic material or component to your inventory</p>
+                </div>
+
+                <form action="/AddSel3a" method="POST" class="add-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <!-- Sel3a Name -->
+                    <div class="form-group">
+                        <label for="SName" class="form-label">
+                            <i class="fas fa-tag"></i>
+                            Item Name
+                        </label>
+                        <div class="input-wrapper">
+                            <input
+                                    type="text"
+                                    id="SName"
+                                    name="SName"
+                                    class="form-input"
+                                    placeholder="Enter item name (e.g., Acrylic, Resin, etc.)"
+                                    required
+                            >
+                            <span class="input-icon">
+                                    <i class="fas fa-cube"></i>
+                                </span>
+                        </div>
+                    </div>
+
+                    <!-- Sel3a Price -->
+                    <div class="form-group">
+                        <label for="SPrice" class="form-label">
+                            <i class="fas fa-dollar-sign"></i>
+                            Price
+                        </label>
+                        <div class="input-wrapper">
+                            <input
+                                    type="number"
+                                    id="SPrice"
+                                    name="SPrice"
+                                    class="form-input"
+                                    placeholder="Enter item price"
+                                    step="0.01"
+                                    required
+                            >
+                            <span class="input-icon">
+                                    <i class="fas fa-coins"></i>
+                                </span>
+                        </div>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="form-group">
+                        <label for="SDate" class="form-label">
+                            <i class="fas fa-calendar"></i>
+                            Purchase Date
+                        </label>
+                        <div class="input-wrapper">
+                            <input
+                                    type="date"
+                                    id="SDate"
+                                    name="SDate"
+                                    class="form-input"
+                                    required
+                            >
+                            <span class="input-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </span>
+                        </div>
+                    </div>
+
+                    <!-- Khalsa Choice -->
+                    <div class="form-group">
+                        <label for="KhalsaChoice" class="form-label">
+                            <i class="fas fa-credit-card"></i>
+                            Is Payment Complete? (Khalsa)
+                        </label>
+                        <div class="select-wrapper">
+                            <select
+                                    id="KhalsaChoice"
+                                    name="SKhalsa"
+                                    class="form-select"
+                                    oninput="VersementFunction()"
+                                    required
+                            >
+                                <option value="">-- Select --</option>
+                                <option value="yes">Yes (Khalsa - Fully Paid)</option>
+                                <option value="no">No (Partial Payment - Versement)</option>
+                            </select>
+                            <span class="select-arrow">
+                                    <i class="fas fa-chevron-down"></i>
+                                </span>
+                        </div>
+                        <p class="field-hint">Select whether the full amount has been paid</p>
+                    </div>
+
+                    <!-- Versement Section (Conditional) -->
+                    <div id="versement"
+                         class="form-group versement-section"
+                         style="{% if value == 'no' %}display: block;{% else %}display: none;{% endif %}">
+
+                        <label for="Versement" class="form-label">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            Advance Payment (Versement)
+                        </label>
+
+                        <div class="input-wrapper">
+                            <input
+                                    type="number"
+                                    id="VersementInput"
+                                    name="Versement"
+                                    class="form-input"
+                                    placeholder="Enter the advance payment amount"
+                                    step="0.01"
+                            >
+
+                            <span class="input-icon">
+                                <i class="fas fa-money-bill"></i>
+                            </span>
+                        </div>
+
+                        <p class="field-hint">
+                            Enter the amount of advance payment received
+                        </p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Add Item</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="info-section">
+                <div class="info-card">
+                    <div class="info-icon khalsa">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Khalsa vs Versement</h3>
+                    <p><strong>Khalsa:</strong> Complete payment - The full amount has been paid.</p>
+                    <p><strong>Versement:</strong> Partial payment - Only a portion has been paid, enter the advance
+                        amount.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon tips">
+                        <i class="fas fa-checklist"></i>
+                    </div>
+                    <h3>Tips for Adding Items</h3>
+                    <ul class="tips-list">
+                        <li>Use clear, descriptive names for items</li>
+                        <li>Include the exact purchase price</li>
+                        <li>Set the correct purchase date</li>
+                        <li>Specify payment status accurately</li>
+                        <li>Include versement amount if applicable</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon success">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                    <h3>Required Fields</h3>
+                    <ul class="tips-list">
+                        <li>Item Name - The name of the material or component</li>
+                        <li>Price - The total cost of the item</li>
+                        <li>Purchase Date - When the item was purchased</li>
+                        <li>Payment Status - Whether fully paid (Khalsa) or partial (Versement)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Handle Khalsa/Versement choice
+    function VersementFunction() {
+        const khalsaValue = document.getElementById("KhalsaChoice").value.toLowerCase();
+        const versementDiv = document.getElementById("versement");
+        const versementInput = document.getElementById("VersementInput");
+
+        // Hide versement section
+        versementDiv.style.display = "none";
+        versementInput.removeAttribute("required");
+
+        // Show versement section if "no" is selected
+        if (khalsaValue === "no") {
+            versementDiv.style.display = "block";
+            versementDiv.classList.add('show');
+            versementInput.setAttribute("required", "required");
+        }
+    }
+
+    // Ripple effect for buttons
+    function createRipple(e) {
+        const button = e.currentTarget;
+        const ripple = document.createElement('span');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.classList.add('ripple');
+
+        button.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    }
+
+    // Attach ripple effect to buttons
+    document.querySelector('.submit-btn')?.addEventListener('click', function(e) {
+        createRipple(e);
+    });
+
+    document.querySelector('.nav-btn')?.addEventListener('click', function(e) {
+        createRipple(e);
+    });
+
+    // Form input validation and focus effects
+    const inputs = document.querySelectorAll('.form-input, .form-select');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+        input.addEventListener('blur', function() {
+            this.parentElement.classList.remove('focused');
+        });
+        input.addEventListener('input', function() {
+            if (this.value) {
+                this.parentElement.classList.add('filled');
+            } else {
+                this.parentElement.classList.remove('filled');
+            }
+        });
+    });
+
+    // Form submission with validation
+    document.querySelector('.add-form')?.addEventListener('submit', function(e) {
+        const khalsaValue = document.getElementById("KhalsaChoice").value;
+        const versementValue = document.getElementById("Versement").value;
+
+        if (khalsaValue === "no" && !versementValue) {
+            e.preventDefault();
+            alert("Please enter the versement amount for partial payments");
+            return false;
+        }
+    });
+</script>
+
+</body>
+
+</html>

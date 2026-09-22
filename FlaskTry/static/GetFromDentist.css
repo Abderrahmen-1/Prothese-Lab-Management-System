@@ -1,0 +1,1412 @@
+/* ===========================
+   GET KHEDMA FORM
+   Modern Form Design with Animations
+   =========================== */
+
+:root {
+    /* Primary Colors */
+    --primary: #2563eb;
+    --primary-light: #3b82f6;
+    --primary-dark: #1e40af;
+
+    /* Secondary Colors */
+    --success: #10b981;
+    --success-light: #34d399;
+    --info: #0891b2;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+
+    /* Neutral Colors */
+    --bg-dark: #0f172a;
+    --bg-light: #f8fafc;
+    --text-dark: #0f172a;
+    --text-light: #64748b;
+    --border: #e2e8f0;
+    --border-focus: #bfdbfe;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+    /* Transitions */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===========================
+   Base Styles
+   =========================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Animated Background */
+.animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    opacity: 0.02;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.page-container {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+/* ===========================
+   Header Styles
+   =========================== */
+
+.form-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 2rem;
+    box-shadow: var(--shadow-xl);
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.header-title {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.title-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    backdrop-filter: blur(10px);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+.header-title h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin: 0;
+    animation: slideInTitle 0.6s ease;
+}
+
+.header-title p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin: 0.25rem 0 0 0;
+}
+
+@keyframes slideInTitle {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.progress-indicator {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.progress-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+    animation: slideInTitle 0.6s ease 0.1s both;
+}
+
+/* ===========================
+   Form Container & Layout
+   =========================== */
+
+.form-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem 2rem;
+}
+
+.khedma-form {
+    position: relative;
+}
+
+/* Form Sections */
+.form-section {
+    background: white;
+    border-radius: 12px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: var(--transition);
+    border: 1px solid var(--border);
+}
+
+.form-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section-header {
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    animation: slideInLeft 0.6s ease;
+}
+
+.section-header h2 i {
+    color: var(--primary);
+    font-size: 1.75rem;
+}
+
+.section-header p {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    margin: 0;
+    animation: slideInLeft 0.6s ease 0.1s both;
+}
+
+.section-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1.5rem;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--success) 100%);
+    border-radius: 2px;
+    animation: expandWidth 0.6s ease;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes expandWidth {
+    from { width: 0; }
+    to { width: 60px; }
+}
+
+/* ===========================
+   Form Grid & Groups
+   =========================== */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.6s ease 0.2s both;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.label-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.label-with-icon i {
+    color: var(--primary);
+    font-size: 1rem;
+}
+
+.label-with-icon:hover {
+    color: var(--primary);
+}
+
+.required {
+    color: var(--danger);
+    font-weight: 700;
+}
+
+.form-input,
+select {
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text-dark);
+    background: white;
+    transition: var(--transition);
+    appearance: none;
+    cursor: text;
+}
+
+.form-input::placeholder,
+select::placeholder {
+    color: var(--text-light);
+}
+
+.form-input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%) border-box;
+}
+
+.form-group.focused .form-input,
+.form-group.focused select {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-group.filled .form-input,
+.form-group.filled select {
+    border-color: var(--success);
+}
+
+.field-hint {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 0.25rem;
+    opacity: 0;
+    animation: fadeInDown 0.4s ease forwards;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Input with Unit */
+.input-with-unit {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-unit .form-input {
+    width: 100%;
+    padding-right: 3rem;
+}
+
+.unit {
+    position: absolute;
+    right: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-light);
+    pointer-events: none;
+}
+
+/* ===========================
+   Conditional Sections
+   =========================== */
+
+.section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--border) 50%, transparent 100%);
+    margin: 2rem 0;
+    animation: expandWidth 0.6s ease;
+}
+
+.conditional-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border);
+}
+
+.conditional-subsection {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary);
+    animation: slideDown 0.4s ease;
+}
+
+.conditional-subsubsection {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(37, 99, 235, 0.03);
+    border-radius: 6px;
+    animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 1000px;
+    }
+}
+
+.slide-in {
+    animation: slideDown 0.4s ease !important;
+}
+
+.subsection-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.subsection-header i {
+    color: var(--primary);
+    font-size: 1.25rem;
+}
+
+.subsection-header h3 {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+/* ===========================
+   Buttons
+   =========================== */
+
+.section-nav {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    justify-content: flex-end;
+    animation: slideUp 0.6s ease 0.3s both;
+}
+
+.btn {
+    padding: 0.875rem 1.75rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-next,
+.btn-submit {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.btn-next:hover,
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-next:active,
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.btn-back {
+    background: linear-gradient(135deg, var(--text-light) 0%, #94a3b8 100%);
+    color: white;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-back:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-back:active {
+    transform: translateY(0);
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%);
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: ripple-animation 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* ===========================
+   Select/Dropdown Styling
+   =========================== */
+
+select {
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 12px;
+    padding-right: 2.5rem;
+}
+
+select::-webkit-outer-spin-button,
+select::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* ===========================
+   Responsive Design
+   =========================== */
+
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .section-nav {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .header-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .back-button,
+    .progress-indicator {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .header-title {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .header-title h1 {
+        font-size: 1.5rem;
+    }
+
+    .form-container {
+        padding: 0 1rem 2rem 1rem;
+    }
+
+    .form-section {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-header::after {
+        width: 40px;
+    }
+
+    .form-input,
+    select {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+@media (max-width: 640px) {
+    .form-header {
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .header-content {
+        gap: 0.75rem;
+    }
+
+    .title-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 28px;
+    }
+
+    .header-title h1 {
+        font-size: 1.25rem;
+    }
+
+    .form-section {
+        border-radius: 8px;
+        padding: 1.25rem;
+    }
+
+    .section-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .section-nav {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+    }
+
+    .btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* ===========================
+   Print Styles
+   =========================== */
+
+@media print {
+    .form-header,
+    .section-nav {
+        display: none;
+    }
+
+    .form-section {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   Get Khedma - Assignment Form
+   ========================================================= */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   LARGE TABLETS / SMALL LAPTOPS
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .page-container {
+        width: 94%;
+        margin: 0 auto;
+    }
+
+    .header-content {
+        gap: 20px;
+    }
+
+    .form-container {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .khedma-form {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .form-section {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .form-grid {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .form-group {
+        min-width: 0;
+    }
+
+    .form-input {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .input-with-unit {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .input-with-unit .form-input {
+        min-width: 0;
+    }
+
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .section-header p {
+        font-size: 0.85rem;
+    }
+
+    .conditional-section,
+    .conditional-subsection,
+    .conditional-subsubsection {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .section-nav {
+        width: 100%;
+    }
+
+    .btn {
+        min-height: 46px;
+    }
+}
+
+
+/* =========================================================
+   TABLETS
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .page-container {
+        width: 94%;
+        margin: 0 auto;
+    }
+
+    /* ---------- HEADER ---------- */
+
+    .form-header {
+        padding: 18px 0;
+    }
+
+    .header-content {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+        text-align: center;
+    }
+
+    .back-button {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+        justify-content: center;
+        min-height: 46px;
+    }
+
+    .header-title {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .title-icon {
+        flex-shrink: 0;
+    }
+
+    .header-title h1 {
+        font-size: 1.8rem;
+        line-height: 1.3;
+    }
+
+    .header-title p {
+        font-size: 0.82rem;
+        line-height: 1.4;
+    }
+
+    .progress-indicator {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+
+    /* ---------- MAIN FORM ---------- */
+
+    .form-container {
+        width: 100%;
+        max-width: 100%;
+        margin: 20px auto;
+    }
+
+    .khedma-form {
+        width: 100%;
+    }
+
+    .form-section {
+        width: 100%;
+        padding: 24px;
+    }
+
+    .section-header {
+        text-align: center;
+        width: 100%;
+    }
+
+    .section-header h2 {
+        font-size: 1.35rem;
+        line-height: 1.4;
+    }
+
+    .section-header p {
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+
+
+    /* ---------- FORM GRID ---------- */
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        width: 100%;
+    }
+
+    .form-group {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .label-with-icon {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+
+    .form-input {
+        width: 100%;
+        min-width: 0;
+        min-height: 48px;
+        font-size: 16px;
+    }
+
+    .field-hint {
+        font-size: 0.73rem;
+        line-height: 1.4;
+    }
+
+
+    /* ---------- PRICE INPUT ---------- */
+
+    .input-with-unit {
+        width: 100%;
+        display: flex;
+        min-width: 0;
+    }
+
+    .input-with-unit .form-input {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .unit {
+        flex-shrink: 0;
+    }
+
+
+    /* ---------- CONDITIONAL SECTIONS ---------- */
+
+    .conditional-section,
+    .conditional-subsection,
+    .conditional-subsubsection {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .subsection-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .subsection-header h3 {
+        font-size: 1.05rem;
+    }
+
+
+    /* ---------- BUTTONS ---------- */
+
+    .section-nav {
+        width: 100%;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        min-height: 48px;
+        justify-content: center;
+    }
+
+    .btn-next,
+    .btn-submit,
+    .btn-back {
+        flex: 1;
+    }
+}
+
+
+/* =========================================================
+   PHONES
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .page-container {
+        width: 94%;
+    }
+
+    /* ---------- HEADER ---------- */
+
+    .form-header {
+        padding: 14px 0;
+    }
+
+    .header-content {
+        gap: 14px;
+    }
+
+    .back-button {
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 12px;
+        font-size: 0.78rem;
+    }
+
+    .header-title {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+
+    .title-icon {
+        width: 46px;
+        height: 46px;
+        font-size: 1.15rem;
+        margin: 0 auto;
+    }
+
+    .header-title h1 {
+        font-size: 1.4rem;
+        line-height: 1.3;
+    }
+
+    .header-title p {
+        font-size: 0.7rem;
+        line-height: 1.4;
+    }
+
+    .progress-text {
+        font-size: 0.72rem;
+    }
+
+
+    /* ---------- FORM ---------- */
+
+    .form-container {
+        width: 100%;
+        margin: 15px auto;
+    }
+
+    .form-section {
+        padding: 17px;
+        border-radius: 14px;
+    }
+
+    .section-header {
+        margin-bottom: 20px;
+    }
+
+    .section-header h2 {
+        font-size: 1.05rem;
+        line-height: 1.4;
+    }
+
+    .section-header h2 i {
+        font-size: 0.9rem;
+    }
+
+    .section-header p {
+        font-size: 0.7rem;
+        line-height: 1.5;
+    }
+
+
+    /* ---------- FORM GRID BECOMES ONE COLUMN ---------- */
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .form-group,
+    .form-group.full-width {
+        grid-column: auto;
+        width: 100%;
+    }
+
+    .label-with-icon {
+        font-size: 0.76rem;
+        gap: 5px;
+    }
+
+    .label-with-icon i {
+        flex-shrink: 0;
+    }
+
+    .required {
+        flex-shrink: 0;
+    }
+
+    .form-input {
+        width: 100%;
+        min-height: 46px;
+        padding: 11px;
+        font-size: 16px;
+    }
+
+    .form-input::placeholder {
+        font-size: 0.68rem;
+    }
+
+    .field-hint {
+        display: block;
+        margin-top: 6px;
+        font-size: 0.63rem;
+        line-height: 1.4;
+    }
+
+
+    /* ---------- PRICE / UNIT ---------- */
+
+    .input-with-unit {
+        width: 100%;
+    }
+
+    .unit {
+        font-size: 0.75rem;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+
+    /* ---------- CONDITIONAL SECTIONS ---------- */
+
+    .conditional-section {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .section-divider {
+        width: 100%;
+        margin: 18px 0;
+    }
+
+    .conditional-subsection {
+        width: 100%;
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    .conditional-subsubsection {
+        width: 100%;
+    }
+
+    .subsection-header {
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        gap: 7px;
+        margin-bottom: 16px;
+    }
+
+    .subsection-header h3 {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .subsection-header i {
+        font-size: 1rem;
+    }
+
+
+    /* ---------- NAVIGATION BUTTONS ---------- */
+
+    .section-nav {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .btn,
+    .btn-next,
+    .btn-back,
+    .btn-submit {
+        width: 100%;
+        flex: none;
+        min-height: 46px;
+        padding: 11px 14px;
+        justify-content: center;
+        font-size: 0.76rem;
+    }
+
+
+    /* ---------- RIPPLE ---------- */
+
+    .ripple {
+        max-width: 100%;
+        max-height: 100%;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+    .page-container {
+        width: 95%;
+    }
+
+    .form-header {
+        padding: 12px 0;
+    }
+
+    .back-button {
+        font-size: 0.7rem;
+        min-height: 43px;
+    }
+
+    .title-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 1rem;
+    }
+
+    .header-title h1 {
+        font-size: 1.18rem;
+    }
+
+    .header-title p {
+        font-size: 0.62rem;
+    }
+
+    .progress-text {
+        font-size: 0.65rem;
+    }
+
+    .form-section {
+        padding: 13px;
+    }
+
+    .section-header h2 {
+        font-size: 0.9rem;
+    }
+
+    .section-header p {
+        font-size: 0.63rem;
+    }
+
+    .form-grid {
+        gap: 12px;
+    }
+
+    .label-with-icon {
+        font-size: 0.7rem;
+    }
+
+    .form-input {
+        min-height: 44px;
+        padding: 10px;
+    }
+
+    .form-input::placeholder {
+        font-size: 0.61rem;
+    }
+
+    .field-hint {
+        font-size: 0.58rem;
+    }
+
+    .conditional-subsection {
+        padding: 12px;
+    }
+
+    .subsection-header h3 {
+        font-size: 0.8rem;
+    }
+
+    .btn {
+        min-height: 44px;
+        font-size: 0.68rem;
+    }
+
+    .unit {
+        font-size: 0.68rem;
+    }
+}
+
+
+/* =========================================================
+   LANDSCAPE PHONES
+   ========================================================= */
+
+@media (max-width: 768px) and (orientation: landscape) {
+
+    .header-content {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        text-align: left;
+        gap: 15px;
+    }
+
+    .back-button {
+        width: auto;
+        margin: 0;
+    }
+
+    .header-title {
+        flex-direction: row;
+        justify-content: center;
+        text-align: left;
+    }
+
+    .progress-indicator {
+        width: auto;
+    }
+
+    .form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .section-nav {
+        flex-direction: row;
+    }
+
+    .btn {
+        flex: 1;
+    }
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+    .back-button,
+    .btn {
+        min-height: 44px;
+    }
+
+    .form-input,
+    select {
+        min-height: 46px;
+    }
+}

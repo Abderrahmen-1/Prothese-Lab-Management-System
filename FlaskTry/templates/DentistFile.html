@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Dentist Management System for Prosthetics Lab">
+    <meta name="keywords" content="Dentist, Prosthetics, Lab Management, Flask">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Dentist Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Dentist.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="animated-bg"></div>
+
+<div class="container">
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-tooth"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>DentistHub</h1>
+                    <p>Professional Management System</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="/HomePage" class="nav-btn back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Menu
+                </a>
+                <a href="/DentistHistory" class="nav-btn history-btn">
+                    <i class="fas fa-history"></i> History
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Dynamic Search Section container -->
+    <div id="search-bar-container">
+        {% if main and not result and not result is mapping and not most and not less and not total %}
+        <div class="search-section">
+            <form action="{{ url_for('DentistPage') }}" method="POST" class="search-form" id="search-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                <div class="search-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input
+                            type="text"
+                            name="SearchBar"
+                            placeholder="Search dentist by name... or patient by number..."
+                            class="search-input"
+                    >
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-magnifying-glass"></i> Search
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Actions</h2>
+                <div class="header-accent"></div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <div class="menu-group">
+                    <h3 class="group-title">Analytics</h3>
+                    <a href="/DentistMainTable" class="menu-item analytics-item ajax-link">
+                        <span> Main Table </span>
+                        <span class="badge"> Main </span>
+                    </a>
+
+                    <a href="/DentistMostKhedma" class="menu-item analytics-item ajax-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Most Khedma</span>
+                        <span class="badge">Top</span>
+                    </a>
+                    <a href="/DentistLessKhedma" class="menu-item analytics-item ajax-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Less Khedma</span>
+                        <span class="badge">Low</span>
+                    </a>
+                    <a href="/DentistDeadLine" class="menu-item analytics-item ajax-link">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>By DeadLine</span>
+                        <span class="badge">Dates</span>
+                    </a>
+                    <a href="/DentistTotal" class="menu-item analytics-item ajax-link">
+                        <i class="fas fa-users"></i>
+                        <span>Total Dentists</span>
+                        <span class="badge">Sum</span>
+                    </a>
+                    <a href="/DentistsStat" class="menu-item analytics-item ajax-link">
+                        <i class="fas fa-pie-chart"></i>
+                        <span>Statistics</span>
+                        <span class="badge">Stats</span>
+                    </a>
+                </div>
+
+                <div class="menu-group">
+                    <h3 class="group-title">Management</h3>
+                    <a href="/AddDentist" class="menu-item add-item">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Add Dentist</span>
+                        <span class="badge badge-add">+</span>
+                    </a>
+                    <!--  <a href="/DeleteDentist" class="menu-item delete-item">
+                          <i class="fas fa-user-minus"></i>
+                          <span>Delete Dentist</span>
+                          <span class="badge badge-delete">−</span>
+                      </a> -->
+                    <a href="/DeleteDentistPatient" class="menu-item delete-patient-item">
+                        <i class="fas fa-user-minus"></i>
+                        <span>Delete Patient Khedma</span>
+                        <span class="badge badge-delete">−</span>
+                    </a>
+                    <a href="/GetFromDentist" class="menu-item get-item">
+                        <i class="fas fa-handshake"></i>
+                        <span>Get Khedma</span>
+                        <span class="badge">In</span>
+                    </a>
+                    <a href="/DentistVersement" class="menu-item modify-versement-item">
+                        <i class="fas fa-edit"></i>
+                        <span>Modify Versement</span>
+                        <span class="badge badge-modify">✎</span>
+                    </a>
+                </div>
+
+                <div class="menu-group">
+                    <h3 class="group-title">Export</h3>
+                    <a href="/DentistStatPDF" class="menu-item export-item">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Download PDF</span>
+                        <span class="badge badge-export">PDF</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content">
+            {% if message or error %}
+            <div class="alert-container">
+                {% if error %}
+                <div class="alert alert-error fade-in-slow">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div class="alert-content">
+                        <h3>Error</h3>
+                        <p>{{ error }}</p>
+                    </div>
+                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                {% endif %}
+
+                {% if message %}
+                <div class="alert alert-success fade-in-slow">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="alert-content">
+                        <h3>Success</h3>
+                        <p>{{ message }}</p>
+                    </div>
+                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <div class="tables-container" id="tables-container">
+
+                {% if main and not result and not result is mapping and not most and not less and not total %}
+                <div id="MainTable" class="table-card fade-in">
+                    <div class="table-header highlight-primary">
+                        <h2><i class="fas fa-table"></i> Main Table</h2>
+                        <span class="result-count">{{ main|length }} records</span>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><span class="th-content">Service ID</span></th>
+                                <th><span class="th-content">Dentist Name</span></th>
+                                <th><span class="th-content">First Name</span></th>
+                                <th><span class="th-content">Last Name</span></th>
+                                <th><span class="th-content">Number</span></th>
+                                <th><span class="th-content">Khedma</span></th>
+                                <th><span class="th-content">Price</span></th>
+                                <th><span class="th-content">Versement</span></th>
+                                <th><span class="th-content">b9aw</span></th>
+                                <th><span class="th-content">Finished</span></th>
+                                <th><span class="th-content">Khalsa</span></th>
+                                <th><span class="th-content">Date</span></th>
+                                <th><span class="th-content">DeadLine</span></th>
+                                <th><span class="th-content">Status</span></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in main %}
+                                <tr class="table-row-animate">
+                                    <td>{{ row[0] }}</td>
+                                    <td>{{ row[2] }}</td>
+                                    <td>{{ row[3] }}</td>
+                                    <td>{{ row[4] }}</td>
+                                    <td>{{ row[5] }}</td>
+                                    <td>{{ row[6] }}</td>
+                                    <td>{{ row[7] }}</td>
+                                    <td>{{ row[8] }}</td>
+                                    <td>{{ row[9] }}</td>
+                                    <td>{{ row[10] }}</td>
+                                    <td>{{ row[11] }}</td>
+                                    <td>{{ row[12] }}</td>
+                                    <td>{{ row[13] }}</td>
+                                    {% if row[14] != 'finished' %}
+                                        <td>
+                                            <select
+                                                    class="status-select"
+                                                    data-patient-number="{{ row[5] }}"
+                                                    data-dentist-name="{{ row[2] }}">
+
+                                                {% if row[14] == 'in process' %}
+                                                <option value="in process" selected>In Process</option>
+                                                {% else %}
+                                                <option value="in process">In Process</option>
+                                                {% endif %}
+
+                                                {% if row[14] == 'prothesist' %}
+                                                <option value="prothesist" selected>Prothesist</option>
+                                                {% else %}
+                                                <option value="prothesist">Prothesist</option>
+                                                {% endif %}
+
+                                                {% if row[14] == 'montage' %}
+                                                <option value="montage" selected>Montage</option>
+                                                {% else %}
+                                                <option value="montage">Montage</option>
+                                                {% endif %}
+
+                                                {% if row[14] == 'esseyage' %}
+                                                <option value="esseyage" selected>Esseyage</option>
+                                                {% else %}
+                                                <option value="esseyage">Esseyage</option>
+                                                {% endif %}
+                                            </select>
+                                        </td>
+                                    {% else %}
+                                        <td>{{ item }}</td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if result and not result is mapping and not most and not less and not total %}
+                <div id="SearchTable" class="table-card fade-in">
+                    <div class="table-header">
+                        <h2><i class="fas fa-search"></i> Search Results</h2>
+                        <span class="result-count">{{ result|length }} results</span>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><span class="th-content">Service ID</span></th>
+                                <th><span class="th-content">Dentist Name</span></th>
+                                <th><span class="th-content">First Name</span></th>
+                                <th><span class="th-content">Last Name</span></th>
+                                <th><span class="th-content">Number</span></th>
+                                <th><span class="th-content">Khedma</span></th>
+                                <th><span class="th-content">Price</span></th>
+                                <th><span class="th-content">Versement</span></th>
+                                <th><span class="th-content">b9aw</span></th>
+                                <th><span class="th-content">Finished</span></th>
+                                <th><span class="th-content">Khalsa</span></th>
+                                <th><span class="th-content">Date</span></th>
+                                <th><span class="th-content">DeadLine</span></th>
+                                <th><span class="th-content">Status</span></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in result %}
+                            <tr class="table-row-animate">
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+                                <td>{{ row[13] }}</td>
+                                <td>{{ row[14] }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if most and not most is mapping %}
+                <div id="MostTable" class="table-card fade-in">
+                    <div class="table-header highlight-success">
+                        <h2><i class="fas fa-chart-line"></i> Most Khedma</h2>
+                        <span class="dentist-highlight">{{ most_name }}</span>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><span class="th-content">Service ID</span></th>
+                                <th><span class="th-content">Dentist Name</span></th>
+                                <th><span class="th-content">First Name</span></th>
+                                <th><span class="th-content">Last Name</span></th>
+                                <th><span class="th-content">Number</span></th>
+                                <th><span class="th-content">Khedma</span></th>
+                                <th><span class="th-content">Price</span></th>
+                                <th><span class="th-content">Versement</span></th>
+                                <th><span class="th-content">b9aw</span></th>
+                                <th><span class="th-content">Finished</span></th>
+                                <th><span class="th-content">Khalsa</span></th>
+                                <th><span class="th-content">Date</span></th>
+                                <th><span class="th-content">DeadLine</span></th>
+                                <th><span class="th-content">Status</span></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in most %}
+                            <tr class="table-row-animate">
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+                                <td>{{ row[13] }}</td>
+                                <td>{{ row[14] }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if less and not less is mapping %}
+                <div id="LessTable" class="table-card fade-in">
+                    <div class="table-header highlight-warning">
+                        <h2><i class="fas fa-chart-bar"></i> Less Khedma</h2>
+                        <span class="dentist-highlight">{{ less_name }}</span>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><span class="th-content">Service ID</span></th>
+                                <th><span class="th-content">Dentist Name</span></th>
+                                <th><span class="th-content">First Name</span></th>
+                                <th><span class="th-content">Last Name</span></th>
+                                <th><span class="th-content">Number</span></th>
+                                <th><span class="th-content">Khedma</span></th>
+                                <th><span class="th-content">Price</span></th>
+                                <th><span class="th-content">Versement</span></th>
+                                <th><span class="th-content">b9aw</span></th>
+                                <th><span class="th-content">Finished</span></th>
+                                <th><span class="th-content">Khalsa</span></th>
+                                <th><span class="th-content">Date</span></th>
+                                <th><span class="th-content">DeadLine</span></th>
+                                <th><span class="th-content">Status</span></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in less %}
+                            <tr class="table-row-animate">
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+                                <td>{{ row[13] }}</td>
+                                <td>{{ row[14] }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if dateDeadLine %}
+                <div id="DateTableDeadLine" class="table-card fade-in">
+                    <div class="table-header highlight-info">
+                        <h2><i class="fas fa-calendar-check"></i> DeadLine Schedule</h2>
+                        <span class="result-count">{{ dateDeadLine|length }} items</span>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><span class="th-content">Service ID</span></th>
+                                <th><span class="th-content">Dentist Name</span></th>
+                                <th><span class="th-content">First Name</span></th>
+                                <th><span class="th-content">Last Name</span></th>
+                                <th><span class="th-content">Number</span></th>
+                                <th><span class="th-content">Khedma</span></th>
+                                <th><span class="th-content">Price</span></th>
+                                <th><span class="th-content">Versement</span></th>
+                                <th><span class="th-content">b9aw</span></th>
+                                <th><span class="th-content">Finished</span></th>
+                                <th><span class="th-content">Khalsa</span></th>
+                                <th><span class="th-content">Date</span></th>
+                                <th><span class="th-content">DeadLine</span></th>
+                                <th><span class="th-content">Status</span></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in dateDeadLine %}
+                            <tr class="table-row-animate">
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+                                <td>{{ row[13] }}</td>
+                                <td>{{ row[14] }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if total %}
+                <div id="TotalTable" class="table-card fade-in">
+                    <div class="table-header highlight-primary">
+                        <h2><i class="fas fa-users"></i> Total Khedma Summary</h2>
+                        <span class="result-count">{{ total|length }} dentists</span>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table summary-table">
+                            <thead>
+                            <tr>
+                                <th><span class="th-content">Dentist</span></th>
+                                <th><span class="th-content"> Total pas encore payee </span></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for dentist, value in total.items() %}
+                            <tr class="table-row-animate summary-row">
+                                <td class="dentist-cell"><strong>{{ dentist }}</strong></td>
+                                <td class="value-cell">
+                                    <span class="badge badge-value">{{ value }}</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if result and result is mapping %}
+                <div id="StatTable" class="table-card fade-in">
+                    <div class="table-header highlight-stats">
+                        <h2><i class="fas fa-pie-chart"></i> Dentist Statistics</h2>
+                        <span class="result-count">Detailed Analysis</span>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th><span class="th-content">DATA ID</span></th>
+                                <th><span class="th-content">Dentist</span></th>
+                                <th><span class="th-content">Total Khedma</span></th>
+                                <th><span class="th-content">Khedma Khalsa</span></th>
+                                <th><span class="th-content">Not Khalsa</span></th>
+                                <th><span class="th-content">Month</span></th>
+                                <th><span class="th-content">Year</span></th>
+                                <th><span class="th-content">User ID</span></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for dentist, values in result.items() %}
+                            {% for item in values %}
+                            <tr class="table-row-animate">
+                                {% for v in item %}
+                                <td>{{ v }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+
+            {% if not result and not most and not less and not total and not dateDeadLine and not main %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-inbox"></i>
+                </div>
+                <h2>No Data Yet</h2>
+                <p>Select an action from the menu to view dentist information</p>
+            </div>
+            {% endif %}
+        </main>
+    </div>
+
+</div>
+
+<script>
+    // Ripple effect function
+    function createRipple(e) {
+        const button = e.currentTarget;
+        const ripple = document.createElement('span');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.classList.add('ripple');
+
+        button.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    }
+
+    // Change the status
+    document.addEventListener('change', function (e) {
+        if (!e.target.classList.contains('status-select')) {
+            return;
+        }
+
+        const select = e.target;
+
+        const patientNumber = select.dataset.patientNumber;
+        const newStatus = select.value;
+        const dentistName = select.dataset.dentistName;
+
+        console.log("Patient:", patientNumber);
+        console.log("New status:", newStatus);
+        console.log("Dentist:", dentistName);
+
+        fetch('/UpdateDentistStatus', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                patient_number: patientNumber,
+                status: newStatus,
+                dentist_name: dentistName
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+
+            console.log("Flask response:", data);
+
+            const message = document.getElementById('statusMessage');
+
+        })
+        .catch(error => {
+
+            console.error("Error:", error);
+
+            const message = document.getElementById('statusMessage');
+
+            message.textContent = "✗ Error updating status";
+            message.className = "status-message error";
+
+        });
+    });
+
+
+    // Intercept menu link clicks for seamless AJAX loading
+    document.querySelectorAll('.ajax-link').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            createRipple(e);
+
+            const targetUrl = this.getAttribute('href');
+            const contentContainer = document.getElementById('tables-container');
+            const searchContainer = document.getElementById('search-bar-container');
+
+            // Quick transition indicator
+            contentContainer.style.opacity = '0.4';
+
+            fetch(targetUrl)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+
+                    // Replace table content dynamically
+                    const newTables = doc.getElementById('tables-container');
+                    if (newTables) {
+                        contentContainer.innerHTML = newTables.innerHTML;
+                    }
+
+                    // Update search bar visibility dynamically
+                    const newSearch = doc.getElementById('search-bar-container');
+                    if (newSearch) {
+                        searchContainer.innerHTML = newSearch.innerHTML;
+                    }
+
+                    contentContainer.style.opacity = '1';
+                    window.history.pushState(null, '', targetUrl);
+                })
+                .catch(err => {
+                    console.error('AJAX Load Error:', err);
+                    contentContainer.style.opacity = '1';
+                });
+        });
+    });
+</script>
+
+</body>
+</html>

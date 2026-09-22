@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard - Prosthetics Lab Management System">
+    <meta name="keywords" content="Dashboard, Home, Lab, Materials, Management">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>DentaFlow - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='HomePage.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <i class="fas fa-tooth"></i>
+      </div>
+      <span>DentaFlow</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="/Patient" class="snav-item">
+        <span class="snav-dot" style="background:#22c55e"></span>Patients
+      </a>
+      <a href="/Dentist" class="snav-item">
+        <span class="snav-dot" style="background:#3b82f6"></span>Dentists
+      </a>
+      <a href="/Khedma" class="snav-item">
+        <span class="snav-dot" style="background:#60a5fa"></span>Khedma
+      </a>
+      <a href="/Sel3a" class="snav-item">
+        <span class="snav-dot" style="background:#f97316"></span>Sel3a
+      </a>
+      <a href="/ProKhedma" class="snav-item">
+        <span class="snav-dot" style="background:#a855f7"></span>Prothesist
+      </a>
+      <a href="/OtherServicesTable" class="snav-item">
+        <span class="snav-dot" style="background:#10b981"></span>Other Services
+      </a>
+      <a href="/AllTotalAccount" class="snav-item">
+        <span class="snav-dot" style="background:#8b5cf6"></span>Statistics
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="system-pill">
+        <span class="pulse-ring"><span class="pulse-core"></span></span>
+        System Online
+      </div>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <header class="top-header">
+      <div class="header-title">
+        <h2>Dashboard Modules</h2>
+        <p class="subtitle">Streamline your prosthetics lab operations with powerful management tools</p>
+      </div>
+      <div class="user-profile">
+        {% if letter %}
+          <div class="avatar">{{ letter }}</div>
+        {% else %}
+          <div class="avatar">U</div>
+        {% endif %}
+        <div class="user-meta">
+          {% if username %}
+            <h4>{{ username }}</h4>
+          {% else %}
+            <h4>User</h4>
+          {% endif %}
+          <small>Lab Admin</small>
+        </div>
+      </div>
+    </header>
+
+    <div class="cards-grid">
+
+      <a href="/Patient" class="mcard" style="--accent: #22c55e;">
+        <div class="mcard-header">
+          <div class="mcard-icon" style="color: #22c55e; background: rgba(34, 197, 94, 0.1);">
+            <i class="fas fa-user-injured"></i>
+          </div>
+          <span class="mcard-tag">Records</span>
+        </div>
+        <div class="mcard-body">
+          <h3>Patients</h3>
+          <p>Manage patient profiles, medical history and treatment plans.</p>
+        </div>
+        <div class="mcard-footer">
+          <span>Open Module</span>
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+
+      <a href="/Dentist" class="mcard" style="--accent: #3b82f6;">
+        <div class="mcard-header">
+          <div class="mcard-icon" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
+            <i class="fas fa-user-md"></i>
+          </div>
+          <span class="mcard-tag">Orders</span>
+        </div>
+        <div class="mcard-body">
+          <h3>Dentists</h3>
+          <p>Track dentist orders, contact info and referral history.</p>
+        </div>
+        <div class="mcard-footer">
+          <span>Open Module</span>
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+
+      <a href="/Khedma" class="mcard" style="--accent: #60a5fa;">
+        <div class="mcard-header">
+          <div class="mcard-icon" style="color: #60a5fa; background: rgba(96, 165, 250, 0.1);">
+            <i class="fas fa-teeth-open"></i>
+          </div>
+          <span class="mcard-tag">Lab Work</span>
+        </div>
+        <div class="mcard-body">
+          <h3>Khedma</h3>
+          <p>Manage and assign lab work tasks to technicians and specialists.</p>
+        </div>
+        <div class="mcard-footer">
+          <span>Open Module</span>
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+
+      <a href="/Sel3a" class="mcard" style="--accent: #f97316;">
+        <div class="mcard-header">
+          <div class="mcard-icon" style="color: #f97316; background: rgba(249, 115, 22, 0.1);">
+            <i class="fas fa-boxes"></i>
+          </div>
+          <span class="mcard-tag">Inventory</span>
+        </div>
+        <div class="mcard-body">
+          <h3>Sel3a</h3>
+          <p>Track lab materials, stock levels and supplier orders.</p>
+        </div>
+        <div class="mcard-footer">
+          <span>Open Module</span>
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+
+      <a href="/ProKhedma" class="mcard" style="--accent: #a855f7;">
+        <div class="mcard-header">
+          <div class="mcard-icon" style="color: #a855f7; background: rgba(168, 85, 247, 0.1);">
+            <i class="fas fa-cogs"></i>
+          </div>
+          <span class="mcard-tag">Production</span>
+        </div>
+        <div class="mcard-body">
+          <h3>Prothesist</h3>
+          <p>Monitor the entire production workflow, stages and deadlines.</p>
+        </div>
+        <div class="mcard-footer">
+          <span>Open Module</span>
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+
+      <a href="/OtherServices" class="mcard" style="--accent: #10b981;">
+        <div class="mcard-header">
+          <div class="mcard-icon" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
+            <i class="fas fa-concierge-bell"></i>
+          </div>
+          <span class="mcard-tag">Services</span>
+        </div>
+        <div class="mcard-body">
+          <h3>Other Services</h3>
+          <p>Manage extra lab services and external requests easily.</p>
+        </div>
+        <div class="mcard-footer">
+          <span>Open Module</span>
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+
+      <a href="/AllTotalAccount" class="mcard mcard-wide" style="--accent: #8b5cf6;">
+        <div class="mcard-header">
+          <div class="mcard-icon" style="color: #8b5cf6; background: rgba(139, 92, 246, 0.1);">
+            <i class="fas fa-chart-bar"></i>
+          </div>
+          <span class="mcard-tag">Analytics</span>
+        </div>
+        <div class="mcard-body">
+          <h3>Statistics & Totals</h3>
+          <p>View full lab analytics — including revenue, production totals, patient counts and monthly reports.</p>
+        </div>
+        <div class="mcard-footer">
+          <span>Open Module</span>
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <script>
+    // Fade-in effect on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      const cards = document.querySelectorAll('.mcard');
+      cards.forEach((card, i) => {
+        setTimeout(() => {
+          card.classList.add('visible');
+        }, 100 + (i * 60));
+      });
+    });
+  </script>
+
+</body>
+</html>

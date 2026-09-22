@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Modify Dentist Status - Professional Management System">
+    <meta name="keywords" content="Dentist Status, Prosthetics, Lab Management, Healthcare">
+    <meta name="author" content="Prosthetics Lab Team">
+    <title>Dentist Status Modification</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='DentistModifyStatus.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Header Section -->
+    <div class="HeadClass">
+        <a href="/Dentist" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Dentists
+        </a>
+        <h1>
+            <i class="fas fa-edit"></i> Status Modification
+        </h1>
+    </div>
+
+    <!-- Main Form Container -->
+    <form action="/DentistStatus/{{ DentistName }}/{{ PatientUnique }}" method="POST" class="status-form" id="dentistStatusForm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+        <!-- Status Field -->
+        <div class="form-group">
+            <label for="Statue">
+                <i class="fas fa-info-circle"></i> New Status
+            </label>
+            <input
+                type="text"
+                id="Statue"
+                name="Statue"
+                placeholder="Enter the new status (e.g., Completed, In Progress, Pending)"
+                required
+                autocomplete="off"
+            >
+            <small class="field-hint">Update the patient service status</small>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">
+            <i class="fas fa-check-circle"></i> Confirm Status Update
+        </button>
+    </form>
+
+    <!-- Message Alert Section -->
+    {% if message %}
+    <div class="message-container">
+        <div class="alert-message alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span>{{ message }}</span>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="message-container">
+        <div class="alert-message alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>{{ error }}</span>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- JavaScript for Enhanced Interactions -->
+    <script>
+        const form = document.getElementById('dentistStatusForm');
+
+        // Form validation on submit
+        form.addEventListener('submit', function(e) {
+            const status = document.getElementById('Statue').value.trim();
+
+            // Clear previous errors
+            const prevError = document.querySelector('.validation-error');
+            if (prevError) prevError.remove();
+
+            // Validation checks
+
+            if (!status) {
+                e.preventDefault();
+                showValidationError('Please enter a new status');
+                return;
+            }
+
+            // Add loading state to button
+            const button = document.querySelector('.submit-btn');
+            const originalText = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            setTimeout(() => {
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }, 3000);
+        });
+
+        // Input focus animations
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+
+            // Input validation on change
+            input.addEventListener('change', function() {
+                if (this.value.trim()) {
+                    this.parentElement.classList.add('filled');
+                } else {
+                    this.parentElement.classList.remove('filled');
+                }
+            });
+        });
+
+        // Custom validation error display
+        function showValidationError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'validation-error';
+            errorDiv.innerHTML = `
+                <i class="fas fa-exclamation-circle"></i>
+                <span>${message}</span>
+            `;
+
+            form.insertBefore(errorDiv, form.firstChild);
+
+            // Auto-dismiss after 4 seconds
+            setTimeout(() => {
+                if (errorDiv.parentElement) {
+                    errorDiv.style.animation = 'fadeOut 0.5s ease forwards';
+                    setTimeout(() => errorDiv.remove(), 500);
+                }
+            }, 4000);
+        }
+
+        // Auto-close success messages after 5 seconds
+        const messageContainer = document.querySelector('.message-container');
+        if (messageContainer) {
+            setTimeout(() => {
+                const alertMsg = messageContainer.querySelector('.alert-message');
+                if (alertMsg) {
+                    alertMsg.style.animation = 'fadeOut 0.5s ease forwards';
+                    setTimeout(() => messageContainer.remove(), 500);
+                }
+            }, 5000);
+        }
+
+        // Form autofill handler
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for any pre-filled values and add filled class
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                if (input.value) {
+                    input.parentElement.classList.add('filled');
+                }
+            });
+
+            // Auto-scroll to form
+            const form = document.querySelector('.status-form');
+            if (form) {
+                setTimeout(() => {
+                    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+        });
+    </script>
+</body>
+
+</html>

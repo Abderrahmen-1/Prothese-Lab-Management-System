@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A simple web app to display SQL tables using Flask and HTML">
+    <meta name="keywords" content="Flask, Python, SQL, HTML, web app, table display">
+    <meta name="author" content="Your Name">
+    <title>Abonnement Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='AddDentist.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+    <!-- Google Fonts example -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <h2>Ton mois gratuit est terminé</h2>
+    <p>Continue pour <strong>2000 DA / mois</strong></p>
+
+    <!-- Bouton OUI : redirige vers le paiement -->
+    <form action="/payer" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit">✅ Oui, continuer (2000 DA)</button>
+    </form>
+
+    <!-- Bouton NON : déconnecte l'utilisateur -->
+    <form action="/quitter" method="POST">
+        <button type="submit">❌ Non merci</button>
+    </form>
+</body>
+
+</html>

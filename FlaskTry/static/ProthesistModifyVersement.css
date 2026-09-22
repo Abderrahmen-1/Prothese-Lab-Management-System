@@ -1,0 +1,1677 @@
+/* ===========================
+   PROTHESIST MODIFY VERSEMENT
+   Form Styling - Extends KhedmaProFile.css
+   =========================== */
+
+/* ===========================
+   Form Header
+   =========================== */
+
+.form-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.form-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.form-header-icon {
+    font-size: 3.5rem;
+    opacity: 0.9;
+    animation: float 3s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+.form-header-content {
+    position: relative;
+    z-index: 2;
+}
+
+.form-header-content h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.form-header-content p {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* ===========================
+   Form Container
+   =========================== */
+
+.form-container {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 2rem;
+}
+
+.modify-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    animation: fadeIn 0.5s ease;
+}
+
+/* ===========================
+   Form Sections
+   =========================== */
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--bg-light);
+    border-radius: 10px;
+    border-left: 4px solid var(--primary);
+    transition: var(--transition);
+}
+
+.form-section:hover {
+    background: rgba(16, 185, 129, 0.03);
+    box-shadow: var(--shadow-sm);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border);
+}
+
+.section-header i {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+/* ===========================
+   Form Groups
+   =========================== */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-group label i {
+    color: var(--primary);
+    font-size: 1rem;
+}
+
+.required {
+    color: var(--danger);
+    font-weight: 700;
+}
+
+/* ===========================
+   Form Inputs
+   =========================== */
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    background: white;
+    transition: var(--transition);
+    outline: none;
+}
+
+.form-input::placeholder,
+.form-select::placeholder {
+    color: var(--text-light);
+}
+
+.form-input:focus,
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    background: rgba(16, 185, 129, 0.02);
+}
+
+.form-input:hover,
+.form-select:hover {
+    border-color: var(--primary-light);
+}
+
+.form-select {
+    cursor: pointer;
+    appearance: none;
+    padding-right: 2.5rem;
+}
+
+/* ===========================
+   Select Wrapper
+   =========================== */
+
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.select-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--primary);
+    font-size: 0.75rem;
+}
+
+.form-select:focus ~ .select-icon {
+    color: var(--primary-dark);
+}
+
+/* ===========================
+   Input Wrapper (for currency)
+   =========================== */
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.currency-input {
+    padding-right: 3rem;
+}
+
+.input-suffix {
+    position: absolute;
+    right: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary);
+    pointer-events: none;
+}
+
+/* ===========================
+   Form Help Text
+   =========================== */
+
+.form-help {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.form-help::before {
+    content: 'ℹ';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: rgba(16, 185, 129, 0.15);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 16px;
+    font-size: 0.7rem;
+    color: var(--primary);
+}
+
+/* ===========================
+   Source Sections
+   =========================== */
+
+.source-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(16, 185, 129, 0.05);
+    border-radius: 8px;
+    border: 2px dashed var(--primary-light);
+    animation: slideDown 0.3s ease;
+}
+
+.source-section.hidden {
+    display: none !important;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 1000px;
+    }
+}
+
+/* ===========================
+   Form Actions
+   =========================== */
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--bg-light);
+    border-radius: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    border-top: 2px solid var(--border);
+    margin-top: 1rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    text-transform: none;
+}
+
+.btn i {
+    font-size: 1rem;
+}
+
+/* Primary Button */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    box-shadow: var(--shadow-md);
+    flex: 1;
+    min-width: 200px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Secondary Button */
+.btn-secondary {
+    background: var(--border);
+    color: var(--text-dark);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: white;
+    border-color: var(--text-dark);
+    transform: translateY(-2px);
+}
+
+.btn-secondary:active {
+    transform: translateY(0);
+}
+
+/* Ripple Effect */
+.btn .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: ripple-animation 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* ===========================
+   Info Cards Section
+   =========================== */
+
+.info-cards-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.info-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    border-left: 4px solid;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    animation: fadeIn 0.5s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.success-card {
+    border-left-color: var(--success);
+}
+
+.success-card .card-icon {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+}
+
+.info-card-blue {
+    border-left-color: var(--info);
+}
+
+.info-card-blue .card-icon {
+    background: rgba(6, 182, 212, 0.15);
+    color: var(--info);
+}
+
+.card-content h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-dark);
+}
+
+.card-content p {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ===========================
+   Info Box (Sidebar)
+   =========================== */
+
+.info-box {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(16, 185, 129, 0.08);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary);
+}
+
+.info-box i {
+    color: var(--primary);
+    font-size: 1.125rem;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+.info-content p {
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    margin: 0.375rem 0;
+    line-height: 1.5;
+}
+
+.info-content p:first-child {
+    margin-top: 0;
+}
+
+.info-content p:last-child {
+    margin-bottom: 0;
+}
+
+.info-content strong {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* ===========================
+   Responsive Design
+   =========================== */
+
+@media (max-width: 1024px) {
+    .form-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .form-header-icon {
+        font-size: 3rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        justify-content: stretch;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-primary {
+        min-width: unset;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-container {
+        padding: 1.5rem;
+    }
+
+    .form-section {
+        padding: 1.25rem;
+    }
+
+    .form-header {
+        padding: 2rem;
+        gap: 1rem;
+    }
+
+    .form-header-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .form-header-icon {
+        font-size: 2.5rem;
+    }
+
+    .section-header {
+        flex-wrap: wrap;
+    }
+
+    .section-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .info-cards-section {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .btn {
+        width: 100%;
+        min-height: 48px;
+    }
+}
+
+@media (max-width: 640px) {
+    .form-container {
+        padding: 1.25rem;
+        border-radius: 8px;
+    }
+
+    .form-section {
+        padding: 1rem;
+        border-left-width: 3px;
+    }
+
+    .form-header {
+        padding: 1.5rem;
+        border-radius: 8px;
+    }
+
+    .form-header-content h1 {
+        font-size: 1.25rem;
+    }
+
+    .form-header-content p {
+        font-size: 0.875rem;
+    }
+
+    .form-header-icon {
+        font-size: 2rem;
+    }
+
+    .form-input,
+    .form-select {
+        font-size: 16px; /* Prevents zoom on focus for mobile */
+        padding: 0.75rem 0.875rem;
+    }
+
+    .input-suffix,
+    .select-icon {
+        font-size: 0.75rem;
+    }
+
+    .section-header {
+        gap: 0.5rem;
+    }
+
+    .section-header i {
+        font-size: 1.25rem;
+    }
+
+    .section-header h2 {
+        font-size: 1rem;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+    }
+
+    .card-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.25rem;
+    }
+
+    .card-content h3 {
+        font-size: 0.95rem;
+    }
+
+    .card-content p {
+        font-size: 0.8rem;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+        min-height: 44px;
+    }
+}
+
+/* ===========================
+   Animation Delays
+   =========================== */
+
+.info-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.info-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+/* ===========================
+   Print Styles
+   =========================== */
+
+@media print {
+    .form-header {
+        page-break-inside: avoid;
+    }
+
+    .btn {
+        display: none;
+    }
+
+    .form-actions {
+        display: none;
+    }
+
+    .modify-form {
+        box-shadow: none;
+    }
+
+    .form-container {
+        box-shadow: none;
+        border: 1px solid var(--border);
+    }
+}
+
+/* ===========================
+   Accessibility
+   =========================== */
+
+.form-input:disabled,
+.form-select:disabled {
+    background: var(--bg-light);
+    color: var(--text-light);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Focus Visible for Keyboard Navigation */
+.form-input:focus-visible,
+.form-select:focus-visible,
+.btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* ===========================
+   Dark Mode Support
+   =========================== */
+
+@media (prefers-color-scheme: dark) {
+    .form-container {
+        background: var(--bg-dark);
+        color: var(--text-light);
+    }
+
+    .form-section {
+        background: rgba(15, 23, 42, 0.5);
+    }
+
+    .form-input,
+    .form-select {
+        background: var(--bg-dark);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+        background: rgba(16, 185, 129, 0.05);
+    }
+
+    .info-card {
+        background: var(--bg-dark);
+        border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .info-box {
+        background: rgba(16, 185, 129, 0.1);
+    }
+
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE DESIGN - PROTHESIST MODIFY VERSEMENT
+   ========================================================= */
+
+/* =========================================================
+   GLOBAL OVERFLOW PROTECTION
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+img,
+svg,
+video {
+    max-width: 100%;
+}
+
+.container,
+.main-layout,
+.sidebar,
+.content,
+.form-container,
+.modify-form,
+.form-section,
+.source-section,
+.info-cards-section,
+.info-card {
+    min-width: 0;
+}
+
+
+/* =========================================================
+   SMALL LAPTOP / TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .container {
+        width: 94%;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .header {
+        padding: 25px 30px;
+    }
+
+    .header-content {
+        gap: 25px;
+    }
+
+    .logo-text {
+        min-width: 0;
+    }
+
+    .logo-text h1 {
+        font-size: 1.8rem;
+    }
+
+    .logo-text p {
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+
+    .header-nav {
+        flex-shrink: 0;
+    }
+
+    .nav-btn {
+        white-space: nowrap;
+    }
+
+    .main-layout {
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .sidebar {
+        min-width: 0;
+    }
+
+    .sidebar-menu {
+        min-width: 0;
+    }
+
+    .menu-item {
+        min-width: 0;
+    }
+
+    .menu-item span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .content {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .form-header {
+        width: 100%;
+    }
+
+    .form-header-content {
+        min-width: 0;
+    }
+
+    .form-header-content h1,
+    .form-header-content p {
+        overflow-wrap: anywhere;
+    }
+
+    .form-container {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .modify-form {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .form-section {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .form-group {
+        min-width: 0;
+    }
+
+    .form-input,
+    .form-select {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .select-wrapper {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .input-wrapper {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .currency-input {
+        min-width: 0;
+    }
+
+    .source-section {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .info-cards-section {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .info-card {
+        min-width: 0;
+    }
+
+    .card-content {
+        min-width: 0;
+    }
+
+    .card-content p {
+        overflow-wrap: anywhere;
+    }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .main-layout {
+        grid-template-columns: 200px minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .form-section {
+        padding: 22px;
+    }
+
+    .info-cards-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .container {
+        width: 100%;
+    }
+
+    .header {
+        padding: 22px 20px;
+    }
+
+    .header-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+    }
+
+    .logo-section {
+        justify-content: center;
+    }
+
+    .logo-text {
+        min-width: 0;
+    }
+
+    .logo-text h1 {
+        font-size: 1.65rem;
+    }
+
+    .logo-text p {
+        font-size: 0.75rem;
+        line-height: 1.45;
+    }
+
+    .header-nav {
+        width: 100%;
+    }
+
+    .nav-btn {
+        width: 100%;
+        min-height: 46px;
+        justify-content: center;
+        text-align: center;
+    }
+
+
+    /* Main layout becomes vertical */
+    .main-layout {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 20px;
+    }
+
+    .sidebar,
+    .content {
+        width: 100%;
+        min-width: 0;
+    }
+
+
+    /* Sidebar */
+    .sidebar-header {
+        text-align: center;
+    }
+
+    .sidebar-menu {
+        width: 100%;
+    }
+
+    .menu-group {
+        width: 100%;
+    }
+
+    .group-title {
+        text-align: left;
+    }
+
+    .menu-item {
+        width: 100%;
+        min-height: 46px;
+    }
+
+    .menu-item span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+
+    /* Sidebar info box */
+    .sidebar .info-box {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .info-content {
+        min-width: 0;
+    }
+
+    .info-content p {
+        overflow-wrap: anywhere;
+        line-height: 1.5;
+    }
+
+
+    /* Form header */
+    .form-header {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .form-header-icon {
+        flex-shrink: 0;
+    }
+
+    .form-header-content {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .form-header-content h1 {
+        font-size: 1.45rem;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    .form-header-content p {
+        font-size: 0.8rem;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+
+    /* Form */
+    .form-container {
+        width: 100%;
+    }
+
+    .modify-form {
+        width: 100%;
+    }
+
+    .form-section {
+        width: 100%;
+        padding: 22px;
+    }
+
+    .section-header {
+        width: 100%;
+        gap: 10px;
+    }
+
+    .section-header i {
+        flex-shrink: 0;
+    }
+
+    .section-header h2 {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+
+    /* Form groups */
+    .form-group {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .form-group label {
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    .form-input,
+    .form-select {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        min-height: 46px;
+    }
+
+
+    /* Select */
+    .select-wrapper {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .select-icon {
+        pointer-events: none;
+    }
+
+
+    /* Dynamic source sections */
+    .source-section {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .source-section .form-group {
+        width: 100%;
+    }
+
+
+    /* Payment */
+    .input-wrapper {
+        width: 100%;
+        min-width: 0;
+        display: flex;
+    }
+
+    .currency-input {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .input-suffix {
+        flex-shrink: 0;
+    }
+
+    .form-help {
+        display: block;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+
+    /* Actions */
+    .form-actions {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+        min-height: 48px;
+        justify-content: center;
+    }
+
+
+    /* Info cards */
+    .info-cards-section {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .info-card {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .card-icon {
+        flex-shrink: 0;
+    }
+
+    .card-content {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .card-content h3,
+    .card-content p {
+        overflow-wrap: anywhere;
+    }
+}
+
+
+/* =========================================================
+   MOBILE PHONE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .header {
+        padding: 18px 15px;
+    }
+
+    .logo-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .logo-icon {
+        margin: 0 auto;
+    }
+
+    .logo-text h1 {
+        font-size: 1.45rem;
+    }
+
+    .logo-text p {
+        font-size: 0.68rem;
+        line-height: 1.45;
+    }
+
+    .header-nav {
+        width: 100%;
+    }
+
+    .nav-btn {
+        width: 100%;
+        min-height: 46px;
+        font-size: 0.8rem;
+    }
+
+
+    /* Sidebar */
+    .main-layout {
+        gap: 15px;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .sidebar-header {
+        padding: 15px;
+    }
+
+    .sidebar-header h2 {
+        font-size: 1rem;
+    }
+
+    .group-title {
+        font-size: 0.82rem;
+    }
+
+    .menu-item {
+        width: 100%;
+        min-height: 46px;
+        padding: 10px 12px;
+        font-size: 0.8rem;
+    }
+
+    .menu-item i {
+        flex-shrink: 0;
+    }
+
+    .menu-item span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+
+    /* Sidebar information */
+    .sidebar .info-box {
+        padding: 13px;
+    }
+
+    .info-content p {
+        font-size: 0.72rem;
+        line-height: 1.5;
+    }
+
+
+    /* Form header */
+    .form-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .form-header-icon {
+        margin: 0 auto;
+    }
+
+    .form-header-content {
+        width: 100%;
+    }
+
+    .form-header-content h1 {
+        font-size: 1.25rem;
+    }
+
+    .form-header-content p {
+        font-size: 0.74rem;
+        line-height: 1.5;
+    }
+
+
+    /* Form sections */
+    .form-section {
+        padding: 17px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 8px;
+    }
+
+    .section-header h2 {
+        font-size: 0.95rem;
+    }
+
+
+    /* Inputs */
+    .form-group label {
+        font-size: 0.8rem;
+    }
+
+    .form-input,
+    .form-select {
+        min-height: 44px;
+        font-size: 0.8rem;
+    }
+
+
+    /* Dynamic sections */
+    .source-section {
+        margin-top: 15px;
+    }
+
+
+    /* Payment input */
+    .input-wrapper {
+        width: 100%;
+    }
+
+    .input-suffix {
+        font-size: 0.75rem;
+    }
+
+    .form-help {
+        font-size: 0.68rem;
+    }
+
+
+    /* Buttons */
+    .form-actions {
+        gap: 10px;
+    }
+
+    .form-actions .btn {
+        min-height: 46px;
+        font-size: 0.8rem;
+    }
+
+
+    /* Info cards */
+    .info-cards-section {
+        gap: 12px;
+    }
+
+    .info-card {
+        padding: 15px;
+    }
+
+    .card-icon {
+        flex-shrink: 0;
+    }
+
+    .card-content h3 {
+        font-size: 0.85rem;
+    }
+
+    .card-content p {
+        font-size: 0.72rem;
+        line-height: 1.5;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+    .header {
+        padding: 15px 10px;
+    }
+
+    .logo-text h1 {
+        font-size: 1.3rem;
+    }
+
+    .logo-text p {
+        font-size: 0.63rem;
+    }
+
+    .nav-btn {
+        min-height: 44px;
+        font-size: 0.74rem;
+    }
+
+
+    /* Sidebar */
+    .sidebar-header {
+        padding: 13px 10px;
+    }
+
+    .sidebar-header h2 {
+        font-size: 0.9rem;
+    }
+
+    .group-title {
+        font-size: 0.75rem;
+    }
+
+    .menu-item {
+        min-height: 44px;
+        padding: 9px 10px;
+        font-size: 0.74rem;
+    }
+
+    .sidebar .info-box {
+        padding: 11px;
+    }
+
+    .info-content p {
+        font-size: 0.65rem;
+    }
+
+
+    /* Form header */
+    .form-header-content h1 {
+        font-size: 1.1rem;
+    }
+
+    .form-header-content p {
+        font-size: 0.67rem;
+    }
+
+
+    /* Form */
+    .form-section {
+        padding: 14px;
+    }
+
+    .section-header h2 {
+        font-size: 0.87rem;
+    }
+
+    .form-group label {
+        font-size: 0.74rem;
+    }
+
+    .form-input,
+    .form-select {
+        min-height: 42px;
+        font-size: 0.74rem;
+    }
+
+    .form-help {
+        font-size: 0.62rem;
+    }
+
+
+    /* Source sections */
+    .source-section {
+        padding: 10px;
+    }
+
+
+    /* Payment */
+    .input-suffix {
+        font-size: 0.68rem;
+    }
+
+
+    /* Buttons */
+    .form-actions .btn {
+        min-height: 44px;
+        font-size: 0.74rem;
+    }
+
+
+    /* Info cards */
+    .info-card {
+        padding: 13px;
+    }
+
+    .card-content h3 {
+        font-size: 0.78rem;
+    }
+
+    .card-content p {
+        font-size: 0.65rem;
+    }
+}
+
+
+/* =========================================================
+   LANDSCAPE PHONES
+   ========================================================= */
+
+@media (max-height: 600px) and (orientation: landscape) {
+
+    .header {
+        padding: 12px 20px;
+    }
+
+    .header-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .logo-section {
+        flex-direction: row;
+        text-align: left;
+    }
+
+    .logo-icon {
+        margin: 0;
+    }
+
+    .header-nav {
+        width: auto;
+    }
+
+    .nav-btn {
+        width: auto;
+        min-height: 44px;
+    }
+
+    .main-layout {
+        gap: 15px;
+    }
+
+
+    /* Form header */
+    .form-header {
+        flex-direction: row;
+        text-align: left;
+        align-items: center;
+    }
+
+    .form-header-icon {
+        margin: 0;
+    }
+
+
+    /* Two columns can fit in landscape */
+    .form-section {
+        padding: 18px;
+    }
+
+    .form-section:nth-child(1) .form-group,
+    .form-section:nth-child(2) .form-group {
+        width: 100%;
+    }
+
+
+    /* Dentist source can use two columns */
+    #DentistSource:not(.hidden) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+    }
+
+    #DentistSource .form-group {
+        min-width: 0;
+    }
+
+
+    /* Buttons side by side */
+    .form-actions {
+        flex-direction: row;
+    }
+
+    .form-actions .btn {
+        flex: 1;
+    }
+
+
+    /* Info cards side by side */
+    .info-cards-section {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+    .nav-btn,
+    .menu-item,
+    .form-input,
+    .form-select,
+    .btn {
+        min-height: 44px;
+    }
+
+    /*
+       Keep mobile form controls easy to tap
+       and avoid browser zoom caused by tiny text.
+    */
+    .form-input,
+    .form-select {
+        font-size: 16px;
+    }
+
+    .select-icon {
+        pointer-events: none;
+    }
+}
+
