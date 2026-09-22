@@ -710,8 +710,9 @@ def DeletePatient():
                             pr.user_id = %s AND pr.patient_number = %s """,(session['id'], Patient_unique))
             found = cursor.fetchone()
 
-            if found[0] == PatientF_deleted and found[1] == PatientL_deleted :
-                return render_template("DeletePatient.html", message=f"This Service is still with {found[2]} we can't delete it", csrf_token=new_token)
+            if found :
+                if found[0] == PatientF_deleted and found[1] == PatientL_deleted :
+                    return render_template("DeletePatient.html", message=f"This Service is still with {found[2]} we can't delete it", csrf_token=new_token)
 
             cursor.execute("""
                     SELECT versa , b9aw , MONTH(la_date) , YEAR(la_date)  
@@ -886,7 +887,7 @@ def ModifyVersaPatient():
                                 SET
                                 versement = %s,
                                 b9aw = %s
-                                WHERE user_id = %s AND patient_number = %s
+                                WHERE user_id = %s AND pNumber = %s
                                """,
                                (new_versa, b9aw, session['id'], Patient_Id))
 
@@ -923,7 +924,7 @@ def ModifyVersaPatient():
                                 SET
                                 versement = %s,
                                 b9aw = %s
-                                WHERE user_id = %s AND patient_number = %s
+                                WHERE user_id = %s AND pNumber = %s
                                """,
                                (new_versa, b9aw, session['id'], Patient_Id))
 
@@ -2064,7 +2065,7 @@ def ModifyDentistVersement():
                                 UPDATE dentist_history 
                                 SET 
                                 versement = %s , b9aw = %s 
-                                WHERE user_id = %s AND dentist_name = %s AND patient_number = %s 
+                                WHERE user_id = %s AND dentistname = %s AND pNumber = %s 
                                 """,(NewVersement, b9aw, session['id'], DentistName, KhedmaId))
 
                 cursor.execute("""
@@ -2086,6 +2087,7 @@ def ModifyDentistVersement():
                                 WHERE user_id = %s """, (session['id'],))
 
                 result = cursor.fetchall()
+                conn.commit()
 
                 return render_template("DentistFile.html", message="Informations Updated Successeful", result=result,
                                        csrf_token=new_token)
@@ -2106,7 +2108,7 @@ def ModifyDentistVersement():
                                 UPDATE dentist_history 
                                 SET 
                                 versement = %s , b9aw = %s 
-                                WHERE user_id = %s AND dentist_name = %s AND patient_number = %s 
+                                WHERE user_id = %s AND dentistname = %s AND pNumber = %s 
                                 """, (NewVersement, b9aw, session['id'], DentistName, KhedmaId))
 
                 cursor.execute("""
@@ -2182,17 +2184,6 @@ def DeleteDentistKhedma():
         try:
 
             cursor.execute("""
-                            SELECT d.patient_firstname, d.patient_lastname, pr.pName 
-                            FROM other_prothesists_khedma pr 
-                            JOIN dentists d ON pr.user_id = d.user_id AND pr.patient_number = d.patient_number
-                            WHERE 
-                            pr.user_id = %s AND pr.patient_number = %s """, (session['id'], Patient_unique))
-            found = cursor.fetchone()
-
-            if found[0] == PatientF_deleted and found[1] == PatientL_deleted :
-                return render_template("DeleteDentistPatient.html", message=f"This Service is still with {found[2]} we can't delete it", csrf_token=new_token)
-
-            cursor.execute("""
                     SELECT price, khalsa, MONTH(date), YEAR(date), versement, b9aw  
                     FROM dentists 
                     WHERE dentist_name = %s AND patient_firstname = %s AND patient_lastname = %s 
@@ -2205,13 +2196,26 @@ def DeleteDentistKhedma():
                 return render_template("DeleteDentistPatient.html"
                                        ,message="Patient not found", csrf_token=new_token )
 
-
             price = result[0]
             khalsa = result[1]
             month = result[2]
             year = result[3]
             versement = result[4]
             b9aw = result[5]
+
+            cursor.execute("""
+                            SELECT d.patient_firstname, d.patient_lastname, pr.pName 
+                            FROM other_prothesists_khedma pr 
+                            JOIN dentists d ON pr.user_id = d.user_id AND pr.patient_number = d.patient_number
+                            WHERE 
+                            pr.user_id = %s AND pr.patient_number = %s """, (session['id'], Patient_unique))
+            found = cursor.fetchone()
+
+            if found :
+                if found[0] == PatientF_deleted and found[1] == PatientL_deleted:
+                    return render_template("DeleteDentistPatient.html",
+                                           message=f"This Service is still with {found[2]} we can't delete it",
+                                           csrf_token=new_token)
 
             if khalsa.lower() == "yes":
                 cursor.execute("""
@@ -2501,6 +2505,13 @@ def DentistsStat():
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
     try:
+        cursor.execute("""
+                        DELETE FROM dentist_stat
+                        WHERE 
+                        total_khedma = 0 AND khalsin = 0 AND machi_khalsin = 0 AND user_id = %s 
+                        """,(session['id'],))
+        conn.commit()
+
         dentists_list = GetAllDentistTables(cursor)
         result = {}
         for dentist in dentists_list:
@@ -2513,6 +2524,11 @@ def DentistsStat():
         if result:
             return render_template("DentistFile.html", message="The Stat Table", result=result)
         return render_template("DentistFile.html", message="Table Not Found (There is no Dentists)")
+
+    except Exception as e :
+        conn.rollback()
+        return render_template("DentistFile.html", message=f"error {str(e)}")
+
     finally:
         cursor.close()
         conn.close()
@@ -2747,7 +2763,7 @@ def khedmaMkemla():
                                     status = 'finished' 
                                     WHERE id = %s AND user_id = %s AND pNumber = %s """, (khedmaID, session['id'], patientId))
                 else:
-                    return render_template("FinishedKhedma.html",
+                    return render_template("PatientHistory.html",
                                            error="Service not found in history get the Service ID from the patient-history table ",
                                            csrf_token=new_token)
 
@@ -2843,8 +2859,8 @@ def khedmaMkemla():
                                     status = 'finished' 
                                     WHERE id = %s AND user_id = %s AND pNumber = %s """, (khedmaID, session['id'], patientId))
                 else:
-                    return render_template("FinishedKhedma.html",
-                                           error="Service not found in history get the Service ID from the patient-history table ",
+                    return render_template("DentistHistory.html",
+                                           error="Service not found in history get the Service ID from the dentists-history table ",
                                            csrf_token=new_token)
 
                 # Update dentist status
@@ -2933,7 +2949,10 @@ def KhedmaKhalsa():
 
                 patient_price = result[10]
                 patient_date  = result[6]
-                old_khalsa    = result[8]
+                old_khalsa    = result[9]
+
+                if old_khalsa == 'yes' :
+                    return render_template("KhedmaKhalsa.html", message="Service already payed", csrf_token=new_token)
 
                 cursor.execute("""
                                 SELECT p.id, k.id 
@@ -2960,7 +2979,7 @@ def KhedmaKhalsa():
                    #                        , csrf_token=new_token)
 
                 cursor.execute("""
-                                SELECT price 
+                                SELECT pPrice 
                                 FROM patient_history 
                                 WHERE id = %s AND user_id = %s AND pNumber = %s """,
                                (khedmaID, session['id'], patientId))
@@ -2973,7 +2992,7 @@ def KhedmaKhalsa():
                                     versement = %s , b9aw = %s 
                                     WHERE id = %s AND user_id = %s """, (found[0], 0, khedmaID, session['id']))
                 else:
-                    return render_template("FinishedKhedma.html",
+                    return render_template("PatientHistory.html",
                                            error="Service not found in history get the Service ID from the patient-history table ",
                                            csrf_token=new_token)
 
@@ -2991,7 +3010,6 @@ def KhedmaKhalsa():
                             WHERE id = %s 
                         """, ('yes', service[1]))
 
-
                 print("DONE 3")
 
                 cursor.execute("""
@@ -3004,11 +3022,9 @@ def KhedmaKhalsa():
                 cursor.execute("""
                             DELETE FROM khedma
                             WHERE khedma_wajda = %s AND user_id = %s
-                        """, ('yes', 'yes', session['id']))
+                        """, ('yes', session['id']))
 
                 print("DONE 5")
-
-
 
                 if old_khalsa.lower() == 'no':
                     UpdateKhalsaStat(cursor, conn, table="patient", price=patient_price, date=patient_date)
@@ -3039,6 +3055,9 @@ def KhedmaKhalsa():
                 dentist_price = result[9]
                 dentist_date  = result[12]
                 old_khalsa    = result[11]
+
+                if old_khalsa == 'yes' :
+                    return render_template("KhedmaKhalsa.html", message="Service already payed", csrf_token=new_token)
 
                 cursor.execute("""
                                 SELECT d.id, k.id 
@@ -3077,17 +3096,16 @@ def KhedmaKhalsa():
                                 WHERE id = %s AND user_id = %s """,
                                    (found[0], 0, khedmaID, session['id']))
                 else:
-                    return render_template("FinishedKhedma.html",
-                                           error="Service not found in history get the Service ID from the patient-history table ",
+                    return render_template("DentistHistory.html",
+                                           error="Service not found in history get the Service ID from the dentists-history table ",
                                            csrf_token=new_token)
-
 
                 cursor.execute("""
                             UPDATE dentists 
-                            SET khalsa = %s
+                            SET 
+                            khalsa = %s, versement = %s , b9aw = 0
                             WHERE id = %s AND user_id = %s 
-                        """, ('yes', service[0], session['id']))
-
+                        """, ('yes', dentist_price, service[0], session['id']))
 
                 cursor.execute("""
                             DELETE FROM dentists
@@ -3688,6 +3706,11 @@ def khedmaProMkemla():
                 if not result :
                     return render_template("FinishedProKhedma.html" , message="Service not found", csrf_token=new_token)
 
+                cursor.execute("""
+                                UPDATE patient 
+                                SET status = %s 
+                                WHERE patient_number = %s AND user_id = %s""",
+                               ('Finished by the proth', patientId, session['id']))
 
                 cursor.execute("""
                                 UPDATE other_prothesists_khedma 
@@ -3756,6 +3779,11 @@ def khedmaProMkemla():
                 if not result:
                     return render_template("FinishedProKhedma.html", message="Service Not Found", csrf_token=new_token)
 
+                cursor.execute("""
+                                UPDATE dentists 
+                                SET status = %s 
+                                WHERE patient_number = %s AND dentist_name = %s AND user_id = %s""",
+                               ('finished by the proth', patientId, dentistName, session['id']))
 
                 cursor.execute("""
                             UPDATE other_prothesists_khedma 
@@ -4515,6 +4543,17 @@ def DeleteProKhedma():
                 return render_template("ALLProKhedma.html", result=result, message=f"Service Already finished", csrf_token=new_token)
 
             cursor.execute("""
+                            SELECT k.khedma_patient, k.khedma_dentist, k.prothesist_name, k.prothesist_number,
+                                    pr.id 
+                            FROM other_prothesists_khedma pr 
+                            JOIN khedma k ON k.user_id = pr.user_id AND k.khedma_patient = pr.patient_number 
+                                            AND k.prothesist_name = pr.pName  AND k.prothesist_number = pr.pNumber 
+                            WHERE 
+                            pr.user_id = %s AND pr.patient_number = %s AND pr.pName = %s AND pr.pNumber = %s
+                            """,(session['id'], PatientNumber, ProName, ProNumber))
+            found2 = cursor.fetchone()
+
+            cursor.execute("""
                             DELETE FROM other_prothesists_khedma 
                             WHERE id = %s AND user_id = %s """,(found[0], session['id']))
 
@@ -4535,13 +4574,26 @@ def DeleteProKhedma():
                             user_id = %s AND patient_number = %s AND prothesist = %s AND pNumber = %s 
                             """,(session['id'], PatientNumber, ProName, ProNumber))
 
+            if found2[1] == 'NO':
+                cursor.execute("""
+                                UPDATE patient 
+                                SET status = %s 
+                                WHERE patient_number = %s AND user_id = %s""",('in process', PatientNumber, session['id']))
+
+            else :
+                cursor.execute("""
+                                UPDATE dentists 
+                                SET status = %s 
+                                WHERE patient_number = %s AND dentist_name = %s AND user_id = %s""",
+                               ('in process', PatientNumber, found2[1], session['id']))
+
             conn.commit()
 
             cursor.execute(""" SELECT * FROM other_prothesists_khedma WHERE user_id = %s """,
                            (session['id'],))
             result = cursor.fetchall()
 
-            return render_template("ALLProKhedma.html", result=result, message="Service Deleted successfully")
+            return render_template("ALLProKhedma.html", result=result, message="Service Deleted successfully", csrf_token=new_token)
 
 
         except Exception as e :
