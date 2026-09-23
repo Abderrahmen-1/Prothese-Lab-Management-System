@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='ProthesistGetKhedma.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -42,14 +43,47 @@
     {% if message %}
     <div class="alert-container">
         <div class="alert {% if 'successfully' in message or '✅' in message %}alert-success{% elif 'Invalid' in message or '❌' in message %}alert-error{% else %}alert-info{% endif %} fade-in-slow">
+
             <i class="fas {% if 'successfully' in message or '✅' in message %}fa-check-circle{% elif 'Invalid' in message or '❌' in message %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+
             <div class="alert-content">
-                <h3>{% if 'successfully' in message or '✅' in message %}Success{% elif 'Invalid' in message or '❌' in message %}Error{% else %}Notice{% endif %}</h3>
+                <h3>
+                    {% if 'successfully' in message or '✅' in message %}
+                    Success
+                    {% elif 'Invalid' in message or '❌' in message %}
+                    Error
+                    {% else %}
+                    Notice
+                    {% endif %}
+                </h3>
+
                 <p>{{ message }}</p>
             </div>
+
             <button class="alert-close" onclick="this.parentElement.style.display='none'">
                 <i class="fas fa-times"></i>
             </button>
+
+        </div>
+    </div>
+    {% endif %}
+
+
+    {% if error %}
+    <div class="alert-container">
+        <div class="alert alert-error fade-in-slow">
+
+            <i class="fas fa-exclamation-circle"></i>
+
+            <div class="alert-content">
+                <h3>Error</h3>
+                <p>{{ error }}</p>
+            </div>
+
+            <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                <i class="fas fa-times"></i>
+            </button>
+
         </div>
     </div>
     {% endif %}
@@ -88,12 +122,12 @@
                                 Prosthesist Name
                             </label>
                             <input
-                                type="text"
-                                id="ProthesistName"
-                                name="ProthesistName"
-                                placeholder="Enter prosthesist name"
-                                required
-                                class="form-input">
+                                    type="text"
+                                    id="ProthesistName"
+                                    name="ProthesistName"
+                                    placeholder="Enter prosthesist name"
+                                    required
+                                    class="form-input">
                             <span class="input-hint">Full name of the responsible prosthesist</span>
                         </div>
 
@@ -103,12 +137,12 @@
                                 Prosthesist ID Number
                             </label>
                             <input
-                                type="text"
-                                id="ProthesistNumber"
-                                name="ProthesistNumber"
-                                placeholder="Enter prosthesist ID"
-                                required
-                                class="form-input">
+                                    type="text"
+                                    id="ProthesistNumber"
+                                    name="ProthesistNumber"
+                                    placeholder="Enter prosthesist ID"
+                                    required
+                                    class="form-input">
                             <span class="input-hint">Unique identification number</span>
                         </div>
                     </div>
@@ -133,11 +167,11 @@
                                 Khedma Source
                             </label>
                             <select
-                                id="Source"
-                                name="khedmaSource"
-                                oninput="GetSourceFunction()"
-                                required
-                                class="form-input form-select">
+                                    id="Source"
+                                    name="khedmaSource"
+                                    oninput="GetSourceFunction()"
+                                    required
+                                    class="form-input form-select">
                                 <option value="">-- Select Source --</option>
                                 <option value="patient">Direct Patient</option>
                                 <option value="dentist">Through Dentist</option>
@@ -159,11 +193,11 @@
                                 Patient Unique Number
                             </label>
                             <input
-                                type="text"
-                                id="PatientSourceInput"
-                                name="PatientSource"
-                                placeholder="Enter 10-digit patient number"
-                                class="form-input">
+                                    type="text"
+                                    id="PatientSourceInput"
+                                    name="PatientSource"
+                                    placeholder="Enter 10-digit patient number"
+                                    class="form-input">
                             <span class="input-hint">10-digit unique patient identifier</span>
                         </div>
                     </div>
@@ -182,11 +216,11 @@
                                     Dentist Name
                                 </label>
                                 <input
-                                    type="text"
-                                    id="DentistSourceInput"
-                                    name="DentistSource"
-                                    placeholder="Enter dentist name"
-                                    class="form-input">
+                                        type="text"
+                                        id="DentistSourceInput"
+                                        name="DentistSource"
+                                        placeholder="Enter dentist name"
+                                        class="form-input">
                                 <span class="input-hint">Name of the referring dentist</span>
                             </div>
                             <div class="form-group">
@@ -195,11 +229,11 @@
                                     Patient Number
                                 </label>
                                 <input
-                                    type="text"
-                                    id="DentistNumberInput"
-                                    name="Dentistnumber"
-                                    placeholder="Enter patient number"
-                                    class="form-input">
+                                        type="text"
+                                        id="DentistNumberInput"
+                                        name="Dentistnumber"
+                                        placeholder="Enter patient number"
+                                        class="form-input">
                                 <span class="input-hint">Associated patient identifier</span>
                             </div>
                         </div>
@@ -225,11 +259,11 @@
                                 Start Date
                             </label>
                             <input
-                                type="date"
-                                id="GetDate"
-                                name="GetDate"
-                                required
-                                class="form-input">
+                                    type="date"
+                                    id="GetDate"
+                                    name="GetDate"
+                                    required
+                                    class="form-input">
                             <span class="input-hint">Work order start date</span>
                         </div>
 
@@ -239,11 +273,11 @@
                                 Deadline
                             </label>
                             <input
-                                type="date"
-                                id="GetDeadLine"
-                                name="GetDeadLine"
-                                required
-                                class="form-input">
+                                    type="date"
+                                    id="GetDeadLine"
+                                    name="GetDeadLine"
+                                    required
+                                    class="form-input">
                             <span class="input-hint">Expected completion date</span>
                         </div>
                     </div>
@@ -270,13 +304,13 @@
                             <div class="price-input-wrapper">
                                 <span class="currency-symbol">DA</span>
                                 <input
-                                    type="number"
-                                    id="PriceValue"
-                                    name="PriceValue"
-                                    placeholder="0.00"
-                                    step="0.01"
-                                    required
-                                    class="form-input price-input">
+                                        type="number"
+                                        id="PriceValue"
+                                        name="PriceValue"
+                                        placeholder="0.00"
+                                        step="0.01"
+                                        required
+                                        class="form-input price-input">
                             </div>
                             <span class="input-hint">Total work order amount</span>
                         </div>
@@ -287,11 +321,11 @@
                                 Fully Paid (Khalsa)?
                             </label>
                             <select
-                                id="khalsaCheck"
-                                name="CheckKhalsa"
-                                oninput="KhalsaCheckFunction()"
-                                required
-                                class="form-input form-select">
+                                    id="khalsaCheck"
+                                    name="CheckKhalsa"
+                                    oninput="KhalsaCheckFunction()"
+                                    required
+                                    class="form-input form-select">
                                 <option value="">-- Select --</option>
                                 <option value="yes">Yes, Fully Paid</option>
                                 <option value="no">No, Partial/Pending</option>
@@ -313,10 +347,10 @@
                                 Received Partial Payment?
                             </label>
                             <select
-                                id="versaChoice"
-                                name="VersaChoice"
-                                oninput="GetVersaChoiceFunction()"
-                                class="form-input form-select">
+                                    id="versaChoice"
+                                    name="VersaChoice"
+                                    oninput="GetVersaChoiceFunction()"
+                                    class="form-input form-select">
                                 <option value="">-- Select --</option>
                                 <option value="yes">Yes, Received</option>
                                 <option value="no">No, Not Yet</option>
@@ -340,12 +374,12 @@
                             <div class="price-input-wrapper">
                                 <span class="currency-symbol">DA</span>
                                 <input
-                                    type="number"
-                                    id="VersementValue"
-                                    name="VersementValue"
-                                    placeholder="0.00"
-                                    step="0.01"
-                                    class="form-input price-input">
+                                        type="number"
+                                        id="VersementValue"
+                                        name="VersementValue"
+                                        placeholder="0.00"
+                                        step="0.01"
+                                        class="form-input price-input">
                             </div>
                             <span class="input-hint">Amount of partial payment received</span>
                         </div>

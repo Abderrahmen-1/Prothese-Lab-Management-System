@@ -19,8 +19,25 @@
 <body>
 
 {% if message %}
-<p>{{ message }}</p>
+<div class="alert alert-message">
+    <i class="fas fa-check-circle"></i>
+    <div class="alert-content">
+        <strong>Success</strong>
+        <p>{{ message }}</p>
+    </div>
+</div>
 {% endif %}
+
+{% if error %}
+<div class="alert alert-error">
+    <i class="fas fa-exclamation-circle"></i>
+    <div class="alert-content">
+        <strong>Error</strong>
+        <p>{{ error }}</p>
+    </div>
+</div>
+{% endif %}
+
 <!-- Animated Background -->
 <div class="animated-bg"></div>
 

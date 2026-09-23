@@ -391,6 +391,36 @@ body {
 }
 
 /* ===========================
+   Error Alert
+   =========================== */
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.10);
+    color: var(--danger);
+    border-left-color: var(--danger);
+}
+
+.alert-error i {
+    color: var(--danger);
+}
+
+.alert-error .alert-content h3 {
+    color: var(--danger);
+}
+
+.alert-error .alert-content p {
+    color: #7f1d1d;
+}
+
+.alert-error .alert-close {
+    color: var(--danger);
+}
+
+.alert-error .alert-close:hover {
+    background: rgba(239, 68, 68, 0.10);
+}
+
+/* ===========================
    Content Area
    =========================== */
 

@@ -18,8 +18,31 @@
 <body>
 
 {% if message %}
-<p>{{ message }}</p>
+<div class="system-alert alert-message">
+    <div class="system-alert-icon">
+        <i class="fas fa-check-circle"></i>
+    </div>
+
+    <div class="system-alert-content">
+        <h3>Success</h3>
+        <p>{{ message }}</p>
+    </div>
+</div>
 {% endif %}
+
+{% if error %}
+<div class="system-alert alert-error">
+    <div class="system-alert-icon">
+        <i class="fas fa-exclamation-circle"></i>
+    </div>
+
+    <div class="system-alert-content">
+        <h3>Error</h3>
+        <p>{{ error }}</p>
+    </div>
+</div>
+{% endif %}
+
     <!-- Animated Background -->
     <div class="animated-bg"></div>
 

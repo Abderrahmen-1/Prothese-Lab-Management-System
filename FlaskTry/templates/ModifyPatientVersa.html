@@ -17,8 +17,19 @@
 <body>
 
 {% if message %}
-<p>{{ message }}</p>
+<div class="form-message success-message">
+    <i class="fas fa-circle-check"></i>
+    <span>{{ message }}</span>
+</div>
 {% endif %}
+
+{% if error %}
+<div class="form-message error-message">
+    <i class="fas fa-circle-exclamation"></i>
+    <span>{{ error }}</span>
+</div>
+{% endif %}
+
     <!-- Animated Background -->
     <div class="animated-bg"></div>
 

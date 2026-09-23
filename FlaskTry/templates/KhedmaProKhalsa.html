@@ -109,6 +109,10 @@
             </div>
             {% endif %}
 
+            {% if error %}
+            <p>{{ error }}</p>
+            {% endif %}
+
             <!-- Form Section -->
             <div class="form-container">
                 <form action="/ProKhalsa" method="POST" class="khalsa-form" id="khalsa-form">

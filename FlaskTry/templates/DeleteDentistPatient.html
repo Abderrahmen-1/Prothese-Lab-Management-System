@@ -92,6 +92,10 @@
                 </div>
                 {% endif %}
 
+                {% if error %}
+                <p>{{ error }}</p>
+                {% endif %}
+
                 <!-- Form Content -->
                 <form action="/DeleteDentistPatient" method="POST" class="delete-patient-form" onsubmit="handleSubmit(event)">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">

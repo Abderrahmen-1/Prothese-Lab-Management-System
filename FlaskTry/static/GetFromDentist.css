@@ -35,6 +35,136 @@
 }
 
 /* ===========================
+   ALERT MESSAGES
+   =========================== */
+
+.alert-container {
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+
+    padding: 1rem 1.2rem;
+
+    border-radius: 10px;
+    border-left: 4px solid;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    animation: alertSlideIn 0.35s ease;
+}
+
+.alert > i {
+    font-size: 1.25rem;
+    margin-top: 2px;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-content h3 {
+    margin: 0 0 0.25rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.alert-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.alert-close {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    font-size: 0.9rem;
+    padding: 4px;
+
+    opacity: 0.7;
+    transition: 0.2s ease;
+}
+
+.alert-close:hover {
+    opacity: 1;
+}
+
+
+/* ===========================
+   SUCCESS
+   =========================== */
+
+.alert-success {
+    background: rgba(16, 185, 129, 0.10);
+    border-left-color: #10b981;
+}
+
+.alert-success > i {
+    color: #10b981;
+}
+
+.alert-success .alert-content h3 {
+    color: #047857;
+}
+
+.alert-success .alert-content p {
+    color: #374151;
+}
+
+.alert-success .alert-close {
+    color: #047857;
+}
+
+
+/* ===========================
+   ERROR
+   =========================== */
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.10);
+    border-left-color: #ef4444;
+}
+
+.alert-error > i {
+    color: #ef4444;
+}
+
+.alert-error .alert-content h3 {
+    color: #b91c1c;
+}
+
+.alert-error .alert-content p {
+    color: #374151;
+}
+
+.alert-error .alert-close {
+    color: #b91c1c;
+}
+
+
+/* ===========================
+   ANIMATION
+   =========================== */
+
+@keyframes alertSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================
    Base Styles
    =========================== */
 

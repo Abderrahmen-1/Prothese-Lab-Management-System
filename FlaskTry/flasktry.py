@@ -168,7 +168,7 @@ def Create():
 
         except Exception as e :
             conn.rollback()
-            return render_template("CreateAccount.html", message=f"error {str(e)}", csrf_token=new_token)
+            return render_template("CreateAccount.html", error=f"error {str(e)}", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -303,11 +303,11 @@ def NewPassword():
                 return render_template("Log-in.html", message="Information Updated ", csrf_token=new_token)
 
             else :
-                return render_template("Log-in.html", message="User not found", csrf_token=new_token)
+                return render_template("Log-in.html", error="User not found", csrf_token=new_token)
 
         except Exception as e :
             conn.rollback()
-            return render_template("NewPassword.html", message=f"error {str(e)}", csrf_token=new_token)
+            return render_template("NewPassword.html", error=f"error {str(e)}", csrf_token=new_token)
 
         finally :
             cursor.close()
@@ -442,29 +442,29 @@ def AddPatient():
         try:
 
             if not firstName or not lastName or firstName.isdigit() or lastName.isdigit():
-                return render_template("AddPatient.html", message="Invalide Name", csrf_token=new_token)
+                return render_template("AddPatient.html", error="Invalide Name", csrf_token=new_token)
 
             if not unique or not unique.isdigit() or len(unique) != 10:
-                return render_template("AddPatient.html", message="Invalide Unique number", csrf_token=new_token)
+                return render_template("AddPatient.html", error="Invalide Unique number", csrf_token=new_token)
 
             if not choice:
-                return render_template("AddPatient.html", message="Invalide Choice", csrf_token=new_token)
+                return render_template("AddPatient.html", error="Invalide Choice", csrf_token=new_token)
 
             if not date or not deadLine:
-                return render_template("AddPatient.html", message="Date and Deadline are required", csrf_token=new_token)
+                return render_template("AddPatient.html", error="Date and Deadline are required", csrf_token=new_token)
 
             if deadLine < date:
-                return render_template("AddPatient.html", message="Invalide Dead Line", csrf_token=new_token)
+                return render_template("AddPatient.html", error="Invalide Dead Line", csrf_token=new_token)
 
             if not khalsa or khalsa not in ['yes', 'no']:
-                return render_template("AddPatient.html", message="You must put 'yes' or 'no' in Khalsa", csrf_token=new_token)
+                return render_template("AddPatient.html", error="You must put 'yes' or 'no' in Khalsa", csrf_token=new_token)
 
             if khalsa == 'no' :
                 if not versa or versa not in ['yes', 'no']:
-                    return render_template("AddPatient.html", message="In versa insert 'yes' or 'no'", csrf_token=new_token)
+                    return render_template("AddPatient.html", error="In versa insert 'yes' or 'no'", csrf_token=new_token)
 
             if not ProCheck or ProCheck not in ['yes', 'no']:
-                return render_template("AddPatient.html", message="You must enter 'yes' or 'no' in the Prothesists check part", csrf_token=new_token)
+                return render_template("AddPatient.html", error="You must enter 'yes' or 'no' in the Prothesists check part", csrf_token=new_token)
 
             cursor.execute("""
                             SELECT id FROM patient WHERE user_id = %s AND patient_number = %s"""
@@ -474,10 +474,10 @@ def AddPatient():
                 return render_template("AddPatient.html", message="Unique number already exists", csrf_token=new_token)
 
             if not price:
-                return render_template("AddPatient.html", message="Price cannot be empty", csrf_token=new_token)
+                return render_template("AddPatient.html", error="Price cannot be empty", csrf_token=new_token)
 
             if not checkValue(price):
-                return render_template("AddPatient.html", message="Invalide price", csrf_token=new_token)
+                return render_template("AddPatient.html", error="Invalide price", csrf_token=new_token)
 
             price = float(price)
 
@@ -488,15 +488,15 @@ def AddPatient():
                     Versa = 0
                 else:
                     if not Versa:
-                        return render_template("AddPatient.html", message="Please enter the versement amount", csrf_token=new_token)
+                        return render_template("AddPatient.html", error="Please enter the versement amount", csrf_token=new_token)
 
                     if not checkValue(Versa):
-                        return render_template("AddPatient.html", message="Invalide versement", csrf_token=new_token)
+                        return render_template("AddPatient.html", error="Invalide versement", csrf_token=new_token)
 
                     Versa = float(Versa)
 
             if Versa > price:
-                return render_template("AddPatient.html", message="Versa must not be bigger than price", csrf_token=new_token)
+                return render_template("AddPatient.html", error="Versa must not be bigger than price", csrf_token=new_token)
 
             if khalsa == 'yes':
                 Versa = price
@@ -532,38 +532,38 @@ def AddPatient():
                 ProDeadLine = request.form.get('ProDeadLine', '').strip()
 
                 if not ProName:
-                    return render_template("AddPatient.html", message="Prothesist Name must not be empty", csrf_token=new_token)
+                    return render_template("AddPatient.html", error="Prothesist Name must not be empty", csrf_token=new_token)
 
                 if ProName.isdigit():
-                    return render_template("AddPatient.html", message="Invalide Prothesist Name", csrf_token=new_token)
+                    return render_template("AddPatient.html", error="Invalide Prothesist Name", csrf_token=new_token)
 
                 if not ProNumber or not ProNumber.isdigit() or len(ProNumber) != 10:
-                    return render_template("AddPatient.html", message="Prothesist Number must contain exactly 10 digits", csrf_token=new_token)
+                    return render_template("AddPatient.html", error="Prothesist Number must contain exactly 10 digits", csrf_token=new_token)
 
                 if not ProKhalsa or ProKhalsa not in ['yes', 'no']:
-                    return render_template("AddPatient.html", message="You must put 'yes' or 'no' in Prothesist Khalsa", csrf_token=new_token)
+                    return render_template("AddPatient.html", error="You must put 'yes' or 'no' in Prothesist Khalsa", csrf_token=new_token)
 
                 if ProKhalsa == 'no':
                     if not Proversa or Proversa not in ['yes', 'no']:
-                        return render_template("AddPatient.html", message="In Prothesist versa insert 'yes' or 'no'", csrf_token=new_token)
+                        return render_template("AddPatient.html", error="In Prothesist versa insert 'yes' or 'no'", csrf_token=new_token)
 
                 if not ProDate or not ProDeadLine:
-                    return render_template("AddPatient.html", message="Prothesist Date and Deadline are required", csrf_token=new_token)
+                    return render_template("AddPatient.html", error="Prothesist Date and Deadline are required", csrf_token=new_token)
 
                 if ProDate < date:
-                    return render_template("AddPatient.html", message="Invalide Prothesist Date", csrf_token=new_token)
+                    return render_template("AddPatient.html", error="Invalide Prothesist Date", csrf_token=new_token)
 
                 if ProDeadLine < ProDate:
-                    return render_template("AddPatient.html", message="Invalide Prothesist Dead Line", csrf_token=new_token)
+                    return render_template("AddPatient.html", error="Invalide Prothesist Dead Line", csrf_token=new_token)
 
                 if ProDeadLine > deadLine:
-                    return render_template("AddPatient.html", message="Prothesist Deadline cannot be after Patient Deadline", csrf_token=new_token)
+                    return render_template("AddPatient.html", error="Prothesist Deadline cannot be after Patient Deadline", csrf_token=new_token)
 
                 if not ProPrice:
-                    return render_template("AddPatient.html", message="Prothesist price cannot be empty", csrf_token=new_token)
+                    return render_template("AddPatient.html", error="Prothesist price cannot be empty", csrf_token=new_token)
 
                 if not checkValue(ProPrice):
-                    return render_template("AddPatient.html", message="Invalide Prothesist price", csrf_token=new_token)
+                    return render_template("AddPatient.html", error="Invalide Prothesist price", csrf_token=new_token)
 
                 ProPrice = float(ProPrice)
 
@@ -574,15 +574,15 @@ def AddPatient():
                         ProVersa = 0
                     else:
                         if not ProVersa:
-                            return render_template("AddPatient.html", message="Please enter the Prothesist versement amount", csrf_token=new_token)
+                            return render_template("AddPatient.html", error="Please enter the Prothesist versement amount", csrf_token=new_token)
 
                         if not checkValue(ProVersa):
-                            return render_template("AddPatient.html", message="Invalide prothesist versement", csrf_token=new_token)
+                            return render_template("AddPatient.html", error="Invalide prothesist versement", csrf_token=new_token)
 
                         ProVersa = float(ProVersa)
 
                 if ProVersa > ProPrice:
-                    return render_template("AddPatient.html", message="Prothesist Versa must not be bigger than his price", csrf_token=new_token)
+                    return render_template("AddPatient.html", error="Prothesist Versa must not be bigger than his price", csrf_token=new_token)
 
                 if ProKhalsa == 'yes':
                     ProVersa = ProPrice
@@ -645,7 +645,7 @@ def AddPatient():
 
         except Exception as e:
             conn.rollback()
-            return render_template("AddPatient.html", message=f"error {str(e)}", csrf_token=new_token)
+            return render_template("AddPatient.html", error=f"error {str(e)}", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -684,15 +684,15 @@ def DeletePatient():
         Confirm_Unique   = request.form.get("confirmunique", "").strip()
 
         if not Patient_unique or not Patient_unique.isdigit() or len(Patient_unique) != 10:
-            return render_template("DeletePatient.html", message="Invalid Unique number", csrf_token=new_token)
+            return render_template("DeletePatient.html", error="Invalid Unique number", csrf_token=new_token)
 
         if not Confirm_Unique or not Confirm_Unique.isdigit() or len(Confirm_Unique) != 10:
-            return render_template("DeletePatient.html", message="Invalid Unique number", csrf_token=new_token)
+            return render_template("DeletePatient.html", error="Invalid Unique number", csrf_token=new_token)
 
         if (PatientF_deleted != Confirm_PatientF or
                 PatientL_deleted != Confirm_PatientL or
                 Patient_unique != Confirm_Unique):
-            return render_template("DeletePatient.html", message="Invalid Confirmation", csrf_token=new_token)
+            return render_template("DeletePatient.html", error="Invalid Confirmation", csrf_token=new_token)
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -763,7 +763,7 @@ def DeletePatient():
 
         except Exception as e:
             conn.rollback()
-            return render_template("DeletePatient.html", message=f"error {str(e)}", csrf_token=new_token)
+            return render_template("DeletePatient.html", error=f"error {str(e)}", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -801,14 +801,14 @@ def ModifyVersaPatient():
         if not Patient_Id or not Patient_Id.isdigit() or len(Patient_Id) != 10:
             return render_template(
                 "ModifyPatientVersa.html",
-                message="Invalide ID",
+                error="Invalide ID",
                 csrf_token=new_token
             )
 
         if not checkValue(VersaValue) or not checkValue(ConfirmVersa):
             return render_template(
                 "ModifyPatientVersa.html",
-                message="Invalide versement values",
+                error="Invalide versement values",
                 csrf_token=new_token
             )
 
@@ -818,7 +818,7 @@ def ModifyVersaPatient():
         if VersaValue != ConfirmVersa:
             return render_template(
                 "ModifyPatientVersa.html",
-                message="The Versa and its Confirmation must be the same value",
+                error="The Versa and its Confirmation must be the same value",
                 csrf_token=new_token
             )
 
@@ -838,7 +838,7 @@ def ModifyVersaPatient():
             if not result:
                 return render_template(
                     "ModifyPatientVersa.html",
-                    message="Patient Not Found",
+                    error="Patient Not Found",
                     csrf_token=new_token
                 )
 
@@ -852,7 +852,7 @@ def ModifyVersaPatient():
             if oldKhalsa.lower() == "yes":
                 return render_template(
                     "ModifyPatientVersa.html",
-                    message="The Patient already paid his khedma",
+                    message="The Patient already paid his Service",
                     csrf_token=new_token
                 )
 
@@ -861,7 +861,7 @@ def ModifyVersaPatient():
             if new_versa > total:
                 return render_template(
                     "ModifyPatientVersa.html",
-                    message="Invalide Versa Amount",
+                    error="Invalide Versa Amount",
                     csrf_token=new_token
                 )
 
@@ -958,7 +958,7 @@ def ModifyVersaPatient():
             conn.rollback()
             return render_template(
                 "ModifyPatientVersa.html",
-                message=f"error {str(e)}",
+                error=f"error {str(e)}",
                 csrf_token=new_token
             )
 
@@ -1516,7 +1516,7 @@ def Get_From_Dentist():
 
             return render_template(
                 "GetFromDentist.html",
-                message="Dentist name cannot be empty",
+                error="Dentist name cannot be empty",
                 csrf_token=new_token
             )
 
@@ -1525,7 +1525,7 @@ def Get_From_Dentist():
 
             return render_template(
                 "GetFromDentist.html",
-                message="Patient first name cannot be empty",
+                error="Patient first name cannot be empty",
                 csrf_token=new_token
             )
 
@@ -1534,7 +1534,7 @@ def Get_From_Dentist():
 
             return render_template(
                 "GetFromDentist.html",
-                message="Patient last name cannot be empty",
+                error="Patient last name cannot be empty",
                 csrf_token=new_token
             )
 
@@ -1547,7 +1547,7 @@ def Get_From_Dentist():
 
             return render_template(
                 "GetFromDentist.html",
-                message="Invalid Choice",
+                error="Invalid Choice",
                 csrf_token=new_token
             )
 
@@ -1559,14 +1559,14 @@ def Get_From_Dentist():
             if not SearcheTable(cursor, dentist):
                 return render_template(
                     "GetFromDentist.html",
-                    message="Dentist doesn't exist",
+                    error="Dentist doesn't exist",
                     csrf_token=new_token
                 )
 
             if not price:
                 return render_template(
                     "GetFromDentist.html",
-                    message="Price cannot be empty",
+                    error="Price cannot be empty",
                     csrf_token=new_token
                 )
 
@@ -1575,7 +1575,7 @@ def Get_From_Dentist():
                 if not checkValue(price):
                     return render_template(
                         "GetFromDentist.html",
-                        message="Invalid Price value",
+                        error="Invalid Price value",
                         csrf_token=new_token
                     )
 
@@ -1584,14 +1584,14 @@ def Get_From_Dentist():
             except (ValueError, TypeError):
                 return render_template(
                     "GetFromDentist.html",
-                    message="Invalid Price Value",
+                    error="Invalid Price Value",
                     csrf_token=new_token
                 )
 
             if not khalsa or khalsa.strip().lower() not in ["yes", "no"]:
                 return render_template(
                     "GetFromDentist.html",
-                    message="You must put 'yes' or 'no' in Khalsa",
+                    error="You must put 'yes' or 'no' in Khalsa",
                     csrf_token=new_token
                 )
 
@@ -1599,7 +1599,7 @@ def Get_From_Dentist():
             if not date or not deadLine:
                 return render_template(
                     "GetFromDentist.html",
-                    message="Date and deadline are required",
+                    error="Date and deadline are required",
                     csrf_token=new_token
                 )
 
@@ -1607,7 +1607,7 @@ def Get_From_Dentist():
             if deadLine < date:
                 return render_template(
                     "GetFromDentist.html",
-                    message="Invalid Deadline",
+                    error="Invalid Deadline",
                     csrf_token=new_token
                 )
 
@@ -1630,7 +1630,7 @@ def Get_From_Dentist():
             if not ProCheck or ProCheck.strip().lower() not in ["yes", "no"]:
                 return render_template(
                     "GetFromDentist.html",
-                    message="You must select Yes or No in the Prothesist check part",
+                    error="You must select Yes or No in the Prothesist check part",
                     csrf_token=new_token
                 )
 
@@ -1959,7 +1959,7 @@ def Get_From_Dentist():
             print("ERROR IN /GetFromDentist:", e)
             return render_template(
                 "GetFromDentist.html",
-                message=f"An error occurred: {e}",
+                error=f"An error occurred: {str(e)}",
                 csrf_token=new_token
             )
 
@@ -1998,15 +1998,15 @@ def ModifyDentistVersement():
         Versement = request.form.get('Versement')
 
         if not Versement:
-            return render_template("ModifyDentistVersement.html", message="Versement cannot be empty", csrf_token=new_token)
+            return render_template("ModifyDentistVersement.html", error="Versement cannot be empty", csrf_token=new_token)
 
         try:
             Versement = float(Versement)
         except (ValueError, TypeError):
-            return render_template("ModifyDentistVersement.html", message="Invalid Versement value", csrf_token=new_token)
+            return render_template("ModifyDentistVersement.html", error="Invalid Versement value", csrf_token=new_token)
 
         if Versement < 0:
-            return render_template("ModifyDentistVersement.html", message="Versement cannot be negative", csrf_token=new_token)
+            return render_template("ModifyDentistVersement.html", error="Versement cannot be negative", csrf_token=new_token)
 
 
         conn = get_connection()
@@ -2037,7 +2037,7 @@ def ModifyDentistVersement():
             NewVersement = oldversement + Versement
 
             if NewVersement > price :
-                return render_template("ModifyDentistVersement.html" , message="Invalide versement", csrf_token=new_token)
+                return render_template("ModifyDentistVersement.html" , error="Invalide versement", csrf_token=new_token)
 
             elif NewVersement == price :
                 b9aw = 0
@@ -2121,7 +2121,7 @@ def ModifyDentistVersement():
 
         except Exception as e :
             conn.rollback()
-            return render_template("ModifyDentistVersement.html", message=f"error {str(e)}", csrf_token=new_token)
+            return render_template("ModifyDentistVersement.html", error=f"error {str(e)}", csrf_token=new_token)
 
         finally :
             cursor.close()
@@ -2162,12 +2162,12 @@ def DeleteDentistKhedma():
         Confirm_Unique   = request.form["confirmunique"]
 
         if not Patient_unique.isdigit() or len(Patient_unique) >= 10:
-            return render_template("DeleteDentistPatient.html", message="Invalid Unique number", csrf_token=new_token)
+            return render_template("DeleteDentistPatient.html", error="Invalid Unique number", csrf_token=new_token)
 
         if (PatientF_deleted != Confirm_PatientF or
                 PatientL_deleted != Confirm_PatientL or
                 Patient_unique != Confirm_Unique):
-            return render_template("DeleteDentistPatient.html", message="Invalid Confirmation", csrf_token=new_token)
+            return render_template("DeleteDentistPatient.html", error="Invalid Confirmation", csrf_token=new_token)
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -2251,7 +2251,7 @@ def DeleteDentistKhedma():
 
         except Exception as e :
             conn.rollback()
-            return render_template("DeleteDentistPatient.html", message=f"error {str(e)}", csrf_token=new_token)
+            return render_template("DeleteDentistPatient.html", error=f"error {str(e)}", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -2429,7 +2429,7 @@ def FindLessDentistKhedma():
         dentist_dics = DentistsDics(cursor)
         active_dentists = {n: c for n, c in dentist_dics.items() if c > 0}
         if not active_dentists:
-            return render_template("DentistFile.html", message="All dentists currently have 0 khedma.")
+            return render_template("DentistFile.html", message="All dentists currently have 0 Services.")
         name, count = min(active_dentists.items(), key=lambda x: x[1])
         cursor.execute("SELECT * FROM dentists WHERE user_id = %s AND dentist_name = %s",
                        (session['id'], name))
@@ -2703,7 +2703,7 @@ def khedmaMkemla():
                 patient_row = cursor.fetchone()
 
                 if not patient_row:
-                    return render_template("FinishedKhedma.html", error="Patient Not Found", csrf_token=new_token)
+                    return render_template("FinishedKhedma.html", message="Patient Not Found", csrf_token=new_token)
 
                 # Verify service entry
                 cursor.execute("""
@@ -2716,7 +2716,7 @@ def khedmaMkemla():
                 result = cursor.fetchone()
 
                 if not result:
-                    return render_template("FinishedKhedma.html", error="Service Not Found", csrf_token=new_token)
+                    return render_template("FinishedKhedma.html", message="Service Not Found", csrf_token=new_token)
 
 
                 cursor.execute("""
@@ -2738,7 +2738,7 @@ def khedmaMkemla():
                     for find in found2 :
                         if find[0] == result[1] :
                             if find[1] == 'no' :
-                                return render_template("FinishedKhedma.html", error=f"Le service et toujours avec le prothesist {found[0]} ", csrf_token=new_token)
+                                return render_template("FinishedKhedma.html", message=f"Le service et toujours avec le prothesist {found[0]} ", csrf_token=new_token)
 
                 cursor.execute("""
                                 SELECT 1 
@@ -2755,7 +2755,7 @@ def khedmaMkemla():
                                     WHERE id = %s AND user_id = %s AND pNumber = %s """, (khedmaID, session['id'], patientId))
                 else:
                     return render_template("PatientHistory.html",
-                                           error="Service not found in history get the Service ID from the patient-history table ",
+                                           message="Service not found in history get the Service ID from the patient-history table ",
                                            csrf_token=new_token)
 
                 # Update patient status
@@ -2782,7 +2782,7 @@ def khedmaMkemla():
                 patientId = request.form.get('DPatientID')
                 khedmaID = request.form.get('DServiceID')
 
-                if not patientId or not patientId.isdigit() or len(patientId) >= 10:
+                if not patientId or not patientId.isdigit() or len(patientId) > 10:
                     return render_template("FinishedKhedma.html", error="Invalid Patient ID", csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
@@ -2798,7 +2798,7 @@ def khedmaMkemla():
 
                 if not found :
                     return render_template("FinishedKhedma.html",
-                                           error="Patient Not Found in Dentist Records", csrf_token=new_token)
+                                           message="Patient Not Found in Dentist Records", csrf_token=new_token)
 
                 # Verify dentist record
                 cursor.execute("""
@@ -2811,7 +2811,7 @@ def khedmaMkemla():
                 result = cursor.fetchone()
 
                 if not result:
-                    return render_template("FinishedKhedma.html", error="Service Not Found in Dentist Records", csrf_token=new_token)
+                    return render_template("FinishedKhedma.html", message="Service Not Found in Dentist Records", csrf_token=new_token)
 
 
                 cursor.execute("""
@@ -2834,7 +2834,7 @@ def khedmaMkemla():
                         if find[0] == result[1]:
                             if find[1] == 'no':
                                 return render_template("FinishedKhedma.html",
-                                                       error=f"Le service et toujours avec le prothesist {found[0]} ", csrf_token=new_token)
+                                                       message=f"Le service et toujours avec le prothesist {found[0]} ", csrf_token=new_token)
 
                 cursor.execute("""
                                 SELECT 1 
@@ -2851,7 +2851,7 @@ def khedmaMkemla():
                                     WHERE id = %s AND user_id = %s AND pNumber = %s """, (khedmaID, session['id'], patientId))
                 else:
                     return render_template("DentistHistory.html",
-                                           error="Service not found in history get the Service ID from the dentists-history table ",
+                                           message="Service not found in history get the Service ID from the dentists-history table ",
                                            csrf_token=new_token)
 
                 # Update dentist status
@@ -2922,10 +2922,10 @@ def KhedmaKhalsa():
                 khedmaID = request.form['ServiceID']
 
                 if not patientId or not patientId.isdigit() or len(patientId) != 10:
-                    return render_template("KhedmaKhalsa.html", message="Invalid Patient ID", csrf_token=new_token)
+                    return render_template("KhedmaKhalsa.html", error="Invalid Patient ID", csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
-                    return render_template("KhedmaKhalsa.html", message="Invalid Service ID", csrf_token=new_token)
+                    return render_template("KhedmaKhalsa.html", error="Invalid Service ID", csrf_token=new_token)
 
                 cursor.execute("""
                     SELECT * FROM patient
@@ -2984,7 +2984,7 @@ def KhedmaKhalsa():
                                     WHERE id = %s AND user_id = %s """, (found[0], 0, khedmaID, session['id']))
                 else:
                     return render_template("PatientHistory.html",
-                                           error="Service not found in history get the Service ID from the patient-history table ",
+                                           message="Service not found in history get the Service ID from the patient-history table ",
                                            csrf_token=new_token)
 
                 cursor.execute("""
@@ -3025,11 +3025,11 @@ def KhedmaKhalsa():
                 patientId = request.form['DPatientID']
                 khedmaID = request.form['DServiceID']
 
-                if not patientId or not patientId.isdigit() or len(patientId) >= 10:
-                    return render_template("KhedmaKhalsa.html", message="Invalid Patient ID", csrf_token=new_token)
+                if not patientId or not patientId.isdigit() or len(patientId) > 10:
+                    return render_template("KhedmaKhalsa.html", error="Invalid Patient ID", csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
-                    return render_template("KhedmaKhalsa.html", message="Invalid Service ID", csrf_token=new_token)
+                    return render_template("KhedmaKhalsa.html", error="Invalid Service ID", csrf_token=new_token)
 
                # if not SearcheTable(cursor, name):
                 #    return render_template("KhedmaKhalsa.html", message="Incorrect dentist name", csrf_token=new_token)
@@ -3088,7 +3088,7 @@ def KhedmaKhalsa():
                                    (found[0], 0, khedmaID, session['id']))
                 else:
                     return render_template("DentistHistory.html",
-                                           error="Service not found in history get the Service ID from the dentists-history table ",
+                                           message="Service not found in history get the Service ID from the dentists-history table ",
                                            csrf_token=new_token)
 
                 cursor.execute("""
@@ -3119,14 +3119,14 @@ def KhedmaKhalsa():
                     UpdateKhalsaStat(cursor, conn, table="dentist", dentistName=name,
                                      price=dentist_price, date=dentist_date)
             else:
-                return render_template("KhedmaKhalsa.html", message="You have to enter (patient / dentist)", csrf_token=new_token)
+                return render_template("KhedmaKhalsa.html", error="You have to enter (patient / dentist)", csrf_token=new_token)
 
             conn.commit()
             return render_template("KhedmaKhalsa.html", message="Payment Updated Successfully", csrf_token=new_token)
 
         except Exception as e :
             conn.rollback()
-            return render_template("KhedmaKhalsa.html", message=f"error {str(e)}", csrf_token=new_token)
+            return render_template("KhedmaKhalsa.html", error=f"error {str(e)}", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -3280,25 +3280,25 @@ def addsel3a():
         try:
             price = float(price)
         except (ValueError, TypeError):
-            return render_template("AddSel3a.html", message="Invalid Price Value", csrf_token=new_token)
+            return render_template("AddSel3a.html", error="Invalid Price Value", csrf_token=new_token)
 
         if price < 0 or not name.strip():
-            return render_template("AddSel3a.html", message="Invalide Informations", csrf_token=new_token)
+            return render_template("AddSel3a.html", error="Invalide Informations", csrf_token=new_token)
 
 
 
         if khalsa.lower() not in ['yes' , 'no']:
-            return render_template("AddSel3a.html" , message="In khalsa case enter 'yes' or 'no' ", csrf_token=new_token)
+            return render_template("AddSel3a.html" , error="In khalsa case enter 'yes' or 'no' ", csrf_token=new_token)
 
         if khalsa == 'no' :
 
             try:
                 versa = float(versa)
             except (ValueError, TypeError):
-                return render_template("AddSel3a.html" , message="Invalide Versement Value", csrf_token=new_token)
+                return render_template("AddSel3a.html" , error="Invalide Versement Value", csrf_token=new_token)
 
             if versa < 0 or price < versa:
-                return render_template("AddSel3a.html" , message="Invalide Versement Value", csrf_token=new_token)
+                return render_template("AddSel3a.html" , error="Invalide Versement Value", csrf_token=new_token)
 
         if khalsa.lower() == 'yes' :
             versa = price
@@ -3320,7 +3320,7 @@ def addsel3a():
         except Exception as e :
             conn.rollback()
             return render_template("AddSel3a.html",
-                                   message=f"error {str(e)}", csrf_token=new_token)
+                                   error=f"error {str(e)}", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -3652,7 +3652,7 @@ def khedmaProMkemla():
         choice           = request.form['Choice']
 
         if not ProthesistNumber or not ProthesistNumber.isdigit() or len(ProthesistNumber) != 10:
-            return render_template("FinishedProKhedma.html", message="Invalid Prothesist Number", csrf_token=new_token)
+            return render_template("FinishedProKhedma.html", error="Invalid Prothesist Number", csrf_token=new_token)
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -3671,10 +3671,10 @@ def khedmaProMkemla():
                 khedmaID = request.form['ServiceID']
 
                 if not patientId or not patientId.isdigit() or len(patientId) != 10:
-                    return render_template("FinishedProKhedma.html", message="Invalid Patient ID", csrf_token=new_token)
+                    return render_template("FinishedProKhedma.html", error="Invalid Patient ID", csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
-                    return render_template("FinishedProKhedma.html", message="Invalid Service ID", csrf_token=new_token)
+                    return render_template("FinishedProKhedma.html", error="Invalid Service ID", csrf_token=new_token)
 
                 cursor.execute("""
                     SELECT 1 FROM patient_history
@@ -3737,11 +3737,11 @@ def khedmaProMkemla():
                 patientId   = request.form['DPatientID']
                 khedmaID      = request.form['DServiceID']
 
-                if not patientId or not patientId.isdigit() or len(patientId) >= 10:
-                    return render_template("FinishedProKhedma.html", message="Invalid Patient ID", csrf_token=new_token)
+                if not patientId or not patientId.isdigit() or len(patientId) > 10:
+                    return render_template("FinishedProKhedma.html", error="Invalid Patient ID", csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
-                    return render_template("FinishedProKhedma.html", message="Invalid Service ID", csrf_token=new_token)
+                    return render_template("FinishedProKhedma.html", error="Invalid Service ID", csrf_token=new_token)
 
                 #if not SearcheTable(cursor, dentistName):
                  #   return render_template("FinishedProKhedma.html", message="Incorrect dentist name", csrf_token=new_token)
@@ -3812,7 +3812,7 @@ def khedmaProMkemla():
                         """, (session['id'], 'yes', 'yes'))
 
             else:
-                return render_template("FinishedProKhedma.html", message="You have to enter 'patient' or 'dentist'", csrf_token=new_token)
+                return render_template("FinishedProKhedma.html", error="You have to enter 'patient' or 'dentist'", csrf_token=new_token)
 
             conn.commit()
             cursor.execute("""
@@ -3823,7 +3823,7 @@ def khedmaProMkemla():
 
         except Exception as e :
             conn.rollback()
-            return render_template("FinishedProKhedma.html", message=f"error {str(e)}", csrf_token=new_token)
+            return render_template("FinishedProKhedma.html", error=f"error {str(e)}", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -3860,7 +3860,7 @@ def KhedmaProKhalsa():
         choice    = request.form['Choice']
 
         if not ProNumber or not ProNumber.isdigit() or len(ProNumber) != 10:
-            return render_template("KhedmaProKhalsa.html", message="Invalid Prothesist Number", csrf_token=new_token)
+            return render_template("KhedmaProKhalsa.html", error="Invalid Prothesist Number", csrf_token=new_token)
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -3883,10 +3883,10 @@ def KhedmaProKhalsa():
                 khedmaID = request.form['ServiceID']
 
                 if not patientId or not patientId.isdigit() or len(patientId) != 10:
-                    return render_template("KhedmaProKhalsa.html", message="Invalid Patient ID", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", error="Invalid Patient ID", csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
-                    return render_template("KhedmaProKhalsa.html", message="Invalid Service ID", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", error="Invalid Service ID", csrf_token=new_token)
 
                 cursor.execute("""
                     SELECT 1 
@@ -3972,11 +3972,11 @@ def KhedmaProKhalsa():
                 patientId = request.form['DPatientID']
                 khedmaID = request.form['DServiceID']
 
-                if not patientId or not patientId.isdigit() or len(patientId) >= 10:
-                    return render_template("KhedmaProKhalsa.html", message="Invalid Patient ID", csrf_token=new_token)
+                if not patientId or not patientId.isdigit() or len(patientId) > 10:
+                    return render_template("KhedmaProKhalsa.html", error="Invalid Patient ID", csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
-                    return render_template("KhedmaProKhalsa.html", message="Invalid Service ID", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", error="Invalid Service ID", csrf_token=new_token)
 
                 if not SearcheTable(cursor, Dentistname):
                     return render_template("KhedmaProKhalsa.html", error="Incorrect dentist name", csrf_token=new_token)
@@ -3988,7 +3988,7 @@ def KhedmaProKhalsa():
                 result = cursor.fetchone()
 
                 if not result:
-                    return render_template("KhedmaProKhalsa.html", error="Patient Not Found", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", message="Patient Not Found", csrf_token=new_token)
 
                 cursor.execute("""
                                     SELECT d.id, k.id, pr.id 
@@ -4001,7 +4001,7 @@ def KhedmaProKhalsa():
                 result = cursor.fetchone()
 
                 if not result :
-                    return render_template("KhedmaProKhalsa.html", error="Service Not Found", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", message="Service Not Found", csrf_token=new_token)
 
 
                 cursor.execute("""
@@ -4012,7 +4012,7 @@ def KhedmaProKhalsa():
                 data = cursor.fetchone()
 
                 if not result :
-                    return render_template("KhedmaProKhalsa.html", error="Patient Not Found", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", message="Patient Not Found", csrf_token=new_token)
 
                 prothesist_price = data[0]
                 prothesist_date  = data[1]
@@ -4063,7 +4063,7 @@ def KhedmaProKhalsa():
                     UpdateProKhalsaStat(cursor, conn, ProName=ProName, ProNumber=ProNumber,
                                         b9aw=old_b9aw, date=prothesist_date)
             else:
-                return render_template("KhedmaProKhalsa.html", message="You have to enter (patient / dentist)", csrf_token=new_token)
+                return render_template("KhedmaProKhalsa.html", error="You have to enter (patient / dentist)", csrf_token=new_token)
 
             conn.commit()
             cursor.execute("""
@@ -4075,7 +4075,7 @@ def KhedmaProKhalsa():
 
         except Exception as e :
             conn.rollback()
-            return render_template("KhedmaProKhalsa.html", message=f"error {str(e)}", csrf_token=new_token)
+            return render_template("KhedmaProKhalsa.html", error=f"error {str(e)}", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -4119,24 +4119,24 @@ def GetProthesistKhedma():
 
         if not ProthesistNumber or not ProthesistNumber.isdigit() or len(ProthesistNumber) != 10:
             return render_template("ProthesistGetKhedma.html",
-                                   message="❌ Invalid Prothesist Number! Must be exactly 10 digits.",
+                                   error="❌ Invalid Prothesist Number! Must be exactly 10 digits.",
                                    csrf_token=new_token)
 
         try:
             price = float(price)
         except (ValueError, TypeError):
             return render_template("ProthesistGetKhedma.html",
-                                   message="❌ Invalid price value!",
+                                   error="❌ Invalid price value!",
                                    csrf_token=new_token)
 
         if price < 0:
             return render_template("ProthesistGetKhedma.html",
-                                   message="❌ Price cannot be negative!",
+                                   error="❌ Price cannot be negative!",
                                    csrf_token=new_token)
 
         if khalsa.lower() not in ["yes", "no"]:
             return render_template("ProthesistGetKhedma.html",
-                                   message="❌ Khalsa must be yes or no!",
+                                   error="❌ Khalsa must be yes or no!",
                                    csrf_token=new_token)
 
         try:
@@ -4145,13 +4145,13 @@ def GetProthesistKhedma():
         except ValueError:
             return render_template(
                 "ProthesistGetKhedma.html",
-                message="❌ Invalid date! Use MM-DD-YYYY.",
+                error="❌ Invalid date! Use MM-DD-YYYY.",
                 csrf_token=new_token
             )
 
         # Validate dates
         if deadLine < date:
-            return render_template("ProthesistGetKhedma.html", message="❌ Deadline must be after the start date!", csrf_token=new_token)
+            return render_template("ProthesistGetKhedma.html", error="❌ Deadline must be after the start date!", csrf_token=new_token)
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -4178,7 +4178,7 @@ def GetProthesistKhedma():
                 # Validate patient number
                 if not patientNumber or not patientNumber.isdigit() or len(patientNumber) != 10:
                     return render_template("ProthesistGetKhedma.html",
-                                           message="❌ Invalid patient number! Must be a 10-digit number."
+                                           error="❌ Invalid patient number! Must be a 10-digit number."
                                            , csrf_token=new_token)
 
                 # Check if patient exists
@@ -4193,7 +4193,7 @@ def GetProthesistKhedma():
 
                 if not result:
                     return render_template("ProthesistGetKhedma.html",
-                                           message="❌ Patient not found! Check the patient number."
+                                           error="❌ Patient not found! Check the patient number."
                                            , csrf_token=new_token)
 
                 if result[0].lower() == "yes":
@@ -4203,12 +4203,12 @@ def GetProthesistKhedma():
 
                 if result[2] > date :
                     return render_template("ProthesistGetKhedma.html",
-                                           message="⚠️ Incorrect Enter date "
+                                           error="⚠️ Incorrect Enter date "
                                            , csrf_token=new_token)
 
                 if deadLine >= result[3] :
                     return render_template("ProthesistGetKhedma.html",
-                                           message="⚠️ Incorrect DeadLine date"
+                                           error="⚠️ Incorrect DeadLine date"
                                            , csrf_token=new_token)
 
 
@@ -4221,12 +4221,12 @@ def GetProthesistKhedma():
                             versaValue = float(request.form["VersementValue"])
                         except (ValueError, KeyError, TypeError):
                             return render_template("ProthesistGetKhedma.html",
-                                                   message="❌ Invalid payment amount! Please enter a valid number."
+                                                   error="❌ Invalid payment amount! Please enter a valid number."
                                                    , csrf_token=new_token)
 
                         if versaValue < 0:
                             return render_template("ProthesistGetKhedma.html",
-                                                   message="❌ Payment amount cannot be negative!"
+                                                   error="❌ Payment amount cannot be negative!"
                                                    , csrf_token=new_token)
 
                         if versaValue == price:
@@ -4234,7 +4234,7 @@ def GetProthesistKhedma():
                             khalsa = "yes"
                         elif versaValue > price:
                             return render_template("ProthesistGetKhedma.html",
-                                                   message="❌ Payment amount cannot exceed the total price!"
+                                                   error="❌ Payment amount cannot exceed the total price!"
                                                    , csrf_token=new_token)
                         else:
                             b9aw = price - versaValue
@@ -4321,11 +4321,11 @@ def GetProthesistKhedma():
 
                 if not dentistName or not patientNumber:
                     return render_template("ProthesistGetKhedma.html",
-                                           message="❌ Dentist name and patient number are required!", csrf_token=new_token)
+                                           error="❌ Dentist name and patient number are required!", csrf_token=new_token)
 
-                if not patientNumber.isdigit() :
+                if not patientNumber.isdigit() or len(patientNumber) > 10 :
                     return render_template("ProthesistGetKhedma.html",
-                                           message="❌ Invalid patient number!",
+                                           error="❌ Invalid patient number!",
                                            csrf_token=new_token)
 
                 # Check if work order exists
@@ -4339,7 +4339,7 @@ def GetProthesistKhedma():
 
                 if not result:
                     return render_template("ProthesistGetKhedma.html",
-                                           message="❌ Work order not found! Check dentist name and patient number.", csrf_token=new_token)
+                                           error="❌ Work order not found! Check dentist name and patient number.", csrf_token=new_token)
 
                 if result[0].lower() == "yes":
                     return render_template("ProthesistGetKhedma.html",
@@ -4347,12 +4347,12 @@ def GetProthesistKhedma():
 
                 if result[2] > date :
                     return render_template("ProthesistGetKhedma.html",
-                                           message="⚠️ Incorrect Enter date "
+                                           error="⚠️ Incorrect Enter date "
                                            , csrf_token=new_token)
 
                 if result[3] < deadLine :
                     return render_template("ProthesistGetKhedma.html",
-                                           message="⚠️ Incorrect DeadLine date"
+                                           error="⚠️ Incorrect DeadLine date"
                                            , csrf_token=new_token)
 
                 # Calculate payment amounts
@@ -4364,18 +4364,18 @@ def GetProthesistKhedma():
                             versaValue = float(request.form["VersementValue"])
                         except (ValueError, KeyError, TypeError):
                             return render_template("ProthesistGetKhedma.html",
-                                                   message="❌ Invalid payment amount! Please enter a valid number.", csrf_token=new_token)
+                                                   error="❌ Invalid payment amount! Please enter a valid number.", csrf_token=new_token)
 
                         if versaValue < 0:
                             return render_template("ProthesistGetKhedma.html",
-                                                   message="❌ Payment amount cannot be negative!", csrf_token=new_token)
+                                                   error="❌ Payment amount cannot be negative!", csrf_token=new_token)
 
                         if versaValue == price:
                             b9aw = 0
                             khalsa = "yes"
                         elif versaValue > price:
                             return render_template("ProthesistGetKhedma.html",
-                                                   message="❌ Payment amount cannot exceed the total price!", csrf_token=new_token)
+                                                   error="❌ Payment amount cannot exceed the total price!", csrf_token=new_token)
                         else:
                             b9aw = price - versaValue
                     else:
@@ -4456,7 +4456,7 @@ def GetProthesistKhedma():
         except Exception as e:
             conn.rollback()
             return render_template("ProthesistGetKhedma.html",
-                                   message=f"❌ Database error: {str(e)}", csrf_token=new_token)
+                                   error=f"❌ Database error: {str(e)}", csrf_token=new_token)
         finally:
             cursor.close()
             conn.close()
@@ -4493,23 +4493,23 @@ def DeleteProKhedma():
         checkPatientNumber = request.form.get('CheckPatientNumber')
 
         if not ProName or not checkProName :
-            return render_template("DeleteProthesistPatient.html", message="The prothesist-name and its confirmation are required", csrf_token=new_token)
+            return render_template("DeleteProthesistPatient.html", error="The prothesist-name and its confirmation are required", csrf_token=new_token)
 
         if not ProNumber or not checkProNumber :
-            return render_template("DeleteProthesistPatient.html", message="The prothesist-number and its confirmation are required", csrf_token=new_token)
+            return render_template("DeleteProthesistPatient.html", error="The prothesist-number and its confirmation are required", csrf_token=new_token)
 
         if not PatientNumber or not checkPatientNumber :
-            return render_template("DeleteProthesistPatient.html", message="The patient-number and its confirmation are required", csrf_token=new_token)
+            return render_template("DeleteProthesistPatient.html", error="The patient-number and its confirmation are required", csrf_token=new_token)
 
         if not ProNumber.isdigit() or len(ProNumber) != 10 :
-            return render_template("DeleteProthesistPatient.html", message="Invalid prothesist number! Must be exactly 10 digits", csrf_token=new_token)
+            return render_template("DeleteProthesistPatient.html", error="Invalid prothesist number! Must be exactly 10 digits", csrf_token=new_token)
 
-        if not PatientNumber.isdigit() :
-            return render_template("DeleteProthesistPatient.html", message="Invalid patient number! Must be exactly 10 digits", csrf_token=new_token)
+        if not PatientNumber.isdigit() or len(PatientNumber) > 10 :
+            return render_template("DeleteProthesistPatient.html", error="Invalid patient number! Must be exactly 10 digits", csrf_token=new_token)
 
         if ProName != checkProName or ProNumber != checkProNumber or PatientNumber != checkPatientNumber :
             return render_template("DeleteProthesistPatient.html",
-                                   message="The confirmation must be the same as the information",
+                                   error="The confirmation must be the same as the information",
                                    csrf_token=new_token)
 
         conn = get_connection()
@@ -4599,7 +4599,7 @@ def DeleteProKhedma():
 
         except Exception as e :
             conn.rollback()
-            return render_template("DeleteProthesistPatient.html", message=f"error {str(e)}", csrf_token=new_token)
+            return render_template("DeleteProthesistPatient.html", error=f"error {str(e)}", csrf_token=new_token)
 
         finally :
             cursor.close()
@@ -4639,19 +4639,19 @@ def ProModifyVersement():
 
         if not ProthesistNumber or not ProthesistNumber.isdigit() or len(ProthesistNumber) != 10:
             return render_template("ProthesistModifyVersement.html",
-                                   message="Invalid Prothesist Number! Must be exactly 10 digits",
+                                   error="Invalid Prothesist Number! Must be exactly 10 digits",
                                    csrf_token=new_token)
 
         try:
             versaValue = float(versaValue)
         except (ValueError, TypeError):
             return render_template("ProthesistModifyVersement.html",
-                                   message="Invalid Versement value",
+                                   error="Invalid Versement value",
                                    csrf_token=new_token)
 
         if versaValue < 0:
             return render_template("ProthesistModifyVersement.html",
-                                   message="Versement cannot be negative",
+                                   error="Versement cannot be negative",
                                    csrf_token=new_token)
 
         conn = get_connection()
@@ -4677,12 +4677,12 @@ def ProModifyVersement():
 
                 if not PatientNumber or not PatientNumber.isdigit() or len(PatientNumber) != 10:
                     return render_template("ProthesistModifyVersement.html",
-                                           message="Invalid Patient Number! Must be exactly 10 digits",
+                                           error="Invalid Patient Number! Must be exactly 10 digits",
                                            csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
                     return render_template("ProthesistModifyVersement.html",
-                                           message="Invalid Service ID",
+                                           error="Invalid Service ID",
                                            csrf_token=new_token)
 
                 cursor.execute("""
@@ -4712,14 +4712,14 @@ def ProModifyVersement():
                 PatientNumber = request.form["DentistNumber"]
                 khedmaID = request.form['DServiceID']
 
-                if not PatientNumber or not PatientNumber.isdigit() or len(PatientNumber) >= 10:
+                if not PatientNumber or not PatientNumber.isdigit() or len(PatientNumber) > 10:
                     return render_template("ProthesistModifyVersement.html",
-                                           message="Invalid Patient Number",
+                                           error="Invalid Patient Number",
                                            csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
                     return render_template("ProthesistModifyVersement.html",
-                                           message="Invalid Service ID",
+                                           error="Invalid Service ID",
                                            csrf_token=new_token)
 
                 cursor.execute("""
@@ -4754,10 +4754,10 @@ def ProModifyVersement():
             b9aw = float(price) - newVersa
 
             if khalsa == "yes" :
-                return render_template("ProthesistModifyVersement.html" , message="Khedma already khalsa ", csrf_token=new_token)
+                return render_template("ProthesistModifyVersement.html" , message="Service already payed ", csrf_token=new_token)
 
             if newVersa > price :
-                return render_template("ProthesistModifyVersement.html" , message="Invalide Versement value ", csrf_token=new_token)
+                return render_template("ProthesistModifyVersement.html" , error="Invalide Versement value ", csrf_token=new_token)
 
             if newVersa == price :
                 khalsa = "yes"
@@ -4835,7 +4835,7 @@ def ProModifyVersement():
 
         except Exception as e :
             conn.rollback()
-            return render_template("ProthesistModifyVersement.html", message=f"error {str(e)}", csrf_token=new_token )
+            return render_template("ProthesistModifyVersement.html", error=f"error {str(e)}", csrf_token=new_token )
 
         finally :
             cursor.close()
@@ -4980,7 +4980,7 @@ def FindLessProKhedma():
         Pro_dics = ProthesistDics(cursor)
         active_Pros = {n: c for n, c in Pro_dics.items() if c > 0}
         if not active_Pros:
-            return render_template("ALLProKhedma.html", message="All prothesists currently have 0 khedma.", csrf_token= new_token)
+            return render_template("ALLProKhedma.html", message="All prothesists currently have 0 Services.", csrf_token= new_token)
         name, count = min(active_Pros.items(), key=lambda x: x[1])
         cursor.execute("SELECT * FROM other_prothesists_khedma WHERE user_id = %s AND pName = %s",
                        (session['id'], name))
@@ -5364,34 +5364,34 @@ def AddService():
 
         # ---------------- VALIDATION ----------------
         if not name:
-            return render_template("AddService.html", message="Invalid Name", csrf_token=new_token)
+            return render_template("AddService.html", error="Invalid Name", csrf_token=new_token)
 
         if not number.isdigit() or len(number) != 10:
-            return render_template("AddService.html", message="Invalid Number", csrf_token=new_token)
+            return render_template("AddService.html", error="Invalid Number", csrf_token=new_token)
 
         if not function:
-            return render_template("AddService.html", message="Invalid Function", csrf_token=new_token)
+            return render_template("AddService.html", error="Invalid Function", csrf_token=new_token)
 
         if khalsa not in ['yes', 'no']:
-            return render_template("AddService.html", message="Khalsa must be yes or no", csrf_token=new_token)
+            return render_template("AddService.html", error="Khalsa must be yes or no", csrf_token=new_token)
 
         if price < 0:
-            return render_template("AddService.html", message="Invalid Price", csrf_token=new_token)
+            return render_template("AddService.html", error="Invalid Price", csrf_token=new_token)
 
         if khalsa == 'no':
             versa = request.form.get('ServiceVersa', 'no').lower()
 
             if versa not in ['yes', 'no']:
-                return render_template("AddService.html", message="Versa must be yes or no", csrf_token=new_token)
+                return render_template("AddService.html", error="Versa must be yes or no", csrf_token=new_token)
 
             if versa == 'yes':
                 Vprice = float(request.form.get('VersaService', '0'))
 
                 if Vprice < 0:
-                    return render_template("AddService.html", message="Invalid Price", csrf_token=new_token)
+                    return render_template("AddService.html", error="Invalid Price", csrf_token=new_token)
 
                 if Vprice > price:
-                    return render_template("AddService.html", message="Versa > Price not allowed", csrf_token=new_token)
+                    return render_template("AddService.html", error="Versa > Price not allowed", csrf_token=new_token)
 
                 if Vprice == price :
                     b9aw = 0

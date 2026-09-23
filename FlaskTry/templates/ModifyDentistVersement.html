@@ -18,8 +18,35 @@
 <body>
 
 {% if message %}
-<p>{{ message }}</p>
+<div class="flash-message success-message">
+    <div class="flash-icon">
+        <i class="fas fa-check"></i>
+    </div>
+    <div class="flash-content">
+        <strong>Success</strong>
+        <span>{{ message }}</span>
+    </div>
+    <button type="button" class="flash-close" onclick="closeFlash(this)">
+        <i class="fas fa-xmark"></i>
+    </button>
+</div>
 {% endif %}
+
+{% if error %}
+<div class="flash-message error-message">
+    <div class="flash-icon">
+        <i class="fas fa-exclamation"></i>
+    </div>
+    <div class="flash-content">
+        <strong>Error</strong>
+        <span>{{ error }}</span>
+    </div>
+    <button type="button" class="flash-close" onclick="closeFlash(this)">
+        <i class="fas fa-xmark"></i>
+    </button>
+</div>
+{% endif %}
+
     <!-- Animated Background -->
     <div class="animated-bg"></div>
 

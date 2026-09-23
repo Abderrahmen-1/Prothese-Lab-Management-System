@@ -46,6 +46,121 @@
 }
 
 /* ===========================
+   System Messages
+   =========================== */
+
+.system-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+
+    border-radius: 10px;
+    border: 1px solid;
+    box-shadow: var(--shadow-md);
+
+    animation: systemAlertIn 0.4s ease both;
+}
+
+.system-alert-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+    flex-shrink: 0;
+
+    font-size: 1.25rem;
+}
+
+.system-alert-content {
+    flex: 1;
+}
+
+.system-alert-content h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.system-alert-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+
+/* ===========================
+   Success / Message
+   =========================== */
+
+.alert-message {
+    background: rgba(8, 145, 178, 0.08);
+    border-color: rgba(8, 145, 178, 0.25);
+    color: var(--success);
+}
+
+.alert-message .system-alert-icon {
+    background: rgba(8, 145, 178, 0.12);
+    color: var(--success);
+}
+
+.alert-message .system-alert-content h3 {
+    color: var(--success);
+}
+
+.alert-message .system-alert-content p {
+    color: var(--text-dark);
+}
+
+
+/* ===========================
+   Error
+   =========================== */
+
+.alert-error {
+    background: rgba(220, 38, 38, 0.08);
+    border-color: rgba(220, 38, 38, 0.25);
+    color: var(--danger);
+}
+
+.alert-error .system-alert-icon {
+    background: rgba(220, 38, 38, 0.12);
+    color: var(--danger);
+}
+
+.alert-error .system-alert-content h3 {
+    color: var(--danger);
+}
+
+.alert-error .system-alert-content p {
+    color: var(--text-dark);
+}
+
+
+/* ===========================
+   Animation
+   =========================== */
+
+@keyframes systemAlertIn {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================
    Base Styles
    =========================== */
 

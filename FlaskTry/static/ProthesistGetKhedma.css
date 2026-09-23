@@ -37,6 +37,198 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* =========================================================
+   ALERT MESSAGES
+   ========================================================= */
+
+.alert-container {
+    width: 100%;
+    padding: 20px 30px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.alert {
+    width: 100%;
+    max-width: 1100px;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    padding: 16px 18px;
+
+    border-radius: 12px;
+
+    font-family: 'Inter', sans-serif;
+
+    position: relative;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+    animation: alertSlideDown 0.45s ease;
+}
+
+
+/* Alert main icon */
+
+.alert > i {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+
+/* Alert content */
+
+.alert-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.alert-content h3 {
+    margin: 0 0 3px;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.alert-content p {
+    margin: 0;
+
+    font-size: 0.85rem;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+
+/* Close button */
+
+.alert-close {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 7px;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+
+    flex-shrink: 0;
+}
+
+.alert-close i {
+    font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   SUCCESS
+   ========================================================= */
+
+.alert-success {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-left: 5px solid #10b981;
+    color: #047857;
+}
+
+.alert-success > i {
+    color: #10b981;
+}
+
+.alert-success .alert-close {
+    color: #047857;
+}
+
+.alert-success .alert-close:hover {
+    background: #d1fae5;
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.alert-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-left: 5px solid #ef4444;
+    color: #b91c1c;
+}
+
+.alert-error > i {
+    color: #ef4444;
+}
+
+.alert-error .alert-close {
+    color: #b91c1c;
+}
+
+.alert-error .alert-close:hover {
+    background: #fee2e2;
+}
+
+
+/* =========================================================
+   INFO
+   ========================================================= */
+
+.alert-info {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-left: 5px solid #3b82f6;
+    color: #1d4ed8;
+}
+
+.alert-info > i {
+    color: #3b82f6;
+}
+
+.alert-info .alert-close {
+    color: #1d4ed8;
+}
+
+.alert-info .alert-close:hover {
+    background: #dbeafe;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes alertSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
 /* ===========================
    Base Styles
    =========================== */

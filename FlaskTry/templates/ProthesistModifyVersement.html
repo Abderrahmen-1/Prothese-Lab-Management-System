@@ -21,7 +21,43 @@
 
 
 {% if message %}
-<p>{{ message }}</p>
+<div class="alert-container">
+    <div class="alert alert-success fade-in-slow">
+        <div class="alert-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+
+        <div class="alert-content">
+            <h3>Success</h3>
+            <p>{{ message }}</p>
+        </div>
+
+        <button type="button" class="alert-close"
+                onclick="this.closest('.alert').remove()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+</div>
+{% endif %}
+
+{% if error %}
+<div class="alert-container">
+    <div class="alert alert-error fade-in-slow">
+        <div class="alert-icon">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+
+        <div class="alert-content">
+            <h3>Error</h3>
+            <p>{{ error }}</p>
+        </div>
+
+        <button type="button" class="alert-close"
+                onclick="this.closest('.alert').remove()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+</div>
 {% endif %}
 
 <div class="animated-bg"></div>

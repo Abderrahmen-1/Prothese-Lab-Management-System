@@ -38,6 +38,96 @@
 }
 
 /* ===========================
+   Messages & Errors
+   =========================== */
+
+.alert {
+    width: calc(100% - 40px);
+    max-width: 1100px;
+    margin: 20px auto 0;
+    padding: 15px 18px;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    border-radius: 10px;
+    border-left: 5px solid;
+    box-shadow: var(--shadow-md);
+
+    animation: alertSlideDown 0.35s ease;
+}
+
+.alert > i {
+    font-size: 20px;
+    margin-top: 2px;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-content strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 3px;
+}
+
+.alert-content p {
+    margin: 0;
+    font-size: 14px;
+}
+
+
+/* Success / Message */
+
+.alert-message {
+    background: rgba(16, 185, 129, 0.10);
+    border-left-color: var(--success);
+    color: #065f46;
+}
+
+.alert-message > i {
+    color: var(--success);
+}
+
+.alert-message .alert-content strong {
+    color: #047857;
+}
+
+
+/* Error */
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.10);
+    border-left-color: var(--danger);
+    color: #991b1b;
+}
+
+.alert-error > i {
+    color: var(--danger);
+}
+
+.alert-error .alert-content strong {
+    color: #b91c1c;
+}
+
+
+/* Animation */
+
+@keyframes alertSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================
    Base Styles
    =========================== */
 

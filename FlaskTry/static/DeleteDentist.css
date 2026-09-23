@@ -41,6 +41,43 @@
 }
 
 /* ===========================
+   Success Message
+   =========================== */
+
+.alert-success {
+    background: rgba(16, 185, 129, 0.10);
+    color: var(--success);
+    border-left-color: var(--success);
+}
+
+.alert-success .alert-icon {
+    color: var(--success);
+}
+
+.alert-success .alert-content h3 {
+    color: var(--success);
+}
+
+
+/* ===========================
+   Error Message
+   =========================== */
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.10);
+    color: var(--danger);
+    border-left-color: var(--danger);
+}
+
+.alert-error .alert-icon {
+    color: var(--danger);
+}
+
+.alert-error .alert-content h3 {
+    color: var(--danger);
+}
+
+/* ===========================
    Base Styles
    =========================== */
 
