@@ -609,11 +609,7 @@ def AddPatient():
 
                 ProthesistsStat(cursor, conn, ProPrice, ProNumber, ProName, ProKhalsa, ProDate, ProVersa)
 
-                cursor.execute("""
-                                INSERT INTO other_prothesists_history
-                                  (dentistname, prothesist, pNumber, pFirstname, pLastname, patient_number, pKhedma, pPrice, versement, b9aw, pDate, user_id, Status) 
-                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """,
-                               (None, ProName, ProNumber, firstName, lastName, unique, choice, ProPrice, ProVersa, Prob9aw, ProDate, session['id'], 'in process'))
+                Prothesist_History(cursor, conn, ProName, ProNumber, unique )
 
             exist = checkExistPatient(cursor, firstName, unique, choice)
 
@@ -1889,21 +1885,15 @@ def Get_From_Dentist():
                 cursor.execute(
                     """
                     INSERT INTO other_prothesists_khedma
-                    ( patient_number, dentist_name, pName, pNumber, pDate, pKhedma, pPrice, pVersa, pB9aw, 
-                    pKhalsa, pFinished, user_id, DeadLine )
-                    VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ) """,( unique, dentist, ProName, ProNumber, ProDate, choice, ProPrice, ProVersa,
-                          Prob9aw, ProKhalsa, "no", session["id"], ProDeadLine ))
+                    ( user_id, patient_number, dentist_name, pName, pNumber, pDate, pKhedma, pPrice, pVersa, pB9aw, 
+                    pKhalsa, pFinished, DeadLine )
+                    VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ) """,( session['id'], unique, dentist, ProName, ProNumber, ProDate, choice, ProPrice, ProVersa,
+                          Prob9aw, ProKhalsa, "no", ProDeadLine ))
 
-                cursor.execute("""
-                                INSERT INTO other_prothesists_history
-                                    (dentistname, prothesist, pNumber, pFirstname, pLastname, patient_number, pKhedma, pPrice, versement, b9aw, pDate, user_id, Status) 
-                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """,
-                               (dentist, ProName, ProNumber, firstName, lastName, unique, choice, ProPrice, ProVersa, Prob9aw, ProDate, session['id'], 'in process'))
+                Prothesist_History(cursor,conn,ProName,ProNumber,unique)
 
                 ProthesistsStat( cursor, conn, ProPrice, ProNumber, ProName,
                                  ProKhalsa, ProDate, ProVersa )
-
-
 
             status = 'in process'
             infos = [ session["id"], dentist, firstName, lastName, unique, choice, price,
@@ -2706,9 +2696,10 @@ def khedmaMkemla():
 
                 # Verify patient record exists
                 cursor.execute("""
-                    SELECT patient_number FROM patient
-                    WHERE user_id = %s AND id = %s AND patient_number = %s
-                """, (session['id'], khedmaID, patientId))
+                    SELECT 1 
+                    FROM patient_history
+                    WHERE id = %s AND user_id = %s AND pNumber = %s
+                """, (khedmaID, session['id'], patientId))
                 patient_row = cursor.fetchone()
 
                 if not patient_row:
@@ -2799,8 +2790,8 @@ def khedmaMkemla():
 
                 cursor.execute("""
                                 SELECT 1 
-                                FROM dentists 
-                                WHERE id = %s AND patient_number = %s AND user_id = %s """
+                                FROM dentists_history 
+                                WHERE id = %s AND pNumber = %s AND user_id = %s """
                                ,(khedmaID, patientId, session['id']))
 
                 found = cursor.fetchone()
@@ -2938,7 +2929,7 @@ def KhedmaKhalsa():
 
                 cursor.execute("""
                     SELECT * FROM patient
-                    WHERE id = %s AND patient_number = %s AND user_id = %s 
+                    WHERE patient_number = %s AND user_id = %s 
                 """, (khedmaID, patientId, session['id']))
                 result = cursor.fetchone()
 
@@ -3045,7 +3036,7 @@ def KhedmaKhalsa():
 
                 cursor.execute("""
                     SELECT * FROM dentists
-                    WHERE id = %s AND patient_number = %s AND user_id = %s AND dentist_name = %s 
+                    WHERE patient_number = %s AND user_id = %s AND dentist_name = %s 
                 """, (khedmaID, patientId, session['id'], name))
                 result = cursor.fetchone()
 
@@ -3710,7 +3701,7 @@ def khedmaProMkemla():
                                 UPDATE patient 
                                 SET status = %s 
                                 WHERE patient_number = %s AND user_id = %s""",
-                               ('Finished by the proth', patientId, session['id']))
+                               ('Finished proth', patientId, session['id']))
 
                 cursor.execute("""
                                 UPDATE other_prothesists_khedma 
@@ -3718,7 +3709,7 @@ def khedmaProMkemla():
                                 WHERE id = %s """, ('yes', result[1]))
 
                 cursor.execute("""
-                                UPDATE other_prothesist_history 
+                                UPDATE other_prothesists_history 
                                 SET status = 'finished' 
                                 WHERE id = %s """,(result[1],))
 
@@ -3783,7 +3774,7 @@ def khedmaProMkemla():
                                 UPDATE dentists 
                                 SET status = %s 
                                 WHERE patient_number = %s AND dentist_name = %s AND user_id = %s""",
-                               ('finished by the proth', patientId, dentistName, session['id']))
+                               ('finished proth', patientId, dentistName, session['id']))
 
                 cursor.execute("""
                             UPDATE other_prothesists_khedma 
@@ -3792,7 +3783,7 @@ def khedmaProMkemla():
                         """, ('yes', result[1]))
 
                 cursor.execute("""
-                                UPDATE other_prothesist_history 
+                                UPDATE other_prothesists_history 
                                 SET status = 'finished' 
                                 WHERE id = %s """, (result[1],))
 
@@ -3824,7 +3815,11 @@ def khedmaProMkemla():
                 return render_template("FinishedProKhedma.html", message="You have to enter 'patient' or 'dentist'", csrf_token=new_token)
 
             conn.commit()
-            return render_template("ALLProKhedma.html", message="Information Updated Successfully", csrf_token=new_token)
+            cursor.execute("""
+                            SELECT * FROM other_prothesists_khedma 
+                            WHERE user_id = %s """, (session['id'],))
+            result = cursor.fetchall()
+            return render_template("ALLProKhedma.html", message="Information Updated Successfully", result=result, csrf_token=new_token)
 
         except Exception as e :
             conn.rollback()
@@ -3918,7 +3913,7 @@ def KhedmaProKhalsa():
                     return render_template("KhedmaProKhalsa.html", message="Service Not Found", csrf_token=new_token)
 
                 cursor.execute("""
-                                SELECT pPrice, pDate, pKhalsa 
+                                SELECT pPrice, pDate, pKhalsa, pB9aw 
                                 FROM other_prothesists_khedma 
                                 WHERE pName = %s AND pNumber = %s AND patient_number = %s AND user_id = %s
                                 """,(ProName, ProNumber, patientId, session['id']))
@@ -3931,9 +3926,10 @@ def KhedmaProKhalsa():
                 prothesist_price = data[0]
                 prothesist_date  = data[1]
                 old_khalsa       = data[2]
+                old_b9aw         = data[3]
 
                 cursor.execute("""
-                                SELECT pKhalsa, price 
+                                SELECT pKhalsa, pPrice 
                                 FROM other_prothesists_khedma 
                                 WHERE id = %s """,(result[1],))
 
@@ -3942,15 +3938,15 @@ def KhedmaProKhalsa():
                 if old[0] == 'no' :
                     cursor.execute("""
                                 UPDATE other_prothesists_khedma
-                                SET pKhalsa = %s, pVersa = pVersa + pB9aw, pB9aw = %s
+                                SET pKhalsa = %s, pVersa = %s, pB9aw = %s
                                 WHERE id = %s
-                            """, ('yes', 0, result[1]))
+                            """, ('yes', old[1], 0, result[1]))
 
                     cursor.execute("""
                                 UPDATE other_prothesists_history 
                                 SET versement = %s , b9aw = %s 
                                 WHERE 
-                                user_id = %s AND pName = %s AND pNumber = %s AND patient_number = %s  """
+                                user_id = %s AND prothesist = %s AND pNumber = %s AND patient_number = %s  """
                                 ,(old[1], 0, session['id'], ProName, ProNumber, patientId))
 
                 else :
@@ -3969,7 +3965,7 @@ def KhedmaProKhalsa():
 
                 if old_khalsa.lower() == 'no':
                     UpdateProKhalsaStat(cursor, conn, ProName=ProName, ProNumber=ProNumber,
-                                        price=prothesist_price, date=prothesist_date)
+                                        b9aw=old_b9aw, date=prothesist_date)
 
             elif choice.lower() == "dentist":
                 Dentistname      = request.form['Dentist']
@@ -4009,7 +4005,7 @@ def KhedmaProKhalsa():
 
 
                 cursor.execute("""
-                                SELECT pPrice, pDate, pKhalsa
+                                SELECT pPrice, pDate, pKhalsa, pB9aw
                                 FROM other_prothesists_khedma 
                                 WHERE pName = %s AND pNumber = %s AND dentist_name = %s AND patient_number = %s AND user_id = %s
                                 """,(ProName, ProNumber, Dentistname, patientId, session['id']))
@@ -4021,6 +4017,7 @@ def KhedmaProKhalsa():
                 prothesist_price = data[0]
                 prothesist_date  = data[1]
                 old_khalsa       = data[2]
+                old_b9aw         = data[3]
 
                 cursor.execute("""
                                 SELECT pKhalsa, pPrice
@@ -4032,15 +4029,15 @@ def KhedmaProKhalsa():
                 if old[0] == 'no' :
                     cursor.execute("""
                                 UPDATE other_prothesists_khedma
-                                SET pKhalsa = %s, pVersa = pVersa + pB9aw, pB9aw = %s
+                                SET pKhalsa = %s, pVersa = %s, pB9aw = %s
                                 WHERE id = %s
-                            """, ('yes', 0, result[2]))
+                            """, ('yes', 0, old[1], result[2]))
 
                     cursor.execute("""
                                     UPDATE other_prothesists_history 
                                     SET versement = %s , b9aw = %s 
                                     WHERE 
-                                    user_id = %s AND pName = %s AND pNumber = %s AND patient_number = %s AND dentist_name = %s  """
+                                    user_id = %s AND prothesist = %s AND pNumber = %s AND patient_number = %s AND dentistname = %s  """
                                    , (old[1], 0, session['id'], ProName, ProNumber, patientId, Dentistname))
 
 
@@ -4064,12 +4061,17 @@ def KhedmaProKhalsa():
 
                 if old_khalsa.lower() == 'no':
                     UpdateProKhalsaStat(cursor, conn, ProName=ProName, ProNumber=ProNumber,
-                                        price=prothesist_price, date=prothesist_date)
+                                        b9aw=old_b9aw, date=prothesist_date)
             else:
                 return render_template("KhedmaProKhalsa.html", message="You have to enter (patient / dentist)", csrf_token=new_token)
 
             conn.commit()
-            return render_template("ALLProKhedma.html", message="Payment Updated Successfully", csrf_token=new_token)
+            cursor.execute("""
+                            SELECT * FROM other_prothesists_khedma 
+                            WHERE user_id = %s """,(session['id'],))
+            result = cursor.fetchall()
+
+            return render_template("ALLProKhedma.html", message="Payment Updated Successfully", result=result, csrf_token=new_token)
 
         except Exception as e :
             conn.rollback()
@@ -4264,12 +4266,8 @@ def GetProthesistKhedma():
                                (session['id'], patientNumber, None, ProthesistName, ProthesistNumber, result[1], price,
                                 versaValue, b9aw, khalsa, "no", date, deadLine))
 
-                cursor.execute("""
-                    INSERT INTO other_prothesists_history (dentistname, prothesist, pNumber, pFirstname, pLastname, 
-                                                            patient_number, pKhedma, pPrice, versement, b9aw, pDate, user_id, status)
-                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """,
-                               (None, ProthesistName, ProthesistNumber, result[4], result[5],
-                                patientNumber, result[1], price, versaValue, b9aw, date, session['id'], 'active' ))
+                Prothesist_History(cursor, conn, ProthesistName, ProthesistNumber,
+                                   patientNumber)
 
                 cursor.execute("""
                                 UPDATE patient 
@@ -4408,20 +4406,14 @@ def GetProthesistKhedma():
                                (session['id'], patientNumber, dentistName, ProthesistName, ProthesistNumber, result[1], price,
                                 versaValue, b9aw, khalsa, "no", date, deadLine))
 
-                cursor.execute("""
-                                INSERT INTO other_prothesists_history (dentistname, prothesist, pNumber, pFirstname, pLastname, 
-                                                                            patient_number, pKhedma, pPrice, versement, b9aw, pDate, user_id, status)
-                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """,
-                               (dentistName, ProthesistName, ProthesistNumber, result[4], result[5],
-                                patientNumber, result[1], price, versaValue, b9aw, date, session['id'], 'active'))
+                Prothesist_History(cursor, conn, ProthesistName, ProthesistNumber,
+                                   patientNumber)
 
                 cursor.execute("""
                                 UPDATE dentists 
                                 SET status = 'prothesist' 
                                 WHERE dentist_name = %s AND patient_number = %s AND user_id = %s """,
                                (dentistName, patientNumber, session['id']))
-
-
 
                 # Update statistics
                 month = date.month
@@ -4551,7 +4543,7 @@ def DeleteProKhedma():
                             WHERE 
                             pr.user_id = %s AND pr.patient_number = %s AND pr.pName = %s AND pr.pNumber = %s
                             """,(session['id'], PatientNumber, ProName, ProNumber))
-            found2 = cursor.fetchone()
+            dentist = cursor.fetchone()
 
             cursor.execute("""
                             DELETE FROM other_prothesists_khedma 
@@ -4580,16 +4572,16 @@ def DeleteProKhedma():
                             prothesist_name = %s, prothesist_number = 0
                             WHERE 
                             id = %s AND user_id = %s 
-                            """, (None, found2[5], session['id']))
+                            """, (None, dentist[5], session['id']))
 
-            if found2[1] == 'NO':
+            if dentist[1] == 'NO':
                 cursor.execute("""
                                 UPDATE patient 
                                 SET status = %s 
                                 WHERE patient_number = %s AND user_id = %s""",('in process', PatientNumber, session['id']))
 
             else :
-                name = found[1][3:]
+                name = dentist[1][3:]
                 cursor.execute("""
                                 UPDATE dentists 
                                 SET status = %s 
@@ -4793,7 +4785,7 @@ def ProModifyVersement():
                                 SET 
                                 versement = %s , 
                                 b9aw = %s 
-                                WHERE user_id = %s AND pName = %s AND pNumber = %s AND patient_number = %s 
+                                WHERE user_id = %s AND prothesist = %s AND pNumber = %s AND patient_number = %s 
                                 """,(newVersa, b9aw, session['id'], ProthesistName, ProthesistNumber, PatientNumber))
 
 
@@ -4822,7 +4814,7 @@ def ProModifyVersement():
                                 SET 
                                 versement = %s , 
                                 b9aw = %s 
-                                WHERE user_id = %s AND pName = %s AND pNumber = %s AND patient_number = %s AND dentist_name = %s
+                                WHERE user_id = %s AND prothesist = %s AND pNumber = %s AND patient_number = %s AND dentist_name = %s
                                 """,
                                (newVersa, b9aw, session['id'], ProthesistName, ProthesistNumber, PatientNumber, DentistName))
 

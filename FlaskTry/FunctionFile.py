@@ -365,6 +365,43 @@ def ProthesistDics(cursor):
             result[Pro] = 0
     return result
 
+def getprothesist(cursor,prothesist_name, prothesist_number, unique):
+    cursor.execute("""
+        SELECT pFirstname, pLastname, patient_number,
+               pDate, pKhedma, user_id, pPrice, versement, b9aw, status, dentist_name
+        FROM other_prothesists_khedma
+        WHERE patient_number = %s AND pName = %s AND pNumber = %s AND user_id = %s
+    """, (unique, prothesist_name, prothesist_number, session['id']))
+    history = cursor.fetchall()
+    return history
+
+
+def Prothesist_History(cursor, conn, prothesistname, prothesist_number, unique):
+    result = getprothesist(cursor, prothesistname, prothesist_number, unique)
+    if result :
+        data = result[0]
+        cursor.execute("""
+            SELECT 1 
+            FROM other_prothesists_history
+            WHERE pNumber = %s AND pName = %s AND patient_number = %s AND pFirstname = %s AND 
+             pLastname = %s AND user_id = %s
+        """, (prothesist_number, prothesistname, data[0], data[1], session['id']))
+        exist = cursor.fetchall()
+
+        if not exist:
+            cursor.execute("""
+                INSERT INTO other_prothesists_history
+                    (dentistname, prothesist, pNumber, pFirstname, pLastname, patient_number, pKhedma, pPrice, versement, b9aw, pDate, user_id, Status) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (data[10], prothesistname, prothesist_number, data[0], data[1], data[2], data[4], data[6], data[7], data[8], data[3], session['id'], data[9]))
+
+        cursor.execute("""
+            DELETE FROM other_prothesists_history
+            WHERE pDate < DATE_SUB(NOW(), INTERVAL 6 MONTH)
+        """)
+        conn.commit()
+
+
 
 def ProthesistsStat(cursor, conn, price, pNumber, pName, khalsa, date, versa):
     if isinstance(date, str):
@@ -409,7 +446,7 @@ def ProthesistsStat(cursor, conn, price, pNumber, pName, khalsa, date, versa):
     conn.commit()
 
 
-def UpdateProKhalsaStat(cursor, conn, ProName=None, ProNumber=0, price=0, date=None):
+def UpdateProKhalsaStat(cursor, conn, ProName=None, ProNumber=0, b9aw=0, date=None):
     if isinstance(date, str):
         parsed = datetime.strptime(date, "%Y-%m-%d")
     else:
@@ -427,10 +464,11 @@ def UpdateProKhalsaStat(cursor, conn, ProName=None, ProNumber=0, price=0, date=N
     if existing:
         cursor.execute("""
             UPDATE prothesist_stat
-            SET khalsin       = khalsin + %s,
+            SET 
+                khalsin       = khalsin + %s,
                 machi_khalsin = machi_khalsin - %s
             WHERE user_id = %s AND prothesist_name = %s AND prothesist_number = %s AND month = %s AND year = %s
-        """, (price, price, session['id'], ProName, ProNumber, month, year))
+        """, (b9aw, b9aw, session['id'], ProName, ProNumber, month, year))
 
         conn.commit()
 
