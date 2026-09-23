@@ -4183,7 +4183,8 @@ def GetProthesistKhedma():
                 cursor.execute("""
                     SELECT finished, T_ype, la_date, DeadLine, patient_firstname, patient_lastname
                     FROM patient 
-                    WHERE user_id = %s AND patient_number = %s """,
+                    WHERE 
+                    user_id = %s AND patient_number = %s """,
                                (session['id'], patientNumber))
 
                 result = cursor.fetchone()
@@ -4203,7 +4204,7 @@ def GetProthesistKhedma():
                                            message="⚠️ Incorrect Enter date "
                                            , csrf_token=new_token)
 
-                if result[3] <  deadLine :
+                if deadLine >= result[3] :
                     return render_template("ProthesistGetKhedma.html",
                                            message="⚠️ Incorrect DeadLine date"
                                            , csrf_token=new_token)
@@ -4243,9 +4244,10 @@ def GetProthesistKhedma():
                     b9aw = 0
 
                 cursor.execute("""
-                                SELECT pName FROM other_prothesists_khedma 
-                                WHERE patient_number = %s AND user_id = %s AND dentist_name = %s 
-                                """,(patientNumber, session['id'], None))
+                                SELECT pName 
+                                FROM other_prothesists_khedma 
+                                WHERE patient_number = %s AND user_id = %s 
+                                """,(patientNumber, session['id']))
 
                 found = cursor.fetchone()
 
@@ -4257,10 +4259,10 @@ def GetProthesistKhedma():
                 # Insert the work order
                 cursor.execute("""
                     INSERT INTO other_prothesists_khedma 
-                    (patient_number, dentist_name, pName, pNumber, pDate, pkhedma, pPrice, pVersa, pB9aw, pKhalsa, pFinished, user_id)  
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """,
-                               (patientNumber, None, ProthesistName, ProthesistNumber, date, result[1], price,
-                                versaValue, b9aw, khalsa, "no", session['id']))
+                    (user_id, patient_number, dentist_name, pName, pNumber, pKhedma, pPrice, pVersa, pB9aw, pKhalsa, pFinished, pDate, DeadLine)  
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """,
+                               (session['id'], patientNumber, None, ProthesistName, ProthesistNumber, result[1], price,
+                                versaValue, b9aw, khalsa, "no", date, deadLine))
 
                 cursor.execute("""
                     INSERT INTO other_prothesists_history (dentistname, prothesist, pNumber, pFirstname, pLastname, 
@@ -4275,8 +4277,6 @@ def GetProthesistKhedma():
                                 WHERE patient_number = %s AND user_id = %s """
                                ,(patientNumber, session['id']))
 
-
-
                 # Update statistics
                 month = date.month
                 year = date.year
@@ -4286,9 +4286,9 @@ def GetProthesistKhedma():
                     WHERE user_id = %s AND month = %s AND year = %s AND prothesist_name = %s AND prothesist_number = %s """,
                                (session['id'], month, year, ProthesistName, ProthesistNumber))
 
-                found = cursor.fetchone()
+                found2 = cursor.fetchone()
 
-                if found:
+                if found2:
                     print("FOUND")
                     cursor.execute("""
                         UPDATE prothesist_stat 
@@ -4311,8 +4311,7 @@ def GetProthesistKhedma():
                                 WHERE khedma_patient = %s AND user_id = %s """,
                                (ProthesistName, ProthesistNumber, patientNumber, session['id']))
 
-
-
+                conn.commit()
                 return render_template("KhedmaProFile.html",
                                        message="✅ Work order created successfully! Patient order added to " + ProthesistName + "'s list."
                                        , csrf_token=new_token)
@@ -4326,7 +4325,7 @@ def GetProthesistKhedma():
                     return render_template("ProthesistGetKhedma.html",
                                            message="❌ Dentist name and patient number are required!", csrf_token=new_token)
 
-                if not patientNumber.isdigit() or len(patientNumber) >= 10:
+                if not patientNumber.isdigit() :
                     return render_template("ProthesistGetKhedma.html",
                                            message="❌ Invalid patient number!",
                                            csrf_token=new_token)
@@ -4389,7 +4388,8 @@ def GetProthesistKhedma():
                     b9aw = 0
 
                 cursor.execute("""
-                                SELECT pName FROM other_prothesists_khedma 
+                                SELECT pName 
+                                FROM other_prothesists_khedma 
                                 WHERE patient_number = %s AND user_id = %s AND dentist_name = %s 
                                 """, (patientNumber, session['id'], dentistName))
 
@@ -4402,11 +4402,11 @@ def GetProthesistKhedma():
 
                 # Insert the work order
                 cursor.execute("""
-                    INSERT INTO other_prothesists_khedma 
-                    (patient_number, dentist_name, pName, pNumber, pDate, pkhedma, pPrice, pVersa, pB9aw, pKhalsa, pFinished, user_id)  
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """,
-                               (patientNumber, dentistName, ProthesistName, ProthesistNumber, date, result[1], price,
-                                versaValue, b9aw, khalsa, "no", session['id']))
+                                INSERT INTO other_prothesists_khedma 
+                                (user_id, patient_number, dentist_name, pName, pNumber, pKhedma, pPrice, pVersa, pB9aw, pKhalsa, pFinished, pDate, DeadLine)  
+                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """,
+                               (session['id'], patientNumber, dentistName, ProthesistName, ProthesistNumber, result[1], price,
+                                versaValue, b9aw, khalsa, "no", date, deadLine))
 
                 cursor.execute("""
                                 INSERT INTO other_prothesists_history (dentistname, prothesist, pNumber, pFirstname, pLastname, 
@@ -4432,9 +4432,9 @@ def GetProthesistKhedma():
                     WHERE user_id = %s AND month = %s AND year = %s AND prothesist_name = %s AND prothesist_number = %s """,
                                (session['id'], month, year, ProthesistName, ProthesistNumber))
 
-                found = cursor.fetchone()
+                found2 = cursor.fetchone()
 
-                if found:
+                if found2:
                     cursor.execute("""
                         UPDATE prothesist_stat 
                         SET 
@@ -4512,7 +4512,7 @@ def DeleteProKhedma():
         if not ProNumber.isdigit() or len(ProNumber) != 10 :
             return render_template("DeleteProthesistPatient.html", message="Invalid prothesist number! Must be exactly 10 digits", csrf_token=new_token)
 
-        if not PatientNumber.isdigit() or len(PatientNumber) != 10 :
+        if not PatientNumber.isdigit() :
             return render_template("DeleteProthesistPatient.html", message="Invalid patient number! Must be exactly 10 digits", csrf_token=new_token)
 
         if ProName != checkProName or ProNumber != checkProNumber or PatientNumber != checkPatientNumber :
@@ -4544,7 +4544,7 @@ def DeleteProKhedma():
 
             cursor.execute("""
                             SELECT k.khedma_patient, k.khedma_dentist, k.prothesist_name, k.prothesist_number,
-                                    pr.id 
+                                    pr.id, k.id 
                             FROM other_prothesists_khedma pr 
                             JOIN khedma k ON k.user_id = pr.user_id AND k.khedma_patient = pr.patient_number 
                                             AND k.prothesist_name = pr.pName  AND k.prothesist_number = pr.pNumber 
@@ -4574,6 +4574,14 @@ def DeleteProKhedma():
                             user_id = %s AND patient_number = %s AND prothesist = %s AND pNumber = %s 
                             """,(session['id'], PatientNumber, ProName, ProNumber))
 
+            cursor.execute("""
+                            UPDATE khedma
+                            SET 
+                            prothesist_name = %s, prothesist_number = 0
+                            WHERE 
+                            id = %s AND user_id = %s 
+                            """, (None, found2[5], session['id']))
+
             if found2[1] == 'NO':
                 cursor.execute("""
                                 UPDATE patient 
@@ -4581,11 +4589,12 @@ def DeleteProKhedma():
                                 WHERE patient_number = %s AND user_id = %s""",('in process', PatientNumber, session['id']))
 
             else :
+                name = found[1][3:]
                 cursor.execute("""
                                 UPDATE dentists 
                                 SET status = %s 
                                 WHERE patient_number = %s AND dentist_name = %s AND user_id = %s""",
-                               ('in process', PatientNumber, found2[1], session['id']))
+                               ('in process', PatientNumber, name, session['id']))
 
             conn.commit()
 
@@ -5040,6 +5049,13 @@ def ProStat():
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
     try:
+        cursor.execute("""
+                        DELETE FROM prothesist_stat
+                        WHERE 
+                        user_id = %s AND total_khedma = 0 AND khalsin = 0 AND machi_khalsin = 0 
+                        """,(session['id'],))
+        conn.commit()
+
         Pro_list = GetAllProthesists(cursor)
         result = {}
         for Pro in Pro_list:
