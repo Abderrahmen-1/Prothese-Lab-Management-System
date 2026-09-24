@@ -580,7 +580,6 @@ def checkVersement(value=None):
             value = float(value)
         except (ValueError, TypeError):
             return False
-
     else :
         return True
 

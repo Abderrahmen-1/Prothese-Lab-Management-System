@@ -4,218 +4,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta name="description" content="Dashboard - Prosthetics Lab Management System">
-    <meta name="keywords" content="Dashboard, Home, Lab, Materials, Management">
+    <meta name="keywords" content="Dashboard, Prosthetics Lab, Management">
     <meta name="author" content="Prosthetics Lab Team">
+
     <title>DentaFlow - Dashboard</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='HomePage.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
 
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-mark">
-        <i class="fas fa-tooth"></i>
-      </div>
-      <span>DentaFlow</span>
-    </div>
+    <!-- TOP NAVIGATION -->
+    <nav class="top-nav">
 
-    <nav class="sidebar-nav">
-      <a href="/Patient" class="snav-item">
-        <span class="snav-dot" style="background:#22c55e"></span>Patients
-      </a>
-      <a href="/Dentist" class="snav-item">
-        <span class="snav-dot" style="background:#3b82f6"></span>Dentists
-      </a>
-      <a href="/Khedma" class="snav-item">
-        <span class="snav-dot" style="background:#60a5fa"></span>Services
-      </a>
-      <a href="/Sel3a" class="snav-item">
-        <span class="snav-dot" style="background:#f97316"></span>Products
-      </a>
-      <a href="/ProKhedma" class="snav-item">
-        <span class="snav-dot" style="background:#a855f7"></span>Prothesist
-      </a>
-      <a href="/OtherServicesTable" class="snav-item">
-        <span class="snav-dot" style="background:#10b981"></span>Other Services
-      </a>
-      <a href="/AllTotalAccount" class="snav-item">
-        <span class="snav-dot" style="background:#8b5cf6"></span>Statistics
-      </a>
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fas fa-tooth"></i>
+            </div>
+
+            <div class="brand-text">
+                <strong>DentaFlow</strong>
+                <span>Prosthetics Lab</span>
+            </div>
+        </div>
+
+        <div class="nav-status">
+            <span class="status-dot"></span>
+            System Online
+        </div>
+
+        <div class="user-profile">
+
+            {% if letter %}
+                <div class="avatar">{{ letter }}</div>
+            {% else %}
+                <div class="avatar">U</div>
+            {% endif %}
+
+            <div class="user-meta">
+                {% if username %}
+                    <strong>{{ username }}</strong>
+                {% else %}
+                    <strong>User</strong>
+                {% endif %}
+
+                <span>Lab Admin</span>
+            </div>
+
+        </div>
+
     </nav>
 
-    <div class="sidebar-bottom">
-      <div class="system-pill">
-        <span class="pulse-ring"><span class="pulse-core"></span></span>
-        System Online
-      </div>
-    </div>
-  </aside>
 
-  <main class="content">
+    <!-- MAIN CONTENT -->
+    <main class="dashboard">
 
-    <header class="top-header">
-      <div class="header-title">
-        <h2>Dashboard Modules</h2>
-        <p class="subtitle">Streamline your prosthetics lab operations with powerful management tools</p>
-      </div>
-      <div class="user-profile">
-        {% if letter %}
-          <div class="avatar">{{ letter }}</div>
-        {% else %}
-          <div class="avatar">U</div>
-        {% endif %}
-        <div class="user-meta">
-          {% if username %}
-            <h4>{{ username }}</h4>
-          {% else %}
-            <h4>User</h4>
-          {% endif %}
-          <small>Lab Admin</small>
-        </div>
-      </div>
-    </header>
+        <!-- HERO -->
+        <section class="dashboard-hero">
 
-    <div class="cards-grid">
+            <div class="hero-content">
 
-      <a href="/Patient" class="mcard" style="--accent: #22c55e;">
-        <div class="mcard-header">
-          <div class="mcard-icon" style="color: #22c55e; background: rgba(34, 197, 94, 0.1);">
-            <i class="fas fa-user-injured"></i>
-          </div>
-          <span class="mcard-tag">Records</span>
-        </div>
-        <div class="mcard-body">
-          <h3>Patients</h3>
-          <p>Manage patient profiles, medical history and treatment plans.</p>
-        </div>
-        <div class="mcard-footer">
-          <span>Open Module</span>
-          <i class="fas fa-arrow-right"></i>
-        </div>
-      </a>
+                <span class="hero-label">
+                    <i class="fas fa-layer-group"></i>
+                    LAB MANAGEMENT
+                </span>
 
-      <a href="/Dentist" class="mcard" style="--accent: #3b82f6;">
-        <div class="mcard-header">
-          <div class="mcard-icon" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
-            <i class="fas fa-user-md"></i>
-          </div>
-          <span class="mcard-tag">Orders</span>
-        </div>
-        <div class="mcard-body">
-          <h3>Dentists</h3>
-          <p>Track dentist orders, contact info and referral history.</p>
-        </div>
-        <div class="mcard-footer">
-          <span>Open Module</span>
-          <i class="fas fa-arrow-right"></i>
-        </div>
-      </a>
+                <h1>
+                    Welcome back,
+                    {% if username %}
+                        <span>{{ username }}</span>
+                    {% else %}
+                        <span>Admin</span>
+                    {% endif %}
+                </h1>
 
-      <a href="/Khedma" class="mcard" style="--accent: #60a5fa;">
-        <div class="mcard-header">
-          <div class="mcard-icon" style="color: #60a5fa; background: rgba(96, 165, 250, 0.1);">
-            <i class="fas fa-teeth-open"></i>
-          </div>
-          <span class="mcard-tag">Lab Work</span>
-        </div>
-        <div class="mcard-body">
-          <h3>Services</h3>
-          <p>Manage and assign lab work tasks to technicians and specialists.</p>
-        </div>
-        <div class="mcard-footer">
-          <span>Open Module</span>
-          <i class="fas fa-arrow-right"></i>
-        </div>
-      </a>
+                <p>
+                    Manage your prosthetics laboratory from one
+                    centralized workspace.
+                </p>
 
-      <a href="/Sel3a" class="mcard" style="--accent: #f97316;">
-        <div class="mcard-header">
-          <div class="mcard-icon" style="color: #f97316; background: rgba(249, 115, 22, 0.1);">
-            <i class="fas fa-boxes"></i>
-          </div>
-          <span class="mcard-tag">Inventory</span>
-        </div>
-        <div class="mcard-body">
-          <h3>Products</h3>
-          <p>Track lab materials, stock levels and supplier orders.</p>
-        </div>
-        <div class="mcard-footer">
-          <span>Open Module</span>
-          <i class="fas fa-arrow-right"></i>
-        </div>
-      </a>
+            </div>
 
-      <a href="/ProKhedma" class="mcard" style="--accent: #a855f7;">
-        <div class="mcard-header">
-          <div class="mcard-icon" style="color: #a855f7; background: rgba(168, 85, 247, 0.1);">
-            <i class="fas fa-cogs"></i>
-          </div>
-          <span class="mcard-tag">Production</span>
-        </div>
-        <div class="mcard-body">
-          <h3>Prothesist</h3>
-          <p>Monitor the entire production workflow, stages and deadlines.</p>
-        </div>
-        <div class="mcard-footer">
-          <span>Open Module</span>
-          <i class="fas fa-arrow-right"></i>
-        </div>
-      </a>
+            <div class="hero-decoration">
+                <div class="hero-circle circle-one"></div>
+                <div class="hero-circle circle-two"></div>
 
-      <a href="/OtherServices" class="mcard" style="--accent: #10b981;">
-        <div class="mcard-header">
-          <div class="mcard-icon" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
-            <i class="fas fa-concierge-bell"></i>
-          </div>
-          <span class="mcard-tag">Services</span>
-        </div>
-        <div class="mcard-body">
-          <h3>Other Services</h3>
-          <p>Manage extra lab services and external requests easily.</p>
-        </div>
-        <div class="mcard-footer">
-          <span>Open Module</span>
-          <i class="fas fa-arrow-right"></i>
-        </div>
-      </a>
+                <i class="fas fa-tooth hero-tooth"></i>
+            </div>
 
-      <a href="/AllTotalAccount" class="mcard mcard-wide" style="--accent: #8b5cf6;">
-        <div class="mcard-header">
-          <div class="mcard-icon" style="color: #8b5cf6; background: rgba(139, 92, 246, 0.1);">
-            <i class="fas fa-chart-bar"></i>
-          </div>
-          <span class="mcard-tag">Analytics</span>
-        </div>
-        <div class="mcard-body">
-          <h3>Statistics & Totals</h3>
-          <p>View full lab analytics — including revenue, production totals, patient counts and monthly reports.</p>
-        </div>
-        <div class="mcard-footer">
-          <span>Open Module</span>
-          <i class="fas fa-arrow-right"></i>
-        </div>
-      </a>
+        </section>
 
-    </div>
-  </main>
 
-  <script>
-    // Fade-in effect on page load
-    document.addEventListener("DOMContentLoaded", () => {
-      const cards = document.querySelectorAll('.mcard');
-      cards.forEach((card, i) => {
-        setTimeout(() => {
-          card.classList.add('visible');
-        }, 100 + (i * 60));
-      });
-    });
-  </script>
+        <!-- SECTION HEADER -->
+        <div class="section-header">
+
+            <div>
+                <h2>Management Modules</h2>
+                <p>Choose a module to manage your laboratory operations.</p>
+            </div>
+
+            <div class="module-count">
+                <strong>7</strong>
+                <span>Modules</span>
+            </div>
+
+        </div>
+
+
+        <!-- MODULES -->
+        <section class="cards-grid">
+
+            <!-- PATIENTS -->
+            <a href="/Patient"
+               class="module-card"
+               style="--accent:#22c55e; --accent-soft:rgba(34,197,94,.10);">
+
+                <div class="card-top">
+
+                    <div class="module-icon">
+                        <i class="fas fa-user-injured"></i>
+                    </div>
+
+                    <span class="module-number">01</span>
+
+                </div>
+
+                <div class="card-content">
+
+                    <span class="card-category">Records</span>
+
+                    <h3>Patients</h3>
+
+                    <p>
+                        Manage patient profiles, treatment information
+                        and medical records.
+                    </p>
+
+                </div>
+
+                <div class="card-action">
+                    <span>Open module</span>
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+            </a>
+
+
+            <!-- DENTISTS -->
+            <a href="/Dentist"
+               class="module-card"
+               style="--accent:#3b82f6; --accent-soft:rgba(59,130,246,.10);">
+
+                <div class="card-top">
+
+                    <div class="module-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+
+                    <span class="module-number">02</span>
+
+                </div>
+
+                <div class="card-content">
+
+                    <span class="card-category">Orders</span>
+
+                    <h3>Dentists</h3>
+
+                    <p>
+                        Track dentist orders, patient referrals,
+                        contacts and history.
+                    </p>
+
+                </div>
+
+                <div class="card-action">
+                    <span>Open module</span>
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+            </a>
+
+
+            <!-- SERVICES -->
+            <a href="/Khedma"
+               class="module-card"
+               style="--accent:#0ea5e9; --accent-soft:rgba(14,165,233,.10);">
+
+                <div class="card-top">
+
+                    <div class="module-icon">
+                        <i class="fas fa-teeth-open"></i>
+                    </div>
+
+                    <span class="module-number">03</span>
+
+                </div>
+
+                <div class="card-content">
+
+                    <span class="card-category">Lab Work</span>
+
+                    <h3>Services</h3>
+
+                    <p>
+                        Manage laboratory work, deadlines and
+                        active treatment services.
+                    </p>
+
+                </div>
+
+                <div class="card-action">
+                    <span>Open module</span>
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+            </a>
+
+
+            <!-- PRODUCTS -->
+            <a href="/Sel3a"
+               class="module-card"
+               style="--accent:#f97316; --accent-soft:rgba(249,115,22,.10);">
+
+                <div class="card-top">
+
+                    <div class="module-icon">
+                        <i class="fas fa-boxes-stacked"></i>
+                    </div>
+
+                    <span class="module-number">04</span>
+
+                </div>
+
+                <div class="card-content">
+
+                    <span class="card-category">Inventory</span>
+
+                    <h3>Products</h3>
+
+                    <p>
+                        Monitor materials, stock levels and
+                        laboratory inventory.
+                    </p>
+
+                </div>
+
+                <div class="card-action">
+                    <span>Open module</span>
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+            </a>
+
+
+            <!-- PROTHESIST -->
+            <a href="/ProKhedma"
+               class="module-card"
+               style="--accent:#a855f7; --accent-soft:rgba(168,85,247,.10);">
+
+                <div class="card-top">
+
+                    <div class="module-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+
+                    <span class="module-number">05</span>
+
+                </div>
+
+                <div class="card-content">
+
+                    <span class="card-category">Production</span>
+
+                    <h3>Prothesist</h3>
+
+                    <p>
+                        Monitor production workflow, assignments
+                        and service deadlines.
+                    </p>
+
+                </div>
+
+                <div class="card-action">
+                    <span>Open module</span>
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+            </a>
+
+
+            <!-- OTHER SERVICES -->
+            <a href="/OtherServices"
+               class="module-card"
+               style="--accent:#10b981; --accent-soft:rgba(16,185,129,.10);">
+
+                <div class="card-top">
+
+                    <div class="module-icon">
+                        <i class="fas fa-concierge-bell"></i>
+                    </div>
+
+                    <span class="module-number">06</span>
+
+                </div>
+
+                <div class="card-content">
+
+                    <span class="card-category">Services</span>
+
+                    <h3>Other Services</h3>
+
+                    <p>
+                        Manage additional laboratory services
+                        and external requests.
+                    </p>
+
+                </div>
+
+                <div class="card-action">
+                    <span>Open module</span>
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+            </a>
+
+
+            <!-- STATISTICS -->
+            <a href="/AllTotalAccount"
+               class="module-card statistics-card"
+               style="--accent:#8b5cf6; --accent-soft:rgba(139,92,246,.10);">
+
+                <div class="card-top">
+
+                    <div class="module-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+
+                    <span class="module-number">07</span>
+
+                </div>
+
+                <div class="card-content">
+
+                    <span class="card-category">Analytics</span>
+
+                    <h3>Statistics & Totals</h3>
+
+                    <p>
+                        Analyze revenue, production totals, patient
+                        activity and monthly laboratory reports.
+                    </p>
+
+                </div>
+
+                <div class="card-action">
+                    <span>View analytics</span>
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const cards = document.querySelectorAll(".module-card");
+
+            cards.forEach((card, index) => {
+
+                setTimeout(() => {
+                    card.classList.add("show");
+                }, 80 + (index * 70));
+
+            });
+
+        });
+
+    </script>
 
 </body>
 </html>

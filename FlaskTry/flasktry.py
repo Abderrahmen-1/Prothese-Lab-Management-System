@@ -43,7 +43,7 @@ def login_required():
 
 # ============================== HOME =========================================
 
-@app.route("/", methods=["POST", "GET"])
+@app.route("/log_in", methods=["POST", "GET"])
 @limiter.limit("10 per minute")
 def home():
     if request.method == "GET":
@@ -328,8 +328,6 @@ def PatientPage():
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
 
-        if not a_acces(cursor):
-            return redirect(url_for("page_abonnement"))
 
         try:
             cursor.execute("DELETE FROM patient WHERE finished = %s AND khalsa = %s AND user_id = %s",
@@ -902,6 +900,9 @@ def ModifyVersaPatient():
 
             else:
                 b9aw = round(total - new_versa, 2)
+                if b9aw > total :
+                    return render_template("ModifyDentistVersement.html", message="Invalid Versement",
+                                           csrf_token=new_token)
 
                 cursor.execute("""
                                 UPDATE patient
@@ -972,6 +973,19 @@ def PatietStat():
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
     try:
+        cursor.execute("""
+                        DELETE FROM other_services_stats 
+                        WHERE 
+                         user_id = %s AND 
+                         ( 
+                           year <= YEAR(CURDATE() , INTERVAL 12 MONTH ) 
+                                OR 
+                            ( year = YEAR(CURDATE() , INTERVAL 12 MONTH ) AND 
+                               month <= MONTH(CURDATE() , INTERVAL 12 MONTH ) 
+                        )
+                     """, (session['id'],))
+        conn.commit()
+
         cursor.execute("""
             SELECT * FROM patient_stat
             WHERE user_id = %s
@@ -1302,8 +1316,6 @@ def DentistPage():
     cursor = conn.cursor(buffered=True)
 
     try:
-        if not a_acces(cursor):
-            return redirect(url_for("page_abonnement"))
 
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
@@ -2053,7 +2065,7 @@ def ModifyDentistVersement():
                 cursor.execute("""
                                 UPDATE dentist_history 
                                 SET 
-                                versement = %s , b9aw = %s , khalsa = 'yes' 
+                                versement = %s , b9aw = %s  
                                 WHERE user_id = %s AND dentistname = %s AND pNumber = %s 
                                 """,(NewVersement, b9aw, session['id'], DentistName, KhedmaId))
 
@@ -2084,6 +2096,11 @@ def ModifyDentistVersement():
             else:
                 b9aw = price - NewVersement
 
+                if b9aw > price :
+                    return render_template("ModifyDentistVersement.html", message="Invalid Versement",
+                                           csrf_token=new_token)
+
+
                 cursor.execute("""
                                  UPDATE dentists 
                                  SET 
@@ -2096,7 +2113,7 @@ def ModifyDentistVersement():
                 cursor.execute("""
                                 UPDATE dentist_history 
                                 SET 
-                                versement = %s , b9aw = %s , khalsa = 'no'
+                                versement = %s , b9aw = %s 
                                 WHERE user_id = %s AND dentistname = %s AND pNumber = %s 
                                 """, (NewVersement, b9aw, session['id'], DentistName, KhedmaId))
 
@@ -2495,6 +2512,20 @@ def DentistsStat():
     cursor = conn.cursor(buffered=True)
     try:
         cursor.execute("""
+                        DELETE FROM other_services_stats 
+                        WHERE 
+                         user_id = %s AND 
+                           ( 
+                              year <= YEAR(CURDATE() , INTERVAL 12 MONTH ) 
+                                  OR 
+                                  ( year = YEAR(CURDATE() , INTERVAL 12 MONTH ) AND 
+                                      month <= MONTH(CURDATE() , INTERVAL 12 MONTH ) 
+                            )
+                        """, (session['id'],))
+        conn.commit()
+
+
+        cursor.execute("""
                         DELETE FROM dentist_stat
                         WHERE 
                         total_khedma = 0 AND khalsin = 0 AND machi_khalsin = 0 AND user_id = %s 
@@ -2627,8 +2658,6 @@ def KhedmaPage():
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
 
-        if not a_acces(cursor):
-            return redirect(url_for("page_abonnement"))
 
         # Only try to get the form if it's a POST request
         if request.method == "POST":
@@ -3202,8 +3231,6 @@ def Sel3aPage():
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
 
-    if not a_acces(cursor):
-        return redirect(url_for("page_abonnement"))
 
     try:
         cursor.execute("""
@@ -3499,9 +3526,6 @@ def ProKhedmaPage():
         return redirect(url_for('home'))
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
-
-    if not a_acces(cursor):
-        return redirect(url_for("page_abonnement"))
 
     try:
         cursor.execute("SELECT * FROM other_prothesists_khedma WHERE user_id = %s", (session['id'],))
@@ -4807,6 +4831,10 @@ def ProModifyVersement():
             newVersa = float(oldVersa) + versaValue
             b9aw = float(price) - newVersa
 
+            if b9aw > float(price):
+                return render_template("ProthesistModifyVersement.html", error="Invalid Versement ",
+                                       csrf_token=new_token)
+
             if khalsa == "yes" and versaValue > 0 :
                 return render_template("ProthesistModifyVersement.html" , message="Service already payed ", csrf_token=new_token)
 
@@ -5084,6 +5112,19 @@ def ProStat():
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
     try:
+        cursor.execute("""
+                        DELETE FROM other_services_stats 
+                        WHERE 
+                         user_id = %s AND 
+                         ( 
+                            year <= YEAR(CURDATE() , INTERVAL 12 MONTH ) 
+                                OR 
+                                ( year = YEAR(CURDATE() , INTERVAL 12 MONTH ) AND 
+                                    month <= MONTH(CURDATE() , INTERVAL 12 MONTH ) 
+                        )
+                        """, (session['id'],))
+        conn.commit()
+
         cursor.execute("""
                         DELETE FROM prothesist_stat
                         WHERE 
@@ -5623,6 +5664,11 @@ def ModifyServiceVersement(service_id):
 
         elif final < float(result[0]) :
             b9aw = float(result[0]) - final
+            if b9aw > float(result[0]):
+                return jsonify({
+                    'success': False ,
+                    'message' : 'Invalide Versement'
+                }),402
 
             cursor.execute("""
                             UPDATE others_services
@@ -5723,13 +5769,6 @@ def DeleteService(service_id):
         conn.close()
 
 
-
-
-
-
-
-
-
 # -------------------------------
 # STATS
 # -------------------------------
@@ -5742,6 +5781,19 @@ def ServicesStat():
     cursor = conn.cursor(buffered=True)
 
     try:
+        cursor.execute("""
+                        DELETE FROM other_services_stats 
+                        WHERE 
+                         user_id = %s AND 
+                         ( 
+                            year <= YEAR(CURDATE() , INTERVAL 12 MONTH ) 
+                                OR 
+                                ( year = YEAR(CURDATE() , INTERVAL 12 MONTH ) AND 
+                                    month <= MONTH(CURDATE() , INTERVAL 12 MONTH ) 
+                         )
+                        """,(session['id'],))
+        conn.commit()
+
         cursor.execute("""
             SELECT * FROM other_services_stats
             WHERE user_id = %s
