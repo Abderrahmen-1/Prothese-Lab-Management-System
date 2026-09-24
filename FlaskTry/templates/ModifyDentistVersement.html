@@ -4,15 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta name="description" content="Professional Modify Dentist Versement Management System">
     <meta name="keywords" content="Dentist, Versement, Khedma, Lab Management, Flask">
     <meta name="author" content="Prosthetics Lab Team">
+
     <title>Modify Dentist Versement</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='ModifyDentistVersement.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='ModifyDentistVersement.css') }}">
+
+    <link rel="icon"
+          href="{{ url_for('static', filename='favicon.ico') }}"
+          type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -22,304 +32,545 @@
     <div class="flash-icon">
         <i class="fas fa-check"></i>
     </div>
+
     <div class="flash-content">
         <strong>Success</strong>
         <span>{{ message }}</span>
     </div>
-    <button type="button" class="flash-close" onclick="closeFlash(this)">
+
+    <button type="button"
+            class="flash-close"
+            onclick="closeFlash(this)">
         <i class="fas fa-xmark"></i>
     </button>
 </div>
 {% endif %}
+
 
 {% if error %}
 <div class="flash-message error-message">
     <div class="flash-icon">
         <i class="fas fa-exclamation"></i>
     </div>
+
     <div class="flash-content">
         <strong>Error</strong>
         <span>{{ error }}</span>
     </div>
-    <button type="button" class="flash-close" onclick="closeFlash(this)">
+
+    <button type="button"
+            class="flash-close"
+            onclick="closeFlash(this)">
         <i class="fas fa-xmark"></i>
     </button>
 </div>
 {% endif %}
 
-    <!-- Animated Background -->
-    <div class="animated-bg"></div>
 
-    <div class="container">
-        <!-- Header Section -->
-        <header class="header">
-            <div class="header-content">
-                <a href="/Dentist" class="back-btn">
-                    <i class="fas fa-arrow-left"></i> Back to Dentists
-                </a>
-                <div class="header-title">
-                    <h1>
-                        <i class="fas fa-money-bill-wave"></i> Modify Versement
-                    </h1>
-                    <p>Update dentist payment amounts for khedma services</p>
-                </div>
+<!-- Animated Background -->
+<div class="animated-bg"></div>
+
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header">
+
+        <div class="header-content">
+
+            <a href="/Dentist" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Dentists
+            </a>
+
+            <div class="header-title">
+
+                <h1>
+                    <i class="fas fa-money-bill-wave"></i>
+                    Modify Versement
+                </h1>
+
+                <p>
+                    Update dentist payment amounts for khedma services
+                </p>
+
             </div>
-        </header>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="form-container fade-in">
-                <div class="form-card">
-                    <!-- Form Header -->
-                    <div class="form-header">
-                        <div class="form-icon">
-                            <i class="fas fa-tooth"></i>
+        </div>
+
+    </header>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <div class="form-container fade-in">
+
+            <div class="form-card">
+
+                <!-- Form Header -->
+                <div class="form-header">
+
+                    <div class="form-icon">
+                        <i class="fas fa-tooth"></i>
+                    </div>
+
+                    <div>
+                        <h2>Dentist Versement Update</h2>
+
+                        <p>
+                            Update payment amounts for dentist services
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- Form -->
+                <form action="/DentistVersement"
+                      method="POST"
+                      class="form-group">
+
+                    <input type="hidden"
+                           name="csrf_token"
+                           value="{{ csrf_token }}">
+
+
+                    <!-- Step 1 -->
+                    <div class="form-section">
+
+                        <h3 class="section-title">
+                            <span class="step-number">1</span>
+                            Dentist Information
+                        </h3>
+
+                        <p class="section-description">
+                            Enter the dentist details to identify the record
+                        </p>
+
+
+                        <div class="form-field-group">
+
+                            <div class="form-field">
+
+                                <label for="DName">
+                                    <i class="fas fa-user-md"></i>
+                                    Dentist Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="DName"
+                                    name="DName"
+                                    placeholder="e.g., Dr. Ahmed Hassan"
+                                    required
+                                    class="input-field"
+                                >
+
+                                <span class="field-hint">
+                                    Full name of the dentist
+                                </span>
+
+                            </div>
+
                         </div>
+
+                    </div>
+
+
+                    <!-- Divider -->
+                    <div class="form-divider"></div>
+
+
+                    <!-- Step 2 -->
+                    <div class="form-section">
+
+                        <h3 class="section-title">
+                            <span class="step-number">2</span>
+                            Khedma Service Details
+                        </h3>
+
+                        <p class="section-description">
+                            Specify which khedma service to update
+                        </p>
+
+
+                        <div class="form-field-group">
+
+                            <div class="form-field">
+
+                                <label for="KhedmaId">
+                                    <i class="fas fa-briefcase"></i>
+                                    Khedma ID
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="KhedmaId"
+                                    name="KhedmaId"
+                                    placeholder="e.g., K001 or K12345"
+                                    required
+                                    class="input-field"
+                                >
+
+                                <span class="field-hint">
+                                    Unique identifier for the khedma service
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Divider -->
+                    <div class="form-divider"></div>
+
+
+                    <!-- Step 3 -->
+                    <div class="form-section">
+
+                        <h3 class="section-title">
+                            <span class="step-number">3</span>
+                            Update Versement Amount
+                        </h3>
+
+                        <p class="section-description">
+                            Enter the new payment amount for this service
+                        </p>
+
+
+                        <div class="form-field-group">
+
+                            <div class="form-field">
+
+                                <label for="Versement">
+                                    <i class="fas fa-coins"></i>
+                                    Versement Amount
+                                </label>
+
+
+                                <div class="input-wrapper">
+
+                                    <input
+                                        type="number"
+                                        id="Versement"
+                                        name="Versement"
+                                        placeholder="Enter the new amount"
+                                        step="0.01"
+                                        required
+                                        class="input-field"
+                                    >
+
+                                    <span class="currency">
+                                        DA
+                                    </span>
+
+                                </div>
+
+
+                                <span class="field-hint">
+                                    Payment amount in Algerian Dinars
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Amount Info -->
+                        <div class="amount-info">
+
+                            <i class="fas fa-info-circle"></i>
+
+                            <span>
+                                Versement refers to the payment amount due for
+                                the khedma service provided
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+
+                        <button type="reset"
+                                class="btn btn-secondary">
+
+                            <i class="fas fa-undo"></i>
+                            Reset Form
+
+                        </button>
+
+
+                        <button type="submit"
+                                class="btn btn-primary">
+
+                            <i class="fas fa-check"></i>
+                            Update Versement
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- Help Text -->
+                    <div class="form-help">
+
+                        <i class="fas fa-lightbulb"></i>
+
                         <div>
-                            <h2>Dentist Versement Update</h2>
-                            <p>Update payment amounts for dentist services</p>
+
+                            <strong>Tip:</strong>
+
+                            Verify all information is correct before submitting.
+                            Double-check the dentist name and khedma ID to ensure
+                            you're updating the correct record.
+
                         </div>
+
                     </div>
 
-                    <!-- Form Content -->
-                    <form action="/DentistVersement" method="POST" class="form-group">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                        <!-- Step 1: Dentist Information -->
-                        <div class="form-section">
-                            <h3 class="section-title">
-                                <span class="step-number">1</span>
-                                Dentist Information
-                            </h3>
-                            <p class="section-description">Enter the dentist details to identify the record</p>
+                </form>
 
-                            <div class="form-field-group">
-                                <div class="form-field">
-                                    <label for="DName">
-                                        <i class="fas fa-user-md"></i> Dentist Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="DName"
-                                        name="DName"
-                                        placeholder="e.g., Dr. Ahmed Hassan"
-                                        required
-                                        class="input-field"
-                                    >
-                                    <span class="field-hint">Full name of the dentist</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Divider -->
-                        <div class="form-divider"></div>
-
-                        <!-- Step 2: Khedma Information -->
-                        <div class="form-section">
-                            <h3 class="section-title">
-                                <span class="step-number">2</span>
-                                Khedma Service Details
-                            </h3>
-                            <p class="section-description">Specify which khedma service to update</p>
-
-                            <div class="form-field-group">
-                                <div class="form-field">
-                                    <label for="KhedmaId">
-                                        <i class="fas fa-briefcase"></i> Khedma ID
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="KhedmaId"
-                                        name="KhedmaId"
-                                        placeholder="e.g., K001 or K12345"
-                                        required
-                                        class="input-field"
-                                    >
-                                    <span class="field-hint">Unique identifier for the khedma service</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Divider -->
-                        <div class="form-divider"></div>
-
-                        <!-- Step 3: Versement Amount -->
-                        <div class="form-section">
-                            <h3 class="section-title">
-                                <span class="step-number">3</span>
-                                Update Versement Amount
-                            </h3>
-                            <p class="section-description">Enter the new payment amount for this service</p>
-
-                            <div class="form-field-group">
-                                <div class="form-field">
-                                    <label for="Versement">
-                                        <i class="fas fa-coins"></i> Versement Amount
-                                    </label>
-                                    <div class="input-wrapper">
-                                        <input
-                                            type="number"
-                                            id="Versement"
-                                            name="Versement"
-                                            placeholder="Enter the new amount"
-                                            step="0.01"
-                                            min="0"
-                                            required
-                                            class="input-field"
-                                        >
-                                        <span class="currency">DA</span>
-                                    </div>
-                                    <span class="field-hint">Payment amount in Algerian Dinars</span>
-                                </div>
-                            </div>
-
-                            <!-- Amount Info -->
-                            <div class="amount-info">
-                                <i class="fas fa-info-circle"></i>
-                                <span>Versement refers to the payment amount due for the khedma service provided</span>
-                            </div>
-                        </div>
-
-                        <!-- Form Actions -->
-                        <div class="form-actions">
-                            <button type="reset" class="btn btn-secondary">
-                                <i class="fas fa-undo"></i> Reset Form
-                            </button>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-check"></i> Update Versement
-                            </button>
-                        </div>
-
-                        <!-- Help Text -->
-                        <div class="form-help">
-                            <i class="fas fa-lightbulb"></i>
-                            <div>
-                                <strong>Tip:</strong> Verify all information is correct before submitting. Double-check the dentist name and khedma ID to ensure you're updating the correct record.
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Info Card -->
-                <div class="info-card">
-                    <div class="info-header">
-                        <i class="fas fa-circle-info"></i>
-                        <h3>Important Information</h3>
-                    </div>
-                    <ul class="info-list">
-                        <li>
-                            <span class="info-icon">✓</span>
-                            <span><strong>Versement</strong> is the payment amount dentists receive for their khedma services</span>
-                        </li>
-                        <li>
-                            <span class="info-icon">✓</span>
-                            <span>Ensure the <strong>Dentist Name</strong> matches exactly as recorded in the system</span>
-                        </li>
-                        <li>
-                            <span class="info-icon">✓</span>
-                            <span>The <strong>Khedma ID</strong> uniquely identifies each service provided</span>
-                        </li>
-                        <li>
-                            <span class="info-icon">✓</span>
-                            <span>Use <strong>decimal notation</strong> for amounts (e.g., 5000.50)</span>
-                        </li>
-                        <li>
-                            <span class="info-icon">✓</span>
-                            <span>Changes are recorded immediately in the system</span>
-                        </li>
-                        <li>
-                            <span class="info-icon">✓</span>
-                            <span>All updates are tracked for audit and financial records</span>
-                        </li>
-                    </ul>
-                </div>
             </div>
-        </main>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>&copy; 2024 DentistHub - Professional Dentist Management System. All rights reserved.</p>
-        </footer>
-    </div>
 
-    <!-- JavaScript for Form Validation and Interactions -->
-    <script>
-        // Get form elements
-        const form = document.querySelector('form');
-        const dentistNameInput = document.getElementById('DName');
-        const khedmaIdInput = document.getElementById('KhedmaId');
-        const versementInput = document.getElementById('Versement');
+            <!-- Info Card -->
+            <div class="info-card">
 
-        // Real-time validation for dentist name
-        dentistNameInput.addEventListener('input', function() {
-            if (this.value.trim().length > 0) {
-                this.parentElement.classList.add('valid');
-            } else {
-                this.parentElement.classList.remove('valid');
-            }
+                <div class="info-header">
+
+                    <i class="fas fa-circle-info"></i>
+
+                    <h3>
+                        Important Information
+                    </h3>
+
+                </div>
+
+
+                <ul class="info-list">
+
+                    <li>
+                        <span class="info-icon">✓</span>
+
+                        <span>
+                            <strong>Versement</strong> is the payment amount
+                            dentists receive for their khedma services
+                        </span>
+                    </li>
+
+
+                    <li>
+                        <span class="info-icon">✓</span>
+
+                        <span>
+                            Ensure the <strong>Dentist Name</strong> matches
+                            exactly as recorded in the system
+                        </span>
+                    </li>
+
+
+                    <li>
+                        <span class="info-icon">✓</span>
+
+                        <span>
+                            The <strong>Khedma ID</strong> uniquely identifies
+                            each service provided
+                        </span>
+                    </li>
+
+
+                    <li>
+                        <span class="info-icon">✓</span>
+
+                        <span>
+                            Use <strong>decimal notation</strong> for amounts
+                            (e.g., 5000.50)
+                        </span>
+                    </li>
+
+
+                    <li>
+                        <span class="info-icon">✓</span>
+
+                        <span>
+                            Changes are recorded immediately in the system
+                        </span>
+                    </li>
+
+
+                    <li>
+                        <span class="info-icon">✓</span>
+
+                        <span>
+                            All updates are tracked for audit and financial
+                            records
+                        </span>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+
+        <p>
+            &copy; 2024 DentistHub - Professional Dentist Management System.
+            All rights reserved.
+        </p>
+
+    </footer>
+
+</div>
+
+
+<script>
+
+    // ===========================
+    // Get Form Elements
+    // ===========================
+
+    const form = document.querySelector('form');
+
+    const dentistNameInput =
+        document.getElementById('DName');
+
+    const khedmaIdInput =
+        document.getElementById('KhedmaId');
+
+    const versementInput =
+        document.getElementById('Versement');
+
+
+    // ===========================
+    // Dentist Name Validation
+    // ===========================
+
+    dentistNameInput.addEventListener('input', function () {
+
+        if (this.value.trim().length > 0) {
+
+            this.parentElement.classList.add('valid');
+
+        } else {
+
+            this.parentElement.classList.remove('valid');
+
+        }
+
+    });
+
+
+    // ===========================
+    // Khedma ID Validation
+    // ===========================
+
+    khedmaIdInput.addEventListener('input', function () {
+
+        if (this.value.trim().length > 0) {
+
+            this.parentElement.classList.add('valid');
+
+        } else {
+
+            this.parentElement.classList.remove('valid');
+
+        }
+
+    });
+
+
+    // ===========================
+    // Form Submission
+    // ===========================
+
+    form.addEventListener('submit', function (e) {
+
+        const dentistName =
+            dentistNameInput.value.trim();
+
+        const khedmaId =
+            khedmaIdInput.value.trim();
+
+        const versement =
+            versementInput.value.trim();
+
+
+        // Check required fields
+
+        if (!dentistName || !khedmaId || !versement) {
+
+            e.preventDefault();
+
+            alert('Please fill in all fields');
+
+            return;
+        }
+
+
+        console.log('Form submitted successfully');
+
+    });
+
+
+    // ===========================
+    // Focus Animation
+    // ===========================
+
+    document.querySelectorAll('.input-field').forEach(input => {
+
+        input.addEventListener('focus', function () {
+
+            this.parentElement.classList.add('focused');
+
         });
 
-        // Real-time validation for khedma ID
-        khedmaIdInput.addEventListener('input', function() {
-            if (this.value.trim().length > 0) {
-                this.parentElement.classList.add('valid');
-            } else {
-                this.parentElement.classList.remove('valid');
+
+        input.addEventListener('blur', function () {
+
+            if (!this.value) {
+
+                this.parentElement.classList.remove('focused');
+
             }
+
         });
 
-        // Real-time validation for versement amount
-        versementInput.addEventListener('input', function() {
-            if (parseFloat(this.value) > 0) {
-                this.parentElement.classList.add('valid');
-            } else {
-                this.parentElement.classList.remove('valid');
-            }
-        });
+    });
 
-        // Form submission validation
-        form.addEventListener('submit', function(e) {
-            const dentistName = dentistNameInput.value.trim();
-            const khedmaId = khedmaIdInput.value.trim();
-            const versement = versementInput.value.trim();
 
-            // Check if all fields are filled
-            if (!dentistName || !khedmaId || !versement) {
-                e.preventDefault();
-                alert('Please fill in all fields');
-                return;
-            }
+    // ===========================
+    // Smooth Scroll
+    // ===========================
 
-            // Check if versement is a valid positive number
-            if (parseFloat(versement) <= 0) {
-                e.preventDefault();
-                alert('Versement amount must be greater than 0');
-                return;
-            }
+    window.addEventListener('load', function () {
 
-            // Show success message
-            console.log('Form submitted successfully');
-        });
+        const formCard =
+            document.querySelector('.form-card');
 
-        // Focus animation
-        document.querySelectorAll('.input-field').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.classList.add('focused');
+        if (formCard) {
+
+            formCard.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
             });
-            input.addEventListener('blur', function() {
-                if (!this.value) {
-                    this.parentElement.classList.remove('focused');
-                }
-            });
-        });
 
-        // Smooth scroll to form on page load
-        window.addEventListener('load', function() {
-            const formCard = document.querySelector('.form-card');
-            if (formCard) {
-                formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    </script>
+        }
+
+    });
+
+</script>
+
 </body>
-
 </html>

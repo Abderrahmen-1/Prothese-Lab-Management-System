@@ -802,15 +802,15 @@ def ModifyVersaPatient():
                 csrf_token=new_token
             )
 
-        if not checkValue(VersaValue) or not checkValue(ConfirmVersa):
-            return render_template(
-                "ModifyPatientVersa.html",
-                error="Invalide versement values",
-                csrf_token=new_token
-            )
+        if not VersaValue or not ConfirmVersa:
+            return render_template("ModifyDentistVersement.html", error="Versement cannot be empty",
+                                   csrf_token=new_token)
 
-        VersaValue = float(VersaValue)
-        ConfirmVersa = float(ConfirmVersa)
+        try:
+            VersaValue = float(VersaValue)
+            ConfirmVersa = float(ConfirmVersa)
+        except (ValueError, TypeError):
+            return render_template("ModifyDentistVersement.html", error="Invalid Versement value", csrf_token=new_token)
 
         if VersaValue != ConfirmVersa:
             return render_template(
@@ -846,7 +846,7 @@ def ModifyVersaPatient():
             month = result[3]
             year = result[4]
 
-            if oldKhalsa.lower() == "yes":
+            if oldKhalsa.lower() == "yes" and VersaValue > 0:
                 return render_template(
                     "ModifyPatientVersa.html",
                     message="The Patient already paid his Service",
@@ -907,7 +907,8 @@ def ModifyVersaPatient():
                                 UPDATE patient
                                 SET
                                 b9aw = %s,
-                                versa = %s
+                                versa = %s,
+                                khalsa = 'no'
                                 WHERE user_id = %s AND patient_number = %s
                                """,
                                (b9aw, new_versa, session['id'], Patient_Id))
@@ -2003,8 +2004,8 @@ def ModifyDentistVersement():
         except (ValueError, TypeError):
             return render_template("ModifyDentistVersement.html", error="Invalid Versement value", csrf_token=new_token)
 
-        if Versement < 0:
-            return render_template("ModifyDentistVersement.html", error="Versement cannot be negative", csrf_token=new_token)
+        #if Versement < 0:
+         #   return render_template("ModifyDentistVersement.html", error="Versement cannot be negative", csrf_token=new_token)
 
 
         conn = get_connection()
@@ -2027,7 +2028,7 @@ def ModifyDentistVersement():
             month = result[4]
             year = result[5]
 
-            if oldkhalsa.lower() == "yes" :
+            if oldkhalsa.lower() == "yes" and Versement > 0 :
                 cursor.execute("SELECT * FROM dentists WHERE user_id = %s ",(session['id'],))
                 result = cursor.fetchall()
                 return render_template("DentistFile.html" , message="Khedma Already Khalsa", result=result, csrf_token=new_token)
@@ -2052,7 +2053,7 @@ def ModifyDentistVersement():
                 cursor.execute("""
                                 UPDATE dentist_history 
                                 SET 
-                                versement = %s , b9aw = %s 
+                                versement = %s , b9aw = %s , khalsa = 'yes' 
                                 WHERE user_id = %s AND dentistname = %s AND pNumber = %s 
                                 """,(NewVersement, b9aw, session['id'], DentistName, KhedmaId))
 
@@ -2095,7 +2096,7 @@ def ModifyDentistVersement():
                 cursor.execute("""
                                 UPDATE dentist_history 
                                 SET 
-                                versement = %s , b9aw = %s 
+                                versement = %s , b9aw = %s , khalsa = 'no'
                                 WHERE user_id = %s AND dentistname = %s AND pNumber = %s 
                                 """, (NewVersement, b9aw, session['id'], DentistName, KhedmaId))
 
@@ -4702,10 +4703,10 @@ def ProModifyVersement():
                                    error="Invalid Versement value",
                                    csrf_token=new_token)
 
-        if versaValue < 0:
-            return render_template("ProthesistModifyVersement.html",
-                                   error="Versement cannot be negative",
-                                   csrf_token=new_token)
+        #if versaValue < 0:
+         #   return render_template("ProthesistModifyVersement.html",
+          #                         error="Versement cannot be negative",
+           #                        csrf_token=new_token)
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -4806,7 +4807,7 @@ def ProModifyVersement():
             newVersa = float(oldVersa) + versaValue
             b9aw = float(price) - newVersa
 
-            if khalsa == "yes" :
+            if khalsa == "yes" and versaValue > 0 :
                 return render_template("ProthesistModifyVersement.html" , message="Service already payed ", csrf_token=new_token)
 
             if newVersa > price :
@@ -4816,60 +4817,49 @@ def ProModifyVersement():
                 khalsa = "yes"
 
 
-            if khedmaSource.strip() == "patient" :
-                cursor.execute("""
-                                UPDATE patient 
-                                SET
-                                status = "prothesist"
-                                WHERE user_id = %s AND patient_number = %s """,
-                               (session['id'],PatientNumber))
+            if newVersa < price :
+                khalsa = 'no'
 
-                cursor.execute("""
-                                UPDATE other_prothesists_khedma 
-                                SET    
-                                pVersa = %s , 
-                                pB9aw = %s ,
-                                pKhalsa = %s
-                                WHERE user_id = %s AND pName = %s AND pNumber = %s AND patient_number = %s                                         
-                                """,(newVersa, b9aw, khalsa, session['id'], ProthesistName, ProthesistNumber, PatientNumber))
+                if khedmaSource.strip() == "patient" :
 
-                cursor.execute("""
-                                UPDATE other_prothesists_history 
-                                SET 
-                                versement = %s , 
-                                b9aw = %s 
-                                WHERE user_id = %s AND prothesist = %s AND pNumber = %s AND patient_number = %s 
-                                """,(newVersa, b9aw, session['id'], ProthesistName, ProthesistNumber, PatientNumber))
+                    cursor.execute("""
+                                    UPDATE other_prothesists_khedma 
+                                    SET    
+                                    pVersa = %s , 
+                                    pB9aw = %s ,
+                                    pKhalsa = %s
+                                    WHERE user_id = %s AND pName = %s AND pNumber = %s AND patient_number = %s                                         
+                                    """,(newVersa, b9aw, khalsa, session['id'], ProthesistName, ProthesistNumber, PatientNumber))
 
+                    cursor.execute("""
+                                    UPDATE other_prothesists_history 
+                                    SET 
+                                    versement = %s , 
+                                    b9aw = %s 
+                                    WHERE user_id = %s AND prothesist = %s AND pNumber = %s AND patient_number = %s 
+                                    """,(newVersa, b9aw, session['id'], ProthesistName, ProthesistNumber, PatientNumber))
 
+                else :
 
-            else :
-                cursor.execute("""
-                                UPDATE dentists 
-                                SET 
-                                status = "prothesist"
-                                WHERE user_id = %s AND dentist_name = %s AND patient_number = %s"""
-                               ,(session['id'], DentistName, PatientNumber))
+                    cursor.execute("""
+                                    UPDATE other_prothesists_khedma 
+                                    SET    
+                                    pVersa = %s , 
+                                    pB9aw = %s ,
+                                    pKhalsa = %s
+                                    WHERE user_id = %s AND pName = %s AND pNumber = %s AND patient_number = %s AND  dentist_name = %s                                        
+                    """, (
+                    newVersa, b9aw, khalsa, session['id'], ProthesistName, ProthesistNumber, PatientNumber,
+                    DentistName))
 
-                cursor.execute("""
-                                UPDATE other_prothesists_khedma 
-                                SET    
-                                pVersa = %s , 
-                                pB9aw = %s ,
-                                pKhalsa = %s
-                                WHERE user_id = %s AND pName = %s AND pNumber = %s AND patient_number = %s AND  dentist_name = %s                                        
-                """, (
-                newVersa, b9aw, khalsa, session['id'], ProthesistName, ProthesistNumber, PatientNumber,
-                DentistName))
-
-                cursor.execute("""
-                                UPDATE other_prothesists_history 
-                                SET 
-                                versement = %s , 
-                                b9aw = %s 
-                                WHERE user_id = %s AND prothesist = %s AND pNumber = %s AND patient_number = %s AND dentist_name = %s
-                                """,
-                               (newVersa, b9aw, session['id'], ProthesistName, ProthesistNumber, PatientNumber, DentistName))
+                    cursor.execute("""
+                                    UPDATE other_prothesists_history 
+                                    SET 
+                                    versement = %s , 
+                                    b9aw = %s 
+                                    WHERE user_id = %s AND prothesist = %s AND pNumber = %s AND patient_number = %s AND dentistname = %s
+                                    """,
+                                   (newVersa, b9aw, session['id'], ProthesistName, ProthesistNumber, PatientNumber, DentistName))
 
 
 
@@ -5637,7 +5627,7 @@ def ModifyServiceVersement(service_id):
             cursor.execute("""
                             UPDATE others_services
                             SET
-                            versement = %s , b9aw = %s 
+                            versement = %s , b9aw = %s , khalsa = 'no' 
                             WHERE 
                             user_id = %s AND id = %s 
                             """, (final, b9aw, session['id'], service_id))

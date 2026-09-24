@@ -574,6 +574,16 @@ def checkValue(value=None):
     else :
         return True
 
+def checkVersement(value=None):
+    if value :
+        try:
+            value = float(value)
+        except (ValueError, TypeError):
+            return False
+
+    else :
+        return True
+
 def checkIntValue(value=None):
     if value :
         try:

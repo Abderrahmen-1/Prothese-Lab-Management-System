@@ -136,7 +136,6 @@
                                                 name="VersaValue"
                                                 placeholder="Enter the new amount"
                                                 step="0.01"
-                                                min="0"
                                                 required
                                                 class="input-field"
                                         >
@@ -158,7 +157,6 @@
                                                 name="ConfirmVersaValue"
                                                 placeholder="Confirm the amount"
                                                 step="0.01"
-                                                min="0"
                                                 required
                                                 class="input-field"
                                         >
@@ -235,75 +233,111 @@
 <script>
     // Get form elements
     const form = document.querySelector('form');
+    const patientIdInput = document.getElementById('PatientId');
     const versaInput = document.getElementById('VersaValue');
     const confirmInput = document.getElementById('ConfirmVersaValue');
     const matchInfo = document.querySelector('.amount-match-info');
 
-    // Real-time validation for matching amounts
+
+    // ============================
+    // Real-time validation
+    // ============================
+
     function validateAmounts() {
+
         if (versaInput.value && confirmInput.value) {
+
             if (parseFloat(versaInput.value) === parseFloat(confirmInput.value)) {
+
                 matchInfo.classList.add('match-success');
                 matchInfo.classList.remove('match-error');
-                matchInfo.innerHTML = '<i class="fas fa-check-circle"></i><span>Amounts match ✓</span>';
+
+                matchInfo.innerHTML =
+                    '<i class="fas fa-check-circle"></i>' +
+                    '<span>Amounts match ✓</span>';
+
             } else {
+
                 matchInfo.classList.add('match-error');
                 matchInfo.classList.remove('match-success');
-                matchInfo.innerHTML = '<i class="fas fa-times-circle"></i><span>Amounts do not match</span>';
+
+                matchInfo.innerHTML =
+                    '<i class="fas fa-times-circle"></i>' +
+                    '<span>Amounts do not match</span>';
             }
+
+        } else {
+
+            matchInfo.classList.remove('match-success');
+            matchInfo.classList.remove('match-error');
+
+            matchInfo.innerHTML =
+                '<i class="fas fa-info-circle"></i>' +
+                '<span>Both amounts must match for the update to be processed</span>';
         }
     }
 
-    // Add event listeners
+
+    // Check amounts while typing
     versaInput.addEventListener('input', validateAmounts);
     confirmInput.addEventListener('input', validateAmounts);
 
+
+    // ============================
     // Form submission validation
+    // ============================
+
     form.addEventListener('submit', function(e) {
-        const patientId = document.getElementById('PatientId').value.trim();
-        const firstName = document.getElementById('PatientF').value.trim();
-        const lastName = document.getElementById('PatientL').value.trim();
+
+        const patientId = patientIdInput.value.trim();
         const versaValue = versaInput.value.trim();
         const confirmValue = confirmInput.value.trim();
 
-        // Check if all fields are filled
-        if (!patientId || !firstName || !lastName || !versaValue || !confirmValue) {
+
+        // Check required fields
+        if (!patientId || !versaValue || !confirmValue) {
+
             e.preventDefault();
+
             alert('Please fill in all fields');
+
             return;
         }
+
 
         // Check if amounts match
         if (parseFloat(versaValue) !== parseFloat(confirmValue)) {
+
             e.preventDefault();
+
             alert('The versa amounts do not match. Please check your entries.');
+
             return;
         }
 
-        // Show success message
+
         console.log('Form submitted successfully');
     });
 
-    // Add smooth scroll behavior
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
 
+    // ============================
     // Focus animation
+    // ============================
+
     document.querySelectorAll('.input-field').forEach(input => {
+
         input.addEventListener('focus', function() {
             this.parentElement.classList.add('focused');
         });
+
         input.addEventListener('blur', function() {
+
             if (!this.value) {
                 this.parentElement.classList.remove('focused');
             }
+
         });
+
     });
 </script>
 </body>

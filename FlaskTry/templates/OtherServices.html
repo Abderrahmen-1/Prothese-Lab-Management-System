@@ -562,12 +562,6 @@
                 return;
             }
 
-            if (parseFloat(newVersement) < 0) {
-                alert('The versement cannot be negative.');
-                hideContextMenu();
-                return;
-            }
-
             try {
                 const response = await fetch(`/ModifyServiceVersement/${recordId}`, {
                     method: 'POST',
