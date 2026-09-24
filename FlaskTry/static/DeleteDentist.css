@@ -1081,12 +1081,31 @@ body {
    RESPONSIVE DESIGN
    ========================================= */
 
-/* ---------- Tablet ---------- */
-@media (max-width: 992px) {
+/* ---------- Large Desktop ---------- */
+/* 1200px and above = default CSS */
 
-    .page-wrapper {
-        width: 100%;
+
+/* ---------- Laptop ---------- */
+@media (max-width: 1200px) {
+
+    .header-content {
+        max-width: 1050px;
     }
+
+    .main-content {
+        max-width: 650px;
+        padding: 2.5rem 2rem;
+    }
+
+    .form-card {
+        padding: 2.25rem;
+    }
+
+}
+
+
+/* ---------- Small Laptop / Large Tablet ---------- */
+@media (max-width: 992px) {
 
     .header-content {
         padding: 20px 30px;
@@ -1114,31 +1133,34 @@ body {
 }
 
 
-/* ---------- Phone ---------- */
+/* ---------- Tablet / Phone ---------- */
 @media (max-width: 768px) {
 
     body {
         overflow-x: hidden;
     }
 
-    .page-wrapper {
-        width: 100%;
+    .page-header {
+        padding: 1.5rem;
     }
 
-    /* Header */
     .header-content {
         padding: 18px 20px;
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: stretch;
         gap: 15px;
     }
 
     .back-button {
         width: 100%;
-        justify-content: flex-start;
+        justify-content: center;
     }
 
     .header-title {
         width: 100%;
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
     }
 
     .title-text h1 {
@@ -1153,18 +1175,18 @@ body {
         width: 45px;
         height: 45px;
         min-width: 45px;
+        font-size: 24px;
     }
 
-    /* Main */
     .main-content {
         padding: 20px 12px;
     }
 
     .form-wrapper {
         width: 100%;
+        max-width: 100%;
     }
 
-    /* Warning */
     .warning-banner {
         padding: 15px;
         gap: 12px;
@@ -1179,13 +1201,6 @@ body {
         line-height: 1.5;
     }
 
-    .warning-icon {
-        min-width: 38px;
-        width: 38px;
-        height: 38px;
-    }
-
-    /* Form */
     .form-card {
         padding: 22px 18px;
     }
@@ -1216,17 +1231,8 @@ body {
         font-size: 16px;
     }
 
-    .field-hint {
-        font-size: 0.75rem;
-    }
-
-    /* Checklist */
     .safety-checklist {
         padding: 15px;
-    }
-
-    .safety-checklist h3 {
-        font-size: 1rem;
     }
 
     .checklist-item {
@@ -1239,7 +1245,6 @@ body {
         line-height: 1.4;
     }
 
-    /* Buttons */
     .form-actions {
         flex-direction: column;
         gap: 12px;
@@ -1256,21 +1261,14 @@ body {
         line-height: 1.4;
     }
 
-    /* Information */
     .info-box {
         padding: 20px 16px;
     }
 
-    .info-box h3 {
-        font-size: 1.1rem;
-    }
-
     .info-list li {
         font-size: 0.8rem;
-        align-items: flex-start;
     }
 
-    /* Alerts */
     .alert {
         padding: 12px;
     }
@@ -1285,8 +1283,12 @@ body {
 }
 
 
-/* ---------- Small phones ---------- */
+/* ---------- Small Phones ---------- */
 @media (max-width: 480px) {
+
+    .page-header {
+        padding: 1rem;
+    }
 
     .header-content {
         padding: 15px;
@@ -1308,10 +1310,7 @@ body {
         width: 40px;
         height: 40px;
         min-width: 40px;
-    }
-
-    .form-card {
-        padding: 18px 14px;
+        font-size: 20px;
     }
 
     .warning-banner {
@@ -1324,6 +1323,11 @@ body {
 
     .warning-content p {
         font-size: 0.72rem;
+    }
+
+    .form-card {
+        padding: 18px 14px;
+        border-radius: 12px;
     }
 
     .form-header-inner h2 {
@@ -1344,10 +1348,15 @@ body {
 
     .form-input {
         padding: 11px 40px;
+        font-size: 16px;
     }
 
     .field-hint {
         font-size: 0.68rem;
+    }
+
+    .safety-checklist {
+        padding: 12px;
     }
 
     .checklist-item label {
@@ -1359,19 +1368,22 @@ body {
         font-size: 0.85rem;
     }
 
+    .info-box {
+        padding: 16px 14px;
+    }
+
     .info-list li {
         font-size: 0.72rem;
     }
 
     .page-footer {
         font-size: 0.7rem;
-        text-align: center;
         padding: 15px;
     }
 }
 
 
-/* ---------- Very small phones ---------- */
+/* ---------- Very Small Phones ---------- */
 @media (max-width: 360px) {
 
     .main-content {
@@ -1409,5 +1421,23 @@ body {
 
     .btn {
         min-height: 44px;
+    }
+}
+
+
+/* ---------- Print ---------- */
+@media print {
+
+    .page-header,
+    .page-footer,
+    .info-box,
+    .back-button,
+    .form-actions {
+        display: none;
+    }
+
+    .form-card {
+        box-shadow: none;
+        border: 1px solid #ccc;
     }
 }

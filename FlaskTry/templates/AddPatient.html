@@ -427,9 +427,36 @@
 
                 <!-- Success/Error Messages -->
                 {% if message %}
-                <div class="form-message">
-                    <i class="fas fa-check-circle"></i>
-                    <p>{{ message }}</p>
+                <div class="alert-container">
+                    <div class="alert alert-success fade-in">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="alert-content">
+                            <h3>Success</h3>
+                            <p>{{ message }}</p>
+                        </div>
+                        <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if error %}
+                <div class="alert-container">
+                    <div class="alert alert-error fade-in-slow">
+                        <i class="fas fa-exclamation-circle"></i>
+
+                        <div class="alert-content">
+                            <h3>Error</h3>
+                            <p>{{ error }}</p>
+                        </div>
+
+                        <button class="alert-close"
+                                type="button"
+                                onclick="this.parentElement.style.display='none'">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 </div>
                 {% endif %}
             </form>

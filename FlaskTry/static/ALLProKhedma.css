@@ -971,81 +971,151 @@ body {
 }
 
 /* =========================================================
-   RESPONSIVE DESIGN
+   RESPONSIVE ONLY
+   Keeps the existing design/style unchanged
    ========================================================= */
 
-/* Tablets */
-@media (max-width: 992px) {
+/* -------------------------
+   Large tablets / laptops
+   ------------------------- */
+@media (max-width: 1200px) {
 
     .container {
         width: 100%;
-        padding: 0 15px;
-    }
-
-    .header-content {
-        flex-wrap: wrap;
-        gap: 15px;
+        max-width: 100%;
     }
 
     .main-layout {
-        grid-template-columns: 220px 1fr;
-        gap: 15px;
+        grid-template-columns: 260px minmax(0, 1fr);
+        margin: 1.5rem;
+    }
+
+    .search-section {
+        margin: 1.5rem 1.5rem 0 1.5rem;
     }
 
     .content {
         min-width: 0;
     }
 
-    /* Large tables can scroll horizontally */
-    .table-wrapper {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+    .sidebar {
+        padding: 1.5rem;
     }
 
-    table {
-        min-width: 1100px;
-    }
-
-    .table-header h3 {
-        font-size: 20px;
+    .data-table {
+        min-width: 1400px;
     }
 }
 
 
-/* Phones */
-@media (max-width: 768px) {
+/* -------------------------
+   Tablets
+   ------------------------- */
+@media (max-width: 992px) {
 
-    .container {
-        padding: 0 10px;
+    .header {
+        padding: 1.5rem;
     }
 
+    .header-content {
+        gap: 1rem;
+    }
+
+    .main-layout {
+        grid-template-columns: 220px minmax(0, 1fr);
+        margin: 1rem;
+    }
+
+    .search-section {
+        margin: 1rem 1rem 0 1rem;
+        padding: 1.5rem;
+    }
+
+    .sidebar {
+        padding: 1.25rem;
+    }
+
+    .content {
+        padding: 1.25rem;
+    }
+
+    /*
+       IMPORTANT:
+       The table stays wide.
+       The wrapper scrolls horizontally instead
+       of breaking the page.
+    */
+    .table-wrapper {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .data-table {
+        width: max-content;
+        min-width: 1400px;
+    }
+
+    #MostTable table,
+    #LessTable table {
+        width: max-content;
+        min-width: 1250px;
+    }
+}
+
+
+/* -------------------------
+   Phones
+   ------------------------- */
+@media (max-width: 768px) {
+
     /* Header */
+    .header {
+        padding: 1.25rem;
+    }
+
     .header-content {
         flex-direction: column;
         align-items: stretch;
-        gap: 15px;
+        gap: 1rem;
     }
 
     .logo-section {
         width: 100%;
     }
 
-    .logo-text h1 {
-        font-size: 24px;
-    }
-
-    .logo-text p {
-        font-size: 13px;
-    }
-
     .header-nav {
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
     }
 
-    .back-btn {
+    .nav-btn {
         width: 100%;
         justify-content: center;
+    }
+
+
+    /* Search */
+    .search-section {
+        margin: 1rem 0.75rem 0 0.75rem;
+        padding: 1rem;
+    }
+
+    .search-wrapper {
+        width: 100%;
+    }
+
+    .search-input {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .search-btn {
+        flex-shrink: 0;
     }
 
 
@@ -1053,22 +1123,26 @@ body {
     .main-layout {
         display: flex;
         flex-direction: column;
-        gap: 15px;
+        gap: 1rem;
+        margin: 0.75rem;
     }
 
     .sidebar {
         width: 100%;
-        order: 1;
+        position: static;
+        border-radius: 12px;
+        padding: 1.25rem;
     }
 
     .content {
         width: 100%;
-        order: 2;
         min-width: 0;
+        border-radius: 12px;
+        padding: 1rem;
     }
 
 
-    /* Sidebar */
+    /* Sidebar menu */
     .sidebar-menu {
         width: 100%;
     }
@@ -1079,168 +1153,204 @@ body {
 
     .menu-item {
         width: 100%;
-        min-height: 46px;
     }
 
 
     /* Tables */
-    .table-section {
-        width: 100%;
-    }
-
     .TableContainer {
         width: 100%;
-        overflow: hidden;
+        max-width: 100%;
     }
 
-    .table-header {
-        padding: 15px;
-    }
-
-    .table-header h3 {
-        font-size: 18px;
-    }
-
-    .table-header p {
-        font-size: 12px;
-    }
-
-    /*
-       14 columns are too wide for a phone.
-       Keep the table readable and allow horizontal scrolling.
-    */
     .table-wrapper {
         width: 100%;
+        max-width: 100%;
         overflow-x: auto;
+        overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
     }
 
-    table {
-        min-width: 1150px;
+    .data-table {
+        width: max-content;
+        min-width: 1400px;
     }
 
-    th,
-    td {
+    #MostTable table,
+    #LessTable table {
+        width: max-content;
+        min-width: 1250px;
+    }
+
+    /*
+       Prevent table cells from shrinking.
+       User can swipe horizontally.
+    */
+    .TableContainer table th,
+    .TableContainer table td {
         white-space: nowrap;
     }
 
 
-    /* Table footer */
+    /* Table header */
+    .table-header {
+        padding: 1rem;
+    }
+
+    .table-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .table-header p {
+        font-size: 0.8rem;
+    }
+
+
+    /* Footer */
     .table-footer {
-        padding: 12px;
         overflow-x: auto;
-    }
-
-    .record-count {
-        font-size: 13px;
-    }
-
-
-    /* Empty state */
-    .empty-state {
-        padding: 35px 15px;
-        text-align: center;
-    }
-
-    .empty-state h3 {
-        font-size: 19px;
-    }
-
-    .empty-state p {
-        font-size: 13px;
+        white-space: nowrap;
     }
 }
 
 
-/* Small phones */
+/* -------------------------
+   Small phones
+   ------------------------- */
 @media (max-width: 480px) {
 
-    .container {
-        padding: 0 7px;
+    .header {
+        padding: 1rem;
     }
 
-    /* Header */
+    .logo-section {
+        gap: 0.75rem;
+    }
+
     .logo-icon {
-        width: 42px;
-        height: 42px;
+        width: 45px;
+        height: 45px;
+        font-size: 24px;
         flex-shrink: 0;
     }
 
     .logo-text h1 {
-        font-size: 21px;
+        font-size: 1.25rem;
     }
 
     .logo-text p {
-        font-size: 11px;
+        font-size: 0.75rem;
     }
 
-    .back-btn {
-        min-height: 44px;
-        font-size: 13px;
+
+    /* Search */
+    .search-section {
+        margin: 0.75rem 0.5rem 0 0.5rem;
+        padding: 0.75rem;
+    }
+
+    /*
+       On very small screens the button goes
+       below the search input.
+    */
+    .search-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .search-wrapper i {
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
+    .search-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+
+    /* Main */
+    .main-layout {
+        margin: 0.5rem;
+    }
+
+    .sidebar {
+        padding: 1rem;
+    }
+
+    .content {
+        padding: 0.75rem;
     }
 
 
     /* Sidebar */
+    .sidebar-header {
+        margin-bottom: 1.25rem;
+    }
+
     .sidebar-header h2 {
-        font-size: 17px;
+        font-size: 1.2rem;
     }
 
     .group-title {
-        font-size: 13px;
+        font-size: 0.7rem;
     }
 
     .menu-item {
-        font-size: 13px;
-    }
-
-    .badge {
-        font-size: 11px;
+        padding: 0.75rem;
+        font-size: 0.85rem;
     }
 
 
-    /* Table */
+    /* Tables */
     .table-header {
-        padding: 12px;
+        padding: 0.85rem;
     }
 
     .table-header h3 {
-        font-size: 16px;
+        font-size: 1rem;
     }
 
     .table-header p {
-        font-size: 11px;
+        font-size: 0.75rem;
     }
 
-    table {
-        min-width: 1100px;
+    .data-table {
+        min-width: 1400px;
     }
 
-    th,
-    td {
-        padding: 8px 10px;
-        font-size: 12px;
+    #MostTable table,
+    #LessTable table {
+        min-width: 1250px;
     }
 
-    .table-footer {
-        padding: 10px;
-    }
-
-    .record-count {
-        font-size: 12px;
+    .TableContainer table th,
+    .TableContainer table td {
+        padding: 0.75rem;
+        font-size: 0.75rem;
     }
 
 
     /* Empty state */
     .empty-state {
-        padding: 25px 10px;
+        padding: 2rem 1rem;
+    }
+
+    .empty-icon {
+        font-size: 3rem;
     }
 
     .empty-state h3 {
-        font-size: 17px;
+        font-size: 1.2rem;
     }
 
     .empty-state p {
-        font-size: 12px;
+        font-size: 0.8rem;
     }
 }
 

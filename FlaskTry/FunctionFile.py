@@ -291,7 +291,7 @@ def checkExistDentistPatient(cursor, dentist, unique, firstName):
 # KHALSA STATS
 # =============================================================================
 
-def UpdateKhalsaStat(cursor, conn, table, dentistName=None, price=0, date=None):
+def UpdateKhalsaStat(cursor, conn, table, dentistName=None, b9aw=0, date=None):
     if isinstance(date, str):
         parsed = datetime.strptime(date, "%Y-%m-%d")
     else:
@@ -322,14 +322,14 @@ def UpdateKhalsaStat(cursor, conn, table, dentistName=None, price=0, date=None):
             SET khalsin       = khalsin + %s,
                 machi_khalsin = machi_khalsin - %s
             WHERE user_id = %s AND dentist_name = %s AND month = %s AND year = %s
-        """, (price, price, session['id'], dentistName, month, year))
+        """, (b9aw, b9aw, session['id'], dentistName, month, year))
     else:
         cursor.execute("""
             UPDATE patient_stat
             SET khalsin       = khalsin + %s,
                 machi_khalsin = machi_khalsin - %s
             WHERE user_id = %s AND month = %s AND year = %s
-        """, (price, price, session['id'], month, year))
+        """, (b9aw, b9aw, session['id'], month, year))
 
     conn.commit()
 

@@ -954,613 +954,199 @@ body {
     }
 }
 
-/* =========================================================
-   RESPONSIVE DESIGN
-   Dentist History
-   ========================================================= */
+/* ===========================
+   DESKTOP
+   > 1100px
+   =========================== */
 
 
-/* =========================================================
-   LARGE TABLETS / SMALL LAPTOPS
-   ========================================================= */
+/* ===========================
+   LAPTOP / LARGE TABLET
+   769px - 1100px
+   =========================== */
 
 @media (max-width: 1100px) {
 
-    .page-container {
+    .container {
         width: 94%;
         margin: 0 auto;
     }
 
-    .header-content {
-        gap: 20px;
-    }
-
-    .header-title h1 {
-        font-size: 1.9rem;
-    }
-
-    .search-container {
-        width: 100%;
-    }
-
-    .main-content {
-        width: 100%;
-        min-width: 0;
-    }
-
-    .table-wrapper {
-        width: 100%;
-        max-width: 100%;
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
+    .main-layout {
+        grid-template-columns: 220px minmax(0, 1fr);
     }
 
     .data-table {
-        min-width: 850px;
+        min-width: 1100px;
     }
 }
 
 
-/* =========================================================
-   TABLETS
-   ========================================================= */
+/* ===========================
+   TABLET
+   481px - 768px
+   =========================== */
 
 @media (max-width: 768px) {
 
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-    }
-
-    html,
-    body {
-        width: 100%;
-        max-width: 100%;
-        overflow-x: hidden;
-    }
-
-
-    /* =========================
-       MAIN CONTAINER
-       ========================= */
-
-    .page-container {
+    .container {
         width: 94%;
         margin: 0 auto;
     }
 
-
-    /* =========================
-       HEADER
-       ========================= */
-
-    .page-header {
-        padding: 18px 0;
-    }
-
     .header-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .main-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: static;
+    }
+
+    .sidebar-menu {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: 18px;
-        text-align: center;
-    }
-
-    .header-left,
-    .header-center,
-    .header-right {
-        width: 100%;
-    }
-
-    .header-left {
-        display: flex;
-        justify-content: center;
-    }
-
-    .header-center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .header-right {
-        display: flex;
-        justify-content: center;
-    }
-
-    .back-button,
-    .nav-link {
-        width: 100%;
-        max-width: 400px;
-        justify-content: center;
-    }
-
-    .header-title h1 {
-        font-size: 1.7rem;
-    }
-
-    .header-title p {
-        font-size: 0.85rem;
-    }
-
-    .logo-icon {
-        flex-shrink: 0;
-    }
-
-
-    /* =========================
-       SEARCH
-       ========================= */
-
-    .search-container {
-        width: 100%;
-    }
-
-    .search-card {
-        width: 100%;
-    }
-
-    .search-wrapper {
-        width: 100%;
-        display: flex;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px;
     }
 
-    .search-input {
-        min-width: 0;
-        flex: 1;
-        width: 100%;
-        font-size: 16px;
-    }
-
-    .search-btn {
-        flex-shrink: 0;
-    }
-
-    .search-hints {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-
-    /* =========================
-       MAIN CONTENT
-       ========================= */
-
-    .main-content {
+    .content {
         width: 100%;
         min-width: 0;
     }
-
-    .table-section {
-        width: 100%;
-        min-width: 0;
-    }
-
-    .table-card {
-        width: 100%;
-        min-width: 0;
-    }
-
-
-    /* =========================
-       TABLE HEADER
-       ========================= */
-
-    .table-header {
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-
-    .table-header .header-left {
-        text-align: left;
-    }
-
-    .table-header .header-left h2 {
-        font-size: 1.2rem;
-    }
-
-    .table-header .header-left p {
-        font-size: 0.82rem;
-    }
-
-    .header-stats {
-        margin-left: auto;
-    }
-
-
-    /* =========================
-       TABLE
-       ========================= */
 
     .table-wrapper {
         width: 100%;
-        max-width: 100%;
         overflow-x: auto;
-        overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
     }
-
-    /*
-       Keep the table readable.
-       Swipe horizontally on tablets/phones.
-    */
 
     .data-table {
-        min-width: 850px;
-    }
-
-    .data-table th,
-    .data-table td {
-        white-space: nowrap;
-    }
-
-
-    /* =========================
-       MESSAGE
-       ========================= */
-
-    .message-box {
-        width: 100%;
-        padding: 18px;
-    }
-
-    .message-content h2 {
-        font-size: 1rem;
-    }
-
-
-    /* =========================
-       EMPTY STATE
-       ========================= */
-
-    .empty-state {
-        width: 100%;
-        padding: 45px 20px;
-        text-align: center;
-    }
-
-    .empty-state h2 {
-        font-size: 1.4rem;
-    }
-
-    .empty-state p {
-        font-size: 0.85rem;
-        line-height: 1.5;
-    }
-
-
-    /* =========================
-       FOOTER
-       ========================= */
-
-    .page-footer {
-        width: 100%;
-    }
-
-    .footer-content {
-        text-align: center;
-    }
-
-    .footer-content p {
-        font-size: 0.78rem;
-        line-height: 1.5;
+        min-width: 1100px;
     }
 }
 
 
-/* =========================================================
-   PHONES
-   ========================================================= */
+/* ===========================
+   PHONE
+   <= 480px
+   =========================== */
 
 @media (max-width: 480px) {
 
-    .page-container {
+    .container {
         width: 94%;
     }
 
-
-    /* =========================
-       HEADER
-       ========================= */
-
-    .page-header {
+    .header {
         padding: 14px 0;
     }
 
-    .header-content {
-        gap: 14px;
-    }
-
-    .header-center {
+    .header-nav {
         flex-direction: column;
-        gap: 8px;
+        width: 100%;
     }
 
-    .logo-icon {
-        width: 45px;
-        height: 45px;
-        font-size: 1.2rem;
-    }
-
-    .header-title h1 {
-        font-size: 1.4rem;
-        line-height: 1.3;
-    }
-
-    .header-title p {
-        font-size: 0.72rem;
-        line-height: 1.4;
-    }
-
-    .back-button,
-    .nav-link {
-        min-height: 45px;
-        font-size: 0.82rem;
-        padding: 11px 13px;
-    }
-
-
-    /* =========================
-       SEARCH
-       ========================= */
-
-    .search-card {
-        padding: 14px;
+    .header-nav .nav-btn {
+        width: 100%;
     }
 
     .search-wrapper {
         flex-direction: column;
-        gap: 10px;
-        padding: 8px;
     }
 
-    .search-icon {
-        display: none;
-    }
-
-    .search-input {
-        width: 100%;
-        min-height: 46px;
-        font-size: 16px;
-    }
-
+    .search-input,
     .search-btn {
         width: 100%;
         min-height: 46px;
-        justify-content: center;
     }
 
-    .search-hints {
+    .sidebar-menu {
+        display: flex;
         flex-direction: column;
-        align-items: stretch;
-        text-align: center;
-        gap: 8px;
     }
 
-    .hint-link {
-        justify-content: center;
-    }
-
-
-    /* =========================
-       MESSAGE
-       ========================= */
-
-    .message-box {
-        padding: 14px;
-        gap: 10px;
-    }
-
-    .message-icon {
-        font-size: 1.1rem;
-    }
-
-    .message-content h2 {
-        font-size: 0.85rem;
-        line-height: 1.4;
-    }
-
-
-    /* =========================
-       TABLE HEADER
-       ========================= */
-
-    .table-header {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 14px;
-        gap: 8px;
-    }
-
-    .table-header .header-left {
+    .menu-item {
         width: 100%;
-    }
-
-    .table-header .header-left h2 {
-        font-size: 1rem;
-        line-height: 1.4;
-    }
-
-    .table-header .header-left p {
-        font-size: 0.72rem;
-        line-height: 1.4;
-    }
-
-    .header-stats {
-        margin-left: 0;
-    }
-
-    .stat-badge {
-        font-size: 0.7rem;
-    }
-
-
-    /* =========================
-       TABLE
-       ========================= */
-
-    .table-wrapper {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        min-height: 46px;
     }
 
     .data-table {
-        min-width: 800px;
+        min-width: 1000px;
     }
 
     .data-table th,
     .data-table td {
         padding: 9px 10px;
-        font-size: 0.72rem;
+        font-size: 0.75rem;
         white-space: nowrap;
-    }
-
-    .th-content {
-        gap: 5px;
-    }
-
-
-    /* =========================
-       EMPTY STATE
-       ========================= */
-
-    .empty-state {
-        padding: 35px 15px;
-    }
-
-    .empty-icon {
-        font-size: 2.5rem;
-    }
-
-    .empty-state h2 {
-        font-size: 1.2rem;
-    }
-
-    .empty-state p {
-        font-size: 0.78rem;
-        line-height: 1.5;
-    }
-
-    .empty-action-btn {
-        width: 100%;
-        justify-content: center;
-    }
-
-
-    /* =========================
-       FOOTER
-       ========================= */
-
-    .page-footer {
-        padding: 20px 10px;
-    }
-
-    .footer-content p {
-        font-size: 0.7rem;
-    }
-
-    .footer-note {
-        font-size: 0.65rem !important;
     }
 }
 
 
-/* =========================================================
-   VERY SMALL PHONES
-   ========================================================= */
+/* ===========================
+   VERY SMALL PHONE
+   <= 360px
+   =========================== */
 
 @media (max-width: 360px) {
 
-    .page-container {
+    .container {
         width: 95%;
     }
 
-    .header-title h1 {
+    .logo-icon {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+    }
+
+    .logo-text h1 {
         font-size: 1.2rem;
     }
 
-    .header-title p {
-        font-size: 0.65rem;
-    }
-
-    .back-button,
-    .nav-link {
-        font-size: 0.75rem;
-    }
-
-    .search-card {
-        padding: 10px;
-    }
-
-    .search-input,
-    .search-btn {
-        min-height: 44px;
-    }
-
-    .table-header .header-left h2 {
-        font-size: 0.9rem;
-    }
-
     .data-table {
-        min-width: 760px;
+        min-width: 950px;
     }
 
     .data-table th,
     .data-table td {
         padding: 8px;
-        font-size: 0.68rem;
-    }
-
-    .empty-state h2 {
-        font-size: 1.05rem;
-    }
-
-    .empty-state p {
-        font-size: 0.72rem;
+        font-size: 0.7rem;
     }
 }
 
 
-/* =========================================================
-   LANDSCAPE PHONES
-   ========================================================= */
+/* ===========================
+   LANDSCAPE PHONE / TABLET
+   =========================== */
 
 @media (max-width: 768px) and (orientation: landscape) {
 
     .header-content {
-        grid-template-columns: auto 1fr auto;
-        align-items: center;
-        text-align: left;
-        gap: 15px;
-    }
-
-    .header-left {
-        display: flex;
-        justify-content: flex-start;
-    }
-
-    .header-center {
         flex-direction: row;
-        justify-content: center;
+        align-items: center;
+        justify-content: space-between;
     }
 
-    .header-right {
-        display: flex;
-        justify-content: flex-end;
+    .header-nav {
+        width: auto;
+        flex-direction: row;
     }
 
-    .back-button,
-    .nav-link {
+    .header-nav .nav-btn {
         width: auto;
     }
 
     .search-wrapper {
         flex-direction: row;
+        flex-wrap: nowrap;
     }
 
     .search-input {
@@ -1570,24 +1156,18 @@ body {
     .search-btn {
         width: auto;
     }
-
-    .table-wrapper {
-        max-height: 65vh;
-        overflow: auto;
-    }
 }
 
 
-/* =========================================================
+/* ===========================
    TOUCH DEVICES
-   ========================================================= */
+   =========================== */
 
 @media (hover: none) and (pointer: coarse) {
 
-    .back-button,
-    .nav-link,
-    .search-btn,
-    .empty-action-btn {
+    .menu-item,
+    .nav-btn,
+    .search-btn {
         min-height: 44px;
     }
 

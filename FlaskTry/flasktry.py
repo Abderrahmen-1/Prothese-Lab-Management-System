@@ -43,7 +43,7 @@ def login_required():
 
 # ============================== HOME =========================================
 
-@app.route("/log_in", methods=["POST", "GET"])
+@app.route("/", methods=["POST", "GET"])
 @limiter.limit("10 per minute")
 def home():
     if request.method == "GET":
@@ -596,10 +596,7 @@ def AddPatient():
                 """, (ProName, ProNumber, session['id']))
 
                 if not cursor.fetchone():
-                    cursor.execute("""
-                        INSERT INTO other_prothesists (pName, pNumber, user_id)
-                        VALUES (%s, %s, %s)
-                    """, (ProName, ProNumber, session['id']))
+                    return render_template("AddPatient.html", error="Prothesist not found", csrf_token=new_token)
 
                 cursor.execute("""
                     INSERT INTO other_prothesists_khedma
@@ -1370,15 +1367,20 @@ def AddDentist():
             if not form_token or form_token != session_token:
                 return "CSRF attack detected", 403
 
-            session["csrf_token"] = secrets.token_hex(16)
+            new_token = secrets.token_hex(16)
+            session["csrf_token"] = new_token
 
 
             dentist_name = request.form["AddDentists"]
+            if not dentist_name or dentist_name.isdigit():
+                return render_template("AddDentist.html", message="Invalide Dentist name", csrf_token=new_token)
+
+
             if not SearcheTable(cursor, dentist_name):
                 AddDentistTable(cursor, conn, dentist_name)
-                return render_template("AddDentist.html", message=f"Dentist {dentist_name} Added Successfully", csrf_token=session['csrf_token'])
+                return render_template("AddDentist.html", message=f"Dentist {dentist_name} Added Successfully", csrf_token=new_token)
             else:
-                return render_template("AddDentist.html", message="Dentist Already exists", csrf_token=session['csrf_token'])
+                return render_template("AddDentist.html", message="Dentist Already exists", csrf_token=new_token)
     finally:
         cursor.close()
         conn.close()
@@ -1876,11 +1878,7 @@ def Get_From_Dentist():
                 # ==================================
 
                 if not cursor.fetchone():
-                    cursor.execute(
-                        """
-                        INSERT INTO other_prothesists
-                            ( pName, pNumber, user_id )
-                        VALUES ( %s, %s, %s ) """, ( ProName, ProNumber, session["id"] ) )
+                    return render_template("GetFromDentist.html", error="Prothesist not found", csrf_token=new_token)
 
                 cursor.execute(
                     """
@@ -2790,7 +2788,7 @@ def khedmaMkemla():
 
                 cursor.execute("""
                                 SELECT 1 
-                                FROM dentists_history 
+                                FROM dentist_history 
                                 WHERE id = %s AND pNumber = %s AND user_id = %s """
                                ,(khedmaID, patientId, session['id']))
 
@@ -2930,7 +2928,7 @@ def KhedmaKhalsa():
                 cursor.execute("""
                     SELECT * FROM patient
                     WHERE patient_number = %s AND user_id = %s 
-                """, (khedmaID, patientId, session['id']))
+                """, ( patientId, session['id']))
                 result = cursor.fetchone()
 
                 if not result:
@@ -2938,7 +2936,8 @@ def KhedmaKhalsa():
 
                 print("DONE 1")
 
-                patient_price = result[10]
+                patient_price = result[8]
+                patient_b9aw = result[11]
                 patient_date  = result[6]
                 old_khalsa    = result[9]
 
@@ -2989,9 +2988,9 @@ def KhedmaKhalsa():
 
                 cursor.execute("""
                             UPDATE patient 
-                            SET khalsa = %s, b9aw = %s
+                            SET khalsa = %s, b9aw = %s, versa = %s
                             WHERE id = %s AND user_id = %s
-                        """, ('yes', 0, service[0], session['id']))
+                        """, ('yes', 0, patient_price, service[0], session['id']))
 
                 print("DONE 2")
 
@@ -3018,7 +3017,7 @@ def KhedmaKhalsa():
                 print("DONE 5")
 
                 if old_khalsa.lower() == 'no':
-                    UpdateKhalsaStat(cursor, conn, table="patient", price=patient_price, date=patient_date)
+                    UpdateKhalsaStat(cursor, conn, table="patient", b9aw=patient_b9aw, date=patient_date)
 
             elif choice.lower() == "dentist":
                 name      = request.form['Dentist']
@@ -3037,13 +3036,14 @@ def KhedmaKhalsa():
                 cursor.execute("""
                     SELECT * FROM dentists
                     WHERE patient_number = %s AND user_id = %s AND dentist_name = %s 
-                """, (khedmaID, patientId, session['id'], name))
+                """, ( patientId, session['id'], name))
                 result = cursor.fetchone()
 
                 if not result:
                     return render_template("KhedmaKhalsa.html", message="Patient Not Found", csrf_token=new_token)
 
-                dentist_price = result[9]
+                dentist_price = result[7]
+                dentist_b9aw = result[9]
                 dentist_date  = result[12]
                 old_khalsa    = result[11]
 
@@ -3117,7 +3117,7 @@ def KhedmaKhalsa():
 
                 if old_khalsa.lower() == 'no':
                     UpdateKhalsaStat(cursor, conn, table="dentist", dentistName=name,
-                                     price=dentist_price, date=dentist_date)
+                                     b9aw=dentist_b9aw, date=dentist_date)
             else:
                 return render_template("KhedmaKhalsa.html", error="You have to enter (patient / dentist)", csrf_token=new_token)
 
@@ -3506,6 +3506,62 @@ def ProKhedmaPage():
         cursor.execute("SELECT * FROM other_prothesists_khedma WHERE user_id = %s", (session['id'],))
         rows = cursor.fetchall()
         return render_template("KhedmaProFile.html", result=rows)
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route("/AddProthesist", methods=["POST", "GET"])
+def AddProthesist():
+    if not is_logged_in():
+        return redirect(url_for('home'))
+
+    if request.method == "GET":
+        token = secrets.token_hex(16)
+        session["csrf_token"] = token
+
+        return render_template(
+            "AddProthesist.html",
+            csrf_token=token
+        )
+
+    conn = get_connection()
+    cursor = conn.cursor(buffered=True)
+
+    try:
+        if request.method == "POST":
+            form_token = request.form.get("csrf_token")
+            session_token = session.get("csrf_token")
+
+            if not form_token or form_token != session_token:
+                return "CSRF attack detected", 403
+
+            new_token = secrets.token_hex(16)
+            session["csrf_token"] = new_token
+
+            prothesist_name = request.form.get("prothesistName")
+            prothesist_number = request.form.get('prothesistNumber')
+
+            if not prothesist_name or prothesist_name.isdigit():
+                return render_template("AddProthesist.html", message="Invalide Prothesist name", csrf_token=new_token)
+
+            if not prothesist_number or not prothesist_number.isdigit() or len(prothesist_number) != 10:
+                return render_template("AddProthesist.html", message="Invalide Prothesist number", csrf_token=new_token)
+
+            cursor.execute("""
+                            SELECT 1 
+                            FROM other_prothesists
+                            WHERE 
+                            pName = %s AND pNumber = %s AND user_id = %s  
+                            """,(prothesist_name, prothesist_number, session['id']))
+            found = cursor.fetchone()
+
+            if not found:
+                cursor.execute("""
+                                INSERT INTO other_prothesists (pName, pNumber, user_id)
+                                VALUES(%s, %s, %s)""",(prothesist_name, prothesist_number, session['id']))
+                return render_template("AddProthesist.html", message=f"Prothesist {prothesist_name} Added Successfully", csrf_token=new_token)
+            else:
+                return render_template("AddProthesist.html", message=f"Prothesist {prothesist_name} - {prothesist_number} Already exists", csrf_token=new_token)
     finally:
         cursor.close()
         conn.close()
@@ -4165,10 +4221,7 @@ def GetProthesistKhedma():
 
             resultP = cursor.fetchone()
             if not resultP:
-                cursor.execute("""
-                                INSERT INTO other_prothesists(pName, pNumber, user_id)
-                                VALUES
-                                (%s, %s, %s) """,(ProthesistName, ProthesistNumber, session['id']))
+                return render_template("ProthesistGetKhedma.html", error="Prothesist not found", csrf_token=new_token)
 
 
             # ========== PATIENT SOURCE ==========
@@ -5821,5 +5874,4 @@ def webhook_chargily():
 # =============================================================================
 
 if __name__ == "__main__":
-    serve(app, host="127.0.0.1", port=5000)
-    #app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

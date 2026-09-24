@@ -507,34 +507,9 @@ body {
     animation: fadeIn 0.8s ease;
 }
 
-/* Responsive adjustments */
-@media (max-width: 900px) {
-    .signup-container {
-        flex-direction: column;
-        min-height: auto;
-    }
-
-    .branding-side {
-        padding: 2.5rem 2rem;
-        min-height: 250px;
-    }
-
-    .form-side {
-        padding: 2.5rem 2rem;
-    }
-
-    .benefits-list {
-        display: none;
-    }
-
-    .testimonial {
-        display: none;
-    }
-}
-
-/* =========================================
+/* ===========================
    RESPONSIVE DESIGN
-   ========================================= */
+   =========================== */
 
 /* ---------- Tablet ---------- */
 @media (max-width: 992px) {
@@ -570,21 +545,47 @@ body {
 }
 
 
+/* ---------- Tablet / Small Laptop ---------- */
+@media (max-width: 900px) {
+
+    .signup-container {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .branding-side {
+        padding: 2.5rem 2rem;
+        min-height: 250px;
+    }
+
+    .form-side {
+        padding: 2.5rem 2rem;
+    }
+
+    .benefits-list {
+        display: none;
+    }
+
+    .testimonial {
+        display: none;
+    }
+}
+
+
 /* ---------- Phone ---------- */
 @media (max-width: 768px) {
 
     body {
         padding: 20px 10px;
+        align-items: flex-start;
     }
 
     .signup-container {
         width: 100%;
         max-width: 500px;
-        min-height: auto;
-        grid-template-columns: 1fr;
     }
 
-    /* Branding becomes the top section */
+    /* Branding */
     .branding-side {
         padding: 35px 25px;
         text-align: center;
@@ -605,18 +606,6 @@ body {
     .brand-subtitle {
         font-size: 0.9rem;
         margin-bottom: 25px;
-    }
-
-    .benefits-list {
-        text-align: left;
-    }
-
-    .benefit-item {
-        margin-bottom: 15px;
-    }
-
-    .testimonial {
-        margin-top: 25px;
     }
 
     /* Form */
@@ -672,7 +661,7 @@ body {
 }
 
 
-/* ---------- Small phones ---------- */
+/* ---------- Small Phones ---------- */
 @media (max-width: 480px) {
 
     body {
@@ -757,7 +746,7 @@ body {
 }
 
 
-/* ---------- Very small phones ---------- */
+/* ---------- Very Small Phones ---------- */
 @media (max-width: 360px) {
 
     .branding-side {
