@@ -23,11 +23,10 @@ limiter = Limiter(get_remote_address, app=app)
 
 def SearcheTable(cursor, DentistName):
     cursor.execute("""
-        SELECT * FROM dentist_registry
+        SELECT 1 FROM dentist_registry
         WHERE user_id = %s AND dentist_name = %s
     """, (session['id'], DentistName))
     exist = cursor.fetchone()
-    cursor.fetchall()
     return exist
 
 
@@ -65,9 +64,9 @@ def home():
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
 
-        email    = request.form["email"]
-        username = request.form["username"]
-        password = request.form["password"]
+        email    = request.form.get("email")
+        username = request.form.get("username")
+        password = request.form.get("password")
 
         try:
             CheckData(email, username, password)
@@ -79,20 +78,21 @@ def home():
             return render_template("Log-in.html", error="Invalide Email", csrf_token= new_token)
 
         row = ConfirmLogIn(email, username)
-        if row and check_password_hash(row[2], password):
+        if row and check_password_hash(row[1], password):
             session['id']       = row[0]
             session['username'] = username
-            return render_template("HomePage.html", message=f"Welcome {session['username']}", csrf_token=form_token)
+            return redirect(url_for('getHome'))
         else:
             return render_template("Log-in.html", error="Invalid Information", csrf_token= new_token)
-
 
 
 @app.route("/HomePage")
 def getHome():
     if not is_logged_in():
         return redirect(url_for('home'))
-    name = session['username']
+
+    print(session)
+    name = session.get('username')
     letter = name[0].upper()
     return render_template("HomePage.html", message=f"WELCOME {name}", username=name,
                           letter=letter )
@@ -122,11 +122,11 @@ def Create():
         session["csrf_token"] = new_token
 
 
-        email       = request.form['email']
-        phone       = request.form['phone']
-        username    = request.form['username']
-        password    = request.form['password']
-        confirmpass = request.form['confirmation']
+        email       = request.form.get('email')
+        phone       = request.form.get('phone')
+        username    = request.form.get('username')
+        password    = request.form.get('password')
+        confirmpass = request.form.get('confirmation')
 
         if password != confirmpass:
             return render_template("CreateAccount.html", error="Invalide Confirmation", csrf_token=new_token)
@@ -200,9 +200,9 @@ def ChangePassword():
         session["csrf_token"] = new_token
 
 
-        email = request.form['email']
-        phone = request.form['phoneNumber']
-        name = request.form['userName']
+        email = request.form.get('email')
+        phone = request.form.get('phoneNumber')
+        name = request.form.get('userName')
 
         try :
             CheckData(email, name, None, phone)
@@ -263,8 +263,8 @@ def NewPassword():
 
         data = session.get('user_infos')
 
-        password = request.form['password']
-        confirmP = request.form['confirmP']
+        password = request.form.get('password')
+        confirmP = request.form.get('confirmP')
 
         username = data['username']
         email = data['email']
@@ -286,7 +286,7 @@ def NewPassword():
             NewPassword = generate_password_hash(password)
 
             cursor.execute("""
-                            SELECT 1 
+                            SELECT id 
                             FROM users
                             WHERE user_name = %s AND user_email = %s AND user_phoneNumber = %s AND id = %s 
                             """,(username, email, phoneNumber, session['id']))
@@ -297,8 +297,8 @@ def NewPassword():
                                 UPDATE users 
                                 SET 
                                 user_password = %s
-                                WHERE user_name = %s AND user_email = %s AND user_phoneNumber = %s
-                                """,(NewPassword, username, email, phoneNumber) )
+                                WHERE id = %s
+                                """,(found[0],) )
                 conn.commit()
                 return render_template("Log-in.html", message="Information Updated ", csrf_token=new_token)
 
@@ -1038,7 +1038,7 @@ def getHistory():
                 conn.close()
 
         if request.method == "POST":
-            form_token = request.form["csrf_token"]
+            form_token = request.form.get("csrf_token")
             session_token = session.get("csrf_token")
 
             #print("FORM TOKEN --> ",form_token)
@@ -1053,7 +1053,7 @@ def getHistory():
             session["csrf_token"] = new_token
 
 
-            patientName = request.form["SearchName"]
+            patientName = request.form.get("SearchName")
 
             if patientName.isdigit():
                 if not patientName or not patientName.isdigit() or int(patientName) < 0 or len(patientName) < 10:
@@ -1331,7 +1331,7 @@ def DentistPage():
         token = secrets.token_hex(16)
         session["csrf_token"] = token
 
-        DentistName = request.form["SearchBar"]
+        DentistName = request.form.get("SearchBar")
         if SearcheTable(cursor, DentistName):
             cursor.execute("SELECT * FROM dentists WHERE user_id = %s AND dentist_name = %s",
                            (session["id"], DentistName))
@@ -1384,7 +1384,7 @@ def AddDentist():
             session["csrf_token"] = new_token
 
 
-            dentist_name = request.form["AddDentists"]
+            dentist_name = request.form.get("AddDentists")
             if not dentist_name or dentist_name.isdigit():
                 return render_template("AddDentist.html", message="Invalide Dentist name", csrf_token=new_token)
 
@@ -1428,8 +1428,8 @@ def DeleteDentist():
             session["csrf_token"] = new_token
 
 
-            Dentist_deleted = request.form["DeleteDentist"]
-            Confirm_Dentist = request.form["ConfirmDeleteDentist"]
+            Dentist_deleted = request.form.get("DeleteDentist")
+            Confirm_Dentist = request.form.get("ConfirmDeleteDentist")
 
             if SearcheTable(cursor, Dentist_deleted):
                 if Dentist_deleted != Confirm_Dentist:
@@ -2004,8 +2004,8 @@ def ModifyDentistVersement():
         session["csrf_token"] = new_token
 
 
-        DentistName = request.form['DName']
-        KhedmaId = request.form['KhedmaId']
+        DentistName = request.form.get('DName')
+        KhedmaId = request.form.get('KhedmaId')
         Versement = request.form.get('Versement')
 
         if not Versement:
@@ -2169,13 +2169,13 @@ def DeleteDentistKhedma():
         session["csrf_token"] = new_token
 
 
-        Dentist_name = request.form["DentistName"]
-        PatientF_deleted = request.form["DeleteF"]
-        Confirm_PatientF = request.form["ConfirmDeletePatientF"]
-        PatientL_deleted = request.form["DeleteL"]
-        Confirm_PatientL = request.form["ConfirmDeletePatientL"]
-        Patient_unique   = request.form["uniquepatient"]
-        Confirm_Unique   = request.form["confirmunique"]
+        Dentist_name = request.form.get("DentistName")
+        PatientF_deleted = request.form.get("DeleteF")
+        Confirm_PatientF = request.form.get("ConfirmDeletePatientF")
+        PatientL_deleted = request.form.get("DeleteL")
+        Confirm_PatientL = request.form.get("ConfirmDeletePatientL")
+        Patient_unique   = request.form.get("uniquepatient")
+        Confirm_Unique   = request.form.get("confirmunique")
 
         if not Patient_unique.isdigit() or len(Patient_unique) >= 10:
             return render_template("DeleteDentistPatient.html", error="Invalid Unique number", csrf_token=new_token)
@@ -2326,7 +2326,7 @@ def getDentistHistory():
         session["csrf_token"] = new_token
 
 
-        dentist_name = request.form["SearchName"]
+        dentist_name = request.form.get("SearchName")
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -2941,13 +2941,13 @@ def KhedmaKhalsa():
         session["csrf_token"] = new_token
 
 
-        choice = request.form['Choice']
+        choice = request.form.get('Choice')
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
         try:
             if choice.lower() == "patient":
-                patientId = request.form['PatientID']
-                khedmaID = request.form['ServiceID']
+                patientId = request.form.get('PatientID')
+                khedmaID = request.form.get('ServiceID')
 
                 if not patientId or not patientId.isdigit() or len(patientId) != 10:
                     return render_template("KhedmaKhalsa.html", error="Invalid Patient ID", csrf_token=new_token)
@@ -2956,7 +2956,8 @@ def KhedmaKhalsa():
                     return render_template("KhedmaKhalsa.html", error="Invalid Service ID", csrf_token=new_token)
 
                 cursor.execute("""
-                    SELECT * FROM patient
+                    SELECT price, b9aw, la_date, khalsa 
+                    FROM patient
                     WHERE patient_number = %s AND user_id = %s 
                 """, ( patientId, session['id']))
                 result = cursor.fetchone()
@@ -2966,10 +2967,10 @@ def KhedmaKhalsa():
 
                 print("DONE 1")
 
-                patient_price = result[8]
-                patient_b9aw = result[11]
-                patient_date  = result[6]
-                old_khalsa    = result[9]
+                patient_price = result[0]
+                patient_b9aw = result[1]
+                patient_date  = result[2]
+                old_khalsa    = result[3]
 
                 if old_khalsa == 'yes' :
                     return render_template("KhedmaKhalsa.html", message="Service already payed", csrf_token=new_token)
@@ -3050,10 +3051,9 @@ def KhedmaKhalsa():
                     UpdateKhalsaStat(cursor, conn, table="patient", b9aw=patient_b9aw, date=patient_date)
 
             elif choice.lower() == "dentist":
-                name      = request.form['Dentist']
-                patientId = request.form['DPatientID']
-                khedmaID = request.form['DServiceID']
-
+                name      = request.form.get('Dentist')
+                patientId = request.form.get('DPatientID')
+                khedmaID = request.form.get('DServiceID')
                 if not patientId or not patientId.isdigit() or len(patientId) > 10:
                     return render_template("KhedmaKhalsa.html", error="Invalid Patient ID", csrf_token=new_token)
 
@@ -3064,7 +3064,8 @@ def KhedmaKhalsa():
                 #    return render_template("KhedmaKhalsa.html", message="Incorrect dentist name", csrf_token=new_token)
 
                 cursor.execute("""
-                    SELECT * FROM dentists
+                    SELECT price, b9aw, date, khalsa 
+                    FROM dentists
                     WHERE patient_number = %s AND user_id = %s AND dentist_name = %s 
                 """, ( patientId, session['id'], name))
                 result = cursor.fetchone()
@@ -3072,10 +3073,10 @@ def KhedmaKhalsa():
                 if not result:
                     return render_template("KhedmaKhalsa.html", message="Patient Not Found", csrf_token=new_token)
 
-                dentist_price = result[7]
-                dentist_b9aw = result[9]
-                dentist_date  = result[12]
-                old_khalsa    = result[11]
+                dentist_price = result[0]
+                dentist_b9aw = result[1]
+                dentist_date  = result[2]
+                old_khalsa    = result[3]
 
                 if old_khalsa == 'yes' :
                     return render_template("KhedmaKhalsa.html", message="Service already payed", csrf_token=new_token)
@@ -3299,11 +3300,11 @@ def addsel3a():
         session["csrf_token"] = new_token
 
 
-        name  = request.form["SName"]
-        price = request.form["SPrice"]
-        date  = request.form["SDate"]
-        khalsa = request.form["SKhalsa"]
-        versa = request.form["Versement"]
+        name  = request.form.get("SName")
+        price = request.form.get("SPrice")
+        date  = request.form.get("SDate")
+        khalsa = request.form.get("SKhalsa")
+        versa = request.form.get("Versement")
 
         try:
             price = float(price)
@@ -3639,7 +3640,7 @@ def getProthesistHistory():
         session["csrf_token"] = new_token
 
 
-        prothesist_name = request.form["SearchName"]
+        prothesist_name = request.form.get("SearchName")
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -3728,9 +3729,9 @@ def khedmaProMkemla():
         session["csrf_token"] = new_token
 
 
-        ProthesistName   = request.form['ProthesistName']
-        ProthesistNumber = request.form['ProthesistNumber']
-        choice           = request.form['Choice']
+        ProthesistName   = request.form.get('ProthesistName')
+        ProthesistNumber = request.form.get('ProthesistNumber')
+        choice           = request.form.get('Choice')
 
         if not ProthesistNumber or not ProthesistNumber.isdigit() or len(ProthesistNumber) != 10:
             return render_template("FinishedProKhedma.html", error="Invalid Prothesist Number", csrf_token=new_token)
@@ -3748,8 +3749,8 @@ def khedmaProMkemla():
                 return render_template("FinishedProKhedma.html", message="Prothesist not found", csrf_token=new_token)
 
             if choice.lower() == "patient":
-                patientId = request.form['PatientID']
-                khedmaID = request.form['ServiceID']
+                patientId = request.form.get('PatientID')
+                khedmaID = request.form.get('ServiceID')
 
                 if not patientId or not patientId.isdigit() or len(patientId) != 10:
                     return render_template("FinishedProKhedma.html", error="Invalid Patient ID", csrf_token=new_token)
@@ -3814,9 +3815,9 @@ def khedmaProMkemla():
                         """, (session['id'], 'yes', 'yes'))
 
             elif choice.lower() == "dentist":
-                dentistName = request.form['Dentist']
-                patientId   = request.form['DPatientID']
-                khedmaID      = request.form['DServiceID']
+                dentistName = request.form.get('Dentist')
+                patientId   = request.form.get('DPatientID')
+                khedmaID      = request.form.get('DServiceID')
 
                 if not patientId or not patientId.isdigit() or len(patientId) > 10:
                     return render_template("FinishedProKhedma.html", error="Invalid Patient ID", csrf_token=new_token)
@@ -3936,9 +3937,9 @@ def KhedmaProKhalsa():
         session["csrf_token"] = new_token
 
 
-        ProName = request.form['ProthesistChoice']
-        ProNumber = request.form['ProthesistNumber']
-        choice    = request.form['Choice']
+        ProName = request.form.get('ProthesistChoice')
+        ProNumber = request.form.get('ProthesistNumber')
+        choice    = request.form.get('Choice')
 
         if not ProNumber or not ProNumber.isdigit() or len(ProNumber) != 10:
             return render_template("KhedmaProKhalsa.html", error="Invalid Prothesist Number", csrf_token=new_token)
@@ -3960,8 +3961,8 @@ def KhedmaProKhalsa():
 
 
             if choice.lower() == "patient":
-                patientId = request.form['PatientID']
-                khedmaID = request.form['ServiceID']
+                patientId = request.form.get('PatientID')
+                khedmaID = request.form.get('ServiceID')
 
                 if not patientId or not patientId.isdigit() or len(patientId) != 10:
                     return render_template("KhedmaProKhalsa.html", error="Invalid Patient ID", csrf_token=new_token)
@@ -4049,9 +4050,9 @@ def KhedmaProKhalsa():
                                         b9aw=old_b9aw, date=prothesist_date)
 
             elif choice.lower() == "dentist":
-                Dentistname      = request.form['Dentist']
-                patientId = request.form['DPatientID']
-                khedmaID = request.form['DServiceID']
+                Dentistname      = request.form.get('Dentist')
+                patientId = request.form.get('DPatientID')
+                khedmaID = request.form.get('DServiceID')
 
                 if not patientId or not patientId.isdigit() or len(patientId) > 10:
                     return render_template("KhedmaProKhalsa.html", error="Invalid Patient ID", csrf_token=new_token)
@@ -4190,13 +4191,13 @@ def GetProthesistKhedma():
         session["csrf_token"] = new_token
 
 
-        ProthesistName = request.form["ProthesistName"]
-        ProthesistNumber = request.form["ProthesistNumber"]
-        source = request.form["khedmaSource"]
-        date = request.form["GetDate"]
-        deadLine = request.form["GetDeadLine"]
-        khalsa = request.form["CheckKhalsa"]
-        price = request.form["PriceValue"]
+        ProthesistName = request.form.get("ProthesistName")
+        ProthesistNumber = request.form.get("ProthesistNumber")
+        source = request.form.get("khedmaSource")
+        date = request.form.get("GetDate")
+        deadLine = request.form.get("GetDeadLine")
+        khalsa = request.form.get("CheckKhalsa")
+        price = request.form.get("PriceValue")
 
         if not ProthesistNumber or not ProthesistNumber.isdigit() or len(ProthesistNumber) != 10:
             return render_template("ProthesistGetKhedma.html",
@@ -4251,7 +4252,7 @@ def GetProthesistKhedma():
 
             # ========== PATIENT SOURCE ==========
             if source.lower() == "patient":
-                patientNumber = request.form['PatientSource']
+                patientNumber = request.form.get('PatientSource')
 
                 # Validate patient number
                 if not patientNumber or not patientNumber.isdigit() or len(patientNumber) != 10:
@@ -4296,7 +4297,7 @@ def GetProthesistKhedma():
 
                     if versaChoice.lower() == "yes":
                         try:
-                            versaValue = float(request.form["VersementValue"])
+                            versaValue = float(request.form.get("VersementValue"))
                         except (ValueError, KeyError, TypeError):
                             return render_template("ProthesistGetKhedma.html",
                                                    error="❌ Invalid payment amount! Please enter a valid number."
@@ -4439,7 +4440,7 @@ def GetProthesistKhedma():
 
                     if versaChoice.lower() == "yes":
                         try:
-                            versaValue = float(request.form["VersementValue"])
+                            versaValue = float(request.form.get("VersementValue"))
                         except (ValueError, KeyError, TypeError):
                             return render_template("ProthesistGetKhedma.html",
                                                    error="❌ Invalid payment amount! Please enter a valid number.", csrf_token=new_token)
@@ -4710,10 +4711,10 @@ def ProModifyVersement():
         session["csrf_token"] = new_token
 
 
-        ProthesistName = request.form["ProthesistName"]
-        ProthesistNumber = request.form["ProthesistNumber"]
-        khedmaSource = request.form["khedmaSource"]
-        versaValue = request.form["VersaValue"]
+        ProthesistName = request.form.get("ProthesistName")
+        ProthesistNumber = request.form.get("ProthesistNumber")
+        khedmaSource = request.form.get("khedmaSource")
+        versaValue = request.form.get("VersaValue")
 
         if not ProthesistNumber or not ProthesistNumber.isdigit() or len(ProthesistNumber) != 10:
             return render_template("ProthesistModifyVersement.html",
@@ -4749,9 +4750,9 @@ def ProModifyVersement():
                 return render_template("ProthesistModifyVersement.html" , message="Prothesist not Found ", csrf_token=new_token)
 
             if khedmaSource.lower() == "patient" :
-                PatientNumber = request.form["PatientNumber"]
+                PatientNumber = request.form.get("PatientNumber")
                 DentistName = None
-                khedmaID = request.form['ServiceID']
+                khedmaID = request.form.get('ServiceID')
 
                 if not PatientNumber or not PatientNumber.isdigit() or len(PatientNumber) != 10:
                     return render_template("ProthesistModifyVersement.html",
@@ -4786,9 +4787,9 @@ def ProModifyVersement():
                     return render_template("ProthesistModifyVersement.html" , message="Service not found ", csrf_token=new_token)
 
             else :
-                DentistName = request.form["DentistName"]
-                PatientNumber = request.form["DentistNumber"]
-                khedmaID = request.form['DServiceID']
+                DentistName = request.form.get("DentistName")
+                PatientNumber = request.form.get("DentistNumber")
+                khedmaID = request.form.get('DServiceID')
 
                 if not PatientNumber or not PatientNumber.isdigit() or len(PatientNumber) > 10:
                     return render_template("ProthesistModifyVersement.html",
@@ -5176,7 +5177,7 @@ def ProSearchPage():
             session["csrf_token"] = new_token
 
 
-            ProName = request.form["SearchBar"]
+            ProName = request.form.get("SearchBar")
             cursor.execute("""
                 SELECT id FROM other_prothesists
                 WHERE user_id = %s AND pName = %s
@@ -5388,7 +5389,7 @@ def SearchBar():
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
 
-        SearchBar = request.form["SearchBar"]
+        SearchBar = request.form.get("SearchBar")
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)

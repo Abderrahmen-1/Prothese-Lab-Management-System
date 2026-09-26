@@ -36,10 +36,10 @@ class InvalidePhoneNumberException(Exception):
 
 def CheckData(email=None, username=None, password=None, phoneNumber=None):
     if username :
-        if not username.strip() or len(username) < 4:
+        if not username.strip() or len(username) < 4 or username.isdigit():
             raise InvalideNameException
     if email :
-        if not email.strip() or "@" not in email or ".com" not in email:
+        if not email.strip() or email.isdigit() or "@" not in email or ".com" not in email:
             raise InvalideEmailException
     if password :
         if not password.strip() or len(password) < 8:
@@ -52,14 +52,14 @@ def CheckData(email=None, username=None, password=None, phoneNumber=None):
 def ConfirmLogIn(email, username):
     from ConnectToSql import get_connection
     conn = get_connection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(buffered=True)
     try:
         cursor.execute("""
-            SELECT * FROM users
+            SELECT id, user_password 
+            FROM users
             WHERE user_email = %s AND user_name = %s
         """, (email, username))
         row = cursor.fetchone()
-        cursor.fetchall()
         return row
     finally:
         cursor.close()

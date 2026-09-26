@@ -23,379 +23,382 @@
 
 <body>
 
-    <!-- TOP NAVIGATION -->
-    <nav class="top-nav">
+<!-- TOP NAVIGATION -->
+<nav class="top-nav">
 
-        <div class="brand">
-            <div class="brand-icon">
-                <i class="fas fa-tooth"></i>
-            </div>
-
-            <div class="brand-text">
-                <strong>DentaFlow</strong>
-                <span>Prosthetics Lab</span>
-            </div>
+    <div class="brand">
+        <div class="brand-icon">
+            <i class="fas fa-tooth"></i>
         </div>
 
-        <div class="nav-status">
-            <span class="status-dot"></span>
-            System Online
+        <div class="brand-text">
+            <strong>DentaFlow</strong>
+            <span>Prosthetics Lab</span>
         </div>
+        {% if session['id'] == 1 %} <!-- just me who is able to create accounts -->
+            <a href="/CreateAnAccount" style="color:white"> Create account </a>
+        {% endif %}
+    </div>
 
-        <div class="user-profile">
+    <div class="nav-status">
+        <span class="status-dot"></span>
+        System Online
+    </div>
 
-            {% if letter %}
-                <div class="avatar">{{ letter }}</div>
+    <div class="user-profile">
+
+        {% if letter %}
+        <div class="avatar">{{ letter }}</div>
+        {% else %}
+        <div class="avatar">U</div>
+        {% endif %}
+
+        <div class="user-meta">
+            {% if username %}
+            <strong>{{ username }}</strong>
             {% else %}
-                <div class="avatar">U</div>
+            <strong>User</strong>
             {% endif %}
 
-            <div class="user-meta">
-                {% if username %}
-                    <strong>{{ username }}</strong>
-                {% else %}
-                    <strong>User</strong>
-                {% endif %}
-
-                <span>Lab Admin</span>
-            </div>
-
+            <span>Lab Admin</span>
         </div>
 
-    </nav>
+    </div>
+
+</nav>
 
 
-    <!-- MAIN CONTENT -->
-    <main class="dashboard">
+<!-- MAIN CONTENT -->
+<main class="dashboard">
 
-        <!-- HERO -->
-        <section class="dashboard-hero">
+    <!-- HERO -->
+    <section class="dashboard-hero">
 
-            <div class="hero-content">
+        <div class="hero-content">
 
                 <span class="hero-label">
                     <i class="fas fa-layer-group"></i>
                     LAB MANAGEMENT
                 </span>
 
-                <h1>
-                    Welcome back,
-                    {% if username %}
-                        <span>{{ username }}</span>
-                    {% else %}
-                        <span>Admin</span>
-                    {% endif %}
-                </h1>
+            <h1>
+                Welcome back,
+                {% if username %}
+                <span>{{ username }}</span>
+                {% else %}
+                <span>Admin</span>
+                {% endif %}
+            </h1>
+
+            <p>
+                Manage your prosthetics laboratory from one
+                centralized workspace.
+            </p>
+
+        </div>
+
+        <div class="hero-decoration">
+            <div class="hero-circle circle-one"></div>
+            <div class="hero-circle circle-two"></div>
+
+            <i class="fas fa-tooth hero-tooth"></i>
+        </div>
+
+    </section>
+
+
+    <!-- SECTION HEADER -->
+    <div class="section-header">
+
+        <div>
+            <h2>Management Modules</h2>
+            <p>Choose a module to manage your laboratory operations.</p>
+        </div>
+
+        <div class="module-count">
+            <strong>7</strong>
+            <span>Modules</span>
+        </div>
+
+    </div>
+
+
+    <!-- MODULES -->
+    <section class="cards-grid">
+
+        <!-- PATIENTS -->
+        <a href="/Patient"
+           class="module-card"
+           style="--accent:#22c55e; --accent-soft:rgba(34,197,94,.10);">
+
+            <div class="card-top">
+
+                <div class="module-icon">
+                    <i class="fas fa-user-injured"></i>
+                </div>
+
+                <span class="module-number">01</span>
+
+            </div>
+
+            <div class="card-content">
+
+                <span class="card-category">Records</span>
+
+                <h3>Patients</h3>
 
                 <p>
-                    Manage your prosthetics laboratory from one
-                    centralized workspace.
+                    Manage patient profiles, treatment information
+                    and medical records.
                 </p>
 
             </div>
 
-            <div class="hero-decoration">
-                <div class="hero-circle circle-one"></div>
-                <div class="hero-circle circle-two"></div>
-
-                <i class="fas fa-tooth hero-tooth"></i>
+            <div class="card-action">
+                <span>Open module</span>
+                <i class="fas fa-arrow-right"></i>
             </div>
 
-        </section>
+        </a>
 
 
-        <!-- SECTION HEADER -->
-        <div class="section-header">
+        <!-- DENTISTS -->
+        <a href="/Dentist"
+           class="module-card"
+           style="--accent:#3b82f6; --accent-soft:rgba(59,130,246,.10);">
 
-            <div>
-                <h2>Management Modules</h2>
-                <p>Choose a module to manage your laboratory operations.</p>
+            <div class="card-top">
+
+                <div class="module-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+
+                <span class="module-number">02</span>
+
             </div>
 
-            <div class="module-count">
-                <strong>7</strong>
-                <span>Modules</span>
+            <div class="card-content">
+
+                <span class="card-category">Orders</span>
+
+                <h3>Dentists</h3>
+
+                <p>
+                    Track dentist orders, patient referrals,
+                    contacts and history.
+                </p>
+
             </div>
 
-        </div>
+            <div class="card-action">
+                <span>Open module</span>
+                <i class="fas fa-arrow-right"></i>
+            </div>
+
+        </a>
 
 
-        <!-- MODULES -->
-        <section class="cards-grid">
+        <!-- SERVICES -->
+        <a href="/Khedma"
+           class="module-card"
+           style="--accent:#0ea5e9; --accent-soft:rgba(14,165,233,.10);">
 
-            <!-- PATIENTS -->
-            <a href="/Patient"
-               class="module-card"
-               style="--accent:#22c55e; --accent-soft:rgba(34,197,94,.10);">
+            <div class="card-top">
 
-                <div class="card-top">
-
-                    <div class="module-icon">
-                        <i class="fas fa-user-injured"></i>
-                    </div>
-
-                    <span class="module-number">01</span>
-
+                <div class="module-icon">
+                    <i class="fas fa-teeth-open"></i>
                 </div>
 
-                <div class="card-content">
+                <span class="module-number">03</span>
 
-                    <span class="card-category">Records</span>
+            </div>
 
-                    <h3>Patients</h3>
+            <div class="card-content">
 
-                    <p>
-                        Manage patient profiles, treatment information
-                        and medical records.
-                    </p>
+                <span class="card-category">Lab Work</span>
 
+                <h3>Services</h3>
+
+                <p>
+                    Manage laboratory work, deadlines and
+                    active treatment services.
+                </p>
+
+            </div>
+
+            <div class="card-action">
+                <span>Open module</span>
+                <i class="fas fa-arrow-right"></i>
+            </div>
+
+        </a>
+
+
+        <!-- PRODUCTS -->
+        <a href="/Sel3a"
+           class="module-card"
+           style="--accent:#f97316; --accent-soft:rgba(249,115,22,.10);">
+
+            <div class="card-top">
+
+                <div class="module-icon">
+                    <i class="fas fa-boxes-stacked"></i>
                 </div>
 
-                <div class="card-action">
-                    <span>Open module</span>
-                    <i class="fas fa-arrow-right"></i>
+                <span class="module-number">04</span>
+
+            </div>
+
+            <div class="card-content">
+
+                <span class="card-category">Inventory</span>
+
+                <h3>Products</h3>
+
+                <p>
+                    Monitor materials, stock levels and
+                    laboratory inventory.
+                </p>
+
+            </div>
+
+            <div class="card-action">
+                <span>Open module</span>
+                <i class="fas fa-arrow-right"></i>
+            </div>
+
+        </a>
+
+
+        <!-- PROTHESIST -->
+        <a href="/ProKhedma"
+           class="module-card"
+           style="--accent:#a855f7; --accent-soft:rgba(168,85,247,.10);">
+
+            <div class="card-top">
+
+                <div class="module-icon">
+                    <i class="fas fa-cogs"></i>
                 </div>
 
-            </a>
+                <span class="module-number">05</span>
+
+            </div>
+
+            <div class="card-content">
+
+                <span class="card-category">Production</span>
+
+                <h3>Prothesist</h3>
+
+                <p>
+                    Monitor production workflow, assignments
+                    and service deadlines.
+                </p>
+
+            </div>
+
+            <div class="card-action">
+                <span>Open module</span>
+                <i class="fas fa-arrow-right"></i>
+            </div>
+
+        </a>
 
 
-            <!-- DENTISTS -->
-            <a href="/Dentist"
-               class="module-card"
-               style="--accent:#3b82f6; --accent-soft:rgba(59,130,246,.10);">
+        <!-- OTHER SERVICES -->
+        <a href="/OtherServices"
+           class="module-card"
+           style="--accent:#10b981; --accent-soft:rgba(16,185,129,.10);">
 
-                <div class="card-top">
+            <div class="card-top">
 
-                    <div class="module-icon">
-                        <i class="fas fa-user-md"></i>
-                    </div>
-
-                    <span class="module-number">02</span>
-
+                <div class="module-icon">
+                    <i class="fas fa-concierge-bell"></i>
                 </div>
 
-                <div class="card-content">
+                <span class="module-number">06</span>
 
-                    <span class="card-category">Orders</span>
+            </div>
 
-                    <h3>Dentists</h3>
+            <div class="card-content">
 
-                    <p>
-                        Track dentist orders, patient referrals,
-                        contacts and history.
-                    </p>
+                <span class="card-category">Services</span>
 
+                <h3>Other Services</h3>
+
+                <p>
+                    Manage additional laboratory services
+                    and external requests.
+                </p>
+
+            </div>
+
+            <div class="card-action">
+                <span>Open module</span>
+                <i class="fas fa-arrow-right"></i>
+            </div>
+
+        </a>
+
+
+        <!-- STATISTICS -->
+        <a href="/AllTotalAccount"
+           class="module-card statistics-card"
+           style="--accent:#8b5cf6; --accent-soft:rgba(139,92,246,.10);">
+
+            <div class="card-top">
+
+                <div class="module-icon">
+                    <i class="fas fa-chart-line"></i>
                 </div>
 
-                <div class="card-action">
-                    <span>Open module</span>
-                    <i class="fas fa-arrow-right"></i>
-                </div>
+                <span class="module-number">07</span>
 
-            </a>
+            </div>
 
+            <div class="card-content">
 
-            <!-- SERVICES -->
-            <a href="/Khedma"
-               class="module-card"
-               style="--accent:#0ea5e9; --accent-soft:rgba(14,165,233,.10);">
+                <span class="card-category">Analytics</span>
 
-                <div class="card-top">
+                <h3>Statistics & Totals</h3>
 
-                    <div class="module-icon">
-                        <i class="fas fa-teeth-open"></i>
-                    </div>
+                <p>
+                    Analyze revenue, production totals, patient
+                    activity and monthly laboratory reports.
+                </p>
 
-                    <span class="module-number">03</span>
+            </div>
 
-                </div>
+            <div class="card-action">
+                <span>View analytics</span>
+                <i class="fas fa-arrow-right"></i>
+            </div>
 
-                <div class="card-content">
+        </a>
 
-                    <span class="card-category">Lab Work</span>
+    </section>
 
-                    <h3>Services</h3>
+</main>
 
-                    <p>
-                        Manage laboratory work, deadlines and
-                        active treatment services.
-                    </p>
 
-                </div>
+<script>
 
-                <div class="card-action">
-                    <span>Open module</span>
-                    <i class="fas fa-arrow-right"></i>
-                </div>
+    document.addEventListener("DOMContentLoaded", () => {
 
-            </a>
+        const cards = document.querySelectorAll(".module-card");
 
+        cards.forEach((card, index) => {
 
-            <!-- PRODUCTS -->
-            <a href="/Sel3a"
-               class="module-card"
-               style="--accent:#f97316; --accent-soft:rgba(249,115,22,.10);">
-
-                <div class="card-top">
-
-                    <div class="module-icon">
-                        <i class="fas fa-boxes-stacked"></i>
-                    </div>
-
-                    <span class="module-number">04</span>
-
-                </div>
-
-                <div class="card-content">
-
-                    <span class="card-category">Inventory</span>
-
-                    <h3>Products</h3>
-
-                    <p>
-                        Monitor materials, stock levels and
-                        laboratory inventory.
-                    </p>
-
-                </div>
-
-                <div class="card-action">
-                    <span>Open module</span>
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-
-            </a>
-
-
-            <!-- PROTHESIST -->
-            <a href="/ProKhedma"
-               class="module-card"
-               style="--accent:#a855f7; --accent-soft:rgba(168,85,247,.10);">
-
-                <div class="card-top">
-
-                    <div class="module-icon">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-
-                    <span class="module-number">05</span>
-
-                </div>
-
-                <div class="card-content">
-
-                    <span class="card-category">Production</span>
-
-                    <h3>Prothesist</h3>
-
-                    <p>
-                        Monitor production workflow, assignments
-                        and service deadlines.
-                    </p>
-
-                </div>
-
-                <div class="card-action">
-                    <span>Open module</span>
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-
-            </a>
-
-
-            <!-- OTHER SERVICES -->
-            <a href="/OtherServices"
-               class="module-card"
-               style="--accent:#10b981; --accent-soft:rgba(16,185,129,.10);">
-
-                <div class="card-top">
-
-                    <div class="module-icon">
-                        <i class="fas fa-concierge-bell"></i>
-                    </div>
-
-                    <span class="module-number">06</span>
-
-                </div>
-
-                <div class="card-content">
-
-                    <span class="card-category">Services</span>
-
-                    <h3>Other Services</h3>
-
-                    <p>
-                        Manage additional laboratory services
-                        and external requests.
-                    </p>
-
-                </div>
-
-                <div class="card-action">
-                    <span>Open module</span>
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-
-            </a>
-
-
-            <!-- STATISTICS -->
-            <a href="/AllTotalAccount"
-               class="module-card statistics-card"
-               style="--accent:#8b5cf6; --accent-soft:rgba(139,92,246,.10);">
-
-                <div class="card-top">
-
-                    <div class="module-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-
-                    <span class="module-number">07</span>
-
-                </div>
-
-                <div class="card-content">
-
-                    <span class="card-category">Analytics</span>
-
-                    <h3>Statistics & Totals</h3>
-
-                    <p>
-                        Analyze revenue, production totals, patient
-                        activity and monthly laboratory reports.
-                    </p>
-
-                </div>
-
-                <div class="card-action">
-                    <span>View analytics</span>
-                    <i class="fas fa-arrow-right"></i>
-                </div>
-
-            </a>
-
-        </section>
-
-    </main>
-
-
-    <script>
-
-        document.addEventListener("DOMContentLoaded", () => {
-
-            const cards = document.querySelectorAll(".module-card");
-
-            cards.forEach((card, index) => {
-
-                setTimeout(() => {
-                    card.classList.add("show");
-                }, 80 + (index * 70));
-
-            });
+            setTimeout(() => {
+                card.classList.add("show");
+            }, 80 + (index * 70));
 
         });
 
-    </script>
+    });
+
+</script>
 
 </body>
 </html>
