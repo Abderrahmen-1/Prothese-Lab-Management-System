@@ -25,22 +25,6 @@ limiter = Limiter(get_remote_address, app=app)
 
 app.register_blueprint(users)
 
-@app.before_request
-def start_timer():
-    request.start_time = time.perf_counter()
-
-
-@app.after_request
-def measure_request(response):
-    elapsed = (time.perf_counter() - request.start_time) * 1000
-
-    print(
-        f"{request.method} {request.path} "
-        f"→ {response.status_code} "
-        f"→ {elapsed:.2f} ms"
-    )
-
-    return response
 
 def SearcheTable(cursor, DentistName):
     cursor.execute("""
@@ -63,7 +47,7 @@ def login_required():
 # ============================== HOME =========================================
 
 @app.route("/log_in", methods=["POST", "GET"])
-#@limiter.limit("10 per minute")
+@limiter.limit("10 per minute")
 def home():
     if request.method == "GET":
         token = secrets.token_hex(16)
@@ -98,13 +82,6 @@ def home():
             return render_template("Log-in.html", error="Invalide Email", csrf_token= new_token)
 
         row = ConfirmLogIn(email, username)
-        print("ROW:", row)
-
-        if row:
-            print("PASSWORD CORRECT:",
-                  check_password_hash(row[1], password))
-        else:
-            print("ROW IS NONE")
 
         if row and check_password_hash(row[1], password):
             session['id']       = row[0]
@@ -113,11 +90,6 @@ def home():
             if row and check_password_hash(row[1], password):
                 session['id'] = row[0]
                 session['username'] = username
-
-                print("✅ LOGIN SUCCESS")
-                print("SESSION AFTER LOGIN:", dict(session))
-
-                # rest of your code...
 
             conn = get_connection()
             cursor = conn.cursor()
@@ -144,13 +116,9 @@ def home():
 
 @app.route("/HomePage")
 def getHome():
-    print("SESSION:", dict(session))
-
     if not is_logged_in():
-        print("❌ NOT LOGGED IN")
         return redirect(url_for('home'))
 
-    print("✅ LOGGED IN")
     name = session.get('username')
     letter = name[0].upper()
 

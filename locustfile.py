@@ -34,9 +34,9 @@ class MyUser(HttpUser):
         # 3. Login
         data = {
             "csrf_token": csrf_token,
-            "email": "abderrahmen@gmail.com",
-            "username": "Dahman",
-            "password": "Dahmen123"
+            "email": "my_email",
+            "username": "my_username",
+            "password": "my_password"
         }
 
         login_response = self.client.post(
