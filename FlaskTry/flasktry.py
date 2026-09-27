@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, session, redirect, url_for, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-from FunctionFile import *
-from ConnectToSql import get_connection
+from FlaskTry.FunctionFile import *
+from FlaskTry.ConnectToSql import get_connection
 import os
 from dotenv import load_dotenv
 from datetime import datetime , timedelta , date
@@ -13,7 +13,7 @@ from flask_limiter.util import get_remote_address
 import secrets
 from waitress import serve
 from flask_caching import Cache
-from routes.users import users
+from FlaskTry.routes.users import users
 
 load_dotenv()
 
@@ -88,10 +88,6 @@ def home():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        print("EMAIL:", email)
-        print("USERNAME:", username)
-        print("PASSWORD RECEIVED:", bool(password))
-
         try:
             CheckData(email, username, password)
         except InvalideNameException:
@@ -113,6 +109,15 @@ def home():
         if row and check_password_hash(row[1], password):
             session['id']       = row[0]
             session['username'] = username
+
+            if row and check_password_hash(row[1], password):
+                session['id'] = row[0]
+                session['username'] = username
+
+                print("✅ LOGIN SUCCESS")
+                print("SESSION AFTER LOGIN:", dict(session))
+
+                # rest of your code...
 
             conn = get_connection()
             cursor = conn.cursor()
@@ -139,14 +144,23 @@ def home():
 
 @app.route("/HomePage")
 def getHome():
+    print("SESSION:", dict(session))
+
     if not is_logged_in():
+        print("❌ NOT LOGGED IN")
         return redirect(url_for('home'))
 
-    print(session)
+    print("✅ LOGGED IN")
     name = session.get('username')
     letter = name[0].upper()
-    return render_template("HomePage.html", message=f"WELCOME {name}", username=name,
-                          letter=letter )
+
+    return render_template(
+            "HomePage.html",
+            message=f"WELCOME {name}",
+            username=name,
+            letter=letter
+        )
+
 
 # ============================ CREATE ACCOUNT =================================
 

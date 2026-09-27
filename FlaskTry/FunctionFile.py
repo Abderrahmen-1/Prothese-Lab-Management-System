@@ -1,5 +1,6 @@
 from flask import session
 from datetime import datetime , timedelta
+from FlaskTry.ConnectToSql import get_connection
 
 # =============================================================================
 # CUSTOM EXCEPTIONS
@@ -47,7 +48,6 @@ def CheckData(email=None, username=None, password=None, phoneNumber=None):
 
 
 def ConfirmLogIn(email, username):
-    from ConnectToSql import get_connection
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
     try:
