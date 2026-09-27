@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Delete User - DentaFlow Prosthetics Lab Management System">
+
+    <title>DentaFlow - Delete User</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='DeleteUser.css') }}">
+
+    <link rel="icon"
+          href="{{ url_for('static', filename='favicon.ico') }}"
+          type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+
+<body>
+
+<div class="page">
+
+    <!-- =========================
+         TOP BAR
+    ========================== -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                <i class="fas fa-tooth"></i>
+            </div>
+
+            <div>
+                <h2>DentaFlow</h2>
+                <span>Prosthetics Lab</span>
+            </div>
+
+            <a href="{{ url_for('users.ConfirmOwnerData') }}" class="users-generated">
+                <i class="fas fa-user-shield"></i>
+                <span>Back to Home</span>
+            </a>
+
+        </div>
+
+
+        <div class="topbar-right">
+
+            <div class="online">
+                <span></span>
+                Online
+            </div>
+
+
+            <div class="profile">
+
+                <div class="avatar">
+                    {{ letter if letter else 'U' }}
+                </div>
+
+                <div class="profile-info">
+                    <strong>
+                        {{ username if username else 'Admin' }}
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="content">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="content-header">
+
+            <div>
+
+                <div class="eyebrow">
+                    <i class="fas fa-users-gear"></i>
+                    USER MANAGEMENT
+                </div>
+
+                <h1>
+                    Delete user
+                </h1>
+
+                <p>
+                    Remove access to a DentaFlow user account.
+                </p>
+
+            </div>
+
+
+            <div class="page-icon">
+                <i class="fas fa-user-minus"></i>
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             CARD
+        ========================== -->
+
+        <section class="card">
+
+
+            <!-- CARD HEADER -->
+
+            <div class="card-header">
+
+                <div>
+
+                    <h3>
+                        User verification
+                    </h3>
+
+                    <p>
+                        Enter the user's details and confirm each value.
+                    </p>
+
+                </div>
+
+
+                <div class="secure">
+
+                    <i class="fas fa-lock"></i>
+
+                    Secure
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 FORM
+            ========================== -->
+
+            <form
+                    action="{{ url_for('users.DeleteUser') }}"
+                    method="POST"
+                    id="deleteUserForm">
+
+
+                <!-- CSRF -->
+
+                <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token }}">
+
+
+                <!-- =========================
+                     USERNAME
+                ========================== -->
+
+                <div class="field-section">
+
+                    <div class="field-title">
+
+                        <span class="number">
+                            01
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Username
+                            </strong>
+
+                            <small>
+                                Identify the account
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="fields">
+
+
+                        <!-- USERNAME -->
+
+                        <div class="field">
+
+                            <label for="userName">
+                                Username
+                            </label>
+
+                            <div class="input-wrap">
+
+                                <i class="fas fa-user"></i>
+
+                                <input
+                                        type="text"
+                                        id="userName"
+                                        name="userName"
+                                        placeholder="Username"
+                                        minlength="5"
+                                        required>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CONFIRM USERNAME -->
+
+                        <div class="field">
+
+                            <label for="confirmUserName">
+                                Confirm username
+                            </label>
+
+                            <div class="input-wrap">
+
+                                <i class="fas fa-user-check"></i>
+
+                                <input
+                                        type="text"
+                                        id="confirmUserName"
+                                        name="confirmUserName"
+                                        placeholder="Repeat username"
+                                        minlength="5"
+                                        required>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     EMAIL
+                ========================== -->
+
+                <div class="field-section">
+
+                    <div class="field-title">
+
+                        <span class="number">
+                            02
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Email address
+                            </strong>
+
+                            <small>
+                                Verify the account email
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="fields">
+
+
+                        <!-- EMAIL -->
+
+                        <div class="field">
+
+                            <label for="email">
+                                Email
+                            </label>
+
+                            <div class="input-wrap">
+
+                                <i class="fas fa-envelope"></i>
+
+                                <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        placeholder="Email address"
+                                        required>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CONFIRM EMAIL -->
+
+                        <div class="field">
+
+                            <label for="confirmEmail">
+                                Confirm email
+                            </label>
+
+                            <div class="input-wrap">
+
+                                <i class="fas fa-envelope-circle-check"></i>
+
+                                <input
+                                        type="email"
+                                        id="confirmEmail"
+                                        name="confirmEmail"
+                                        placeholder="Repeat email"
+                                        required>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     PHONE
+                ========================== -->
+
+                <div class="field-section">
+
+                    <div class="field-title">
+
+                        <span class="number">
+                            03
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Phone number
+                            </strong>
+
+                            <small>
+                                Verify the account phone
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="fields">
+
+
+                        <!-- PHONE -->
+
+                        <div class="field">
+
+                            <label for="phoneNumber">
+                                Phone number
+                            </label>
+
+                            <div class="input-wrap">
+
+                                <i class="fas fa-phone"></i>
+
+                                <input
+                                        type="text"
+                                        id="phoneNumber"
+                                        name="phoneNumber"
+                                        placeholder="10 digit number"
+                                        maxlength="10"
+                                        inputmode="numeric"
+                                        required>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CONFIRM PHONE -->
+
+                        <div class="field">
+
+                            <label for="confirmPhoneNumber">
+                                Confirm phone
+                            </label>
+
+                            <div class="input-wrap">
+
+                                <i class="fas fa-phone-volume"></i>
+
+                                <input
+                                        type="text"
+                                        id="confirmPhoneNumber"
+                                        name="confirmPhoneNumber"
+                                        placeholder="Repeat phone number"
+                                        maxlength="10"
+                                        inputmode="numeric"
+                                        required>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     WARNING
+                ========================== -->
+
+                <div class="danger-message">
+
+                    <div class="danger-icon">
+
+                        <i class="fas fa-triangle-exclamation"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Account deletion
+                        </strong>
+
+                        <p>
+                            The user's application data will be removed
+                            and the account will be marked as deleted.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     ACTIONS
+                ========================== -->
+
+                <div class="form-actions">
+
+
+                    <div class="csrf-info">
+
+                        <i class="fas fa-shield-halved"></i>
+
+                        <span>
+                            Protected by CSRF validation
+                        </span>
+
+                    </div>
+
+
+                    <button
+                            type="submit"
+                            class="delete-btn">
+
+                        <i class="fas fa-user-minus"></i>
+
+                        Delete user
+
+                    </button>
+
+                </div>
+
+
+                <!-- =========================
+                     SUCCESS MESSAGE
+                ========================== -->
+
+                {% if message %}
+
+                <div class="alert success">
+
+                    <i class="fas fa-circle-check"></i>
+
+                    <div>
+
+                        <strong>
+                            Success
+                        </strong>
+
+                        <p>
+                            {{ message }}
+                        </p>
+
+                    </div>
+
+
+                    <button
+                            type="button"
+                            onclick="this.parentElement.remove()">
+
+                        <i class="fas fa-xmark"></i>
+
+                    </button>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- =========================
+                     ERROR MESSAGE
+                ========================== -->
+
+                {% if error %}
+
+                <div class="alert error">
+
+                    <i class="fas fa-circle-exclamation"></i>
+
+                    <div>
+
+                        <strong>
+                            Error
+                        </strong>
+
+                        <p>
+                            {{ error }}
+                        </p>
+
+                    </div>
+
+
+                    <button
+                            type="button"
+                            onclick="this.parentElement.remove()">
+
+                        <i class="fas fa-xmark"></i>
+
+                    </button>
+
+                </div>
+
+                {% endif %}
+
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

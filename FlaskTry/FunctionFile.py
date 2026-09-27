@@ -1,9 +1,6 @@
 from flask import session
 from datetime import datetime , timedelta
 
-from FlaskTry.flasktry import is_logged_in
-
-
 # =============================================================================
 # CUSTOM EXCEPTIONS
 # =============================================================================

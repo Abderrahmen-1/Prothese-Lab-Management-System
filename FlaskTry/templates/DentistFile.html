@@ -447,29 +447,29 @@
                                             data-patient-number="{{ row[5] }}"
                                             data-dentist-name="{{ row[2] }}">
 
-                                                {% if row[14] == 'in process' %}
-                                                <option value="in process" selected>In Process</option>
-                                                {% else %}
-                                                <option value="in process">In Process</option>
-                                                {% endif %}
+                                        {% if row[14] == 'in process' %}
+                                        <option value="in process" selected>In Process</option>
+                                        {% else %}
+                                        <option value="in process">In Process</option>
+                                        {% endif %}
 
-                                                {% if row[14] == 'prothesist' %}
-                                                <option value="prothesist" selected>Prothesist</option>
-                                                {% else %}
-                                                <option value="prothesist">Prothesist</option>
-                                                {% endif %}
+                                        {% if row[14] == 'prothesist' %}
+                                        <option value="prothesist" selected>Prothesist</option>
+                                        {% else %}
+                                        <option value="prothesist">Prothesist</option>
+                                        {% endif %}
 
-                                                {% if row[14] == 'montage' %}
-                                                <option value="montage" selected>Montage</option>
-                                                {% else %}
-                                                <option value="montage">Montage</option>
-                                                {% endif %}
+                                        {% if row[14] == 'montage' %}
+                                        <option value="montage" selected>Montage</option>
+                                        {% else %}
+                                        <option value="montage">Montage</option>
+                                        {% endif %}
 
-                                                {% if row[14] == 'esseyage' %}
-                                                <option value="esseyage" selected>Esseyage</option>
-                                                {% else %}
-                                                <option value="esseyage">Esseyage</option>
-                                                {% endif %}
+                                        {% if row[14] == 'esseyage' %}
+                                        <option value="esseyage" selected>Esseyage</option>
+                                        {% else %}
+                                        <option value="esseyage">Esseyage</option>
+                                        {% endif %}
 
                                     </select>
 
@@ -902,8 +902,7 @@
 
                 {% if result and result is mapping %}
 
-                <div id="StatTable"
-                     class="table-card fade-in">
+                <div id="StatTable" class="table-card fade-in">
 
                     <div class="table-header highlight-stats">
 
@@ -913,18 +912,16 @@
                         </h2>
 
                         <span class="result-count">
-                            Detailed Analysis
-                        </span>
+            Detailed Analysis
+        </span>
 
                     </div>
-
 
                     <div class="table-wrapper">
 
                         <table class="data-table">
 
                             <thead>
-
                             <tr>
                                 <th>DATA ID</th>
                                 <th>Dentist</th>
@@ -935,27 +932,25 @@
                                 <th>Year</th>
                                 <th>User ID</th>
                             </tr>
-
                             </thead>
-
 
                             <tbody>
 
                             {% for dentist, values in result.items() %}
 
-                                {% for item in values %}
+                            {% for row in values %}
 
-                                <tr class="table-row-animate">
+                            <tr class="table-row-animate">
 
-                                    {% for v in item %}
+                                {% for item in row %}
 
-                                    <td>{{ v }}</td>
-
-                                    {% endfor %}
-
-                                </tr>
+                                <td>{{ item }}</td>
 
                                 {% endfor %}
+
+                            </tr>
+
+                            {% endfor %}
 
                             {% endfor %}
 

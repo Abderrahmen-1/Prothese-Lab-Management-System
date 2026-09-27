@@ -28,6 +28,64 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* =========================================================
+   USERS GENERATED - OWNER ONLY
+   ========================================================= */
+
+.users-generated {
+
+    margin-left: 22px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 8px 12px;
+
+    border-radius: 9px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    color: #475569;
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.1px;
+
+    transition:
+        all 0.25s ease;
+}
+
+.users-generated i {
+
+    font-size: 11px;
+
+    color: #64748b;
+
+    transition:
+        all 0.25s ease;
+}
+
+.users-generated:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #0f172a;
+    transform: translateY(-1px);
+    box-shadow:
+        0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.users-generated:hover i {
+    color: #2563eb;
+    transform: scale(1.05);
+}
+
 * {
     margin: 0;
     padding: 0;

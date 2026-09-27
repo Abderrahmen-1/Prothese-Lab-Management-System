@@ -16,320 +16,331 @@
 </head>
 
 <body>
-    <div class="bg-shapes">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-        <div class="shape shape-3"></div>
-    </div>
+<div class="bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+</div>
 
-    <div class="signup-container">
-        <div class="branding-side">
-            <div class="branding-content">
-                <div class="logo-wrapper">
-                    <i class="fas fa-tooth"></i>
-                    <div class="logo-ring"></div>
+<div class="signup-container">
+    <div class="branding-side">
+        <div class="branding-content">
+            <div class="logo-wrapper">
+                <i class="fas fa-tooth"></i>
+                <div class="logo-ring"></div>
+            </div>
+            <h1 class="brand-title">DentaFlow</h1>
+            <p class="brand-subtitle">Join Our Prosthetics Lab Management System</p>
+
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="benefit-text">
+                        <h3>Quick Setup</h3>
+                        <p>Get started in less than 2 minutes</p>
+                    </div>
                 </div>
-                <h1 class="brand-title">DentaFlow</h1>
-                <p class="brand-subtitle">Join Our Prosthetics Lab Management System</p>
-
-                <div class="benefits-list">
-                    <div class="benefit-item">
-                        <div class="benefit-icon">
-                            <i class="fas fa-rocket"></i>
-                        </div>
-                        <div class="benefit-text">
-                            <h3>Quick Setup</h3>
-                            <p>Get started in less than 2 minutes</p>
-                        </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-shield-alt"></i>
                     </div>
-                    <div class="benefit-item">
-                        <div class="benefit-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <div class="benefit-text">
-                            <h3>Secure & Safe</h3>
-                            <p>Your data is encrypted and protected</p>
-                        </div>
+                    <div class="benefit-text">
+                        <h3>Secure & Safe</h3>
+                        <p>Your data is encrypted and protected</p>
                     </div>
-                    <div class="benefit-item">
-                        <div class="benefit-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="benefit-text">
-                            <h3>Boost Productivity</h3>
-                            <p>Manage your lab efficiently</p>
-                        </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
                     </div>
-
-                    <a href="/HomePage" style="color:white"> Back to home</a>
-
+                    <div class="benefit-text">
+                        <h3>Boost Productivity</h3>
+                        <p>Manage your lab efficiently</p>
+                    </div>
                 </div>
 
-                <div class="testimonial">
-                    <i class="fas fa-quote-left quote-icon"></i>
-                    <p>"DentaFlow a transformé la gestion de notre laboratoire. Indispensable!"</p>
-                    <div class="testimonial-author">
-                        <strong>Dr. Karim M.</strong>
-                        <span>Prothésiste, Alger</span>
-                    </div>
+                <a href="{{ url_for('users.ConfirmOwnerData') }}" class="users-generated">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Back to Home</span>
+                </a>
+
+            </div>
+
+            <div class="testimonial">
+                <i class="fas fa-quote-left quote-icon"></i>
+                <p>"DentaFlow a transformé la gestion de notre laboratoire. Indispensable!"</p>
+                <div class="testimonial-author">
+                    <strong>Dr. Karim M.</strong>
+                    <span>Prothésiste, Alger</span>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="form-side">
-            <div class="form-wrapper">
-                <div class="form-header">
-                    <h2>Create Your Account</h2>
-                    <p>Start managing your prosthetics lab today</p>
-                </div>
+    <div class="form-side">
+        <div class="form-wrapper">
+            <div class="form-header">
+                <h2>Create Your Account</h2>
+                <p>Start managing your prosthetics lab today</p>
+            </div>
 
-                <form action="/CreateAnAccount" method="POST" class="signup-form" id="signupForm">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <form action="/CreateAnAccount" method="POST" class="signup-form" id="signupForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-                    {% if error %}
-                    <div class="alert alert-error fade-in-slow">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <div class="alert-content">
-                            <h3>Error</h3>
-                            <p>{{ error }}</p>
-                        </div>
-                        <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
-                            <i class="fas fa-times"></i>
-                        </button>
+                {% if error %}
+                <div class="alert alert-error fade-in-slow">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="alert-content">
+                        <h3>Error</h3>
+                        <p>{{ error }}</p>
                     </div>
-                    {% endif %}
-
-                    {% if success %}
-                    <div class="alert alert-success fade-in-slow">
-                        <i class="fas fa-check-circle"></i>
-                        <div class="alert-content">
-                            <h3>Success</h3>
-                            <p>{{ success }}</p>
-                        </div>
-                        <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    {% endif %}
-
-                    {% if message %}
-                    <div class="alert alert-success fade-in-slow">
-                        <i class="fas fa-check-circle"></i>
-                        <div class="alert-content">
-                            <h3>Success</h3>
-                            <p>{{ message }}</p>
-                        </div>
-                        <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    {% endif %}
-
-                    <div class="input-group">
-                        <label for="email">
-                            <span class="label-text">Email Address</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" id="email" name="email" placeholder="Enter your email" required class="form-input">
-                        </div>
-                        <span class="input-hint">We'll never share your email</span>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="phone">
-                            <span class="label-text">Phone Number</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-phone"></i>
-                            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number (optional)" class="form-input">
-                        </div>
-                        <span class="input-hint">Format: 0XXX XX XX XX</span>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="username">
-                            <span class="label-text">Username</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="username" name="username" placeholder="Choose a username" required class="form-input">
-                        </div>
-                        <span class="input-hint">At least 3 characters</span>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="password">
-                            <span class="label-text">Password</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="password" name="password" placeholder="Create a strong password" required class="form-input">
-                            <button type="button" class="toggle-password" onclick="togglePassword('password', 'eye-icon-1')">
-                                <i class="fas fa-eye" id="eye-icon-1"></i>
-                            </button>
-                        </div>
-                        <div class="password-strength" id="passwordStrength">
-                            <div class="strength-bar">
-                                <div class="strength-fill" id="strengthFill"></div>
-                            </div>
-                            <span class="strength-text" id="strengthText">Password strength</span>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="Confirmation">
-                            <span class="label-text">Confirm Password</span>
-                        </label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="Confirmation" name="confirmation" placeholder="Confirm your password" required class="form-input">
-                            <button type="button" class="toggle-password" onclick="togglePassword('Confirmation', 'eye-icon-2')">
-                                <i class="fas fa-eye" id="eye-icon-2"></i>
-                            </button>
-                        </div>
-                        <span class="match-indicator" id="matchIndicator"></span>
-                    </div>
-
-                    <div class="terms-checkbox">
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="terms" required>
-                            <span class="checkbox-text">I agree to the <a href="#" class="terms-link">Terms & Conditions</a> and <a href="#" class="terms-link">Privacy Policy</a></span>
-                        </label>
-                    </div>
-
-                    <button type="submit" class="btn-submit">
-                        <span>Create Account</span>
-                        <i class="fas fa-arrow-right"></i>
+                    <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class="fas fa-times"></i>
                     </button>
+                </div>
+                {% endif %}
 
-                    <div class="divider">
-                        <span>or</span>
+                {% if success %}
+                <div class="alert alert-success fade-in-slow">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="alert-content">
+                        <h3>Success</h3>
+                        <p>{{ success }}</p>
                     </div>
+                    <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                {% endif %}
 
-                    <div class="login-link">
-                        <p>Already have an account? <a href="/log_in">Log in here</a></p>
+                {% if message %}
+                <div class="alert alert-success fade-in-slow">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="alert-content">
+                        <h3>Success</h3>
+                        <p>{{ message }}</p>
                     </div>
-                </form>
-            </div>
+                    <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                {% endif %}
+
+                <div class="input-group">
+                    <label for="email">
+                        <span class="label-text">Email Address</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required
+                               class="form-input">
+                    </div>
+                    <span class="input-hint">We'll never share your email</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="phone">
+                        <span class="label-text">Phone Number</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-phone"></i>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number (optional)"
+                               class="form-input">
+                    </div>
+                    <span class="input-hint">Format: 0XXX XX XX XX</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="username">
+                        <span class="label-text">Username</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" name="username" placeholder="Choose a username" required
+                               class="form-input">
+                    </div>
+                    <span class="input-hint">At least 3 characters</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">
+                        <span class="label-text">Password</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Create a strong password"
+                               required class="form-input">
+                        <button type="button" class="toggle-password"
+                                onclick="togglePassword('password', 'eye-icon-1')">
+                            <i class="fas fa-eye" id="eye-icon-1"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <span class="strength-text" id="strengthText">Password strength</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="Confirmation">
+                        <span class="label-text">Confirm Password</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="Confirmation" name="confirmation" placeholder="Confirm your password"
+                               required class="form-input">
+                        <button type="button" class="toggle-password"
+                                onclick="togglePassword('Confirmation', 'eye-icon-2')">
+                            <i class="fas fa-eye" id="eye-icon-2"></i>
+                        </button>
+                    </div>
+                    <span class="match-indicator" id="matchIndicator"></span>
+                </div>
+
+                <div class="terms-checkbox">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="terms" required>
+                        <span class="checkbox-text">I agree to the <a href="#" class="terms-link">Terms & Conditions</a> and <a
+                                href="#" class="terms-link">Privacy Policy</a></span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <span>Create Account</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+
+                <div class="divider">
+                    <span>or</span>
+                </div>
+
+                <div class="login-link">
+                    <p>Already have an account? <a href="/log_in">Log in here</a></p>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
-    <script>
-        // Toggle password visibility
-        function togglePassword(inputId, iconId) {
-            const passwordInput = document.getElementById(inputId);
-            const eyeIcon = document.getElementById(iconId);
+<script>
+    // Toggle password visibility
+    function togglePassword(inputId, iconId) {
+        const passwordInput = document.getElementById(inputId);
+        const eyeIcon = document.getElementById(iconId);
 
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeIcon.classList.remove('fa-eye');
-                eyeIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
-            }
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+        }
+    }
+
+    // Password strength checker
+    const passwordInput = document.getElementById('password');
+    const strengthFill = document.getElementById('strengthFill');
+    const strengthText = document.getElementById('strengthText');
+
+    passwordInput.addEventListener('input', function() {
+        const password = this.value;
+        let strength = 0;
+
+        if (password.length >= 8) strength++;
+        if (password.length >= 12) strength++;
+        if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+        if (/\d/.test(password)) strength++;
+        if (/[^a-zA-Z\d]/.test(password)) strength++;
+
+        const percentage = (strength / 5) * 100;
+        strengthFill.style.width = percentage + '%';
+
+        if (strength <= 2) {
+            strengthFill.style.background = '#ef4444';
+            strengthText.textContent = 'Weak password';
+            strengthText.style.color = '#ef4444';
+        } else if (strength <= 3) {
+            strengthFill.style.background = '#f59e0b';
+            strengthText.textContent = 'Medium password';
+            strengthText.style.color = '#f59e0b';
+        } else {
+            strengthFill.style.background = '#10b981';
+            strengthText.textContent = 'Strong password';
+            strengthText.style.color = '#10b981';
+        }
+    });
+
+    // Password match checker
+    const confirmInput = document.getElementById('Confirmation');
+    const matchIndicator = document.getElementById('matchIndicator');
+
+    function checkPasswordMatch() {
+        const password = passwordInput.value;
+        const confirm = confirmInput.value;
+
+        if (confirm.length === 0) {
+            matchIndicator.textContent = '';
+            return;
         }
 
-        // Password strength checker
-        const passwordInput = document.getElementById('password');
-        const strengthFill = document.getElementById('strengthFill');
-        const strengthText = document.getElementById('strengthText');
-
-        passwordInput.addEventListener('input', function() {
-            const password = this.value;
-            let strength = 0;
-
-            if (password.length >= 8) strength++;
-            if (password.length >= 12) strength++;
-            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
-            if (/\d/.test(password)) strength++;
-            if (/[^a-zA-Z\d]/.test(password)) strength++;
-
-            const percentage = (strength / 5) * 100;
-            strengthFill.style.width = percentage + '%';
-
-            if (strength <= 2) {
-                strengthFill.style.background = '#ef4444';
-                strengthText.textContent = 'Weak password';
-                strengthText.style.color = '#ef4444';
-            } else if (strength <= 3) {
-                strengthFill.style.background = '#f59e0b';
-                strengthText.textContent = 'Medium password';
-                strengthText.style.color = '#f59e0b';
-            } else {
-                strengthFill.style.background = '#10b981';
-                strengthText.textContent = 'Strong password';
-                strengthText.style.color = '#10b981';
-            }
-        });
-
-        // Password match checker
-        const confirmInput = document.getElementById('Confirmation');
-        const matchIndicator = document.getElementById('matchIndicator');
-
-        function checkPasswordMatch() {
-            const password = passwordInput.value;
-            const confirm = confirmInput.value;
-
-            if (confirm.length === 0) {
-                matchIndicator.textContent = '';
-                return;
-            }
-
-            if (password === confirm) {
-                matchIndicator.innerHTML = '<i class="fas fa-check-circle"></i> Passwords match';
-                matchIndicator.style.color = '#10b981';
-            } else {
-                matchIndicator.innerHTML = '<i class="fas fa-times-circle"></i> Passwords do not match';
-                matchIndicator.style.color = '#ef4444';
-            }
+        if (password === confirm) {
+            matchIndicator.innerHTML = '<i class="fas fa-check-circle"></i> Passwords match';
+            matchIndicator.style.color = '#10b981';
+        } else {
+            matchIndicator.innerHTML = '<i class="fas fa-times-circle"></i> Passwords do not match';
+            matchIndicator.style.color = '#ef4444';
         }
+    }
 
-        passwordInput.addEventListener('input', checkPasswordMatch);
-        confirmInput.addEventListener('input', checkPasswordMatch);
+    passwordInput.addEventListener('input', checkPasswordMatch);
+    confirmInput.addEventListener('input', checkPasswordMatch);
 
-        // Add ripple effect to submit button
-        document.querySelector('.btn-submit').addEventListener('click', function(e) {
-            const ripple = document.createElement('span');
-            ripple.classList.add('ripple');
-            this.appendChild(ripple);
+    // Add ripple effect to submit button
+    document.querySelector('.btn-submit').addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        this.appendChild(ripple);
 
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
 
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
 
-            setTimeout(() => ripple.remove(), 600);
+        setTimeout(() => ripple.remove(), 600);
+    });
+
+    // Input focus animations
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.closest('.input-wrapper').classList.add('focused');
         });
 
-        // Input focus animations
-        document.querySelectorAll('.form-input').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.closest('.input-wrapper').classList.add('focused');
-            });
-
-            input.addEventListener('blur', function() {
-                this.closest('.input-wrapper').classList.remove('focused');
-            });
+        input.addEventListener('blur', function() {
+            this.closest('.input-wrapper').classList.remove('focused');
         });
+    });
 
-        // Form validation
-        document.getElementById('signupForm').addEventListener('submit', function(e) {
-            const password = passwordInput.value;
-            const confirm = confirmInput.value;
+    // Form validation
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+        const password = passwordInput.value;
+        const confirm = confirmInput.value;
 
-            if (password !== confirm) {
-                e.preventDefault();
-                alert('Passwords do not match!');
-                return false;
-            }
-        });
-    </script>
+        if (password !== confirm) {
+            e.preventDefault();
+            alert('Passwords do not match!');
+            return false;
+        }
+    });
+</script>
 </body>
 </html>

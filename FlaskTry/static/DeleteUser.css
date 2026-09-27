@@ -1,0 +1,1962 @@
+:root {
+    --background: #f5f7fa;
+    --white: #ffffff;
+
+    --navy: #111827;
+    --navy-2: #1f2937;
+
+    --text: #111827;
+    --secondary: #6b7280;
+    --muted: #9ca3af;
+
+    --border: #e5e7eb;
+    --input-bg: #f9fafb;
+
+    --blue: #2563eb;
+
+    --red: #dc2626;
+    --red-dark: #b91c1c;
+    --red-light: #fef2f2;
+
+    --green: #16a34a;
+    --green-light: #f0fdf4;
+}
+
+/* =========================================================
+   USERS GENERATED - OWNER ONLY
+   ========================================================= */
+
+.users-generated {
+
+    margin-left: 22px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 8px 12px;
+
+    border-radius: 9px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    color: #475569;
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.1px;
+
+    transition:
+        all 0.25s ease;
+}
+
+.users-generated i {
+
+    font-size: 11px;
+
+    color: #64748b;
+
+    transition:
+        all 0.25s ease;
+}
+
+.users-generated:hover {
+
+    background: #f1f5f9;
+
+    border-color: #cbd5e1;
+
+    color: #0f172a;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.users-generated:hover i {
+
+    color: #2563eb;
+
+    transform: scale(1.05);
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    min-height: 100vh;
+
+    background: var(--background);
+    color: var(--text);
+
+    font-family: "Inter", sans-serif;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.page {
+    min-height: 100vh;
+}
+
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar {
+    height: 70px;
+
+    padding: 0 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: var(--white);
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+.brand {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+
+.brand-logo {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: var(--navy);
+    color: white;
+
+    font-size: 17px;
+}
+
+
+.brand h2 {
+    font-size: 15px;
+    font-weight: 700;
+
+    line-height: 1.1;
+}
+
+
+.brand span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+
+/* =========================
+   TOP RIGHT
+========================= */
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+
+    gap: 28px;
+}
+
+
+.online {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--secondary);
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+.online span {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+}
+
+
+.profile {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+}
+
+
+.avatar {
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eef2ff;
+    color: #4338ca;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.profile-info strong {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+.profile-info small {
+    margin-top: 1px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+}
+
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.content {
+    width: min(960px, calc(100% - 40px));
+
+    margin: 42px auto 70px;
+}
+
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.content-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 28px;
+}
+
+
+.eyebrow {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 8px;
+
+    color: var(--blue);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+
+.content-header h1 {
+    font-size: 30px;
+    font-weight: 700;
+
+    letter-spacing: -0.8px;
+}
+
+
+.content-header p {
+    margin-top: 5px;
+
+    color: var(--secondary);
+
+    font-size: 13px;
+}
+
+
+.page-icon {
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: var(--red-light);
+    color: var(--red);
+
+    font-size: 20px;
+}
+
+
+/* =========================
+   MAIN CARD
+========================= */
+
+.card {
+    background: var(--white);
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.02),
+        0 8px 25px rgba(17, 24, 39, 0.04);
+}
+
+
+/* =========================
+   CARD HEADER
+========================= */
+
+.card-header {
+    min-height: 76px;
+
+    padding: 20px 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+.card-header h3 {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.card-header p {
+    margin-top: 3px;
+
+    color: var(--secondary);
+
+    font-size: 11px;
+}
+
+
+.secure {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 7px 10px;
+
+    border-radius: 8px;
+
+    background: var(--green-light);
+
+    color: #15803d;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+form {
+    padding: 28px;
+}
+
+
+/* =========================
+   FIELD SECTION
+========================= */
+
+.field-section {
+    padding: 24px 0;
+
+    border-bottom: 1px solid #f0f1f3;
+}
+
+
+.field-section:first-of-type {
+    padding-top: 0;
+}
+
+
+.field-title {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    margin-bottom: 17px;
+}
+
+
+.number {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #f3f4f6;
+
+    color: var(--secondary);
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+.field-title strong {
+    display: block;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.field-title small {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   FIELDS
+========================= */
+
+.fields {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 18px;
+}
+
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.field label {
+    margin-bottom: 7px;
+
+    color: #374151;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* =========================
+   INPUT
+========================= */
+
+.input-wrap {
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+    background: var(--input-bg);
+
+    transition: 0.2s ease;
+}
+
+
+.input-wrap i {
+    width: 42px;
+
+    text-align: center;
+
+    color: #9ca3af;
+
+    font-size: 12px;
+}
+
+
+.input-wrap input {
+    width: 100%;
+    height: 100%;
+
+    padding-right: 12px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 12px;
+}
+
+
+.input-wrap input::placeholder {
+    color: #b4b9c1;
+}
+
+
+.input-wrap:hover {
+    border-color: #d1d5db;
+}
+
+
+.input-wrap:focus-within {
+    border-color: var(--blue);
+
+    background: white;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+
+.input-wrap:focus-within i {
+    color: var(--blue);
+}
+
+
+/* =========================
+   DANGER MESSAGE
+========================= */
+
+.danger-message {
+    margin-top: 25px;
+
+    padding: 15px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    border-radius: 10px;
+
+    background: var(--red-light);
+
+    border: 1px solid #fee2e2;
+}
+
+
+.danger-icon {
+    width: 35px;
+    height: 35px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #fee2e2;
+
+    color: var(--red);
+
+    font-size: 13px;
+}
+
+
+.danger-message strong {
+    display: block;
+
+    color: #991b1b;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+.danger-message p {
+    margin-top: 2px;
+
+    color: #b91c1c;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   FORM ACTIONS
+========================= */
+
+.form-actions {
+    margin-top: 25px;
+    padding-top: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-top: 1px solid var(--border);
+}
+
+
+.csrf-info {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+
+.csrf-info i {
+    color: #64748b;
+}
+
+
+/* =========================
+   DELETE BUTTON
+========================= */
+
+.delete-btn {
+    height: 43px;
+
+    padding: 0 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: var(--red);
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+.delete-btn:hover {
+    background: var(--red-dark);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 15px rgba(220, 38, 38, 0.18);
+}
+
+
+.delete-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================
+   ALERT
+========================= */
+
+.alert {
+    margin-top: 18px;
+
+    padding: 13px 15px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    border-radius: 9px;
+}
+
+
+.alert > i {
+    font-size: 17px;
+}
+
+
+.alert div {
+    flex: 1;
+}
+
+
+.alert strong {
+    display: block;
+
+    font-size: 11px;
+}
+
+
+.alert p {
+    margin-top: 2px;
+
+    color: var(--secondary);
+
+    font-size: 10px;
+}
+
+
+.alert button {
+    width: 28px;
+    height: 28px;
+
+    border: none;
+
+    background: transparent;
+
+    color: inherit;
+
+    cursor: pointer;
+
+    border-radius: 6px;
+}
+
+
+.alert button:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+
+.success {
+    background: var(--green-light);
+
+    border: 1px solid #bbf7d0;
+
+    color: var(--green);
+}
+
+
+.error {
+    background: var(--red-light);
+
+    border: 1px solid #fecaca;
+
+    color: var(--red);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 0 20px;
+    }
+
+
+    .online {
+        display: none;
+    }
+
+
+    .profile-info {
+        display: none;
+    }
+
+
+    .content {
+        width: calc(100% - 24px);
+
+        margin-top: 25px;
+    }
+
+
+    .content-header h1 {
+        font-size: 25px;
+    }
+
+
+    .card-header,
+    form {
+        padding: 20px;
+    }
+
+
+    .fields {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .topbar {
+        height: 62px;
+    }
+
+
+    .brand-logo {
+        width: 34px;
+        height: 34px;
+    }
+
+
+    .brand h2 {
+        font-size: 14px;
+    }
+
+
+    .content-header {
+        margin-bottom: 20px;
+    }
+
+
+    .content-header h1 {
+        font-size: 23px;
+    }
+
+
+    .page-icon {
+        width: 45px;
+        height: 45px;
+
+        font-size: 17px;
+    }
+
+
+    .card-header {
+        align-items: flex-start;
+    }
+
+
+    .secure {
+        display: none;
+    }
+
+
+    .form-actions {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 15px;
+    }
+
+
+    .csrf-info {
+        justify-content: center;
+    }
+
+
+    .delete-btn {
+        width: 100%;
+    }
+
+}
+
+/* =========================================================
+   RESPONSIVE
+   Phones / Tablets / Laptops / Large Screens
+   ========================================================= */
+
+
+/* =========================================================
+   LARGE SCREENS
+   1200px+
+   ========================================================= */
+
+@media (min-width: 1200px) {
+
+    .content {
+        width: min(1000px, calc(100% - 80px));
+    }
+
+    .topbar {
+        padding-left: 55px;
+        padding-right: 55px;
+    }
+
+}
+
+
+/* =========================================================
+   LAPTOPS
+   901px - 1199px
+   ========================================================= */
+
+@media (max-width: 1199px) {
+
+    .topbar {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .content {
+        width: min(920px, calc(100% - 50px));
+    }
+
+    .users-generated {
+        margin-left: 15px;
+    }
+
+}
+
+
+/* =========================================================
+   TABLETS
+   701px - 900px
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    /* ---------- TOP BAR ---------- */
+
+    .topbar {
+        height: 68px;
+
+        padding:
+            0 22px;
+    }
+
+    .brand {
+        gap: 9px;
+    }
+
+    .brand-logo {
+        width: 37px;
+        height: 37px;
+
+        font-size: 16px;
+    }
+
+    .brand h2 {
+        font-size: 14px;
+    }
+
+    .brand span {
+        font-size: 8px;
+    }
+
+
+    /* ---------- USERS LINK ---------- */
+
+    .users-generated {
+
+        margin-left: 12px;
+
+        padding:
+            7px 10px;
+
+        font-size: 9px;
+
+        white-space: nowrap;
+    }
+
+
+    /* ---------- TOP RIGHT ---------- */
+
+    .topbar-right {
+        gap: 18px;
+    }
+
+
+    .profile-info strong {
+        font-size: 10px;
+    }
+
+    .profile-info small {
+        font-size: 8px;
+    }
+
+
+    /* ---------- CONTENT ---------- */
+
+    .content {
+
+        width:
+            calc(100% - 44px);
+
+        margin:
+            32px auto 55px;
+    }
+
+
+    /* ---------- HEADER ---------- */
+
+    .content-header {
+        margin-bottom: 24px;
+    }
+
+    .content-header h1 {
+        font-size: 28px;
+    }
+
+    .content-header p {
+        font-size: 12px;
+    }
+
+
+    /* ---------- CARD ---------- */
+
+    .card-header {
+        padding:
+            20px 24px;
+    }
+
+    form {
+        padding:
+            24px;
+    }
+
+
+    /* ---------- FORM ---------- */
+
+    .fields {
+        gap: 15px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL TABLETS / LARGE PHONES
+   601px - 700px
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    /* ---------- TOP BAR ---------- */
+
+    .topbar {
+
+        height: 64px;
+
+        padding:
+            0 18px;
+    }
+
+
+    .brand {
+        min-width: 0;
+    }
+
+
+    .brand-text {
+        min-width: 0;
+    }
+
+
+    .brand h2 {
+        font-size: 14px;
+    }
+
+
+    .brand span {
+        display: none;
+    }
+
+
+    /* ---------- USERS BUTTON ---------- */
+
+    .users-generated {
+
+        margin-left: 10px;
+
+        width: 34px;
+        height: 34px;
+
+        padding: 0;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 9px;
+    }
+
+
+    .users-generated span {
+        display: none;
+    }
+
+
+    .users-generated i {
+        font-size: 12px;
+    }
+
+
+    /* ---------- TOP RIGHT ---------- */
+
+    .online {
+        display: none;
+    }
+
+
+    .topbar-right {
+        margin-left: auto;
+
+        gap: 10px;
+    }
+
+
+    .profile-info {
+        display: none;
+    }
+
+
+    .avatar {
+        width: 34px;
+        height: 34px;
+
+        font-size: 11px;
+    }
+
+
+    /* ---------- CONTENT ---------- */
+
+    .content {
+
+        width:
+            calc(100% - 28px);
+
+        margin:
+            25px auto 45px;
+    }
+
+
+    /* ---------- PAGE HEADER ---------- */
+
+    .content-header {
+
+        align-items: center;
+
+        margin-bottom: 20px;
+    }
+
+
+    .eyebrow {
+
+        margin-bottom: 6px;
+
+        font-size: 9px;
+    }
+
+
+    .content-header h1 {
+
+        font-size: 25px;
+
+        letter-spacing: -0.5px;
+    }
+
+
+    .content-header p {
+
+        max-width: 500px;
+
+        font-size: 11px;
+
+        line-height: 1.5;
+    }
+
+
+    .page-icon {
+
+        width: 46px;
+        height: 46px;
+
+        flex-shrink: 0;
+
+        border-radius: 12px;
+
+        font-size: 17px;
+    }
+
+
+    /* ---------- CARD ---------- */
+
+    .card {
+        border-radius: 12px;
+    }
+
+
+    .card-header {
+
+        min-height: auto;
+
+        padding:
+            18px 20px;
+    }
+
+
+    .card-header h3 {
+        font-size: 13px;
+    }
+
+
+    .card-header p {
+        font-size: 10px;
+
+        line-height: 1.4;
+    }
+
+
+    .secure {
+        padding:
+            6px 8px;
+
+        font-size: 9px;
+
+        white-space: nowrap;
+    }
+
+
+    /* ---------- FORM ---------- */
+
+    form {
+        padding:
+            20px;
+    }
+
+
+    .field-section {
+
+        padding:
+            20px 0;
+    }
+
+
+    .field-section:first-of-type {
+        padding-top: 0;
+    }
+
+
+    .fields {
+
+        grid-template-columns: 1fr;
+
+        gap: 14px;
+    }
+
+
+    .field-title {
+
+        margin-bottom: 14px;
+
+        gap: 9px;
+    }
+
+
+    .number {
+
+        width: 28px;
+        height: 28px;
+
+        flex-shrink: 0;
+    }
+
+
+    /* ---------- WARNING ---------- */
+
+    .danger-message {
+
+        margin-top: 20px;
+
+        padding: 13px;
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+
+    .danger-icon {
+
+        width: 32px;
+        height: 32px;
+
+        flex-shrink: 0;
+    }
+
+
+    .danger-message p {
+
+        line-height: 1.5;
+    }
+
+
+    /* ---------- ACTIONS ---------- */
+
+    .form-actions {
+
+        margin-top: 20px;
+
+        padding-top: 18px;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 14px;
+    }
+
+
+    .csrf-info {
+
+        justify-content: center;
+    }
+
+
+    .delete-btn {
+
+        width: 100%;
+    }
+
+}
+
+
+/* =========================================================
+   PHONES
+   401px - 600px
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .topbar {
+
+        padding:
+            0 14px;
+    }
+
+
+    .brand {
+
+        gap: 8px;
+    }
+
+
+    .brand-logo {
+
+        width: 34px;
+        height: 34px;
+
+        border-radius: 9px;
+
+        font-size: 15px;
+    }
+
+
+    .brand h2 {
+        font-size: 13px;
+    }
+
+
+    .users-generated {
+
+        margin-left: 7px;
+
+        width: 32px;
+        height: 32px;
+    }
+
+
+    .avatar {
+
+        width: 32px;
+        height: 32px;
+    }
+
+
+    /* ---------- CONTENT ---------- */
+
+    .content {
+
+        width:
+            calc(100% - 20px);
+
+        margin:
+            20px auto 35px;
+    }
+
+
+    /* ---------- HEADER ---------- */
+
+    .content-header {
+
+        align-items: flex-start;
+    }
+
+
+    .content-header h1 {
+
+        font-size: 23px;
+    }
+
+
+    .content-header p {
+
+        max-width: 280px;
+
+        font-size: 10px;
+    }
+
+
+    .page-icon {
+
+        width: 42px;
+        height: 42px;
+
+        border-radius: 10px;
+
+        font-size: 15px;
+    }
+
+
+    /* ---------- CARD ---------- */
+
+    .card-header {
+
+        padding:
+            17px;
+    }
+
+
+    .card-header p {
+
+        max-width: 220px;
+    }
+
+
+    .secure {
+
+        display: none;
+    }
+
+
+    form {
+
+        padding:
+            17px;
+    }
+
+
+    /* ---------- INPUTS ---------- */
+
+    .input-wrap {
+
+        height: 44px;
+
+        min-width: 0;
+    }
+
+
+    .input-wrap i {
+
+        width: 38px;
+
+        flex-shrink: 0;
+    }
+
+
+    .input-wrap input {
+
+        min-width: 0;
+
+        font-size: 11px;
+    }
+
+
+    /* ---------- WARNING ---------- */
+
+    .danger-message {
+
+        padding: 12px;
+    }
+
+
+    .danger-message strong {
+
+        font-size: 10px;
+    }
+
+
+    .danger-message p {
+
+        font-size: 9px;
+    }
+
+
+    /* ---------- ALERTS ---------- */
+
+    .alert {
+
+        align-items: flex-start;
+
+        padding:
+            12px;
+    }
+
+
+    .alert > i {
+
+        margin-top: 2px;
+
+        font-size: 15px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   320px - 400px
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+    .topbar {
+
+        height: 60px;
+
+        padding:
+            0 11px;
+    }
+
+
+    .brand-logo {
+
+        width: 32px;
+        height: 32px;
+
+        font-size: 14px;
+    }
+
+
+    .brand h2 {
+
+        font-size: 12px;
+    }
+
+
+    .users-generated {
+
+        width: 30px;
+        height: 30px;
+
+        margin-left: 5px;
+    }
+
+
+    .avatar {
+
+        width: 30px;
+        height: 30px;
+
+        font-size: 10px;
+    }
+
+
+    /* ---------- CONTENT ---------- */
+
+    .content {
+
+        width:
+            calc(100% - 16px);
+
+        margin-top: 17px;
+    }
+
+
+    .content-header h1 {
+
+        font-size: 21px;
+    }
+
+
+    .content-header p {
+
+        max-width: 230px;
+
+        font-size: 9px;
+    }
+
+
+    .eyebrow {
+
+        font-size: 8px;
+
+        letter-spacing: 0.8px;
+    }
+
+
+    .page-icon {
+
+        width: 38px;
+        height: 38px;
+
+        font-size: 14px;
+    }
+
+
+    /* ---------- CARD ---------- */
+
+    .card-header {
+
+        padding:
+            15px;
+    }
+
+
+    form {
+
+        padding:
+            15px;
+    }
+
+
+    .field-section {
+
+        padding:
+            18px 0;
+    }
+
+
+    .field-title strong {
+
+        font-size: 11px;
+    }
+
+
+    .field-title small {
+
+        font-size: 9px;
+    }
+
+
+    .field label {
+
+        font-size: 9px;
+    }
+
+
+    .input-wrap {
+
+        height: 42px;
+
+        border-radius: 8px;
+    }
+
+
+    .input-wrap i {
+
+        width: 35px;
+
+        font-size: 11px;
+    }
+
+
+    .input-wrap input {
+
+        font-size: 10px;
+    }
+
+
+    /* ---------- WARNING ---------- */
+
+    .danger-message {
+
+        gap: 8px;
+
+        padding: 10px;
+    }
+
+
+    .danger-icon {
+
+        width: 29px;
+        height: 29px;
+
+        font-size: 11px;
+    }
+
+
+    .danger-message p {
+
+        font-size: 8px;
+    }
+
+
+    /* ---------- BUTTON ---------- */
+
+    .delete-btn {
+
+        height: 42px;
+
+        font-size: 10px;
+    }
+
+
+    .csrf-info {
+
+        font-size: 9px;
+    }
+
+
+    /* ---------- ALERT ---------- */
+
+    .alert p {
+
+        font-size: 9px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   <= 319px
+   ========================================================= */
+
+@media (max-width: 319px) {
+
+    .topbar {
+
+        padding:
+            0 8px;
+    }
+
+
+    .brand h2 {
+
+        font-size: 11px;
+    }
+
+
+    .users-generated {
+
+        display: none;
+    }
+
+
+    .content {
+
+        width:
+            calc(100% - 12px);
+    }
+
+
+    .content-header h1 {
+
+        font-size: 19px;
+    }
+
+
+    .page-icon {
+
+        width: 34px;
+        height: 34px;
+
+        font-size: 12px;
+    }
+
+
+    form,
+    .card-header {
+
+        padding:
+            12px;
+    }
+
+
+    .danger-message {
+
+        align-items: flex-start;
+    }
+
+}
+
+
+/* =========================================================
+   LANDSCAPE PHONES
+   ========================================================= */
+
+@media (max-height: 500px) and (orientation: landscape) {
+
+    .topbar {
+
+        height: 58px;
+    }
+
+
+    .content {
+
+        margin-top: 18px;
+        margin-bottom: 30px;
+    }
+
+
+    .content-header {
+
+        margin-bottom: 16px;
+    }
+
+
+    .field-section {
+
+        padding:
+            15px 0;
+    }
+
+
+    .danger-message {
+
+        margin-top: 15px;
+    }
+
+
+    .form-actions {
+
+        margin-top: 15px;
+        padding-top: 15px;
+    }
+
+}
+
+
+/* =========================================================
+   PREVENT HORIZONTAL OVERFLOW
+   ========================================================= */
+
+html,
+body {
+
+    width: 100%;
+
+    max-width: 100%;
+
+    overflow-x: hidden;
+}
+
+
+.page,
+.topbar,
+.content,
+.card,
+form,
+.fields,
+.field,
+.input-wrap {
+
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+    .users-generated:hover,
+    .delete-btn:hover {
+
+        transform: none;
+
+        box-shadow: none;
+    }
+
+
+    .input-wrap:hover {
+
+        border-color: var(--border);
+    }
+
+
+    .delete-btn {
+
+        min-height: 44px;
+    }
+
+
+    .input-wrap {
+
+        min-height: 44px;
+    }
+
+}

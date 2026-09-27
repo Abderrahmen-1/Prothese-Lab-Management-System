@@ -5,12 +5,15 @@ from ConnectToSql import get_connection
 import os
 from dotenv import load_dotenv
 from datetime import datetime , timedelta , date
+import time
 from chargily_pay import ChargilyClient
 import hmac , hashlib
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import secrets
 from waitress import serve
+from flask_caching import Cache
+from routes.users import users
 
 load_dotenv()
 
@@ -20,6 +23,24 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 limiter = Limiter(get_remote_address, app=app)
 
+app.register_blueprint(users)
+
+@app.before_request
+def start_timer():
+    request.start_time = time.perf_counter()
+
+
+@app.after_request
+def measure_request(response):
+    elapsed = (time.perf_counter() - request.start_time) * 1000
+
+    print(
+        f"{request.method} {request.path} "
+        f"→ {response.status_code} "
+        f"→ {elapsed:.2f} ms"
+    )
+
+    return response
 
 def SearcheTable(cursor, DentistName):
     cursor.execute("""
@@ -33,7 +54,6 @@ def SearcheTable(cursor, DentistName):
 def is_logged_in():
     return "id" in session
 
-
 def login_required():
     if not is_logged_in():
         return redirect(url_for('home'))
@@ -43,7 +63,7 @@ def login_required():
 # ============================== HOME =========================================
 
 @app.route("/log_in", methods=["POST", "GET"])
-@limiter.limit("10 per minute")
+#@limiter.limit("10 per minute")
 def home():
     if request.method == "GET":
         token = secrets.token_hex(16)
@@ -68,6 +88,10 @@ def home():
         username = request.form.get("username")
         password = request.form.get("password")
 
+        print("EMAIL:", email)
+        print("USERNAME:", username)
+        print("PASSWORD RECEIVED:", bool(password))
+
         try:
             CheckData(email, username, password)
         except InvalideNameException:
@@ -78,10 +102,37 @@ def home():
             return render_template("Log-in.html", error="Invalide Email", csrf_token= new_token)
 
         row = ConfirmLogIn(email, username)
+        print("ROW:", row)
+
+        if row:
+            print("PASSWORD CORRECT:",
+                  check_password_hash(row[1], password))
+        else:
+            print("ROW IS NONE")
+
         if row and check_password_hash(row[1], password):
             session['id']       = row[0]
             session['username'] = username
-            return redirect(url_for('getHome'))
+
+            conn = get_connection()
+            cursor = conn.cursor()
+
+            try :
+                cursor.execute("""
+                                SELECT status 
+                                FROM users 
+                                WHERE id = %s """,(session['id'],))
+                found = cursor.fetchone()
+
+                if found[0] == 'block' :
+                    session.clear()
+                    return render_template("Log-in.html", error="No access to log-in", csrf_token=new_token)
+
+                return redirect(url_for('getHome'))
+
+            finally :
+                cursor.close()
+                conn.close()
         else:
             return render_template("Log-in.html", error="Invalid Information", csrf_token= new_token)
 
@@ -968,31 +1019,46 @@ def ModifyVersaPatient():
 
 @app.route("/PatientStat")
 def PatietStat():
+
     if not is_logged_in():
         return redirect(url_for('home'))
+
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
+
     try:
+
         cursor.execute("""
-                        DELETE FROM other_services_stats 
-                        WHERE 
-                         user_id = %s AND 
-                         ( 
-                           year <= YEAR(CURDATE() , INTERVAL 12 MONTH ) 
-                                OR 
-                            ( year = YEAR(CURDATE() , INTERVAL 12 MONTH ) AND 
-                               month <= MONTH(CURDATE() , INTERVAL 12 MONTH ) 
-                        )
-                     """, (session['id'],))
+            DELETE FROM patient_stat
+            WHERE
+                user_id = %s
+                AND (
+                    year < YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
+                    OR (
+                        year = YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
+                        AND month <= MONTH(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
+                    )
+                )
+        """, (session['id'],))
+
         conn.commit()
 
         cursor.execute("""
-            SELECT * FROM patient_stat
+            SELECT *
+            FROM patient_stat
             WHERE user_id = %s
             ORDER BY year DESC, month DESC
         """, (session['id'],))
+
         row = cursor.fetchall()
-        return render_template("PatientsFile.html", stat=row)
+
+        print("PATIENT STAT:", row)
+
+        return render_template(
+            "PatientsFile.html",
+            stat=row
+        )
+
     finally:
         cursor.close()
         conn.close()
@@ -1336,6 +1402,7 @@ def DentistPage():
             cursor.execute("SELECT * FROM dentists WHERE user_id = %s AND dentist_name = %s",
                            (session["id"], DentistName))
             rows = cursor.fetchall()
+
             return render_template("DentistFile.html", result=rows, csrf_token=token)
 
         elif DentistName.isdigit() :
@@ -1346,6 +1413,7 @@ def DentistPage():
             cursor.execute("SELECT * FROM dentists WHERE user_id = %s AND patient_number = %s",
                            (session['id'], DentistName))
             rows = cursor.fetchall()
+
             return render_template("DentistFile.html", result=rows, csrf_token=token)
 
         else:
@@ -2506,48 +2574,75 @@ def ShowTotal():
 
 @app.route("/DentistsStat")
 def DentistsStat():
+
     if not is_logged_in():
         return redirect(url_for('home'))
+
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
+
     try:
+        # Delete statistics older than 12 months
         cursor.execute("""
-                        DELETE FROM other_services_stats 
-                        WHERE 
-                         user_id = %s AND 
-                           ( 
-                              year <= YEAR(CURDATE() , INTERVAL 12 MONTH ) 
-                                  OR 
-                                  ( year = YEAR(CURDATE() , INTERVAL 12 MONTH ) AND 
-                                      month <= MONTH(CURDATE() , INTERVAL 12 MONTH ) 
-                            )
-                        """, (session['id'],))
+            DELETE FROM dentist_stat
+            WHERE user_id = %s
+              AND (
+                    year < YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
+                    OR (
+                        year = YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
+                        AND month <= MONTH(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
+                    )
+              )
+        """, (session['id'],))
         conn.commit()
 
-
+        # Delete empty statistics
         cursor.execute("""
-                        DELETE FROM dentist_stat
-                        WHERE 
-                        total_khedma = 0 AND khalsin = 0 AND machi_khalsin = 0 AND user_id = %s 
-                        """,(session['id'],))
+            DELETE FROM dentist_stat
+            WHERE total_khedma = 0
+              AND khalsin = 0
+              AND machi_khalsin = 0
+              AND user_id = %s
+        """, (session['id'],))
+
         conn.commit()
 
+        # Get all dentists
         dentists_list = GetAllDentistTables(cursor)
         result = {}
         for dentist in dentists_list:
+
             cursor.execute("""
-                SELECT * FROM dentist_stat
-                WHERE user_id = %s AND dentist_name = %s
+                SELECT *
+                FROM dentist_stat
+                WHERE user_id = %s
+                  AND dentist_name = %s
                 ORDER BY year DESC, month DESC
             """, (session['id'], dentist))
-            result[dentist] = cursor.fetchall()
-        if result:
-            return render_template("DentistFile.html", message="The Stat Table", result=result)
-        return render_template("DentistFile.html", message="Table Not Found (There is no Dentists)")
 
-    except Exception as e :
+            rows = cursor.fetchall()
+
+            # Only add dentist if statistics exist
+            if rows:
+                result[dentist] = rows
+
+        # Statistics found
+        if result:
+            return render_template(
+                "DentistFile.html",
+                message="The Stat Table",
+                result=result)
+
+        # No statistics found
+        return render_template(
+            "DentistFile.html",
+            message="Table Not Found (There are no statistics)")
+
+    except Exception as e:
         conn.rollback()
-        return render_template("DentistFile.html", message=f"error {str(e)}")
+        return render_template(
+            "DentistFile.html",
+            message=f"error {str(e)}")
 
     finally:
         cursor.close()
@@ -2766,7 +2861,7 @@ def khedmaMkemla():
                     for find in found2 :
                         if find[0] == result[1] :
                             if find[1] == 'no' :
-                                return render_template("FinishedKhedma.html", message=f"Le service et toujours avec le prothesist {found[0]} ", csrf_token=new_token)
+                                return render_template("FinishedKhedma.html", message=f"Le service et toujours avec le prothesist {find[0]} ", csrf_token=new_token)
 
                 cursor.execute("""
                                 SELECT 1 
@@ -2862,7 +2957,7 @@ def khedmaMkemla():
                         if find[0] == result[1]:
                             if find[1] == 'no':
                                 return render_template("FinishedKhedma.html",
-                                                       message=f"Le service et toujours avec le prothesist {found[0]} ", csrf_token=new_token)
+                                                       message=f"Le service et toujours avec le prothesist {find[0]} ", csrf_token=new_token)
 
                 cursor.execute("""
                                 SELECT 1 
@@ -5112,39 +5207,75 @@ def ProStat():
 
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
+
     try:
         cursor.execute("""
-                        DELETE FROM other_services_stats 
-                        WHERE 
-                         user_id = %s AND 
-                         ( 
-                            year <= YEAR(CURDATE() , INTERVAL 12 MONTH ) 
-                                OR 
-                                ( year = YEAR(CURDATE() , INTERVAL 12 MONTH ) AND 
-                                    month <= MONTH(CURDATE() , INTERVAL 12 MONTH ) 
-                        )
-                        """, (session['id'],))
+            DELETE FROM other_services_stats
+            WHERE
+                user_id = %s
+                AND (
+                    year < YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
+                    OR (
+                        year = YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
+                        AND month <= MONTH(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
+                    )
+                )
+        """, (session['id'],))
         conn.commit()
 
         cursor.execute("""
-                        DELETE FROM prothesist_stat
-                        WHERE 
-                        user_id = %s AND total_khedma = 0 AND khalsin = 0 AND machi_khalsin = 0 
-                        """,(session['id'],))
+            DELETE FROM prothesist_stat
+            WHERE
+                user_id = %s
+                AND total_khedma = 0
+                AND khalsin = 0
+                AND machi_khalsin = 0
+        """, (session['id'],))
+
         conn.commit()
 
         Pro_list = GetAllProthesists(cursor)
         result = {}
         for Pro in Pro_list:
+
             cursor.execute("""
-                SELECT * FROM prothesist_stat
-                WHERE user_id = %s AND prothesist_name = %s AND prothesist_number = %s
+                SELECT *
+                FROM prothesist_stat
+                WHERE user_id = %s
+                  AND prothesist_name = %s
+                  AND prothesist_number = %s
                 ORDER BY year DESC, month DESC
             """, (session['id'], Pro[1], Pro[0]))
-            result[Pro] = cursor.fetchall()
+
+            rows = cursor.fetchall()
+
+            # Only add the prothesist if statistics exist
+            if rows:
+                result[Pro] = rows
+
         if result:
-            return render_template("ProStats.html", message="The Stat Table", result=result, csrf_token= token)
-        return render_template("ProStats.html", message="Table Not Found (There is no Prothesists)", csrf_token= token)
+            return render_template(
+                "ProStats.html",
+                message="The Stat Table",
+                result=result,
+                csrf_token=token
+            )
+
+
+        return render_template(
+            "ProStats.html",
+            message="Table Not Found (There are no statistics)",
+            csrf_token=token
+        )
+
+    except Exception as e:
+        conn.rollback()
+        return render_template(
+            "ProStats.html",
+            message=f"error {str(e)}",
+            csrf_token=token
+        )
+
     finally:
         cursor.close()
         conn.close()
@@ -5356,9 +5487,9 @@ def OtherServicesTable():
         result = cursor.fetchall()
 
         if result:
-            return render_template("OtherServices.html", result=result, message="The Other Services Table")
+            return render_template("OtherServices.html", result=result, message="The Other Services Table", csrf_token=token)
         else:
-            return render_template("OtherServices.html", error="Empty Table")
+            return render_template("OtherServices.html", error="Empty Table", csrf_token=token)
 
     finally:
         cursor.close()
@@ -5783,15 +5914,16 @@ def ServicesStat():
 
     try:
         cursor.execute("""
-                        DELETE FROM other_services_stats 
-                        WHERE 
-                         user_id = %s AND 
-                         ( 
-                            year <= YEAR(CURDATE() , INTERVAL 12 MONTH ) 
-                                OR 
-                                ( year = YEAR(CURDATE() , INTERVAL 12 MONTH ) AND 
-                                    month <= MONTH(CURDATE() , INTERVAL 12 MONTH ) 
-                         )
+                        DELETE FROM other_services_stats
+                        WHERE
+                            user_id = %s
+                            AND (
+                                year < YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
+                                OR (
+                                    year = YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
+                                    AND month <= MONTH(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
+                                )
+                            )
                         """,(session['id'],))
         conn.commit()
 

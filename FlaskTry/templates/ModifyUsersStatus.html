@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Modify User Status - DentaFlow Prosthetics Lab Management System">
+
+    <meta name="keywords"
+          content="DentaFlow, User Status, User Management, Prosthetics Lab">
+
+    <meta name="author"
+          content="Prosthetics Lab Team">
+
+    <title>DentaFlow - Modify User Status</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='ModifyUsersStatus.css') }}">
+
+    <link rel="icon"
+          href="{{ url_for('static', filename='favicon.ico') }}"
+          type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<!-- =========================================================
+     TOP NAVIGATION
+     ========================================================= -->
+
+<nav class="top-nav">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fas fa-tooth"></i>
+        </div>
+
+        <div class="brand-text">
+            <strong>DentaFlow</strong>
+            <span>Prosthetics Lab</span>
+        </div>
+
+        <a href="{{ url_for('users.ConfirmOwnerData') }}" class="users-generated">
+            <i class="fas fa-user-shield"></i>
+            <span>Back to Home</span>
+        </a>
+
+
+    </div>
+
+
+    <div class="nav-status">
+
+        <span class="status-dot"></span>
+
+        System Online
+
+    </div>
+
+
+    <div class="user-profile">
+
+        {% if letter %}
+
+        <div class="avatar">
+            {{ letter }}
+        </div>
+
+        {% else %}
+
+        <div class="avatar">
+            U
+        </div>
+
+        {% endif %}
+
+
+        <div class="user-meta">
+
+            {% if username %}
+
+            <strong>
+                {{ username }}
+            </strong>
+
+            {% else %}
+
+            <strong>
+                Admin
+            </strong>
+
+            {% endif %}
+
+            <span>
+                Lab Admin
+            </span>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================================================
+     MAIN CONTENT
+     ========================================================= -->
+
+<main class="modify-container">
+
+
+    <!-- HERO -->
+
+    <section class="modify-hero">
+
+        <div class="modify-hero-content">
+
+            <span class="modify-label">
+
+                <i class="fas fa-user-shield"></i>
+
+                USER MANAGEMENT
+
+            </span>
+
+
+            <h1>
+
+                Modify User
+
+                <span>Status</span>
+
+            </h1>
+
+
+            <p>
+
+                Update the account status of an existing
+                DentaFlow user.
+
+            </p>
+
+        </div>
+
+
+        <div class="modify-decoration">
+
+            <div class="modify-circle modify-circle-one"></div>
+
+            <div class="modify-circle modify-circle-two"></div>
+
+            <i class="fas fa-user-shield modify-user-icon"></i>
+
+        </div>
+
+    </section>
+
+
+    <!-- SECTION HEADER -->
+
+    <div class="modify-section-header">
+
+        <div>
+
+            <h2>
+                User Information
+            </h2>
+
+            <p>
+                Enter the user's information before applying the new status.
+            </p>
+
+        </div>
+
+
+        <div class="status-badge">
+
+            <i class="fas fa-lock"></i>
+
+            Status Control
+
+        </div>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <section class="modify-card">
+
+        <form action="/users/ModifyStatus" id="modifyStatusForm" method="POST">
+
+            <!-- CSRF -->
+            <input
+                    type="hidden"
+                    name="csrf_token"
+                    id="csrf_token"
+                    value="{{ csrf_token }}"
+            >
+
+            <div class="form-grid">
+
+                <!-- USERNAME -->
+
+                <div class="form-group">
+
+                    <label
+                            class="form-label"
+                            for="userName">
+
+                        <i class="fas fa-user"></i>
+
+                        Username
+
+                    </label>
+
+
+                    <input
+                            class="form-input"
+                            type="text"
+                            id="userName"
+                            name="userName"
+                            placeholder="Enter username"
+                            minlength="5"
+                            required
+                    >
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label
+                            class="form-label"
+                            for="email">
+
+                        <i class="fas fa-envelope"></i>
+
+                        Email
+
+                    </label>
+
+
+                    <input
+                            class="form-input"
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter email address"
+                            required
+                    >
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label
+                            class="form-label"
+                            for="phoneNumber">
+
+                        <i class="fas fa-phone"></i>
+
+                        Phone Number
+
+                    </label>
+
+
+                    <input
+                            class="form-input"
+                            type="text"
+                            id="phoneNumber"
+                            name="phoneNumber"
+                            placeholder="Enter 10 digit phone number"
+                            maxlength="10"
+                            inputmode="numeric"
+                            required
+                    >
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="form-group">
+
+                    <label
+                            class="form-label"
+                            for="NewStatus">
+
+                        <i class="fas fa-user-lock"></i>
+
+                        New Status
+
+                    </label>
+
+
+                    <div class="status-select-wrapper">
+
+                        <select
+                                class="form-select"
+                                id="NewStatus"
+                                name="NewStatus"
+                                required
+                        >
+
+                            <option value="block">
+                                Block
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="form-footer">
+
+                <div class="security-info">
+
+                    <i class="fas fa-shield-halved"></i>
+
+                    <span>
+                        This action is protected by CSRF validation.
+                    </span>
+
+                </div>
+
+
+                <button
+                        type="submit"
+                        class="modify-button">
+
+                    <i class="fas fa-user-lock"></i>
+
+                    Modify User Status
+
+                </button>
+            </div>
+
+            <!-- Success/Error Messages -->
+            {% if message %}
+            <div class="alert-container">
+                <div class="alert alert-success fade-in">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="alert-content">
+                        <h3>Success</h3>
+                        <p>{{ message }}</p>
+                    </div>
+                    <button
+                            class="alert-close"
+                            type="button"
+                            onclick="this.parentElement.style.display='none'"
+                    >
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div class="alert-container">
+                <div class="alert alert-error fade-in-slow">
+                    <i class="fas fa-exclamation-circle"></i>
+
+                    <div class="alert-content">
+                        <h3>Error</h3>
+                        <p>{{ error }}</p>
+                    </div>
+
+                    <button class="alert-close"
+                            type="button"
+                            onclick="this.parentElement.style.display='none'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+        </form>
+
+
+        <!-- RESPONSE MESSAGE -->
+
+        <div id="message"></div>
+
+    </section>
+
+
+</main>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+
+</body>
+</html>
+

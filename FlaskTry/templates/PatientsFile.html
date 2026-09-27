@@ -10,704 +10,1476 @@
     <title>Patients Management System</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='PatientFile.css') }}">
+
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Sora:wght@400;500;600&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
+
 <div class="animated-bg"></div>
 
 <div class="container">
+
+    <!-- ================= HEADER ================= -->
+
     <header class="header">
+
         <div class="header-content">
+
             <div class="logo-section">
+
                 <div class="logo-icon">
                     <i class="fas fa-wheelchair"></i>
                 </div>
+
                 <div class="logo-text">
                     <h1>PatientHub</h1>
                     <p>Prosthetics Lab Patient Management</p>
                 </div>
+
             </div>
+
             <nav class="header-nav">
+
                 <a href="/HomePage" class="nav-btn back-btn">
-                    <i class="fas fa-arrow-left"></i> Back to Menu
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Menu
                 </a>
+
                 <a href="/AllPatientsHistory" class="nav-btn history-btn">
-                    <i class="fas fa-history"></i> History
+                    <i class="fas fa-history"></i>
+                    History
                 </a>
+
             </nav>
+
         </div>
+
     </header>
 
-    <!-- Dynamic Search Section container -->
+
+    <!-- ================= SEARCH ================= -->
+
     <div id="search-bar-container">
-        {% if (data and not stat and not dataASC and not datDESC and not dataDeadLine and not dataPrice) or (not data and not stat and not dataASC and not datDESC and not dataDeadLine and not dataPrice) %}
+
+        {% if (data and not stat and not dataASC and not datDESC and not dataDeadLine and not dataPrice)
+        or (not data and not stat and not dataASC and not datDESC and not dataDeadLine and not dataPrice) %}
+
         <div class="search-section">
-            <form action="{{ url_for('PatientPage') }}" method="POST" class="search-form" id="search-form">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            <form action="{{ url_for('PatientPage') }}"
+                  method="POST"
+                  class="search-form"
+                  id="search-form">
+
+                <input type="hidden"
+                       name="csrf_token"
+                       value="{{ csrf_token }}">
 
                 <div class="search-wrapper">
+
                     <i class="fas fa-search"></i>
+
                     <input
                             type="text"
                             name="SearchBar"
                             placeholder="Search patient by name... or by number..."
                             class="search-input"
                     >
+
                     <button type="submit" class="search-btn">
-                        <i class="fas fa-magnifying-glass"></i> Search
+                        <i class="fas fa-magnifying-glass"></i>
+                        Search
                     </button>
+
                 </div>
+
             </form>
+
         </div>
+
         {% endif %}
+
     </div>
 
 
+    <!-- ================= MAIN LAYOUT ================= -->
+
     <div class="main-layout">
+
+
+        <!-- ================= SIDEBAR ================= -->
+
         <aside class="sidebar">
+
             <div class="sidebar-header">
+
                 <h2>
-                    <i class="fas fa-users"></i> Patient Actions
+                    <i class="fas fa-users"></i>
+                    Patient Actions
                 </h2>
+
                 <div class="header-accent"></div>
+
             </div>
 
+
             <nav class="sidebar-menu">
+
+
+                <!-- MANAGEMENT -->
+
                 <div class="menu-group">
-                    <h3 class="group-title">Management</h3>
-                    <a href="/AddPatient" class="menu-item add-item">
+
+                    <h3 class="group-title">
+                        Management
+                    </h3>
+
+                    <a href="/AddPatient"
+                       class="menu-item add-item">
+
                         <i class="fas fa-user-plus"></i>
+
                         <span>Add Patient</span>
-                        <span class="badge badge-add">+</span>
+
+                        <span class="badge badge-add">
+                            +
+                        </span>
+
                     </a>
-                    <a href="/DeletePatient" class="menu-item delete-item">
+
+
+                    <a href="/DeletePatient"
+                       class="menu-item delete-item">
+
                         <i class="fas fa-user-minus"></i>
+
                         <span>Delete Patient</span>
-                        <span class="badge badge-delete">−</span>
+
+                        <span class="badge badge-delete">
+                            −
+                        </span>
+
                     </a>
-                    <a href="/ModifyVersaPatient" class="menu-item modify-item">
+
+
+                    <a href="/ModifyVersaPatient"
+                       class="menu-item modify-item">
+
                         <i class="fas fa-user-edit"></i>
+
                         <span>Modify Versa</span>
-                        <span class="badge badge-delete">✎</span>
+
+                        <span class="badge badge-delete">
+                            ✎
+                        </span>
+
                     </a>
-                    <a href="/Patient" class="menu-item main-item ajax-link">
+
+
+                    <a href="/Patient"
+                       class="menu-item main-item ajax-link">
+
                         <i class="fas fa-table"></i>
+
                         <span>All Patients</span>
-                        <span class="badge">All</span>
+
+                        <span class="badge">
+                            All
+                        </span>
+
                     </a>
+
                 </div>
 
+
+                <!-- SORT & FILTER -->
+
                 <div class="menu-group">
-                    <h3 class="group-title">Sort & Filter</h3>
-                    <a href="/PatientByDateASC" class="menu-item sort-item ajax-link">
+
+                    <h3 class="group-title">
+                        Sort & Filter
+                    </h3>
+
+
+                    <a href="/PatientByDateASC"
+                       class="menu-item sort-item ajax-link">
+
                         <i class="fas fa-arrow-up-short-wide"></i>
-                        <span>Date (Old → New)</span>
-                        <span class="badge">ASC</span>
+
+                        <span>
+                            Date (Old → New)
+                        </span>
+
+                        <span class="badge">
+                            ASC
+                        </span>
+
                     </a>
-                    <a href="/PatientByDateDESC" class="menu-item sort-item ajax-link">
+
+
+                    <a href="/PatientByDateDESC"
+                       class="menu-item sort-item ajax-link">
+
                         <i class="fas fa-arrow-down-wide-short"></i>
-                        <span>Date (New → Old)</span>
-                        <span class="badge">DESC</span>
+
+                        <span>
+                            Date (New → Old)
+                        </span>
+
+                        <span class="badge">
+                            DESC
+                        </span>
+
                     </a>
-                    <a href="/PatientByDeadLine" class="menu-item deadline-item ajax-link">
+
+
+                    <a href="/PatientByDeadLine"
+                       class="menu-item deadline-item ajax-link">
+
                         <i class="fas fa-calendar-check"></i>
-                        <span>By Deadline</span>
-                        <span class="badge">Urgent</span>
+
+                        <span>
+                            By Deadline
+                        </span>
+
+                        <span class="badge">
+                            Urgent
+                        </span>
+
                     </a>
-                    <a href="/PatientByB9aw" class="menu-item price-item ajax-link">
+
+
+                    <a href="/PatientByB9aw"
+                       class="menu-item price-item ajax-link">
+
                         <i class="fas fa-tag"></i>
-                        <span>By Cost (B9aw)</span>
-                        <span class="badge">Cost</span>
+
+                        <span>
+                            By Cost (B9aw)
+                        </span>
+
+                        <span class="badge">
+                            Cost
+                        </span>
+
                     </a>
+
                 </div>
 
+
+                <!-- ANALYTICS -->
+
                 <div class="menu-group">
-                    <h3 class="group-title">Analytics</h3>
-                    <a href="/PatientStat" class="menu-item stats-item ajax-link">
+
+                    <h3 class="group-title">
+                        Analytics
+                    </h3>
+
+                    <a href="/PatientStat"
+                       class="menu-item stats-item ajax-link">
+
                         <i class="fas fa-chart-line"></i>
-                        <span>Statistics</span>
-                        <span class="badge badge-stats">📊</span>
+
+                        <span>
+                            Statistics
+                        </span>
+
+                        <span class="badge badge-stats">
+                            📊
+                        </span>
+
                     </a>
+
                 </div>
 
             </nav>
 
+
             {% if message %}
+
             <div class="sidebar-message">
+
                 <i class="fas fa-check-circle"></i>
-                <p>{{ message }}</p>
+
+                <p>
+                    {{ message }}
+                </p>
+
             </div>
+
             {% endif %}
+
         </aside>
 
+
+        <!-- ================= CONTENT ================= -->
+
         <main class="content">
+
+
             {% if message %}
+
             <div class="alert-container">
+
                 <div class="alert alert-success fade-in">
+
                     <div class="alert-icon">
                         <i class="fas fa-check-circle"></i>
                     </div>
+
                     <div class="alert-content">
-                        <h3>Success</h3>
-                        <p>{{ message }}</p>
+
+                        <h3>
+                            Success
+                        </h3>
+
+                        <p>
+                            {{ message }}
+                        </p>
+
                     </div>
-                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+
+                    <button class="alert-close"
+                            onclick="this.parentElement.style.display='none'">
+
                         <i class="fas fa-times"></i>
+
                     </button>
+
                 </div>
+
             </div>
+
             {% endif %}
 
-            <div id="statusMessage" class="status-message"></div>
 
-            <div class="tables-container" id="tables-container">
-                {% if data and not (dataASC or dataDESC or dataDeadLine or dataPrice or stat or History) %}
-                <div class="table-card fade-in">
-                    <div class="table-header highlight-primary">
-                        <div class="header-left">
-                            <h2><i class="fas fa-list-ul"></i> All Patients</h2>
-                            <span class="result-count">{{ data|length }} patients</span>
-                        </div>
-                    </div>
-                    <div class="table-wrapper">
-                        <table class="data-table">
-                            <thead>
-                            <tr>
-                                <th><span class="th-content"><i class="fas fa-id-card"></i> Service ID</span></th>
-                                <th><span class="th-content"><i class="fas fa-user"></i> First Name</span></th>
-                                <th><span class="th-content"><i class="fas fa-user-tag"></i> Last Name</span></th>
-                                <th><span class="th-content"><i class="fas fa-phone"></i> Patient Number</span></th>
-                                <th><span class="th-content"><i class="fas fa-teeth"></i> Service Type</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar-alt"></i> Enter Date</span></th>
-                                <th><span class="th-content"><i class="fas fa-check-circle"></i> Finished?</span></th>
-                                <th><span class="th-content"><i class="fas fa-money-bill-wave"></i> Price</span></th>
-                                <th><span class="th-content"><i class="fas fa-credit-card"></i> Payed?</span></th>
-                                <th><span class="th-content"><i class="fas fa-money-bill-wave"></i> Versement</span>
-                                </th>
-                                <th><span class="th-content"><i class="fas fa-coins"></i> Rest</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar-check"></i> Deadline</span></th>
-                                <th><span class="th-content"><i class="fas fa-tasks"></i> Status</span></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for row in data %}
-                                <tr class="table-row-animate">
-                                    <td>{{ row[0] }}</td>
-                                    <td>{{ row[2] }}</td>
-                                    <td>{{ row[3] }}</td>
-                                    <td>{{ row[4] }}</td>
-                                    <td>{{ row[5] }}</td>
-                                    <td>{{ row[6] }}</td>
-                                    <td>{{ row[7] }}</td>
-                                    <td>{{ row[8] }}</td>
-                                    <td>{{ row[9] }}</td>
-                                    <td>{{ row[10] }}</td>
-                                    <td>{{ row[11] }}</td>
-                                    <td>{{ row[12] }}</td>
-                                    {% if row[13] != 'finished' %}
-                                        <td>
-                                            <select
-                                                    class="status-select"
-                                                    data-patient-number="{{ row[4] }}"
-                                                    >
-
-                                                {% if row[13] == 'in process' %}
-                                                <option value="in process" selected>In Process</option>
-                                                {% else %}
-                                                <option value="in process">In Process</option>
-                                                {% endif %}
-
-                                                {% if row[13] == 'prothesist' %}
-                                                <option value="prothesist" selected>Prothesist</option>
-                                                {% else %}
-                                                <option value="prothesist">Prothesist</option>
-                                                {% endif %}
-
-                                                {% if row[13] == 'montage' %}
-                                                <option value="montage" selected>Montage</option>
-                                                {% else %}
-                                                <option value="montage">Montage</option>
-                                                {% endif %}
-
-                                                {% if row[13] == 'esseyage' %}
-                                                <option value="esseyage" selected>Esseyage</option>
-                                                {% else %}
-                                                <option value="esseyage">Esseyage</option>
-                                                {% endif %}
-                                            </select>
-                                        </td>
-                                    {% else %}
-                                        <td>{{ row[13] }}</td>
-                                    {% endif %}
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if dataASC %}
-                <div class="table-card fade-in">
-                    <div class="table-header highlight-success">
-                        <div class="header-left">
-                            <h2><i class="fas fa-arrow-up-short-wide"></i> Patients by Date (Old → New)</h2>
-                            <span class="result-count">{{ dataASC|length }} patients</span>
-                        </div>
-                    </div>
-                    <div class="table-wrapper">
-                        <table class="data-table">
-                            <thead>
-                            <tr>
-                                <th><span class="th-content"><i class="fas fa-id-card"></i> khedma ID</span></th>
-                                <th><span class="th-content"><i class="fas fa-user"></i> First Name</span></th>
-                                <th><span class="th-content"><i class="fas fa-user-tag"></i> Last Name</span></th>
-                                <th><span class="th-content"><i class="fas fa-phone"></i> Number</span></th>
-                                <th><span class="th-content"><i class="fas fa-teeth"></i> khedma Type</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar-alt"></i> Enter Date</span></th>
-                                <th><span class="th-content"><i class="fas fa-check-circle"></i> Finished?</span></th>
-                                <th><span class="th-content"><i class="fas fa-money-bill-wave"></i> Price</span></th>
-                                <th><span class="th-content"><i class="fas fa-credit-card"></i> Payed?</span></th>
-                                <th><span class="th-content"><i class="fas fa-money-bill-wave"></i> Versement</span>
-                                </th>
-                                <th><span class="th-content"><i class="fas fa-coins"></i> Rest</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar-check"></i> Deadline</span></th>
-                                <th><span class="th-content"><i class="fas fa-tasks"></i> Status</span></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for row in dataASC %}
-                            <tr class="table-row-animate">
-                                <td>{{ row[0] }}</td>
-                                <td>{{ row[2] }}</td>
-                                <td>{{ row[3] }}</td>
-                                <td>{{ row[4] }}</td>
-                                <td>{{ row[5] }}</td>
-                                <td>{{ row[6] }}</td>
-                                <td>{{ row[7] }}</td>
-                                <td>{{ row[8] }}</td>
-                                <td>{{ row[9] }}</td>
-                                <td>{{ row[10] }}</td>
-                                <td>{{ row[11] }}</td>
-                                <td>{{ row[12] }}</td>
-                                <td>{{ row[13] }}</td>
-                            </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if dataDESC %}
-                <div class="table-card fade-in">
-                    <div class="table-header highlight-info">
-                        <div class="header-left">
-                            <h2><i class="fas fa-arrow-down-wide-short"></i> Patients by Date (New → Old)</h2>
-                            <span class="result-count">{{ dataDESC|length }} patients</span>
-                        </div>
-                    </div>
-                    <div class="table-wrapper">
-                        <table class="data-table">
-                            <thead>
-                            <tr>
-                                <th><span class="th-content"><i class="fas fa-id-card"></i> khedma ID</span></th>
-                                <th><span class="th-content"><i class="fas fa-user"></i> First Name</span></th>
-                                <th><span class="th-content"><i class="fas fa-user-tag"></i> Last Name</span></th>
-                                <th><span class="th-content"><i class="fas fa-phone"></i> Number</span></th>
-                                <th><span class="th-content"><i class="fas fa-teeth"></i> khedma Type</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar-alt"></i> Enter Date</span></th>
-                                <th><span class="th-content"><i class="fas fa-check-circle"></i> Finished?</span></th>
-                                <th><span class="th-content"><i class="fas fa-money-bill-wave"></i> Price</span></th>
-                                <th><span class="th-content"><i class="fas fa-credit-card"></i> Payed?</span></th>
-                                <th><span class="th-content"><i class="fas fa-money-bill-wave"></i> Versement</span>
-                                </th>
-                                <th><span class="th-content"><i class="fas fa-coins"></i> Rest</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar-check"></i> Deadline</span></th>
-                                <th><span class="th-content"><i class="fas fa-tasks"></i> Status</span></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for row in dataDESC %}
-                            <tr class="table-row-animate">
-                                <td>{{ row[0] }}</td>
-                                <td>{{ row[2] }}</td>
-                                <td>{{ row[3] }}</td>
-                                <td>{{ row[4] }}</td>
-                                <td>{{ row[5] }}</td>
-                                <td>{{ row[6] }}</td>
-                                <td>{{ row[7] }}</td>
-                                <td>{{ row[8] }}</td>
-                                <td>{{ row[9] }}</td>
-                                <td>{{ row[10] }}</td>
-                                <td>{{ row[11] }}</td>
-                                <td>{{ row[12] }}</td>
-                                <td>{{ row[13] }}</td>
-                            </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if dateDeadLine %}
-                <div class="table-card fade-in">
-                    <div class="table-header highlight-warning">
-                        <div class="header-left">
-                            <h2><i class="fas fa-calendar-alert"></i> Patients by Deadline</h2>
-                            <span class="result-count">{{ dateDeadLine|length }} patients</span>
-                        </div>
-                    </div>
-                    <div class="table-wrapper">
-                        <table class="data-table">
-                            <thead>
-                            <tr>
-                                <th><span class="th-content"><i class="fas fa-id-card"></i> khedma ID</span></th>
-                                <th><span class="th-content"><i class="fas fa-user"></i> First Name</span></th>
-                                <th><span class="th-content"><i class="fas fa-user-tag"></i> Last Name</span></th>
-                                <th><span class="th-content"><i class="fas fa-phone"></i> Number</span></th>
-                                <th><span class="th-content"><i class="fas fa-teeth"></i> khedma Type</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar-alt"></i> Enter Date</span></th>
-                                <th><span class="th-content"><i class="fas fa-check-circle"></i> Finished?</span></th>
-                                <th><span class="th-content"><i class="fas fa-money-bill-wave"></i> Price</span></th>
-                                <th><span class="th-content"><i class="fas fa-credit-card"></i> Payed?</span></th>
-                                <th><span class="th-content"><i class="fas fa-money-bill-wave"></i> Versement</span>
-                                </th>
-                                <th><span class="th-content"><i class="fas fa-coins"></i> Rest</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar-check"></i> Deadline</span></th>
-                                <th><span class="th-content"><i class="fas fa-tasks"></i> Status</span></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for row in dateDeadLine %}
-                            <tr class="table-row-animate">
-                                <td>{{ row[0] }}</td>
-                                <td>{{ row[2] }}</td>
-                                <td>{{ row[3] }}</td>
-                                <td>{{ row[4] }}</td>
-                                <td>{{ row[5] }}</td>
-                                <td>{{ row[6] }}</td>
-                                <td>{{ row[7] }}</td>
-                                <td>{{ row[8] }}</td>
-                                <td>{{ row[9] }}</td>
-                                <td>{{ row[10] }}</td>
-                                <td>{{ row[11] }}</td>
-                                <td>{{ row[12] }}</td>
-                                <td>{{ row[13] }}</td>
-                            </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if dataPrice %}
-                <div class="table-card fade-in">
-                    <div class="table-header highlight-accent">
-                        <div class="header-left">
-                            <h2><i class="fas fa-tag"></i> Patients by Cost</h2>
-                            <span class="result-count">{{ dataPrice|length }} patients</span>
-                        </div>
-                    </div>
-                    <div class="table-wrapper">
-                        <table class="data-table">
-                            <thead>
-                            <tr>
-                                <th><span class="th-content"><i class="fas fa-id-card"></i> khedma ID</span></th>
-                                <th><span class="th-content"><i class="fas fa-user"></i> First Name</span></th>
-                                <th><span class="th-content"><i class="fas fa-user-tag"></i> Last Name</span></th>
-                                <th><span class="th-content"><i class="fas fa-phone"></i> Number</span></th>
-                                <th><span class="th-content"><i class="fas fa-teeth"></i> khedma Type</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar-alt"></i> Enter Date</span></th>
-                                <th><span class="th-content"><i class="fas fa-check-circle"></i> Finished?</span></th>
-                                <th><span class="th-content"><i class="fas fa-money-bill-wave"></i> Price</span></th>
-                                <th><span class="th-content"><i class="fas fa-credit-card"></i> Payed?</span></th>
-                                <th><span class="th-content"><i class="fas fa-money-bill-wave"></i> Versement</span>
-                                </th>
-                                <th><span class="th-content"><i class="fas fa-coins"></i> Rest</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar-check"></i> Deadline</span></th>
-                                <th><span class="th-content"><i class="fas fa-tasks"></i> Status</span></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for row in dataPrice %}
-                            <tr class="table-row-animate">
-                                <td>{{ row[0] }}</td>
-                                <td>{{ row[2] }}</td>
-                                <td>{{ row[3] }}</td>
-                                <td>{{ row[4] }}</td>
-                                <td>{{ row[5] }}</td>
-                                <td>{{ row[6] }}</td>
-                                <td>{{ row[7] }}</td>
-                                <td>{{ row[8] }}</td>
-                                <td>{{ row[9] }}</td>
-                                <td>{{ row[10] }}</td>
-                                <td>{{ row[11] }}</td>
-                                <td>{{ row[12] }}</td>
-                                <td>{{ row[13] }}</td>
-                            </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if stat %}
-                <div class="table-card fade-in">
-                    <div class="table-header highlight-stats">
-                        <div class="header-left">
-                            <h2><i class="fas fa-chart-pie"></i> Patient Statistics</h2>
-                            <span class="result-count">Statistical Analysis</span>
-                        </div>
-                    </div>
-                    <div class="table-wrapper">
-                        <table class="data-table summary-table">
-                            <thead>
-                            <tr>
-                                <th><span class="th-content"><i class="fas fa-hashtag"></i> Stat ID</span></th>
-                                <th><span class="th-content"><i class="fas fa-users"></i> Patient Count</span></th>
-                                <th><span class="th-content"><i class="fas fa-wallet"></i> Khalsin (Sum)</span></th>
-                                <th><span class="th-content"><i
-                                        class="fas fa-hand-holding-usd"></i> Not Khalsin (Sum)</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar-minus"></i> Month</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar"></i> Year</span></th>
-                                <th><span class="th-content"><i class="fas fa-user-circle"></i> User ID</span></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for row in stat %}
-                            <tr class="table-row-animate">
-                                {% for item in row %}
-                                <td>{{ item }}</td>
-                                {% endfor %}
-                            </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if History %}
-                <div class="table-card fade-in">
-                    <div class="table-header highlight-history">
-                        <div class="header-left">
-                            <h2><i class="fas fa-history"></i> Patient History</h2>
-                            <span class="result-count">{{ History|length }} records</span>
-                        </div>
-                    </div>
-                    <div class="table-wrapper">
-                        <table class="data-table">
-                            <thead>
-                            <tr>
-                                <th><span class="th-content"><i class="fas fa-user"></i> First Name</span></th>
-                                <th><span class="th-content"><i class="fas fa-user-tag"></i> Last Name</span></th>
-                                <th><span class="th-content"><i class="fas fa-phone"></i> Number</span></th>
-                                <th><span class="th-content"><i class="fas fa-clock"></i> Date</span></th>
-                                <th><span class="th-content"><i class="fas fa-concierge-bell"></i> Service</span></th>
-                                <th><span class="th-content"><i class="fas fa-user-circle"></i> User ID</span></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for row in History %}
-                            <tr class="table-row-animate">
-                                {% for item in row %}
-                                <td>{{ item }}</td>
-                                {% endfor %}
-                            </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {% endif %}
+            <div id="statusMessage"
+                 class="status-message">
             </div>
 
-            {% if not data and not dataASC and not dataDESC and not dataDeadLine and not dataPrice and not stat and not
-            History %}
+
+            <!-- ================= TABLE CONTAINER ================= -->
+
+            <div class="tables-container"
+                 id="tables-container">
+
+
+                <!-- ================= ALL PATIENTS ================= -->
+
+                {% if data and not (dataASC or dataDESC or dataDeadLine or dataPrice or stat or History) %}
+
+                <div class="table-card fade-in">
+
+                    <div class="table-header highlight-primary">
+
+                        <div class="header-left">
+
+                            <h2>
+                                <i class="fas fa-list-ul"></i>
+                                All Patients
+                            </h2>
+
+                            <span class="result-count">
+                                {{ data|length }} patients
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                            <tr>
+
+                                <th>
+                                    <span class="th-content">
+                                        <i class="fas fa-id-card"></i>
+                                        Service ID
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span class="th-content">
+                                        <i class="fas fa-user"></i>
+                                        First Name
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span class="th-content">
+                                        <i class="fas fa-user-tag"></i>
+                                        Last Name
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span class="th-content">
+                                        <i class="fas fa-phone"></i>
+                                        Patient Number
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span class="th-content">
+                                        <i class="fas fa-teeth"></i>
+                                        Service Type
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span class="th-content">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        Enter Date
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span class="th-content">
+                                        <i class="fas fa-check-circle"></i>
+                                        Finished?
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span class="th-content">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        Price
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span class="th-content">
+                                        <i class="fas fa-credit-card"></i>
+                                        Payed?
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span class="th-content">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        Versement
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span class="th-content">
+                                        <i class="fas fa-coins"></i>
+                                        Rest
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span class="th-content">
+                                        <i class="fas fa-calendar-check"></i>
+                                        Deadline
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span class="th-content">
+                                        <i class="fas fa-tasks"></i>
+                                        Status
+                                    </span>
+                                </th>
+
+                            </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                            {% for row in data %}
+
+                            <tr class="table-row-animate">
+
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+
+
+                                {% if row[13] != 'finished' %}
+
+                                <td>
+
+                                    <select
+                                            class="status-select"
+                                            data-patient-number="{{ row[4] }}"
+                                    >
+
+                                        <option value="in process"
+                                                {% if row[13]==
+                                        'in process' %}selected{% endif %}>
+                                        In Process
+                                        </option>
+
+                                        <option value="prothesist"
+                                                {% if row[13]==
+                                        'prothesist' %}selected{% endif %}>
+                                        Prothesist
+                                        </option>
+
+                                        <option value="montage"
+                                                {% if row[13]==
+                                        'montage' %}selected{% endif %}>
+                                        Montage
+                                        </option>
+
+                                        <option value="esseyage"
+                                                {% if row[13]==
+                                        'esseyage' %}selected{% endif %}>
+                                        Esseyage
+                                        </option>
+
+                                    </select>
+
+                                </td>
+
+                                {% else %}
+
+                                <td>
+                                    {{ row[13] }}
+                                </td>
+
+                                {% endif %}
+
+                            </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- ================= DATE ASC ================= -->
+
+                {% if dataASC %}
+
+                <div class="table-card fade-in">
+
+                    <div class="table-header highlight-success">
+
+                        <div class="header-left">
+
+                            <h2>
+                                <i class="fas fa-arrow-up-short-wide"></i>
+                                Patients by Date (Old → New)
+                            </h2>
+
+                            <span class="result-count">
+                                {{ dataASC|length }} patients
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                            <tr>
+
+                                <th>khedma ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Number</th>
+                                <th>khedma Type</th>
+                                <th>Enter Date</th>
+                                <th>Finished?</th>
+                                <th>Price</th>
+                                <th>Payed?</th>
+                                <th>Versement</th>
+                                <th>Rest</th>
+                                <th>Deadline</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                            {% for row in dataASC %}
+
+                            <tr class="table-row-animate">
+
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+                                <td>{{ row[13] }}</td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- ================= DATE DESC ================= -->
+
+                {% if dataDESC %}
+
+                <div class="table-card fade-in">
+
+                    <div class="table-header highlight-info">
+
+                        <div class="header-left">
+
+                            <h2>
+                                <i class="fas fa-arrow-down-wide-short"></i>
+                                Patients by Date (New → Old)
+                            </h2>
+
+                            <span class="result-count">
+                                {{ dataDESC|length }} patients
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                            <tr>
+
+                                <th>khedma ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Number</th>
+                                <th>khedma Type</th>
+                                <th>Enter Date</th>
+                                <th>Finished?</th>
+                                <th>Price</th>
+                                <th>Payed?</th>
+                                <th>Versement</th>
+                                <th>Rest</th>
+                                <th>Deadline</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                            {% for row in dataDESC %}
+
+                            <tr class="table-row-animate">
+
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+                                <td>{{ row[13] }}</td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- ================= DEADLINE ================= -->
+
+                {% if dateDeadLine %}
+
+                <div class="table-card fade-in">
+
+                    <div class="table-header highlight-warning">
+
+                        <div class="header-left">
+
+                            <h2>
+                                <i class="fas fa-calendar-alert"></i>
+                                Patients by Deadline
+                            </h2>
+
+                            <span class="result-count">
+                                {{ dateDeadLine|length }} patients
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                            <tr>
+
+                                <th>khedma ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Number</th>
+                                <th>khedma Type</th>
+                                <th>Enter Date</th>
+                                <th>Finished?</th>
+                                <th>Price</th>
+                                <th>Payed?</th>
+                                <th>Versement</th>
+                                <th>Rest</th>
+                                <th>Deadline</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                            {% for row in dateDeadLine %}
+
+                            <tr class="table-row-animate">
+
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+                                <td>{{ row[13] }}</td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- ================= PRICE ================= -->
+
+                {% if dataPrice %}
+
+                <div class="table-card fade-in">
+
+                    <div class="table-header highlight-accent">
+
+                        <div class="header-left">
+
+                            <h2>
+                                <i class="fas fa-tag"></i>
+                                Patients by Cost
+                            </h2>
+
+                            <span class="result-count">
+                                {{ dataPrice|length }} patients
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                            <tr>
+
+                                <th>khedma ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Number</th>
+                                <th>khedma Type</th>
+                                <th>Enter Date</th>
+                                <th>Finished?</th>
+                                <th>Price</th>
+                                <th>Payed?</th>
+                                <th>Versement</th>
+                                <th>Rest</th>
+                                <th>Deadline</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                            {% for row in dataPrice %}
+
+                            <tr class="table-row-animate">
+
+                                <td>{{ row[0] }}</td>
+                                <td>{{ row[2] }}</td>
+                                <td>{{ row[3] }}</td>
+                                <td>{{ row[4] }}</td>
+                                <td>{{ row[5] }}</td>
+                                <td>{{ row[6] }}</td>
+                                <td>{{ row[7] }}</td>
+                                <td>{{ row[8] }}</td>
+                                <td>{{ row[9] }}</td>
+                                <td>{{ row[10] }}</td>
+                                <td>{{ row[11] }}</td>
+                                <td>{{ row[12] }}</td>
+                                <td>{{ row[13] }}</td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- ================= STATISTICS ================= -->
+
+                {% if stat %}
+
+                <div class="table-card fade-in">
+
+                    <div class="table-header highlight-stats">
+
+                        <div class="header-left">
+
+                            <h2>
+                                <i class="fas fa-chart-pie"></i>
+                                Patient Statistics
+                            </h2>
+
+                            <span class="result-count">
+                                Statistical Analysis
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table class="data-table summary-table">
+
+                            <thead>
+
+                            <tr>
+
+                                <th>Stat ID</th>
+                                <th>Patient Count</th>
+                                <th>Khalsin (Sum)</th>
+                                <th>Not Khalsin (Sum)</th>
+                                <th>Month</th>
+                                <th>Year</th>
+                                <th>User ID</th>
+
+                            </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                            {% for row in stat %}
+
+                            <tr class="table-row-animate">
+
+                                {% for item in row %}
+
+                                <td>
+                                    {{ item }}
+                                </td>
+
+                                {% endfor %}
+
+                            </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- ================= HISTORY ================= -->
+
+                {% if History %}
+
+                <div class="table-card fade-in">
+
+                    <div class="table-header highlight-history">
+
+                        <div class="header-left">
+
+                            <h2>
+                                <i class="fas fa-history"></i>
+                                Patient History
+                            </h2>
+
+                            <span class="result-count">
+                                {{ History|length }} records
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                            <tr>
+
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Number</th>
+                                <th>Date</th>
+                                <th>Service</th>
+                                <th>User ID</th>
+
+                            </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                            {% for row in History %}
+
+                            <tr class="table-row-animate">
+
+                                {% for item in row %}
+
+                                <td>
+                                    {{ item }}
+                                </td>
+
+                                {% endfor %}
+
+                            </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+            <!-- ================= EMPTY STATE ================= -->
+
+            {% if not data
+            and not dataASC
+            and not dataDESC
+            and not dataDeadLine
+            and not dataPrice
+            and not stat
+            and not History %}
+
             <div class="empty-state">
+
                 <div class="empty-icon">
                     <i class="fas fa-inbox"></i>
                 </div>
-                <h2>No Patients Yet</h2>
-                <p>Use the menu on the left to add patients or view existing patient records</p>
-                <a href="/AddPatient" class="empty-action">
-                    <i class="fas fa-plus"></i> Add Your First Patient
+
+                <h2>
+                    No Patients Yet
+                </h2>
+
+                <p>
+                    Use the menu on the left to add patients
+                    or view existing patient records
+                </p>
+
+                <a href="/AddPatient"
+                   class="empty-action">
+
+                    <i class="fas fa-plus"></i>
+                    Add Your First Patient
+
                 </a>
+
             </div>
+
             {% endif %}
+
+
         </main>
+
     </div>
+
 </div>
 
-<script>
-    // Ripple effect for menu items
-    function createRipple(e) {
-        const button = e.currentTarget;
-        const ripple = document.createElement('span');
-        const rect = button.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
 
-        ripple.style.width = ripple.style.height = size + 'px';
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
+<!-- ========================================================= -->
+<!-- ======================= JAVASCRIPT ====================== -->
+<!-- ========================================================= -->
+
+<script>
+
+
+    /* =========================================================
+       RIPPLE EFFECT
+       ========================================================= */
+
+    function createRipple(e) {
+
+        const button = e.currentTarget;
+
+        const ripple = document.createElement('span');
+
+        const rect = button.getBoundingClientRect();
+
+        const size = Math.max(
+            rect.width,
+            rect.height
+        );
+
+        const x =
+            e.clientX -
+            rect.left -
+            size / 2;
+
+        const y =
+            e.clientY -
+            rect.top -
+            size / 2;
+
+        ripple.style.width =
+            ripple.style.height =
+            size + 'px';
+
+        ripple.style.left =
+            x + 'px';
+
+        ripple.style.top =
+            y + 'px';
+
         ripple.classList.add('ripple');
 
         button.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 600);
+
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
     }
 
-    // Add ripple effect to interactive elements
-    document.querySelectorAll('.menu-item, .nav-btn').forEach(item => {
-        item.addEventListener('click', function(e) {
-            createRipple(e);
+
+    /* =========================================================
+       RIPPLE FOR MENU BUTTONS
+       ========================================================= */
+
+    document
+        .querySelectorAll('.menu-item, .nav-btn')
+        .forEach(item => {
+
+            item.addEventListener(
+                'click',
+                function(e) {
+
+                    createRipple(e);
+
+                }
+            );
+
         });
-    });
 
-    // Change the status
-    document.addEventListener('change', function (e) {
-        if (!e.target.classList.contains('status-select')) {
-            return;
-        }
 
-        const select = e.target;
+    /* =========================================================
+       CHANGE PATIENT STATUS
+       ========================================================= */
 
-        const patientNumber = select.dataset.patientNumber;
-        const newStatus = select.value;
+    document.addEventListener(
+        'change',
+        function(e) {
 
-        console.log("Patient:", patientNumber);
-        console.log("New status:", newStatus);
+            if (!e.target.classList.contains('status-select')) {
+                return;
+            }
 
-        fetch('/UpdatePatientStatus', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                patient_number: patientNumber,
-                status: newStatus
+            const select = e.target;
+
+            const patientNumber =
+                select.dataset.patientNumber;
+
+            const newStatus =
+                select.value;
+
+
+            console.log(
+                "Patient:",
+                patientNumber
+            );
+
+            console.log(
+                "New status:",
+                newStatus
+            );
+
+
+            fetch(
+                '/UpdatePatientStatus',
+                {
+                    method: 'POST',
+
+                    headers: {
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body: JSON.stringify({
+
+                        patient_number:
+                            patientNumber,
+
+                        status:
+                            newStatus
+
+                    })
+                }
+            )
+
+            .then(response => {
+
+                return response.json();
+
             })
-        })
-        .then(response => response.json())
-        .then(data => {
 
-            console.log("Flask response:", data);
+            .then(data => {
 
-            const message = document.getElementById('statusMessage');
+                console.log(
+                    "Flask response:",
+                    data
+                );
 
-        })
-        .catch(error => {
+            })
 
-            console.error("Error:", error);
+            .catch(error => {
 
-            const message = document.getElementById('statusMessage');
+                console.error(
+                    "Error:",
+                    error
+                );
 
-            message.textContent = "✗ Error updating status";
-            message.className = "status-message error";
+                const message =
+                    document.getElementById(
+                        'statusMessage'
+                    );
 
-        });
-    });
+                message.textContent =
+                    "✗ Error updating status";
 
-    // Intercept menu links with class 'ajax-link' for dynamic table rendering
-    document.querySelectorAll('.ajax-link').forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
+                message.className =
+                    "status-message error";
 
-            const targetUrl = this.getAttribute('href');
-            const contentContainer = document.getElementById('tables-container');
+            });
 
-            contentContainer.style.opacity = '0.4';
-
-            fetch(targetUrl)
-                .then(response => response.text())
-                .then(html => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-
-                    const newTables = doc.getElementById('tables-container');
-                    if (newTables) {
-                        contentContainer.innerHTML = newTables.innerHTML;
-                    }
-
-                    contentContainer.style.opacity = '1';
-                    window.history.pushState(null, '', targetUrl);
-                })
-                .catch(err => {
-                    console.error('AJAX Load Error:', err);
-                    contentContainer.style.opacity = '1';
-                });
-        });
-    });
-
-    // Auto-scroll to table on page load
-    document.addEventListener('DOMContentLoaded', () => {
-        const activeTable = document.querySelector('.table-card');
-        if (activeTable) {
-            setTimeout(() => {
-                activeTable.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 300);
         }
-    });
+    );
 
-    // Close alert on button click
-    document.querySelectorAll('.alert-close').forEach(btn => {
-        btn.addEventListener('click', function() {
-            this.parentElement.style.display = 'none';
+
+    /* =========================================================
+       AJAX LINKS
+       IMPORTANT:
+       THERE IS ONLY ONE AJAX EVENT LISTENER NOW
+       ========================================================= */
+
+    document
+        .querySelectorAll('.ajax-link')
+        .forEach(item => {
+
+            item.addEventListener(
+                'click',
+                function(e) {
+
+                    e.preventDefault();
+
+                    createRipple(e);
+
+
+                    const targetUrl =
+                        this.getAttribute('href');
+
+
+                    const contentContainer =
+                        document.getElementById(
+                            'tables-container'
+                        );
+
+
+                    const searchContainer =
+                        document.getElementById(
+                            'search-bar-container'
+                        );
+
+
+                    /* Loading effect */
+
+                    contentContainer.style.opacity =
+                        '0.4';
+
+
+                    /* AJAX request */
+
+                    fetch(targetUrl)
+
+                        .then(response => {
+
+                            if (!response.ok) {
+
+                                throw new Error(
+                                    `HTTP error: ${response.status}`
+                                );
+
+                            }
+
+                            return response.text();
+
+                        })
+
+
+                        .then(html => {
+
+                            const parser =
+                                new DOMParser();
+
+
+                            const doc =
+                                parser.parseFromString(
+                                    html,
+                                    'text/html'
+                                );
+
+
+                            /* Replace tables */
+
+                            const newTables =
+                                doc.getElementById(
+                                    'tables-container'
+                                );
+
+
+                            if (newTables) {
+
+                                contentContainer.innerHTML =
+                                    newTables.innerHTML;
+
+                            }
+
+
+                            /* Replace search bar */
+
+                            const newSearch =
+                                doc.getElementById(
+                                    'search-bar-container'
+                                );
+
+
+                            if (newSearch) {
+
+                                searchContainer.innerHTML =
+                                    newSearch.innerHTML;
+
+                            }
+
+
+                            /* Restore opacity */
+
+                            contentContainer.style.opacity =
+                                '1';
+
+
+                            /* Change browser URL */
+
+                            window.history.pushState(
+                                null,
+                                '',
+                                targetUrl
+                            );
+
+                        })
+
+
+                        .catch(err => {
+
+                            console.error(
+                                'AJAX Load Error:',
+                                err
+                            );
+
+                            contentContainer.style.opacity =
+                                '1';
+
+                        });
+
+                }
+            );
+
         });
-    });
 
 
-    // Intercept menu link clicks for seamless AJAX loading
-    document.querySelectorAll('.ajax-link').forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            createRipple(e);
+    /* =========================================================
+       AUTO SCROLL TO TABLE
+       ========================================================= */
 
-            const targetUrl = this.getAttribute('href');
-            const contentContainer = document.getElementById('tables-container');
-            const searchContainer = document.getElementById('search-bar-container');
+    document.addEventListener(
+        'DOMContentLoaded',
+        () => {
 
-            // Quick transition indicator
-            contentContainer.style.opacity = '0.4';
+            const activeTable =
+                document.querySelector(
+                    '.table-card'
+                );
 
-            fetch(targetUrl)
-                .then(response => response.text())
-                .then(html => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
 
-                    // Replace table content dynamically
-                    const newTables = doc.getElementById('tables-container');
-                    if (newTables) {
-                        contentContainer.innerHTML = newTables.innerHTML;
-                    }
+            if (activeTable) {
 
-                    // Update search bar visibility dynamically
-                    const newSearch = doc.getElementById('search-bar-container');
-                    if (newSearch) {
-                        searchContainer.innerHTML = newSearch.innerHTML;
-                    }
+                setTimeout(() => {
 
-                    contentContainer.style.opacity = '1';
-                    window.history.pushState(null, '', targetUrl);
-                })
-                .catch(err => {
-                    console.error('AJAX Load Error:', err);
-                    contentContainer.style.opacity = '1';
-                });
+                    activeTable.scrollIntoView({
+
+                        behavior: 'smooth',
+
+                        block: 'start'
+
+                    });
+
+                }, 300);
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       CLOSE ALERT
+       ========================================================= */
+
+    document
+        .querySelectorAll('.alert-close')
+        .forEach(btn => {
+
+            btn.addEventListener(
+                'click',
+                function() {
+
+                    this.parentElement.style.display =
+                        'none';
+
+                }
+            );
+
         });
-    });
 
 
 </script>
+
 </body>
 
 </html>

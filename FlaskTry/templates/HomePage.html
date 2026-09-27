@@ -35,8 +35,11 @@
             <strong>DentaFlow</strong>
             <span>Prosthetics Lab</span>
         </div>
-        {% if session['id'] == 1 %} <!-- just me who is able to create accounts -->
-            <a href="/CreateAnAccount" style="color:white"> Create account </a>
+        {% if session['id'] == 1 %}
+        <a href="{{ url_for('users.ConfirmOwnerData') }}" class="users-generated">
+            <i class="fas fa-user-shield"></i>
+            <span>Users Generated</span>
+        </a>
         {% endif %}
     </div>
 

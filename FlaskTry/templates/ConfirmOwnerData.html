@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="DentaFlow Owner Verification - Secure User Management">
+
+    <meta name="author" content="DentaFlow">
+
+    <title>DentaFlow - Owner Verification</title>
+
+    <link rel="icon"
+          href="{{ url_for('static', filename='favicon.ico') }}"
+          type="image/x-icon">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='ConfirmOwnerData.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="page-shell">
+
+    <!-- TOP NAV -->
+    <nav class="top-nav">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fas fa-tooth"></i>
+            </div>
+
+            <div class="brand-text">
+                <strong>DentaFlow</strong>
+                <span>Prosthetics Lab</span>
+            </div>
+        </div>
+        <a href="{{ url_for('getHome') }}" class="users-generated">
+            <i class="fas fa-user-shield"></i>
+            <span>Back to Home</span>
+        </a>
+
+        <div class="nav-security">
+            <span class="online-dot"></span>
+            Secure Session
+        </div>
+
+    </nav>
+
+
+    <!-- MAIN -->
+    <main class="owner-container">
+
+        <!-- HERO -->
+        <section class="owner-hero">
+
+            <div class="hero-content">
+
+                <div class="security-label">
+                    <i class="fas fa-shield-halved"></i>
+                    OWNER VERIFICATION
+                </div>
+
+                <h1>
+                    Confirm <span>Authorization</span>
+                </h1>
+
+                <p>
+                    Verify the owner's credentials before accessing
+                    sensitive user management actions.
+                </p>
+
+            </div>
+
+            <div class="hero-visual">
+
+                <div class="glow-circle circle-one"></div>
+                <div class="glow-circle circle-two"></div>
+
+                <div class="shield-container">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SECURITY NOTICE -->
+        <div class="security-notice">
+
+            <div class="notice-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+
+            <div>
+                <strong>Protected operation</strong>
+                <p>
+                    Owner credentials are required to continue.
+                    This verification is protected by CSRF validation.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- FORM HEADER -->
+        <div class="section-header">
+
+            <div>
+                <span class="section-label">
+                    <i class="fas fa-user-shield"></i>
+                    ADMIN SECURITY
+                </span>
+
+                <h2>Verify Owner Data</h2>
+
+                <p>
+                    Enter the owner's credentials and select the action
+                    you want to perform.
+                </p>
+            </div>
+
+            <div class="protected-badge">
+                <i class="fas fa-shield-halved"></i>
+                Protected
+            </div>
+
+        </div>
+
+
+        <!-- FORM CARD -->
+        <section class="owner-card">
+
+            <form
+                    action="{{ url_for('users.ConfirmOwnerData') }}"
+                    method="POST"
+                    id="ownerVerificationForm"
+            >
+
+                <!-- CSRF -->
+                <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token }}"
+                >
+
+
+                <div class="form-grid">
+
+                    <!-- USERNAME -->
+                    <div class="form-group">
+
+                        <label for="userName">
+                            <i class="fas fa-user"></i>
+                            Owner Username
+                        </label>
+
+                        <div class="input-wrapper">
+                            <i class="fas fa-user input-icon"></i>
+
+                            <input
+                                    type="text"
+                                    id="userName"
+                                    name="userName"
+                                    placeholder="Enter owner username"
+                                    minlength="5"
+                                    autocomplete="username"
+                                    required
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+                    <div class="form-group">
+
+                        <label for="email">
+                            <i class="fas fa-envelope"></i>
+                            Owner Email
+                        </label>
+
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope input-icon"></i>
+
+                            <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="Enter owner email"
+                                    autocomplete="email"
+                                    required
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <!-- PHONE -->
+                    <div class="form-group">
+
+                        <label for="phoneNumber">
+                            <i class="fas fa-phone"></i>
+                            Phone Number
+                        </label>
+
+                        <div class="input-wrapper">
+                            <i class="fas fa-phone input-icon"></i>
+
+                            <input
+                                    type="text"
+                                    id="phoneNumber"
+                                    name="phoneNumber"
+                                    placeholder="Enter phone number"
+                                    maxlength="10"
+                                    inputmode="numeric"
+                                    autocomplete="tel"
+                                    required
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+                    <div class="form-group">
+
+                        <label for="password">
+                            <i class="fas fa-key"></i>
+                            Owner Password
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fas fa-key input-icon"></i>
+
+                            <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Enter owner password"
+                                    autocomplete="current-password"
+                                    required
+                            >
+
+                            <button
+                                    type="button"
+                                    class="password-toggle"
+                                    id="passwordToggle"
+                                    aria-label="Show password"
+                            >
+                                <i class="fas fa-eye"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FUNCTION -->
+                    <div class="form-group full-width">
+
+                        <label for="function">
+                            <i class="fas fa-user-cog"></i>
+                            Management Action
+                        </label>
+
+                        <div class="select-wrapper">
+
+                            <i class="fas fa-sliders input-icon"></i>
+
+                            <select
+                                    id="function"
+                                    name="function"
+                                    required
+                            >
+                                <option value="" selected disabled>
+                                    Select an action
+                                </option>
+
+                                <option value="add">
+                                    Add User
+                                </option>
+
+                                <option value="block">
+                                    Block User
+                                </option>
+
+                                <option value="delete">
+                                    Delete User
+                                </option>
+
+                            </select>
+
+                            <i class="fas fa-chevron-down select-arrow"></i>
+
+                        </div>
+
+                        <div class="action-hint">
+                            <i class="fas fa-circle-info"></i>
+
+                            <span>
+                                Choose <strong>Block</strong> to disable
+                                an account or <strong>Delete</strong> to
+                                permanently remove it.
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOTER -->
+                <div class="form-footer">
+
+                    <div class="security-status">
+
+                        <div class="status-icon">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+
+                        <div>
+                            <strong>Secure verification</strong>
+                            <span>CSRF protected request</span>
+                        </div>
+
+                    </div>
+
+
+                    <button
+                            type="submit"
+                            class="verify-button"
+                    >
+                        <i class="fas fa-check-double"></i>
+                        Verify & Continue
+                    </button>
+
+                </div>
+
+
+                <!-- ERROR / MESSAGE -->
+
+                {% if message %}
+
+                <div class="alert alert-success">
+
+                    <div class="alert-icon">
+                        <i class="fas fa-circle-check"></i>
+                    </div>
+
+                    <div class="alert-content">
+                        <strong>Verification Failed</strong>
+                        <p>{{ message }}</p>
+                    </div>
+
+                    <button
+                            type="button"
+                            class="alert-close"
+                            onclick="this.parentElement.remove()"
+                    >
+                        <i class="fas fa-xmark"></i>
+                    </button>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if error %}
+
+                <div class="alert alert-error">
+
+                    <div class="alert-icon">
+                        <i class="fas fa-circle-exclamation"></i>
+                    </div>
+
+                    <div class="alert-content">
+                        <strong>Error</strong>
+                        <p>{{ error }}</p>
+                    </div>
+
+                    <button
+                            type="button"
+                            class="alert-close"
+                            onclick="this.parentElement.remove()"
+                    >
+                        <i class="fas fa-xmark"></i>
+                    </button>
+
+                </div>
+
+                {% endif %}
+
+            </form>
+
+        </section>
+
+
+        <!-- BOTTOM SECURITY INFO -->
+        <div class="bottom-security">
+
+            <i class="fas fa-lock"></i>
+
+            <span>
+                Sensitive owner credentials are transmitted through
+                a protected HTTPS session.
+            </span>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+    const passwordInput = document.getElementById("password");
+    const passwordToggle = document.getElementById("passwordToggle");
+
+    passwordToggle.addEventListener("click", function () {
+
+        const icon = this.querySelector("i");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+            this.setAttribute("aria-label", "Hide password");
+        } else {
+            passwordInput.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+            this.setAttribute("aria-label", "Show password");
+        }
+
+    });
+</script>
+
+</body>
+</html>
+
