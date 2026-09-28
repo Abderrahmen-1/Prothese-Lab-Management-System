@@ -28,7 +28,7 @@
         <div class="header-background"></div>
         <div class="header-content">
             <div class="header-left">
-                <a href="/ProAllkhedma" class="back-button">
+                <a href="/prothesists/ProAllkhedma" class="back-button">
                     <i class="fas fa-arrow-left"></i>
                     <span>Back to Prothesists Page</span>
                 </a>
@@ -50,7 +50,7 @@
     <!-- Search Section -->
     <div class="search-container">
         <div class="search-card">
-            <form action="/ProthesistHistory" method="POST" class="search-form">
+            <form action="/prothesists/ProthesistHistory" method="POST" class="search-form">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
                 <div class="search-wrapper">
@@ -73,7 +73,7 @@
 
             <div class="search-hints">
                 <span class="hint-label">Quick Access:</span>
-                <a href="/AllProthesistHistory" class="hint-link">
+                <a href="/prothesists/AllProthesistHistory" class="hint-link">
                     <i class="fas fa-layer-group"></i> View All History
                 </a>
             </div>
@@ -241,7 +241,7 @@
             <h2>No Data Available</h2>
             <p>Use the search bar to find prothesist history or click "All History" to view complete records</p>
             <div class="empty-actions">
-                <a href="/AllProthesistHistory" class="empty-action-btn">
+                <a href="/prothesists/AllProthesistHistory" class="empty-action-btn">
                     <i class="fas fa-layer-group"></i>
                     <span>View All History</span>
                 </a>

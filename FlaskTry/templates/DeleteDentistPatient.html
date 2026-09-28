@@ -27,7 +27,7 @@
     <header class="page-header danger-theme">
         <div class="header-background"></div>
         <div class="header-content">
-            <a href="/Dentist" class="back-button">
+            <a href="/dentists/Dentist" class="back-button">
                 <i class="fas fa-arrow-left"></i>
                 <span>Back</span>
             </a>
@@ -110,7 +110,7 @@
                 {% endif %}
 
                 <!-- Form Content -->
-                <form action="/DeleteDentistPatient" method="POST" class="delete-patient-form" onsubmit="handleSubmit(event)">
+                <form action="/dentists/DeleteDentistPatient" method="POST" class="delete-patient-form" onsubmit="handleSubmit(event)">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
                     <!-- Dentist Name -->
@@ -353,7 +353,7 @@
 
                     <!-- Submit Button -->
                     <div class="form-actions">
-                        <button type="button" class="btn btn-cancel" onclick="window.location.href='/Dentist'">
+                        <button type="button" class="btn btn-cancel" onclick="window.location.href='/dentists/Dentist'">
                             <span class="btn-icon">
                                 <i class="fas fa-times"></i>
                             </span>

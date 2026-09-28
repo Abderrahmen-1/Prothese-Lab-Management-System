@@ -23,7 +23,7 @@
         <!-- Header -->
         <header class="page-header">
             <div class="header-content">
-                <a href="/Patient" class="back-btn">
+                <a href="/patients/Patient" class="back-btn">
                     <i class="fas fa-chevron-left"></i>
                     Back to Patients
                 </a>
@@ -39,7 +39,7 @@
 
         <!-- Main Form Container -->
         <div class="form-container">
-            <form action="/AddPatient" method="POST" class="patient-form">
+            <form action="/patients/AddPatient" method="POST" class="patient-form">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <!-- Patient Information Section -->
                 <div class="form-section">
@@ -417,7 +417,7 @@
 
                 <!-- Form Actions -->
                 <div class="form-actions">
-                    <a href="/Patient" class="cancel-btn">
+                    <a href="/patients/Patient" class="cancel-btn">
                         <i class="fas fa-times"></i> Cancel
                     </a>
                     <button type="submit" class="submit-btn">

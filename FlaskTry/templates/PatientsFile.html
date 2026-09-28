@@ -50,7 +50,7 @@
                     Back to Menu
                 </a>
 
-                <a href="/AllPatientsHistory" class="nav-btn history-btn">
+                <a href="/patients/AllPatientsHistory" class="nav-btn history-btn">
                     <i class="fas fa-history"></i>
                     History
                 </a>
@@ -71,7 +71,7 @@
 
         <div class="search-section">
 
-            <form action="{{ url_for('PatientPage') }}"
+            <form action="{{ url_for('patients.PatientPage') }}"
                   method="POST"
                   class="search-form"
                   id="search-form">
@@ -139,7 +139,7 @@
                         Management
                     </h3>
 
-                    <a href="/AddPatient"
+                    <a href="/patients/AddPatient"
                        class="menu-item add-item">
 
                         <i class="fas fa-user-plus"></i>
@@ -153,7 +153,7 @@
                     </a>
 
 
-                    <a href="/DeletePatient"
+                    <a href="/patients/DeletePatient"
                        class="menu-item delete-item">
 
                         <i class="fas fa-user-minus"></i>
@@ -167,7 +167,7 @@
                     </a>
 
 
-                    <a href="/ModifyVersaPatient"
+                    <a href="/patients/ModifyVersaPatient"
                        class="menu-item modify-item">
 
                         <i class="fas fa-user-edit"></i>
@@ -181,7 +181,7 @@
                     </a>
 
 
-                    <a href="/Patient"
+                    <a href="/patients/Patient"
                        class="menu-item main-item ajax-link">
 
                         <i class="fas fa-table"></i>
@@ -206,7 +206,7 @@
                     </h3>
 
 
-                    <a href="/PatientByDateASC"
+                    <a href="/patients/PatientByDateASC"
                        class="menu-item sort-item ajax-link">
 
                         <i class="fas fa-arrow-up-short-wide"></i>
@@ -222,7 +222,7 @@
                     </a>
 
 
-                    <a href="/PatientByDateDESC"
+                    <a href="/patients/PatientByDateDESC"
                        class="menu-item sort-item ajax-link">
 
                         <i class="fas fa-arrow-down-wide-short"></i>
@@ -238,7 +238,7 @@
                     </a>
 
 
-                    <a href="/PatientByDeadLine"
+                    <a href="/patients/PatientByDeadLine"
                        class="menu-item deadline-item ajax-link">
 
                         <i class="fas fa-calendar-check"></i>
@@ -254,7 +254,7 @@
                     </a>
 
 
-                    <a href="/PatientByB9aw"
+                    <a href="/patients/PatientByB9aw"
                        class="menu-item price-item ajax-link">
 
                         <i class="fas fa-tag"></i>
@@ -280,7 +280,7 @@
                         Analytics
                     </h3>
 
-                    <a href="/PatientStat"
+                    <a href="/patients/PatientStat"
                        class="menu-item stats-item ajax-link">
 
                         <i class="fas fa-chart-line"></i>
@@ -526,29 +526,29 @@
                                             data-patient-number="{{ row[4] }}"
                                     >
 
-                                        <option value="in process"
-                                                {% if row[13]==
-                                        'in process' %}selected{% endif %}>
-                                        In Process
-                                        </option>
+                                        {% if row[13] == 'in process' %}
+                                        <option value="in process" selected>In Process</option>
+                                        {% else %}
+                                        <option value="in process">In Process</option>
+                                        {% endif %}
 
-                                        <option value="prothesist"
-                                                {% if row[13]==
-                                        'prothesist' %}selected{% endif %}>
-                                        Prothesist
-                                        </option>
+                                        {% if row[13] == 'prothesist' %}
+                                        <option value="prothesist" selected>Prothesist</option>
+                                        {% else %}
+                                        <option value="prothesist">Prothesist</option>
+                                        {% endif %}
 
-                                        <option value="montage"
-                                                {% if row[13]==
-                                        'montage' %}selected{% endif %}>
-                                        Montage
-                                        </option>
+                                        {% if row[13] == 'montage' %}
+                                        <option value="montage" selected>Montage</option>
+                                        {% else %}
+                                        <option value="montage">Montage</option>
+                                        {% endif %}
 
-                                        <option value="esseyage"
-                                                {% if row[13]==
-                                        'esseyage' %}selected{% endif %}>
-                                        Esseyage
-                                        </option>
+                                        {% if row[13] == 'esseyage' %}
+                                        <option value="esseyage" selected>Esseyage</option>
+                                        {% else %}
+                                        <option value="esseyage">Esseyage</option>
+                                        {% endif %}
 
                                     </select>
 
@@ -1096,7 +1096,7 @@
                     or view existing patient records
                 </p>
 
-                <a href="/AddPatient"
+                <a href="/patients/AddPatient"
                    class="empty-action">
 
                     <i class="fas fa-plus"></i>
@@ -1223,7 +1223,7 @@
 
 
             fetch(
-                '/UpdatePatientStatus',
+                '/patients/UpdatePatientStatus',
                 {
                     method: 'POST',
 

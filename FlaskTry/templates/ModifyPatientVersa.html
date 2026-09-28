@@ -58,7 +58,7 @@
     <!-- Header Section -->
     <header class="header">
         <div class="header-content">
-            <a href="/Patient" class="back-btn">
+            <a href="/patients/Patient" class="back-btn">
                 <i class="fas fa-arrow-left"></i> Back to Patients
             </a>
             <div class="header-title">
@@ -86,7 +86,7 @@
                 </div>
 
                 <!-- Form Content -->
-                <form action="/ModifyVersaPatient" method="POST" class="form-group">
+                <form action="/patients/ModifyVersaPatient" method="POST" class="form-group">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     <!-- Step 1: Patient Identification -->
                     <div class="form-section">

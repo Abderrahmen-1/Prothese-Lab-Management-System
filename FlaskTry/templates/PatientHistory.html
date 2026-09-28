@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <nav class="header-nav">
-                    <a href="/Patient" class="nav-btn back-btn">
+                    <a href="/patients/Patient" class="nav-btn back-btn">
                         <i class="fas fa-arrow-left"></i> Back to Patients
                     </a>
                 </nav>
@@ -50,7 +50,7 @@
                         <p>Enter a patient name to view their specific history</p>
                     </div>
 
-                    <form action="/PatientHistory" method="POST" class="search-form">
+                    <form action="/patients/PatientHistory" method="POST" class="search-form">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
                         <div class="search-wrapper">
@@ -70,7 +70,7 @@
                     </form>
 
                     <div class="quick-actions">
-                        <a href="/AllPatientsHistory" class="action-btn all-history">
+                        <a href="/patients/AllPatientsHistory" class="action-btn all-history">
                             <i class="fas fa-list"></i>
                             <span>Show All History</span>
                             <i class="fas fa-arrow-right"></i>
@@ -210,7 +210,7 @@
                         </div>
                         <h2>No Results Found</h2>
                         <p>Try searching with a different patient name</p>
-                        <a href="/PatientHistory" class="empty-action">
+                        <a href="/patients/PatientHistory" class="empty-action">
                             <i class="fas fa-redo"></i> Clear Search
                         </a>
                     </div>

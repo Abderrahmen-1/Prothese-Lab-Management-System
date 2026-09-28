@@ -28,7 +28,7 @@
     <!-- Header -->
     <header class="form-header">
         <div class="header-content">
-            <a href="/Dentist" class="back-button">
+            <a href="/dentists/Dentist" class="back-button">
                 <i class="fas fa-arrow-left"></i>
                 <span>Back to Dentist</span>
             </a>
@@ -88,7 +88,7 @@
 
     <!-- Form Container -->
     <main class="form-container">
-        <form action="/GetFromDentist" method="POST" class="khedma-form">
+        <form action="/dentists/GetFromDentist" method="POST" class="khedma-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
             <!-- Section 1: Basic Dentist & Patient Information -->

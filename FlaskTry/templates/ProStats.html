@@ -51,16 +51,16 @@
                     <div class="menu-group">
                         <h3 class="group-title">Views</h3>
                         <!-- BUG FIX #16: Use proper data attributes for JavaScript selection -->
-                        <a href="/ProAllkhedma"  class="menu-item all-item" data-table="SearchTable">
+                        <a href="/prothesists/ProAllkhedma"  class="menu-item all-item" data-table="SearchTable">
                             <i class="fas fa-search"></i>
                             <span>Search Results</span>
                         </a>
 
-                        <a href="/ProTotal"  class="menu-item finish-item" data-table="TotalTable">
+                        <a href="/prothesists/ProTotal"  class="menu-item finish-item" data-table="TotalTable">
                             <i class="fas fa-sum"></i>
                             <span>Total Summary</span>
                         </a>
-                        <a href="/ProStat"  class="menu-item get-item" data-table="StatTable">
+                        <a href="/prothesists/ProStat"  class="menu-item get-item" data-table="StatTable">
                             <i class="fas fa-chart-bar"></i>
                             <span>Statistics Table</span>
                         </a>
@@ -89,7 +89,7 @@
                 </div>
 
                 <div class="search-section">
-                    <form action="{{ url_for('ProSearchPage') }}" method="POST" class="search-form">
+                    <form action="{{ url_for('prothesists.ProSearchPage') }}" method="POST" class="search-form">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <div class="search-input-wrapper">
                             <i class="fas fa-search"></i>

@@ -76,7 +76,7 @@
                 </div>
             </div>
             <nav class="header-nav">
-                <a href="/ProKhedma" class="nav-btn back-btn">
+                <a href="/prothesists/ProKhedma" class="nav-btn back-btn">
                     <i class="fas fa-arrow-left"></i> Back to Prothesist
                 </a>
             </nav>
@@ -95,11 +95,11 @@
             <nav class="sidebar-menu">
                 <div class="menu-group">
                     <h3 class="group-title">Navigation</h3>
-                    <a href="/ProAllkhedma" class="menu-item all-item">
+                    <a href="{{ url_for('prothesists.Proallkhedma') }}" class="menu-item all-item">
                         <i class="fas fa-list-alt"></i>
                         <span>All Khedma</span>
                     </a>
-                    <a href="/ProKhedma" class="menu-item get-item">
+                    <a href="/prothesists/ProKhedma" class="menu-item get-item">
                         <i class="fas fa-arrow-left"></i>
                         <span>Back to Main</span>
                     </a>
@@ -133,7 +133,7 @@
 
             <!-- Form Section -->
             <div class="form-container">
-                <form action="/ProModifyVersement" method="POST" class="modify-form" id="modifyVersementForm">
+                <form action="/prothesists/ProModifyVersement" method="POST" class="modify-form" id="modifyVersementForm">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
                     <!-- Prothesist Information Section -->

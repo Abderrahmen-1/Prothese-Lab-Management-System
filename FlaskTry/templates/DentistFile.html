@@ -53,7 +53,7 @@
                     Back to Menu
                 </a>
 
-                <a href="/DentistHistory" class="nav-btn history-btn">
+                <a href="/dentists/DentistHistory" class="nav-btn history-btn">
                     <i class="fas fa-history"></i>
                     History
                 </a>
@@ -73,7 +73,7 @@
 
         <div class="search-section">
 
-            <form action="{{ url_for('DentistPage') }}"
+            <form action="{{ url_for('dentists.DentistPage') }}"
                   method="POST"
                   class="search-form"
                   id="search-form">
@@ -139,7 +139,7 @@
                         Analytics
                     </h3>
 
-                    <a href="/DentistMainTable"
+                    <a href="/dentists/DentistMainTable"
                        class="menu-item analytics-item ajax-link">
 
                         <i class="fas fa-table"></i>
@@ -153,7 +153,7 @@
                     </a>
 
 
-                    <a href="/DentistMostKhedma"
+                    <a href="/dentists/DentistMostKhedma"
                        class="menu-item analytics-item ajax-link">
 
                         <i class="fas fa-chart-line"></i>
@@ -167,7 +167,7 @@
                     </a>
 
 
-                    <a href="/DentistLessKhedma"
+                    <a href="/dentists/DentistLessKhedma"
                        class="menu-item analytics-item ajax-link">
 
                         <i class="fas fa-chart-bar"></i>
@@ -181,7 +181,7 @@
                     </a>
 
 
-                    <a href="/DentistDeadLine"
+                    <a href="/dentists/DentistDeadLine"
                        class="menu-item analytics-item ajax-link">
 
                         <i class="fas fa-calendar-check"></i>
@@ -195,7 +195,7 @@
                     </a>
 
 
-                    <a href="/DentistTotal"
+                    <a href="/dentists/DentistTotal"
                        class="menu-item analytics-item ajax-link">
 
                         <i class="fas fa-users"></i>
@@ -209,7 +209,7 @@
                     </a>
 
 
-                    <a href="/DentistsStat"
+                    <a href="/dentists/DentistsStat"
                        class="menu-item analytics-item ajax-link">
 
                         <i class="fas fa-chart-pie"></i>
@@ -234,7 +234,7 @@
                     </h3>
 
 
-                    <a href="/AddDentist"
+                    <a href="/dentists/AddDentist"
                        class="menu-item add-item">
 
                         <i class="fas fa-user-plus"></i>
@@ -248,7 +248,7 @@
                     </a>
 
 
-                    <a href="/DeleteDentistPatient"
+                    <a href="/dentists/DeleteDentistPatient"
                        class="menu-item delete-patient-item">
 
                         <i class="fas fa-user-minus"></i>
@@ -262,7 +262,7 @@
                     </a>
 
 
-                    <a href="/GetFromDentist"
+                    <a href="/dentists/GetFromDentist"
                        class="menu-item get-item">
 
                         <i class="fas fa-handshake"></i>
@@ -276,7 +276,7 @@
                     </a>
 
 
-                    <a href="/DentistVersement"
+                    <a href="/dentists/DentistVersement"
                        class="menu-item modify-versement-item">
 
                         <i class="fas fa-money-bill-wave"></i>
@@ -1053,7 +1053,7 @@
 
         const message = document.getElementById('statusMessage');
 
-        fetch('/UpdateDentistStatus', {
+        fetch('/dentists/UpdateDentistStatus', {
 
             method: 'POST',
 

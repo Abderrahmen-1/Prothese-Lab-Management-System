@@ -32,6 +32,14 @@ class InvalidePhoneNumberException(Exception):
 # AUTH
 # =============================================================================
 
+def SearcheTable(cursor, DentistName):
+    cursor.execute("""
+        SELECT 1 FROM dentist_registry
+        WHERE user_id = %s AND dentist_name = %s
+    """, (session['id'], DentistName))
+    exist = cursor.fetchone()
+    return exist
+
 def CheckData(email=None, username=None, password=None, phoneNumber=None):
     if username :
         if not username.strip() or len(username) < 4 or username.isdigit():

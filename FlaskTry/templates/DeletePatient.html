@@ -50,7 +50,7 @@
         <!-- Header -->
         <header class="page-header">
             <div class="header-content">
-                <a href="/Patient" class="back-btn">
+                <a href="/patients/Patient" class="back-btn">
                     <i class="fas fa-chevron-left"></i>
                     Back to Patients
                 </a>
@@ -78,7 +78,7 @@
 
         <!-- Main Form Container -->
         <div class="form-container">
-            <form action="/DeletePatient" method="POST" class="delete-form" onsubmit="return confirmDelete()">
+            <form action="/patients/DeletePatient" method="POST" class="delete-form" onsubmit="return confirmDelete()">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
                 <!-- Patient Identification Section -->
@@ -245,7 +245,7 @@
 
                 <!-- Form Actions -->
                 <div class="form-actions">
-                    <a href="/Patient" class="cancel-btn">
+                    <a href="/patients/Patient" class="cancel-btn">
                         <i class="fas fa-times"></i> Cancel
                     </a>
                     <button type="submit" class="delete-btn" id="deleteButton" disabled>

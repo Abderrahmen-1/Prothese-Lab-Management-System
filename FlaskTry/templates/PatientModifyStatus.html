@@ -17,7 +17,7 @@
 <body>
     <!-- Header Section -->
     <div class="HeadClass">
-        <a href="/Patient" class="back-link">
+        <a href="/patients/Patient" class="back-link">
             <i class="fas fa-arrow-left"></i> Back to Patients
         </a>
         <h1>
@@ -26,7 +26,7 @@
     </div>
 
     <!-- Main Form Container -->
-    <form action="/PatientStatus/{{ patient_number }}" method="POST" class="status-form">
+    <form action="/patients/UpdatePatientStatus/{{ patient_number }}" method="POST" class="status-form">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
         <!-- Status Field -->

@@ -50,7 +50,7 @@
 
             <nav class="header-nav">
 
-                <a href="/ProKhedma"
+                <a href="/prothesists/ProKhedma"
                    class="nav-btn back-btn">
 
                     <i class="fas fa-arrow-left"></i>
@@ -58,7 +58,7 @@
 
                 </a>
 
-                <a href="/AllProthesistHistory"
+                <a href="/prothesists/AllProthesistHistory"
                    class="nav-btn history-btn">
 
                     <i class="fas fa-history"></i>
@@ -83,7 +83,7 @@
 
         <div class="search-section">
 
-            <form action="{{ url_for('Proallkhedma') }}"
+            <form action="{{ url_for('prothesists.Proallkhedma') }}"
                   method="POST"
                   class="search-form"
                   id="search-form">
@@ -99,7 +99,7 @@
                     <input
                             type="text"
                             name="SearchBar"
-                            placeholder="Search prothesist by name or patient number..."
+                            placeholder="Search prothesist by name or by number..."
                             class="search-input"
                     >
 
@@ -161,7 +161,7 @@
                     </h3>
 
 
-                    <a href="/ProAllkhedma"
+                    <a href="/prothesists/ProAllkhedma"
                        class="menu-item all-item ajax-link">
 
                         <i class="fas fa-table-list"></i>
@@ -175,7 +175,7 @@
                     </a>
 
 
-                    <a href="/ProKhedmaByDateASC"
+                    <a href="/prothesists/ProKhedmaByDateASC"
                        class="menu-item asc-item ajax-link">
 
                         <i class="fas fa-arrow-up"></i>
@@ -189,7 +189,7 @@
                     </a>
 
 
-                    <a href="/ProKhedmaByDateDESC"
+                    <a href="/prothesists/ProKhedmaByDateDESC"
                        class="menu-item desc-item ajax-link">
 
                         <i class="fas fa-arrow-down"></i>
@@ -203,7 +203,7 @@
                     </a>
 
 
-                    <a href="/ProMostKhedma"
+                    <a href="/prothesists/ProMostKhedma"
                        class="menu-item most-item ajax-link">
 
                         <i class="fas fa-arrow-trend-up"></i>
@@ -213,7 +213,7 @@
                     </a>
 
 
-                    <a href="/ProLessKhedma"
+                    <a href="/prothesists/ProLessKhedma"
                        class="menu-item less-item ajax-link">
 
                         <i class="fas fa-arrow-trend-down"></i>
@@ -248,7 +248,7 @@
                     </a>
 
 
-                    <a href="{{ url_for('DeleteProKhedma') }}"
+                    <a href="{{ url_for('prothesists.DeleteProKhedma') }}"
                        class="menu-item delete-patient-item">
 
                         <i class="fas fa-user-minus"></i>

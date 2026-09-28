@@ -27,7 +27,7 @@
         <div class="header-background"></div>
         <div class="header-content">
             <div class="header-left">
-                <a href="/Dentist" class="back-button">
+                <a href="/dentists/Dentist" class="back-button">
                     <i class="fas fa-arrow-left"></i>
                     <span>Back to Dentist</span>
                 </a>
@@ -44,7 +44,7 @@
             </div>
 
             <div class="header-right">
-                <a href="/AllDentistHistory" class="nav-link active" id="all-history-btn">
+                <a href="/dentists/AllDentistHistory" class="nav-link active" id="all-history-btn">
                     <i class="fas fa-list"></i>
                     <span>All History</span>
                 </a>
@@ -55,7 +55,7 @@
     <!-- Search Section -->
     <div class="search-container">
         <div class="search-card">
-            <form action="/DentistHistory" method="POST" class="search-form">
+            <form action="/dentists/DentistHistory" method="POST" class="search-form">
                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
                 <div class="search-wrapper">
@@ -78,7 +78,7 @@
 
             <div class="search-hints">
                 <span class="hint-label">Quick Access:</span>
-                <a href="/AllDentistHistory" class="hint-link">
+                <a href="/dentists/AllDentistHistory" class="hint-link">
                     <i class="fas fa-layer-group"></i> View All History
                 </a>
             </div>
@@ -236,7 +236,7 @@
             <h2>No Data Available</h2>
             <p>Use the search bar to find dentist history or click "All History" to view complete records</p>
             <div class="empty-actions">
-                <a href="/AllDentistHistory" class="empty-action-btn">
+                <a href="/dentists/AllDentistHistory" class="empty-action-btn">
                     <i class="fas fa-layer-group"></i>
                     <span>View All History</span>
                 </a>

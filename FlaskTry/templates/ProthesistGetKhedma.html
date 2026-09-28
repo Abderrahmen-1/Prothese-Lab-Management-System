@@ -33,7 +33,7 @@
                 </div>
             </div>
             <nav class="header-nav">
-                <a href="/ProKhedma" class="nav-btn back-btn">
+                <a href="/prothesists/ProKhedma" class="nav-btn back-btn">
                     <i class="fas fa-arrow-left"></i> Back to Prosthesists
                 </a>
             </nav>
@@ -100,7 +100,7 @@
         </div>
 
         <div class="form-container">
-            <form action="/ProGetKhedma" method="POST" id="khedmaForm" class="form-layout">
+            <form action="/prothesists/ProGetKhedma" method="POST" id="khedmaForm" class="form-layout">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
                 <!-- Prosthesist Information -->
@@ -392,7 +392,7 @@
                         <i class="fas fa-check-circle"></i>
                         <span>Create Work Order</span>
                     </button>
-                    <a href="/ProKhedma" class="btn btn-secondary">
+                    <a href="/prothesists/ProKhedma" class="btn btn-secondary">
                         <i class="fas fa-times-circle"></i>
                         <span>Cancel</span>
                     </a>

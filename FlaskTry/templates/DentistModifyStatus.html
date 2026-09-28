@@ -20,7 +20,7 @@
 
     <!-- Header Section -->
     <div class="HeadClass">
-        <a href="/Dentist" class="back-link">
+        <a href="/dentists/Dentist" class="back-link">
             <i class="fas fa-arrow-left"></i> Back to Dentists
         </a>
         <h1>
@@ -29,7 +29,7 @@
     </div>
 
     <!-- Main Form Container -->
-    <form action="/DentistStatus/{{ DentistName }}/{{ PatientUnique }}" method="POST" class="status-form" id="dentistStatusForm">
+    <form action="/dentists/UpdateDentistStatus/{{ DentistName }}/{{ PatientUnique }}" method="POST" class="status-form" id="dentistStatusForm">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
         <!-- Status Field -->

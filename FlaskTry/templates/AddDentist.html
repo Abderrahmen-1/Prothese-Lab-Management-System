@@ -27,7 +27,7 @@
     <header class="page-header">
         <div class="header-background"></div>
         <div class="header-content">
-            <a href="/Dentist" class="back-button">
+            <a href="/dentists/Dentist" class="back-button">
                 <i class="fas fa-arrow-left"></i>
                 <span>Back</span>
             </a>
@@ -82,7 +82,7 @@
                 {% endif %}
 
                 <!-- Form Content -->
-                <form action="/AddDentist" method="POST" class="add-dentist-form" onsubmit="handleSubmit(event)">
+                <form action="/dentists/AddDentist" method="POST" class="add-dentist-form" onsubmit="handleSubmit(event)">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     <div class="form-group">
                         <label for="dentist-name" class="form-label">
@@ -137,7 +137,7 @@
             <div class="action-card">
                 <h3>Other Actions</h3>
                 <div class="action-links">
-                    <a href="/DentistTotal" class="action-link">
+                    <a href="/dentists/DentistTotal" class="action-link">
                         <i class="fas fa-list"></i>
                         <span>View All Dentists</span>
                     </a>
