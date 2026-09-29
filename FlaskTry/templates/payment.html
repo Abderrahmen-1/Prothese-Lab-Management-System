@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+            name="description"
+            content="DentaFlow permanent access purchase"
+    >
+
+    <title>DentaFlow - Purchase</title>
+
+    <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/payment.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="payment-card">
+
+    <div class="logo">
+
+        <div class="logo-mark">
+            D
+        </div>
+
+        DentaFlow
+
+    </div>
+
+    <h1>
+        Permanent Access
+    </h1>
+
+    <p class="description">
+
+        Your free trial has ended.
+
+        Purchase DentaFlow once and continue
+        using the application with permanent access.
+
+    </p>
+
+
+    <div class="price-box">
+
+        <div class="price-label">
+            One-time purchase
+        </div>
+
+        <div class="price">
+
+            {{ price }}
+
+            <span>DA</span>
+
+        </div>
+
+    </div>
+
+
+    <form
+            method="POST"
+            action="{{ url_for('payments.create_payment') }}"
+    >
+
+        <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token }}"
+        >
+
+        <button
+                type="submit"
+                class="btn btn-primary"
+        >
+
+            Continue to Secure Payment
+
+        </button>
+
+    </form>
+
+
+    <div class="secure">
+
+        <span class="secure-icon">
+            🔒
+        </span>
+
+        Secure payment powered by Chargily
+
+    </div>
+
+    <a
+            href="{{ url_for('home') }}"
+            class="back-link"
+    >
+
+        Back to DentaFlow
+
+    </a>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>DentaFlow - Payment Failed</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/payment.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="payment-card">
+
+    <div class="logo">
+
+        <div class="logo-mark">
+            D
+        </div>
+
+        DentaFlow
+
+    </div>
+
+
+    <div class="status-icon error">
+        ×
+    </div>
+
+
+    <h1>
+        Payment Failed
+    </h1>
+
+
+    <p class="description">
+
+        Your payment was not completed.
+
+        No permanent access has been activated
+        for your account.
+
+    </p>
+
+
+    <div class="error-box">
+
+        Your account has not been charged
+        successfully through this payment attempt.
+
+    </div>
+
+
+    <a
+        href="{{ url_for('payments.payment') }}"
+        class="btn btn-primary"
+    >
+
+        Try Payment Again
+
+    </a>
+
+
+    <a
+        href="{{ url_for('home') }}"
+        class="back-link"
+    >
+
+        Back to DentaFlow
+
+    </a>
+
+</div>
+
+</body>
+
+</html>

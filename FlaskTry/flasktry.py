@@ -12,6 +12,7 @@ from FlaskTry.routes.users import users
 from FlaskTry.routes.patients import patients
 from FlaskTry.routes.dentists import dentists
 from FlaskTry.routes.prothesists import prothesists
+from FlaskTry.routes.payment import payments
 import random
 from flask_mail import Mail, Message
 
@@ -27,6 +28,7 @@ app.register_blueprint(users)
 app.register_blueprint(patients)
 app.register_blueprint(dentists)
 app.register_blueprint(prothesists)
+app.register_blueprint(payments)
 
 #============== Email configuration ===================
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
@@ -52,6 +54,7 @@ def login_required():
 @app.route("/log_in", methods=["POST", "GET"])
 @limiter.limit("10 per minute")
 def home():
+
     if request.method == "GET":
         session.clear()
         token = secrets.token_hex(16)
@@ -72,120 +75,175 @@ def home():
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
 
-        email    = request.form.get("email")
+
+        email = request.form.get("email")
         username = request.form.get("username")
         password = request.form.get("password")
 
         try:
             CheckData(email, username, password)
+
         except InvalideNameException:
-            return render_template("Log-in.html", error="Invalide Name", csrf_token= new_token)
+            return render_template(
+                "Log-in.html",
+                error="Invalide Name",
+                csrf_token=new_token
+            )
+
         except InvalidePasswordException:
-            return render_template("Log-in.html", error="Invalide Password", csrf_token= new_token)
+            return render_template(
+                "Log-in.html",
+                error="Invalide Password",
+                csrf_token=new_token
+            )
+
         except InvalideEmailException:
-            return render_template("Log-in.html", error="Invalide Email", csrf_token= new_token)
+            return render_template(
+                "Log-in.html",
+                error="Invalide Email",
+                csrf_token=new_token
+            )
 
         row = ConfirmLogIn(email, username)
 
-        if row and check_password_hash(row[1], password):
-            session['id']       = row[0]
-            session['username'] = username
+        if not row or not check_password_hash(row[1], password):
+            return render_template(
+                "Log-in.html",
+                error="Invalid Information",
+                csrf_token=new_token
+            )
 
-            if row and check_password_hash(row[1], password):
-                session['id'] = row[0]
-                session['username'] = username
+        session["id"] = row[0]
+        session["username"] = username
 
-            conn = get_connection()
-            cursor = conn.cursor(buffered=True)
+        conn = get_connection()
+        cursor = conn.cursor(buffered=True)
 
-            try :
-                cursor.execute("""
-                                DELETE FROM users 
-                                WHERE 
-                                date_inscription <= DATE_SUB(CURDATE() , INTERVAL 2 DAY)
-                                AND email_confirmed = %s """,(False,))
+        try:
+            cursor.execute("""
+                DELETE FROM users
+                WHERE date_inscription <= DATE_SUB(CURDATE(), INTERVAL 2 DAY)
+                  AND email_confirmed = %s
+                  AND is_paid = %s
+            """, (False, False))
 
-                cursor.execute("""
-                                UPDATE users
-                                SET status = 'out of limits' 
-                                WHERE 
-                                date_inscription <= DATE_SUB(CURDATE() , INTERVAL 1 MONTH)  
-                                AND status != 'block' AND id != %s
-                                        """,(1,))
-                conn.commit()
+            cursor.execute("""
+                UPDATE users
+                SET status = 'out of limits'
+                WHERE date_inscription <= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+                  AND status != 'block'
+                  AND id != %s
+                  AND is_paid = %s
+            """, (1, False))
 
-                cursor.execute("""
-                                SELECT status 
-                                FROM users 
-                                WHERE id = %s """,(session['id'],))
-                found = cursor.fetchone()
+            conn.commit()
 
-                if found[0] == 'block' :
-                    session.clear()
-                    return render_template("Log-in.html", error="No access to log-in", csrf_token=new_token)
-                if found[0] == 'out of limits':
-                    return render_template("Log-in.html",
-                                           error="Your free offer has been ended you should contact us for more informations",
-                                           csrf_token=session['id'])
+            if not row[2]:
+                return render_template(
+                    "Log-in.html",
+                    error="Please verify your email first.",
+                    csrf_token=new_token
+                )
 
-                row = ConfirmLogIn(email, username)
-                if row and check_password_hash(row[1], password):
-                    if not row[2]:
-                        return render_template(
-                            "Log-in.html",
-                            error="Please verify your email first.",
-                            csrf_token=new_token
-                        )
+            cursor.execute("""
+                SELECT status, is_paid
+                FROM users
+                WHERE id = %s
+            """, (session["id"],))
+            found = cursor.fetchone()
 
-                    session['id'] = row[0]
-                    session['username'] = username
+            if not found:
+                session.clear()
+                return render_template(
+                    "Log-in.html",
+                    error="User not found.",
+                    csrf_token=new_token
+                )
 
-                return redirect(url_for('getHome'))
+            status = found[0]
+            is_paid = found[1]
 
-            finally :
-                cursor.close()
-                conn.close()
-        else:
-            return render_template("Log-in.html", error="Invalid Information", csrf_token= new_token)
+            if status == "block":
+                session.clear()
+                return render_template(
+                    "Log-in.html",
+                    error="No access to log-in",
+                    csrf_token=new_token
+                )
+
+            if status == "out of limits" and not is_paid:
+                return redirect(url_for("payments.payment"))
+
+            return redirect(url_for("getHome"))
+
+        except Exception as e:
+            conn.rollback()
+            return render_template(
+                "Log-in.html",
+                error=f"Database error: {str(e)}",
+                csrf_token=new_token
+            )
+
+        finally:
+            cursor.close()
+            conn.close()
 
 
 @app.route("/HomePage")
 def getHome():
     if not is_logged_in():
-        return redirect(url_for('home'))
+        return redirect(url_for("home"))
 
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
 
-    try :
+    try:
         cursor.execute("""
-                        SELECT status 
-                        FROM users 
-                        WHERE id = %s """,(session['id'],))
+            SELECT status, is_paid
+            FROM users
+            WHERE id = %s
+        """, (session["id"],))
         result = cursor.fetchone()
 
-        if result[0] == 'block' :
-            return render_template("Log-in.html", error="The account is blocked contact us for more informations", csrf_token=session['csrf_token'])
-        if result[0] == 'out of limits':
-            return render_template("Log-in.html", error="Your free offer has been ended you should contact us for more informations",
-                                                        csrf_token=session['id'])
+        if not result:
+            session.clear()
+            return redirect(url_for("home"))
+
+        status = result[0]
+        is_paid = result[1]
+
+        if status == "block":
+            session.clear()
+            token = secrets.token_hex(16)
+            session["csrf_token"] = token
+
+            return render_template(
+                "Log-in.html",
+                error="The account is blocked. Contact us for more information.",
+                csrf_token=token
+            )
+
     except Exception as e:
         conn.rollback()
-        return render_template("Log-in.html", message=f"error {str(e)}")
+        return render_template(
+            "Log-in.html",
+            message=f"error {str(e)}"
+        )
 
-    finally :
+    finally:
         cursor.close()
         conn.close()
 
-    name = session.get('username')
-    letter = name[0].upper()
+
+    name = session.get("username") if session['username'] else None
+    letter = name[0].upper() if name else None
 
     return render_template(
-            "HomePage.html",
-            message=f"WELCOME {name}",
-            username=name,
-            letter=letter
-        )
+        "HomePage.html",
+        message=f"WELCOME {name}",
+        username=name,
+        letter=letter
+    )
 
 
 # ============================ CREATE ACCOUNT =================================
