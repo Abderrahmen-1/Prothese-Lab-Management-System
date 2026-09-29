@@ -93,8 +93,8 @@
                                     required
                             >
                             <span class="input-icon">
-                                    <i class="fas fa-cube"></i>
-                                </span>
+                                <i class="fas fa-cube"></i>
+                            </span>
                         </div>
                     </div>
 
@@ -110,13 +110,73 @@
                                     id="SPrice"
                                     name="SPrice"
                                     class="form-input"
-                                    placeholder="Enter item price"
+                                    placeholder="Enter unit price"
                                     step="0.01"
+                                    min="0"
                                     required
                             >
                             <span class="input-icon">
-                                    <i class="fas fa-coins"></i>
-                                </span>
+                                <i class="fas fa-coins"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Sel3a Quantity -->
+                    <div class="form-group">
+                        <label for="SQuantity" class="form-label">
+                            <i class="fas fa-boxes"></i>
+                            Quantity
+                        </label>
+                        <div class="input-wrapper">
+                            <input
+                                    type="number"
+                                    id="SQuantity"
+                                    name="SQuantity"
+                                    class="form-input"
+                                    placeholder="Enter quantity"
+                                    step="1"
+                                    min="0"
+                                    required
+                            >
+                            <span class="input-icon">
+                                <i class="fas fa-cubes"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Sel3a Unit -->
+                    <div class="form-group">
+                        <label for="SUnit" class="form-label">
+                            <i class="fas fa-ruler"></i>
+                            Unit
+                        </label>
+
+                        <div class="select-wrapper">
+                            <select
+                                    id="SUnit"
+                                    name="SUnit"
+                                    class="form-select"
+                                    required
+                            >
+                                <option value="" disabled selected>Select unit</option>
+                                <option value="piece">Piece</option>
+                                <option value="kg">Kilogram (kg)</option>
+                                <option value="g">Gram (g)</option>
+                                <option value="liter">Liter (L)</option>
+                                <option value="ml">Milliliter (ml)</option>
+                                <option value="meter">Meter (m)</option>
+                                <option value="cm">Centimeter (cm)</option>
+                                <option value="box">Box</option>
+                                <option value="pack">Pack</option>
+                            </select>
+
+                            <span class="input-icon">
+                                <i class="fas fa-balance-scale"></i>
+                            </span>
+
+                            <span class="select-arrow">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
                         </div>
                     </div>
 

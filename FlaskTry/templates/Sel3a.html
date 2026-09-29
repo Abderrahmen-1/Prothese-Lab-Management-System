@@ -136,7 +136,7 @@
                 <div class="menu-group">
                     <h3 class="group-title">⚡ Quick Actions</h3>
 
-                    <a href="/AddSel3a" class="menu-item add-item">
+                    <a href="/products/AddSel3a" class="menu-item add-item">
                         <i class="fas fa-plus-circle"></i>
                         <span>Add Product</span>
                         <span class="badge badge-success">+</span>
@@ -216,7 +216,11 @@
                             <thead>
                             <tr>
                                 <th><i class="fas fa-box-open"></i> Product Name</th>
-                                <th><i class="fas fa-dollar-sign"></i> Price</th>
+                                <th><i class="fas fa-box-open"></i> Quantity</th>
+                                <th><i class="fas fa-box-open"></i> Max Quantity</th>
+                                <th><i class="fas fa-box-open"></i> Unit</th>
+                                <th><i class="fas fa-dollar-sign"></i> Unit Price</th>
+                                <th><i class="fas fa-dollar-sign"></i> Total Price</th>
                                 <th><i class="fas fa-calendar"></i> Date</th>
                                 <th><i class="fas fa-credit-card"></i> Khalsa</th>
                                 <th><i class="fas fa-money-bill"></i> Versement</th>
@@ -233,6 +237,10 @@
                                 <td><span class="cell-content">{{ row[5] }}</span></td>
                                 <td><span class="cell-content">{{ row[6] }}</span></td>
                                 <td><span class="cell-content">{{ row[7] }}</span></td>
+                                <td><span class="cell-content">{{ row[8] }}</span></td>
+                                <td><span class="cell-content">{{ row[9] }}</span></td>
+                                <td><span class="cell-content">{{ row[10] }}</span></td>
+                                <td><span class="cell-content">{{ row[11] }}</span></td>
                             </tr>
                             {% endfor %}
                             </tbody>
@@ -264,7 +272,11 @@
                             <thead>
                             <tr>
                                 <th><i class="fas fa-box-open"></i> Product Name</th>
-                                <th><i class="fas fa-dollar-sign"></i> Price</th>
+                                <th><i class="fas fa-box-open"></i> Quantity</th>
+                                <th><i class="fas fa-box-open"></i> Max Quantity</th>
+                                <th><i class="fas fa-box-open"></i> Unit</th>
+                                <th><i class="fas fa-dollar-sign"></i> Unit Price</th>
+                                <th><i class="fas fa-dollar-sign"></i> Total Price</th>
                                 <th><i class="fas fa-calendar"></i> Date</th>
                                 <th><i class="fas fa-credit-card"></i> Khalsa</th>
                                 <th><i class="fas fa-money-bill"></i> Versement</th>
@@ -281,6 +293,10 @@
                                 <td><span class="cell-content">{{ row[5] }}</span></td>
                                 <td><span class="cell-content">{{ row[6] }}</span></td>
                                 <td><span class="cell-content">{{ row[7] }}</span></td>
+                                <td><span class="cell-content">{{ row[8] }}</span></td>
+                                <td><span class="cell-content">{{ row[9] }}</span></td>
+                                <td><span class="cell-content">{{ row[10] }}</span></td>
+                                <td><span class="cell-content">{{ row[11] }}</span></td>
                             </tr>
                             {% endfor %}
                             </tbody>
@@ -312,7 +328,11 @@
                             <thead>
                             <tr>
                                 <th><i class="fas fa-box-open"></i> Product Name</th>
-                                <th><i class="fas fa-dollar-sign"></i> Price</th>
+                                <th><i class="fas fa-box-open"></i> Quantity</th>
+                                <th><i class="fas fa-box-open"></i> Max Quantity</th>
+                                <th><i class="fas fa-box-open"></i> Unit</th>
+                                <th><i class="fas fa-dollar-sign"></i> Unit Price</th>
+                                <th><i class="fas fa-dollar-sign"></i> Total Price</th>
                                 <th><i class="fas fa-calendar"></i> Date</th>
                                 <th><i class="fas fa-credit-card"></i> Khalsa</th>
                                 <th><i class="fas fa-money-bill"></i> Versement</th>
@@ -329,6 +349,10 @@
                                 <td><span class="cell-content">{{ row[5] }}</span></td>
                                 <td><span class="cell-content">{{ row[6] }}</span></td>
                                 <td><span class="cell-content">{{ row[7] }}</span></td>
+                                <td><span class="cell-content">{{ row[8] }}</span></td>
+                                <td><span class="cell-content">{{ row[9] }}</span></td>
+                                <td><span class="cell-content">{{ row[10] }}</span></td>
+                                <td><span class="cell-content">{{ row[11] }}</span></td>
                             </tr>
                             {% endfor %}
                             </tbody>
@@ -393,7 +417,7 @@
                     </div>
                     <h2>No Products Available</h2>
                     <p>Start by adding products to your inventory</p>
-                    <a href="/AddSel3a" class="add-btn">
+                    <a href="/products/AddSel3a" class="add-btn">
                         <i class="fas fa-plus"></i> Add First Product
                     </a>
                 </div>
@@ -405,7 +429,6 @@
 
 <!-- Custom Floating Context Menu -->
 <div id="custom-context-menu" class="context-menu" style="display: none;">
-
     <button id="paid-row-btn" class="context-menu-item paid-action">
         <i class="fas fa-check-circle"></i> Mark as Paid
     </button>
@@ -414,10 +437,14 @@
         <i class="fas fa-money-bill-wave"></i> Modify Versement
     </button>
 
+    <!-- Change Quantity -->
+    <button id="use-product-btn" class="context-menu-item quantity-action">
+        <i class="fas fa-box-open"></i> Use Product
+    </button>
+
     <button id="delete-row-btn" class="context-menu-item delete-action">
         <i class="fas fa-trash-alt"></i> Delete Product
     </button>
-
 </div>
 
 <script>
@@ -539,6 +566,7 @@
 
         const paidBtn = document.getElementById('paid-row-btn');
         const modifyVersementBtn = document.getElementById('modify-versement-btn');
+        const changeQuantityBtn = document.getElementById('use-product-btn');
         const deleteBtn = document.getElementById('delete-row-btn');
 
         let targetRow = null;
@@ -611,7 +639,7 @@
 
             if (confirm(`Are you sure you want to delete product #${recordId}?`)) {
                 try {
-                    const response = await fetch(`/DeleteSel3a/${recordId}`, {
+                    const response = await fetch(`/products/DeleteSel3a/${recordId}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' }
                     });
@@ -657,7 +685,7 @@
             }
 
             try {
-                const response = await fetch(`/Sel3aPaid/${recordId}`, {
+                const response = await fetch(`/products/Sel3aPaid/${recordId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -701,7 +729,7 @@
         }
 
         try {
-            const response = await fetch(`/ModifySel3aVersement/${recordId}`, {
+            const response = await fetch(`/products/ModifySel3aVersement/${recordId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -731,6 +759,70 @@
         hideContextMenu();
     });
 
+        // Change Product Quantity
+        changeQuantityBtn.addEventListener('click', async () => {
+
+            if (!targetRow) return;
+
+            const recordId = targetRow.getAttribute('data-id');
+
+            const newQuantity = prompt(
+                `How many did you used? #${recordId}:`
+            );
+
+            if (newQuantity === null) {
+                hideContextMenu();
+                return;
+            }
+
+            if (
+                newQuantity.trim() === '' ||
+                isNaN(newQuantity) ||
+                parseFloat(newQuantity) < 0
+            ) {
+                alert('Please enter a valid quantity.');
+                hideContextMenu();
+                return;
+            }
+
+            try {
+
+                const response = await fetch(`/products/ModifySel3aQuantity/${recordId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        used: parseFloat(newQuantity)
+                    })
+                });
+
+                const data = await response.json();
+
+                console.log("Status:", response.status);
+                console.log("Response:", data);
+
+                if (response.ok && data.success) {
+                    location.reload();
+                } else {
+                    alert(
+                        data.error ||
+                        data.message ||
+                        'Failed to modify quantity.'
+                    );
+                }
+
+            } catch (err) {
+
+                console.error('Quantity error:', err);
+
+                alert(
+                    'An error occurred while communicating with the server.'
+                );
+            }
+
+            hideContextMenu();
+        });
     });
 </script>
 </body>

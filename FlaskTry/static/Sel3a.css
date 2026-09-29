@@ -877,6 +877,15 @@ body {
     box-shadow: 0 8px 16px rgba(16, 185, 129, 0.3);
 }
 
+.context-menu-item.quantity-action {
+    color: #2563eb;
+}
+
+.context-menu-item.quantity-action:hover {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
 /* ===========================
    Responsive Design
    =========================== */
