@@ -11,6 +11,8 @@ from chargily_pay.entity import Checkout
 payments = Blueprint("payments", __name__, url_prefix="/payments")
 load_dotenv()
 
+PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL")
+
 CHARGILY_KEY = os.getenv("CHARGILY_API_KEY")
 CHARGILY_SECRET = os.getenv("CHARGILY_API_SECRET")
 chargily = ChargilyClient( CHARGILY_KEY, CHARGILY_SECRET, CHARGILIY_TEST_URL)
@@ -90,6 +92,8 @@ def create_payment():
 
     generate_csrf_token()
 
+    print("Create a Payment")
+
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
 
@@ -120,9 +124,19 @@ def create_payment():
             """, (session["id"], "TEMP", DENTAFLOW_PRICE, "dzd"))
         payment_id = cursor.lastrowid
 
-        webhook_url = url_for("payments.chargily_webhook", _external=True)
-        success_url = url_for("payments.payment_success", _external=True)
-        failure_url = url_for("payments.payment_failure", _external=True)
+        #webhook_url = url_for("payments.chargily_webhook", _external=True)
+        webhook_url = f"{PUBLIC_BASE_URL.rstrip('/')}/payments/chargily/webhook"
+        #success_url = url_for("payments.payment_success", _external=True)
+        #failure_url = url_for("payments.payment_failure", _external=True)
+        success_url = f"{PUBLIC_BASE_URL.rstrip('/')}/payments/success"
+        failure_url = f"{PUBLIC_BASE_URL.rstrip('/')}/payments/failure"
+
+        print("WEBHOOK URL:", webhook_url)
+        print("=" * 50)
+        print("WEBHOOK URL =", webhook_url)
+        print("SUCCESS URL =", success_url)
+        print("FAILURE URL =", failure_url)
+        print("=" * 50)
 
         checkout = Checkout(
             success_url=success_url,
