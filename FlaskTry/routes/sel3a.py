@@ -368,6 +368,3 @@ def ModifySel3aVersement(sel3a_id):
     finally :
         cursor.close()
         conn.close()
-
-
-

@@ -94,7 +94,7 @@
         </div>
     </header>
     <div class="SearchBar">
-        <form action="/OtherSearchBar" method="POST">
+        <form action="/services/OtherSearchBar" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <input type="search" name="SearchBar" placeholder="Search here the name of the person">
             <button type="submit">
@@ -111,17 +111,17 @@
             <nav class="sidebar-menu">
                 <div class="menu-group">
                     <h3 class="group-title">📋 Service Management</h3>
-                    <a href="/OtherServicesTable" class="menu-item view-item">
+                    <a href="/services/OtherServicesTable" class="menu-item view-item">
                         <i class="fas fa-table"></i>
                         <span>View Services</span>
                         <span class="badge badge-primary">View</span>
                     </a>
-                    <a href="/AddService" class="menu-item add-item">
+                    <a href="/services/AddService" class="menu-item add-item">
                         <i class="fas fa-plus-circle"></i>
                         <span>Add Service</span>
                         <span class="badge badge-success">+</span>
                     </a>
-                    <a href="/ServicesStats" class="menu-item stats-item">
+                    <a href="/services/ServicesStats" class="menu-item stats-item">
                         <i class="fas fa-chart-bar"></i>
                         <span>Statistics</span>
                         <span class="badge badge-info">📊</span>
@@ -504,7 +504,7 @@
             }
 
             try {
-                const response = await fetch(`/ServicePaid/${recordId}`, {
+                const response = await fetch(`/services/ServicePaid/${recordId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -562,7 +562,7 @@
             }
 
             try {
-                const response = await fetch(`/ModifyServiceVersement/${recordId}`, {
+                const response = await fetch(`/services/ModifyServiceVersement/${recordId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -610,7 +610,7 @@
             }
 
             try {
-                const response = await fetch(`/DeleteService/${recordId}`, {
+                const response = await fetch(`/services/DeleteService/${recordId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

@@ -212,4 +212,3 @@ def ConfirmOwnerData():
 
         else :
             return render_template('ConfirmOwnerData.html', message='Do not have the access', csrf_token=new_token)
-
