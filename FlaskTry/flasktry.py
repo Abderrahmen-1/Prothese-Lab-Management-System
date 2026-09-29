@@ -100,12 +100,18 @@ def home():
 
             try :
                 cursor.execute("""
+                                DELETE FROM users 
+                                WHERE 
+                                date_inscription <= DATE_SUB(CURDATE() , INTERVAL 2 DAY)
+                                AND email_confirmed = %s """,(False,))
+
+                cursor.execute("""
                                 UPDATE users
                                 SET status = 'out of limits' 
                                 WHERE 
                                 date_inscription <= DATE_SUB(CURDATE() , INTERVAL 1 MONTH)  
                                 AND status != 'block' AND id != %s
-                                        """,(session['id'],))
+                                        """,(1,))
                 conn.commit()
 
                 cursor.execute("""
