@@ -61,10 +61,12 @@
                     </div>
                 </div>
 
-                <a href="{{ url_for('users.ConfirmOwnerData') }}" class="users-generated">
-                    <i class="fas fa-user-shield"></i>
-                    <span>Back to previous</span>
-                </a>
+                {% if session %}
+                    <a href="{{ url_for('users.ConfirmOwnerData') }}" class="users-generated">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Back to previous</span>
+                    </a>
+                {% endif %}
 
             </div>
 

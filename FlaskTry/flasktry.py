@@ -12,6 +12,8 @@ from FlaskTry.routes.users import users
 from FlaskTry.routes.patients import patients
 from FlaskTry.routes.dentists import dentists
 from FlaskTry.routes.prothesists import prothesists
+import random
+from flask_mail import Mail, Message
 
 load_dotenv()
 
@@ -25,6 +27,16 @@ app.register_blueprint(users)
 app.register_blueprint(patients)
 app.register_blueprint(dentists)
 app.register_blueprint(prothesists)
+
+#============== Email configuration ===================
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] = 587
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USERNAME"] = os.getenv("email_account")
+app.config["MAIL_PASSWORD"] = os.getenv("email_password")
+
+mail = Mail(app)
+
 
 def is_logged_in():
     return "id" in session
@@ -41,6 +53,7 @@ def login_required():
 @limiter.limit("10 per minute")
 def home():
     if request.method == "GET":
+        session.clear()
         token = secrets.token_hex(16)
         session["csrf_token"] = token
 
@@ -83,9 +96,18 @@ def home():
                 session['username'] = username
 
             conn = get_connection()
-            cursor = conn.cursor()
+            cursor = conn.cursor(buffered=True)
 
             try :
+                cursor.execute("""
+                                UPDATE users
+                                SET status = 'out of limits' 
+                                WHERE 
+                                date_inscription <= DATE_SUB(CURDATE() , INTERVAL 1 MONTH)  
+                                AND status != 'block' AND id != %s
+                                        """,(session['id'],))
+                conn.commit()
+
                 cursor.execute("""
                                 SELECT status 
                                 FROM users 
@@ -95,6 +117,22 @@ def home():
                 if found[0] == 'block' :
                     session.clear()
                     return render_template("Log-in.html", error="No access to log-in", csrf_token=new_token)
+                if found[0] == 'out of limits':
+                    return render_template("Log-in.html",
+                                           error="Your free offer has been ended you should contact us for more informations",
+                                           csrf_token=session['id'])
+
+                row = ConfirmLogIn(email, username)
+                if row and check_password_hash(row[1], password):
+                    if not row[2]:
+                        return render_template(
+                            "Log-in.html",
+                            error="Please verify your email first.",
+                            csrf_token=new_token
+                        )
+
+                    session['id'] = row[0]
+                    session['username'] = username
 
                 return redirect(url_for('getHome'))
 
@@ -109,6 +147,29 @@ def home():
 def getHome():
     if not is_logged_in():
         return redirect(url_for('home'))
+
+    conn = get_connection()
+    cursor = conn.cursor(buffered=True)
+
+    try :
+        cursor.execute("""
+                        SELECT status 
+                        FROM users 
+                        WHERE id = %s """,(session['id'],))
+        result = cursor.fetchone()
+
+        if result[0] == 'block' :
+            return render_template("Log-in.html", error="The account is blocked contact us for more informations", csrf_token=session['csrf_token'])
+        if result[0] == 'out of limits':
+            return render_template("Log-in.html", error="Your free offer has been ended you should contact us for more informations",
+                                                        csrf_token=session['id'])
+    except Exception as e:
+        conn.rollback()
+        return render_template("Log-in.html", message=f"error {str(e)}")
+
+    finally :
+        cursor.close()
+        conn.close()
 
     name = session.get('username')
     letter = name[0].upper()
@@ -180,12 +241,45 @@ def Create():
             result = cursor.fetchone()
 
             if not result:
+                code = str(random.randint(10000, 99999))
+
                 cursor.execute("""
-                    INSERT INTO users (user_name, user_password, user_email, user_phoneNumber, date_inscription )
-                    VALUES (%s, %s, %s, %s, NOW())
-                """, (username, password, email, phone))
+                    INSERT INTO users
+                    (
+                        user_name,
+                        user_password,
+                        user_email,
+                        user_phoneNumber,
+                        date_inscription,
+                        email_confirmed,
+                        verification_code
+                    )
+                    VALUES (%s, %s, %s, %s, NOW(), FALSE, %s)
+                """, (username, password, email, phone, code))
+
                 conn.commit()
-                return render_template("Log-in.html", message=f"Account Created Welcome {username}", csrf_token=new_token)
+
+                # Send verification email
+                msg = Message(
+                    subject="Email Verification Code",
+                    sender=app.config["MAIL_USERNAME"],
+                    recipients=[email]
+                )
+
+                msg.body = f"""
+                Hello {username},
+                Your email verification code is:
+                {code}
+                Enter this code in the verification page to activate your account.
+                Do not share this code with anyone.
+                """
+
+                mail.send(msg)
+
+                return redirect(url_for(
+                    "verify_email",
+                    email=email
+                ))
 
             else :
                 return render_template("Log-in.html" , message="Account Already exist", csrf_token=new_token)
@@ -198,6 +292,94 @@ def Create():
             cursor.close()
             conn.close()
 
+
+@app.route("/VerifyEmail/<email>", methods=["GET", "POST"])
+def verify_email(email):
+
+    if request.method == "GET":
+        token = secrets.token_hex(16)
+        session["csrf_token"] = token
+
+        return render_template(
+            "VerifyEmail.html",
+            email=email,
+            csrf_token=token
+        )
+
+    if request.method == "POST" :
+        form_token = request.form.get("csrf_token")
+        session_token = session.get("csrf_token")
+
+        if not form_token or form_token != session_token:
+            return "CSRF attack detected", 403
+
+        new_token = secrets.token_hex(16)
+        session["csrf_token"] = new_token
+
+        code = request.form.get("code")
+
+        conn = get_connection()
+        cursor = conn.cursor(buffered=True)
+
+        try:
+            cursor.execute("""
+                SELECT id, verification_code, email_confirmed
+                FROM users
+                WHERE user_email = %s
+            """, (email,))
+
+            user = cursor.fetchone()
+
+            if not user:
+                return render_template(
+                    "VerifyEmail.html",
+                    email=email,
+                    error="User not found",
+                    csrf_token=new_token
+                )
+
+            user_id = user[0]
+            stored_code = user[1]
+            confirmed = user[2]
+
+            if confirmed:
+                return redirect(url_for("home"))
+
+            if code != stored_code:
+                return render_template(
+                    "VerifyEmail.html",
+                    email=email,
+                    error="Invalid verification code",
+                    csrf_token=new_token
+                )
+
+            cursor.execute("""
+                UPDATE users
+                SET email_confirmed = TRUE,
+                    verification_code = NULL
+                WHERE id = %s
+            """, (user_id,))
+
+            conn.commit()
+
+            return render_template(
+                "Log-in.html",
+                message="Email verified successfully. You can now login.",
+                csrf_token=new_token
+            )
+
+        except Exception as e:
+            conn.rollback()
+            return render_template(
+                "VerifyEmail.html",
+                email=email,
+                error=f"Error: {str(e)}",
+                csrf_token=new_token
+            )
+
+        finally:
+            cursor.close()
+            conn.close()
 
 # ===================================== Change password =======================
 

@@ -1,0 +1,1789 @@
+/* ===========================
+   DENTAFLOW - VERIFY EMAIL
+   Professional Charcoal Theme
+   Responsive Design
+   =========================== */
+
+
+:root {
+
+    --primary: #1e293b;
+    --primary-light: #334155;
+    --primary-dark: #0f172a;
+
+    --success: #10b981;
+    --danger: #ef4444;
+    --info: #38bdf8;
+
+    --bg-dark: #0f172a;
+    --bg-light: #f8fafc;
+
+    --text-dark: #0f172a;
+    --text-light: #64748b;
+
+    --border: #e2e8f0;
+
+    --shadow-sm:
+        0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+    --shadow-md:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+    --shadow-lg:
+        0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+    --shadow-xl:
+        0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+    --transition:
+        all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* ===========================
+   RESET
+   =========================== */
+
+* {
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+
+body {
+
+    font-family:
+        'Inter',
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        sans-serif;
+
+    background-color: var(--bg-light);
+
+    color: var(--text-dark);
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    position: relative;
+
+    overflow-x: hidden;
+
+    padding: 1rem;
+}
+
+
+/* ===========================
+   BACKGROUND
+   =========================== */
+
+.bg-shapes {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: -1;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f172a 0%,
+            #1e293b 50%,
+            #334155 100%
+        );
+
+    opacity: 0.03;
+}
+
+
+/* ===========================
+   MAIN CONTAINER
+   =========================== */
+
+.verification-container {
+
+    width: 100%;
+
+    max-width: 1050px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    box-shadow: var(--shadow-xl);
+
+    display: flex;
+
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+
+    animation:
+        fadeIn 0.8s ease;
+}
+
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(10px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* ===========================
+   LEFT BRANDING SIDE
+   =========================== */
+
+.branding-side {
+
+    flex: 1;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary) 0%,
+            var(--primary-dark) 100%
+        );
+
+    color: white;
+
+    padding: 3rem;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    position: relative;
+}
+
+
+.branding-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+/* ===========================
+   LOGO
+   =========================== */
+
+.logo-wrapper {
+
+    width: 64px;
+    height: 64px;
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    border-radius: 16px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 28px;
+
+    margin-bottom: 1.5rem;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.2);
+
+    position: relative;
+
+    animation:
+        float 4s ease-in-out infinite;
+}
+
+
+@keyframes float {
+
+    0%, 100% {
+
+        transform:
+            translateY(0);
+    }
+
+    50% {
+
+        transform:
+            translateY(-8px);
+    }
+}
+
+
+/* ===========================
+   BRAND TEXT
+   =========================== */
+
+.brand-title {
+
+    font-size: 2rem;
+
+    font-weight: 700;
+
+    letter-spacing: -0.5px;
+
+    margin-bottom: 0.25rem;
+}
+
+
+.brand-subtitle {
+
+    font-size: 0.875rem;
+
+    color: #94a3b8;
+
+    margin-bottom: 2.5rem;
+}
+
+
+/* ===========================
+   BENEFITS
+   =========================== */
+
+.benefits-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1.25rem;
+
+    margin-bottom: 3rem;
+}
+
+
+.benefit-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 1rem;
+}
+
+
+.benefit-icon {
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255, 255, 255, 0.1);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 1.15rem;
+
+    color: var(--info);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.1);
+
+    flex-shrink: 0;
+}
+
+
+.benefit-text h3 {
+
+    font-size: 0.925rem;
+
+    font-weight: 600;
+
+    margin-bottom: 2px;
+}
+
+
+.benefit-text p {
+
+    font-size: 0.75rem;
+
+    color: #94a3b8;
+
+    line-height: 1.4;
+}
+
+
+/* ===========================
+   BACK BUTTON
+   =========================== */
+
+.users-generated {
+
+    margin-left: 22px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 8px 12px;
+
+    border-radius: 9px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    color: #475569;
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.1px;
+
+    transition:
+        all 0.25s ease;
+
+    width: fit-content;
+}
+
+
+.users-generated i {
+
+    font-size: 11px;
+
+    color: #64748b;
+
+    transition:
+        all 0.25s ease;
+}
+
+
+.users-generated:hover {
+
+    background: #f1f5f9;
+
+    border-color: #cbd5e1;
+
+    color: #0f172a;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 4px 12px
+        rgba(15, 23, 42, 0.06);
+}
+
+
+.users-generated:hover i {
+
+    color: #2563eb;
+
+    transform:
+        translateX(-2px);
+}
+
+
+/* ===========================
+   TESTIMONIAL
+   =========================== */
+
+.testimonial {
+
+    margin-top: auto;
+
+    background:
+        rgba(255, 255, 255, 0.06);
+
+    padding: 1.25rem;
+
+    border-radius: 12px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.1);
+
+    font-size: 0.825rem;
+
+    font-style: italic;
+
+    color: #e2e8f0;
+}
+
+
+.testimonial .quote-icon {
+
+    color: var(--info);
+
+    margin-bottom: 0.5rem;
+
+    display: block;
+}
+
+
+.testimonial-author {
+
+    margin-top: 0.5rem;
+
+    font-style: normal;
+
+    font-size: 0.75rem;
+}
+
+
+.testimonial-author strong {
+
+    display: block;
+
+    color: white;
+}
+
+
+.testimonial-author span {
+
+    color: #94a3b8;
+}
+
+
+/* ===========================
+   RIGHT SIDE
+   =========================== */
+
+.form-side {
+
+    flex: 1.2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 3rem;
+
+    background: white;
+}
+
+
+.form-wrapper {
+
+    width: 100%;
+
+    max-width: 450px;
+}
+
+
+/* ===========================
+   HEADER
+   =========================== */
+
+.form-header {
+
+    margin-bottom: 1.75rem;
+
+    text-align: center;
+}
+
+
+.verification-icon {
+
+    width: 64px;
+
+    height: 64px;
+
+    margin:
+        0 auto 1rem;
+
+    border-radius: 16px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        rgba(56, 189, 248, 0.1);
+
+    color: var(--info);
+
+    font-size: 1.6rem;
+
+    border:
+        1px solid
+        rgba(56, 189, 248, 0.2);
+}
+
+
+.form-header h2 {
+
+    font-size: 1.65rem;
+
+    color: var(--primary);
+
+    font-weight: 700;
+
+    margin-bottom: 0.35rem;
+}
+
+
+.form-header p {
+
+    font-size: 0.825rem;
+
+    color: var(--text-light);
+
+    line-height: 1.5;
+
+    max-width: 360px;
+
+    margin: auto;
+}
+
+
+/* ===========================
+   FORM
+   =========================== */
+
+.verification-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1.15rem;
+}
+
+
+/* ===========================
+   EMAIL DISPLAY
+   =========================== */
+
+.email-display {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.85rem;
+
+    padding: 0.9rem 1rem;
+
+    border-radius: 10px;
+
+    background:
+        #f8fafc;
+
+    border:
+        1px solid
+        var(--border);
+}
+
+
+.email-display > i {
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 9px;
+
+    background:
+        rgba(56, 189, 248, 0.1);
+
+    color: var(--info);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+
+.email-display div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+
+.email-display span {
+
+    font-size: 0.68rem;
+
+    color: var(--text-light);
+
+    margin-bottom: 2px;
+}
+
+
+.email-display strong {
+
+    font-size: 0.8rem;
+
+    color: var(--primary);
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ===========================
+   INPUT
+   =========================== */
+
+.input-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.35rem;
+}
+
+
+.input-group label {
+
+    font-size: 0.775rem;
+
+    font-weight: 600;
+
+    color: var(--primary-light);
+}
+
+
+.code-input-wrapper {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+}
+
+
+.code-input-wrapper > i {
+
+    position: absolute;
+
+    left: 1.15rem;
+
+    color: var(--text-light);
+
+    font-size: 0.95rem;
+
+    transition:
+        var(--transition);
+
+    z-index: 2;
+}
+
+
+.code-input {
+
+    width: 100%;
+
+    padding:
+        1rem
+        1.15rem
+        1rem
+        2.85rem;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 8px;
+
+    font-size: 1.15rem;
+
+    font-weight: 600;
+
+    letter-spacing: 0.55rem;
+
+    text-align: center;
+
+    background:
+        var(--bg-light);
+
+    color:
+        var(--text-dark);
+
+    outline: none;
+
+    transition:
+        var(--transition);
+}
+
+
+.code-input::placeholder {
+
+    color: #cbd5e1;
+
+    letter-spacing:
+        0.55rem;
+}
+
+
+.code-input:focus {
+
+    background: white;
+
+    border-color:
+        var(--primary-light);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(30, 41, 59, 0.1);
+}
+
+
+.code-input-wrapper.focused > i {
+
+    color:
+        var(--primary);
+}
+
+
+.code-input.code-complete {
+
+    border-color:
+        var(--success);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(16, 185, 129, 0.08);
+}
+
+
+.code-input.input-error {
+
+    border-color:
+        var(--danger);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(239, 68, 68, 0.08);
+
+    animation:
+        shake 0.3s ease;
+}
+
+
+@keyframes shake {
+
+    0%, 100% {
+
+        transform:
+            translateX(0);
+    }
+
+    25% {
+
+        transform:
+            translateX(-5px);
+    }
+
+    75% {
+
+        transform:
+            translateX(5px);
+    }
+}
+
+
+.input-hint {
+
+    font-size: 0.7rem;
+
+    color: var(--text-light);
+}
+
+
+/* ===========================
+   BUTTON
+   =========================== */
+
+.btn-submit {
+
+    margin-top: 0.25rem;
+
+    width: 100%;
+
+    padding:
+        0.875rem
+        1.5rem;
+
+    background:
+        var(--primary);
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 0.925rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    transition:
+        var(--transition);
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+.btn-submit:hover {
+
+    background:
+        var(--primary-dark);
+
+    box-shadow:
+        var(--shadow-md);
+
+    transform:
+        translateY(-2px);
+}
+
+
+.btn-submit .ripple {
+
+    position: absolute;
+
+    background:
+        rgba(255, 255, 255, 0.3);
+
+    border-radius: 50%;
+
+    transform: scale(0);
+
+    animation:
+        ripple 0.6s linear;
+}
+
+
+@keyframes ripple {
+
+    to {
+
+        transform:
+            scale(4);
+
+        opacity: 0;
+    }
+}
+
+
+/* ===========================
+   SECURITY NOTE
+   =========================== */
+
+.security-note {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 0.5rem;
+
+    color: var(--text-light);
+
+    font-size: 0.7rem;
+
+    text-align: center;
+
+    line-height: 1.4;
+}
+
+
+.security-note i {
+
+    color: var(--success);
+
+    font-size: 0.75rem;
+}
+
+
+/* ===========================
+   DIVIDER
+   =========================== */
+
+.divider {
+
+    display: flex;
+
+    align-items: center;
+
+    text-align: center;
+
+    color: var(--text-light);
+
+    font-size: 0.75rem;
+
+    margin:
+        0.25rem 0;
+}
+
+
+.divider::before,
+.divider::after {
+
+    content: '';
+
+    flex: 1;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+
+.divider::before {
+
+    margin-right:
+        0.75rem;
+}
+
+
+.divider::after {
+
+    margin-left:
+        0.75rem;
+}
+
+
+/* ===========================
+   LOGIN / REGISTER LINK
+   =========================== */
+
+.login-link {
+
+    text-align: center;
+
+    font-size: 0.775rem;
+
+    color: var(--text-light);
+
+    line-height: 1.5;
+}
+
+
+.login-link a {
+
+    color:
+        var(--primary);
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+
+.login-link a:hover {
+
+    text-decoration: underline;
+}
+
+
+/* ===========================
+   ALERTS
+   =========================== */
+
+.alert {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 0.85rem;
+
+    padding:
+        0.85rem
+        1.15rem;
+
+    border-radius: 8px;
+
+    box-shadow:
+        var(--shadow-sm);
+
+    font-size: 0.825rem;
+
+    animation:
+        slideDown 0.4s ease;
+
+    position: relative;
+
+    margin-bottom:
+        0.25rem;
+}
+
+
+@keyframes slideDown {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(-8px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+.alert > i {
+
+    font-size: 1.25rem;
+
+    flex-shrink: 0;
+}
+
+
+.alert-content {
+
+    flex: 1;
+}
+
+
+.alert-content h3 {
+
+    font-size: 0.875rem;
+
+    font-weight: 700;
+
+    margin-bottom:
+        0.1rem;
+}
+
+
+.alert-content p {
+
+    font-size: 0.775rem;
+
+    margin: 0;
+
+    line-height: 1.4;
+}
+
+
+.alert-close {
+
+    background: none;
+
+    border: none;
+
+    color: inherit;
+
+    cursor: pointer;
+
+    font-size: 1rem;
+
+    opacity: 0.6;
+
+    transition:
+        var(--transition);
+
+    padding:
+        0.15rem;
+}
+
+
+.alert-close:hover {
+
+    opacity: 1;
+}
+
+
+.alert-success {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(16, 185, 129, 0.1) 0%,
+            rgba(16, 185, 129, 0.05) 100%
+        );
+
+    border-left:
+        4px solid
+        var(--success);
+
+    color:
+        #065f46;
+}
+
+
+.alert-success > i {
+
+    color:
+        var(--success);
+}
+
+
+.alert-error {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(239, 68, 68, 0.1) 0%,
+            rgba(239, 68, 68, 0.05) 100%
+        );
+
+    border-left:
+        4px solid
+        var(--danger);
+
+    color:
+        #991b1b;
+}
+
+
+.alert-error > i {
+
+    color:
+        var(--danger);
+}
+
+
+.fade-in-slow {
+
+    animation:
+        fadeIn 0.8s ease;
+}
+
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   ========================================================= */
+
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 992px) {
+
+    .verification-container {
+
+        width: 95%;
+
+        max-width: 900px;
+    }
+
+
+    .branding-side {
+
+        padding:
+            40px 30px;
+    }
+
+
+    .form-side {
+
+        padding:
+            40px 30px;
+    }
+
+
+    .brand-title {
+
+        font-size:
+            2.2rem;
+    }
+
+
+    .brand-subtitle {
+
+        font-size:
+            0.95rem;
+    }
+
+
+    .benefit-item {
+
+        margin-bottom:
+            8px;
+    }
+
+
+    .form-wrapper {
+
+        max-width:
+            100%;
+    }
+}
+
+
+/* ---------- Tablet / Small Laptop ---------- */
+
+@media (max-width: 900px) {
+
+    .verification-container {
+
+        flex-direction:
+            column;
+
+        min-height:
+            auto;
+    }
+
+
+    .branding-side {
+
+        padding:
+            2.5rem 2rem;
+
+        min-height:
+            250px;
+    }
+
+
+    .form-side {
+
+        padding:
+            2.5rem 2rem;
+    }
+
+
+    .benefits-list {
+
+        display:
+            none;
+    }
+
+
+    .testimonial {
+
+        display:
+            none;
+    }
+}
+
+
+/* ---------- Phone ---------- */
+
+@media (max-width: 768px) {
+
+    body {
+
+        padding:
+            20px 10px;
+
+        align-items:
+            flex-start;
+    }
+
+
+    .verification-container {
+
+        width:
+            100%;
+
+        max-width:
+            500px;
+    }
+
+
+    /* Branding */
+
+    .branding-side {
+
+        padding:
+            35px 25px;
+
+        text-align:
+            center;
+    }
+
+
+    .branding-content {
+
+        max-width:
+            100%;
+    }
+
+
+    .logo-wrapper {
+
+        margin:
+            0 auto 15px;
+    }
+
+
+    .brand-title {
+
+        font-size:
+            2rem;
+    }
+
+
+    .brand-subtitle {
+
+        font-size:
+            0.9rem;
+
+        margin-bottom:
+            25px;
+    }
+
+
+    /* Back button */
+
+    .users-generated {
+
+        margin-left:
+            auto;
+
+        margin-right:
+            auto;
+    }
+
+
+    /* Form */
+
+    .form-side {
+
+        padding:
+            30px 20px;
+    }
+
+
+    .form-header {
+
+        text-align:
+            center;
+    }
+
+
+    .form-header h2 {
+
+        font-size:
+            1.7rem;
+    }
+
+
+    .form-header p {
+
+        font-size:
+            0.9rem;
+    }
+
+
+    .verification-icon {
+
+        width:
+            58px;
+
+        height:
+            58px;
+
+        font-size:
+            1.45rem;
+    }
+
+
+    .email-display {
+
+        padding:
+            0.85rem;
+    }
+
+
+    .email-display strong {
+
+        font-size:
+            0.75rem;
+    }
+
+
+    .code-input {
+
+        font-size:
+            1.1rem;
+
+        letter-spacing:
+            0.45rem;
+    }
+
+
+    .code-input::placeholder {
+
+        letter-spacing:
+            0.45rem;
+    }
+
+
+    .btn-submit {
+
+        width:
+            100%;
+    }
+
+
+    .security-note {
+
+        font-size:
+            0.68rem;
+    }
+
+
+    /* Alerts */
+
+    .alert {
+
+        padding:
+            12px;
+    }
+
+
+    .alert-content h3 {
+
+        font-size:
+            0.9rem;
+    }
+
+
+    .alert-content p {
+
+        font-size:
+            0.8rem;
+    }
+}
+
+
+/* ---------- Small Phones ---------- */
+
+@media (max-width: 480px) {
+
+    body {
+
+        padding:
+            10px 6px;
+    }
+
+
+    .verification-container {
+
+        border-radius:
+            15px;
+    }
+
+
+    .branding-side {
+
+        padding:
+            28px 18px;
+    }
+
+
+    .form-side {
+
+        padding:
+            25px 15px;
+    }
+
+
+    .logo-wrapper {
+
+        transform:
+            scale(0.85);
+    }
+
+
+    .brand-title {
+
+        font-size:
+            1.7rem;
+    }
+
+
+    .brand-subtitle {
+
+        font-size:
+            0.82rem;
+    }
+
+
+    .form-header h2 {
+
+        font-size:
+            1.45rem;
+    }
+
+
+    .form-header p {
+
+        font-size:
+            0.8rem;
+    }
+
+
+    .verification-icon {
+
+        width:
+            54px;
+
+        height:
+            54px;
+
+        font-size:
+            1.3rem;
+    }
+
+
+    .email-display {
+
+        align-items:
+            flex-start;
+    }
+
+
+    .email-display > i {
+
+        width:
+            34px;
+
+        height:
+            34px;
+
+        font-size:
+            0.8rem;
+    }
+
+
+    .email-display span {
+
+        font-size:
+            0.62rem;
+    }
+
+
+    .email-display strong {
+
+        font-size:
+            0.7rem;
+    }
+
+
+    .code-input {
+
+        font-size:
+            1rem;
+
+        padding:
+            12px 40px;
+
+        letter-spacing:
+            0.35rem;
+    }
+
+
+    .code-input::placeholder {
+
+        letter-spacing:
+            0.35rem;
+    }
+
+
+    .input-hint {
+
+        font-size:
+            0.68rem;
+    }
+
+
+    .btn-submit {
+
+        padding:
+            13px;
+
+        font-size:
+            0.9rem;
+    }
+
+
+    .security-note {
+
+        font-size:
+            0.65rem;
+    }
+
+
+    .login-link {
+
+        font-size:
+            0.75rem;
+    }
+}
+
+
+/* ---------- Very Small Phones ---------- */
+
+@media (max-width: 360px) {
+
+    .branding-side {
+
+        padding:
+            22px 14px;
+    }
+
+
+    .form-side {
+
+        padding:
+            22px 12px;
+    }
+
+
+    .brand-title {
+
+        font-size:
+            1.5rem;
+    }
+
+
+    .form-header h2 {
+
+        font-size:
+            1.3rem;
+    }
+
+
+    .form-header p {
+
+        font-size:
+            0.75rem;
+    }
+
+
+    .verification-icon {
+
+        width:
+            48px;
+
+        height:
+            48px;
+
+        font-size:
+            1.15rem;
+    }
+
+
+    .email-display {
+
+        gap:
+            0.6rem;
+    }
+
+
+    .email-display strong {
+
+        font-size:
+            0.65rem;
+    }
+
+
+    .code-input {
+
+        font-size:
+            0.95rem;
+
+        letter-spacing:
+            0.25rem;
+    }
+
+
+    .code-input::placeholder {
+
+        letter-spacing:
+            0.25rem;
+    }
+
+
+    .benefit-item {
+
+        align-items:
+            flex-start;
+    }
+
+
+    .benefit-icon {
+
+        min-width:
+            34px;
+
+        width:
+            34px;
+
+        height:
+            34px;
+
+        font-size:
+            0.8rem;
+    }
+}

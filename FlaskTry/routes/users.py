@@ -11,7 +11,7 @@ def is_logged_in():
 
 @users.route("/ModifyStatus", methods=["POST", "GET"])
 def ModifyStatus():
-    if not is_logged_in():
+    if not is_logged_in() or session['id'] != 1:
         return redirect(url_for('home'))
 
     if request.method == "GET":
@@ -78,7 +78,7 @@ def ModifyStatus():
 
 @users.route("/DeleteUser", methods=["POST", "GET"])
 def DeleteUser():
-    if not is_logged_in():
+    if not is_logged_in() or session['id'] != 1:
         return redirect(url_for('home'))
 
     if request.method == "GET":
@@ -178,7 +178,7 @@ def DeleteUser():
 
 @users.route("/ConfirmOwnerData", methods=["POST" , "GET"])
 def ConfirmOwnerData():
-    if not is_logged_in():
+    if not is_logged_in() :
         return redirect(url_for('home'))
 
     if request.method == "GET":

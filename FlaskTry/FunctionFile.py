@@ -60,7 +60,7 @@ def ConfirmLogIn(email, username):
     cursor = conn.cursor(buffered=True)
     try:
         cursor.execute("""
-            SELECT id, user_password 
+            SELECT id, user_password, email_confirmed
             FROM users
             WHERE user_email = %s AND user_name = %s
         """, (email, username))
