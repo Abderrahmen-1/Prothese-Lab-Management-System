@@ -50,12 +50,12 @@
                     <i class="fas fa-plus-circle"></i>
                 </div>
                 <div class="logo-text">
-                    <h1>Add Sel3a</h1>
+                    <h1>Add Inventory</h1>
                     <p>Add New Inventory Item</p>
                 </div>
             </div>
             <nav class="header-nav">
-                <a href="/Sel3a" class="nav-btn back-btn">
+                <a href="/products/Sel3a" class="nav-btn back-btn">
                     <i class="fas fa-arrow-left"></i> Back to Inventory
                 </a>
             </nav>
@@ -75,7 +75,7 @@
                     <p class="form-subtitle">Add a new prosthetic material or component to your inventory</p>
                 </div>
 
-                <form action="/AddSel3a" method="POST" class="add-form">
+                <form action="/products/AddSel3a" method="POST" class="add-form">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     <!-- Sel3a Name -->
                     <div class="form-group">

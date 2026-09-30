@@ -97,14 +97,14 @@ def addsel3a():
             return render_template("AddSel3a.html", error="Invalid Name Value", csrf_token=new_token)
 
         try:
-            price = float(price) * int(quantity)
+            price = float(price) * float(quantity)
         except (ValueError, TypeError):
             return render_template("AddSel3a.html", error="Invalid Price Value", csrf_token=new_token)
 
-        if price < 0 or not name.strip():
+        if price <= 0 or not name.strip():
             return render_template("AddSel3a.html", error="Invalide Informations", csrf_token=new_token)
 
-        if not quantity or not unit :
+        if not quantity or float(quantity) < 0 or not unit :
             return render_template("AddSel3a.html", error="Unit and Quantity are required ", csrf_token=new_token)
 
         if khalsa.lower() not in ['yes' , 'no']:
@@ -160,7 +160,7 @@ def ModifySel3aQuantity(sel3a_id):
     data = request.get_json()
 
     try :
-        used = int(data.get('used'))
+        used = float(data.get('used'))
     except (TypeError , ValueError):
         return jsonify({
             'success': False,
@@ -174,7 +174,7 @@ def ModifySel3aQuantity(sel3a_id):
                         WHERE id = %s AND user_id = %s """,(sel3a_id, session['id']))
         result = cursor.fetchone()
 
-        new_quantity = int(result[0]) - used
+        new_quantity = float(result[0]) - used
 
         if new_quantity < 0 :
             return jsonify({

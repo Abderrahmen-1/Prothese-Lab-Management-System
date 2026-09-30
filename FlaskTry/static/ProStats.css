@@ -623,75 +623,7 @@ code {
     background: var(--primary-dark);
 }
 
-/* ===========================
-   Print Styles
-   BUG FIX #23: Better print handling
-   =========================== */
 
-@media print {
-    .search-section,
-    .stats-header,
-    .table-header .table-actions,
-    .btn-icon,
-    .sidebar,
-    .header,
-    .nav-btn {
-        display: none !important;
-    }
-
-    .table-container {
-        page-break-inside: avoid;
-        box-shadow: none;
-        border: 1px solid var(--border);
-        margin-bottom: 2rem;
-    }
-
-    .table-header {
-        page-break-inside: avoid;
-        border: 1px solid var(--text-dark);
-        background: white;
-    }
-
-    .table-header h2 {
-        color: var(--text-dark);
-        font-size: 1.2rem;
-    }
-
-    .data-table {
-        font-size: 0.85rem;
-    }
-
-    .data-table thead {
-        background: white;
-        color: var(--text-dark);
-        border: 2px solid var(--text-dark);
-    }
-
-    .data-table th {
-        border: 1px solid var(--text-dark);
-        padding: 0.75rem;
-    }
-
-    .data-table td {
-        border: 1px solid var(--border);
-        padding: 0.75rem;
-    }
-
-    .data-table tbody tr {
-        page-break-inside: avoid;
-    }
-
-    .badge-value {
-        background: white;
-        border: 1px solid var(--text-dark);
-        color: var(--text-dark);
-        padding: 0.3rem 0.6rem;
-    }
-
-    .empty-message {
-        display: none;
-    }
-}
 
 /* ===========================
    Accessibility & Motion
@@ -1816,3 +1748,440 @@ video {
     }
 }
 
+/* =========================================================
+   RESPONSIVE SIDEBAR
+   ========================================================= */
+
+.main-layout {
+    display: grid;
+    grid-template-columns: 22% 1fr;
+    gap: 2%;
+    width: 100%;
+}
+
+.sidebar {
+    width: 100%;
+    min-width: 0;
+}
+
+/* Options stay UNDER each other */
+.sidebar-menu {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1%;
+}
+
+/* Each option: icon + text NEXT TO each other */
+.menu-item {
+    width: 100%;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    gap: 5%;
+    padding: 3% 5%;
+}
+
+/* Icon */
+.menu-item i {
+    flex-shrink: 0;
+}
+
+/* Text */
+.menu-item span {
+    min-width: 0;
+    flex: 1;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Badge */
+.menu-item .badge {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   PRINT
+   Keep the statistics page visually close to the real page
+========================================================= */
+
+@media print {
+
+    /* -----------------------------------------------------
+       PAGE
+    ----------------------------------------------------- */
+
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+
+    html,
+    body {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        overflow: visible !important;
+        background: white !important;
+        color: var(--text-dark);
+    }
+
+    /* -----------------------------------------------------
+       HIDE NAVIGATION / INTERACTIVE CONTROLS
+       Keep the actual statistics content.
+    ----------------------------------------------------- */
+
+    .sidebar,
+    .header,
+    .nav-btn,
+    .search-section,
+    .table-header .table-actions,
+    .btn-icon,
+    .alert-close {
+        display: none !important;
+    }
+
+    /* -----------------------------------------------------
+       MAIN CONTENT
+    ----------------------------------------------------- */
+
+    .container {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .main-layout {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .content {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* -----------------------------------------------------
+       STATISTICS HEADER
+       Keep the real header instead of hiding it.
+    ----------------------------------------------------- */
+
+    .stats-header {
+        display: flex !important;
+        width: 100% !important;
+        margin-bottom: 20px;
+        padding: 25px;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .stats-header-icon {
+        display: block !important;
+        animation: none !important;
+    }
+
+    .stats-header-content {
+        display: block !important;
+    }
+
+    .stats-header-content h1 {
+        font-size: 2rem;
+    }
+
+    .stats-header-content p {
+        font-size: 1rem;
+    }
+
+    /* -----------------------------------------------------
+       MESSAGES
+    ----------------------------------------------------- */
+
+    .messages-section {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .alert {
+        break-inside: avoid;
+        page-break-inside: avoid;
+
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* -----------------------------------------------------
+       TABLE AREA
+    ----------------------------------------------------- */
+
+    .table-area {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* -----------------------------------------------------
+       TABLE CONTAINERS
+    ----------------------------------------------------- */
+
+    .table-container {
+        width: 100% !important;
+        max-width: none !important;
+
+        box-shadow: none !important;
+
+        border: 1px solid var(--border);
+
+        overflow: visible !important;
+
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    /*
+       If your JS hides some tables with .hidden,
+       don't print those hidden tables.
+    */
+    .table-container.hidden {
+        display: none !important;
+    }
+
+    .table-container.active {
+        display: block !important;
+    }
+
+    /* -----------------------------------------------------
+       TABLE HEADER
+    ----------------------------------------------------- */
+
+    .table-header {
+        display: flex !important;
+
+        padding: 15px;
+
+        background: white;
+
+        border-bottom: 2px solid var(--border);
+
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .table-header h2 {
+        color: var(--text-dark);
+        font-size: 1.2rem;
+    }
+
+    .table-header h2 i {
+        color: var(--primary);
+    }
+
+    /* -----------------------------------------------------
+       TABLE WRAPPER
+       Remove horizontal scrolling when printing.
+    ----------------------------------------------------- */
+
+    .table-wrapper {
+        width: 100% !important;
+        max-width: none !important;
+
+        overflow: visible !important;
+
+        -webkit-overflow-scrolling: auto;
+    }
+
+    /* -----------------------------------------------------
+       DATA TABLE
+    ----------------------------------------------------- */
+
+    .data-table {
+        width: 100% !important;
+
+        /*
+           Important:
+           Do not use max-content while printing.
+        */
+        min-width: 0 !important;
+
+        table-layout: auto;
+
+        font-size: 0.78rem;
+    }
+
+    .data-table thead {
+        position: static !important;
+
+        background: var(--primary) !important;
+        color: white !important;
+
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .data-table th {
+        padding: 8px 7px;
+
+        white-space: nowrap;
+
+        border: 1px solid rgba(255,255,255,0.3);
+
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .data-table td {
+        padding: 8px 7px;
+
+        border: 1px solid var(--border);
+
+        white-space: normal;
+
+        word-break: break-word;
+    }
+
+    .data-table tbody tr {
+        break-inside: avoid;
+        page-break-inside: avoid;
+
+        box-shadow: none !important;
+    }
+
+    .data-table tbody tr:hover {
+        background: inherit !important;
+        box-shadow: none !important;
+    }
+
+    /* Keep alternating rows when browser supports print colors */
+    .data-table tbody tr:nth-child(even) {
+        background: rgba(16, 185, 129, 0.02) !important;
+
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* -----------------------------------------------------
+       SPECIAL COLUMN WIDTHS
+       Override the large screen widths during printing.
+    ----------------------------------------------------- */
+
+    .data-table th:nth-child(6),
+    .data-table td:nth-child(6),
+
+    .data-table th:nth-child(8),
+    .data-table td:nth-child(8),
+
+    .data-table th:nth-child(9),
+    .data-table td:nth-child(9),
+
+    .data-table th:nth-child(10),
+    .data-table td:nth-child(10),
+
+    .data-table th:nth-child(14),
+    .data-table td:nth-child(14) {
+
+        min-width: 0 !important;
+        width: auto !important;
+        white-space: normal !important;
+    }
+
+    /* -----------------------------------------------------
+       BADGES
+    ----------------------------------------------------- */
+
+    .badge-value {
+        background: white !important;
+        color: var(--text-dark) !important;
+
+        border: 1px solid var(--text-dark);
+
+        padding: 3px 6px;
+
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* -----------------------------------------------------
+       CODE / VALUES
+    ----------------------------------------------------- */
+
+    code {
+        background: white !important;
+        color: var(--text-dark) !important;
+
+        border: 1px solid var(--border);
+
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* -----------------------------------------------------
+       FOOTER
+    ----------------------------------------------------- */
+
+    .table-footer {
+        padding: 10px 15px;
+
+        background: white;
+
+        border-top: 1px solid var(--border);
+
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* -----------------------------------------------------
+       EMPTY STATES
+    ----------------------------------------------------- */
+
+    .empty-message {
+        display: flex !important;
+
+        margin: 15px;
+
+        background: white;
+
+        border: 1px solid var(--border);
+    }
+
+    /* -----------------------------------------------------
+       ANIMATIONS
+       Prevent print rendering problems.
+    ----------------------------------------------------- */
+
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    /* -----------------------------------------------------
+       COLORS
+       Tell the browser to preserve backgrounds.
+    ----------------------------------------------------- */
+
+    .stats-header,
+    .data-table thead,
+    .badge-value,
+    .alert,
+    .data-table tbody tr:nth-child(even) {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}

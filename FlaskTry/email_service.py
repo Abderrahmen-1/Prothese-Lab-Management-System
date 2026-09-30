@@ -115,49 +115,89 @@ def send_deadline_emails(user_email, deadline_diff, deadline, mail, patient_numb
 
 
 def send_quantity_email(user_email, mail, sel3a_name, quantity, max_quantity, unit, low_stock_notified, out_of_stock_notified):
+
     msg = Message(
         subject="Quantity Email",
         sender=mail.username,
         recipients=[user_email]
     )
 
-    low_quantity = (max_quantity * 5 )/100
+    # Determine the low-stock threshold
+    if max_quantity <= 5:
+        low_quantity = 1
 
-    if quantity <= low_quantity and quantity != 0 and low_stock_notified == False:
+    elif max_quantity <= 10:
+        low_quantity = 2
+
+    elif max_quantity <= 20:
+        low_quantity = 3
+
+    elif max_quantity <= 50:
+        low_quantity = 5
+
+    elif max_quantity <= 100:
+        low_quantity = 10
+
+    elif max_quantity <= 200:
+        low_quantity = 20
+
+    else:
+        low_quantity = 30
+
+
+    # OUT OF STOCK
+    if quantity == 0 and out_of_stock_notified is False:
+
+        msg.body = f"""
+                Bonjour,
+                
+                Une alerte automatique vous informe que le produit suivant est actuellement en rupture de stock dans votre inventaire :
+                
+                Produit : {sel3a_name}
+                Quantité disponible : 0 {unit}
+                
+                Ce produit n'est actuellement plus disponible en stock.
+                Nous vous invitons à vérifier votre inventaire et à procéder à son réapprovisionnement afin d'éviter toute interruption de votre activité.
+                
+                Cette notification a été générée automatiquement par DentaFlow.
+                
+                Cordialement,
+                DentaFlow
+                Gestion des stocks — Laboratoire de prothèse
+                """
+
+        mail.send(msg)
+        out_of_stock_notified = True
+
+
+    # LOW STOCK
+    elif quantity <= low_quantity and quantity > 0 and low_stock_notified is False:
+
         msg.body = f"""
                     Bonjour,
+                    
                     Ceci est une notification automatique de votre système de gestion DentaFlow.
+                    
                     Le produit suivant a atteint un niveau de stock faible et pourrait nécessiter un réapprovisionnement :
-                    **Produit :** { sel3a_name }
-                    **Quantité disponible :** { quantity } { unit }
+                    
+                    Produit : {sel3a_name}
+                    Quantité disponible : {quantity} {unit}
+                    Seuil de stock faible : {low_quantity} {unit}
+                    
                     Nous vous recommandons de vérifier votre stock et de prévoir un réapprovisionnement si nécessaire afin d'éviter toute rupture.
+                    
                     Cette notification a été générée automatiquement par DentaFlow.
                     
                     Cordialement,
-                    **DentaFlow**
-                    *Gestion des stocks — Laboratoire de prothèse*
+                    DentaFlow
+                    Gestion des stocks — Laboratoire de prothèse
                     """
+
+        mail.send(msg)
         low_stock_notified = True
 
-    if quantity == 0 and out_of_stock_notified == False :
-        msg.body = f"""
-                    Bonjour,
-                    Une alerte automatique vous informe que le produit suivant est actuellement **en rupture de stock** dans votre inventaire :
-                    **Produit :** { sel3a_name }
-                    **Quantité disponible :** 0 { unit }
-                    Ce produit n'est actuellement plus disponible en stock. Nous vous invitons à vérifier votre inventaire et à procéder à son réapprovisionnement afin d'éviter toute interruption de votre activité.
-                    Cette notification a été générée automatiquement par **DentaFlow**.
-                    
-                    Cordialement,
-                    **DentaFlow**
-                    *Gestion des stocks — Laboratoire de prothèse*
-                    """
-        out_of_stock_notified = True
 
-    if msg.body:
-        mail.send(msg)
-
-    return (low_stock_notified, out_of_stock_notified)
+    return low_stock_notified, out_of_stock_notified
 
 def send_prothesists_email(user_email, mail, user_name, service_name, prothesist_name, patient_number, remain, deadline):
     msg = Message(

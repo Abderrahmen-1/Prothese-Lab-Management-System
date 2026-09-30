@@ -1631,15 +1631,20 @@ def ProStat():
         for Pro in Pro_list:
 
             cursor.execute("""
-                SELECT *
-                FROM prothesist_stat
-                WHERE user_id = %s
-                  AND prothesist_name = %s
-                  AND prothesist_number = %s
-                ORDER BY year DESC, month DESC
+                SELECT p.prothesist_name, p.prothesist_number, p.total_khedma, SUM(CASE WHEN o.status = 'finished' THEN 1 ELSE 0 END) AS total_finished,
+                        SUM(CASE WHEN o.status NOT IN ('finished' , 'deleted') THEN 1 ELSE 0 END) AS total_not_finished,
+                        p.khalsin, p.machi_khalsin, p.month, p.year
+                FROM prothesist_stat p
+                JOIN other_prothesists_history o ON p.user_id = o.user_id AND p.prothesist_name = o.prothesist AND p.prothesist_number = o.pNumber
+                WHERE p.user_id = %s
+                  AND p.prothesist_name = %s
+                  AND p.prothesist_number = %s
+                ORDER BY p.year DESC, p.month DESC
             """, (session['id'], Pro[1], Pro[0]))
 
             rows = cursor.fetchall()
+
+            print(rows[0])
 
             # Only add the prothesist if statistics exist
             if rows:
