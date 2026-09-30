@@ -135,7 +135,7 @@
                                     class="form-input"
                                     placeholder="Enter quantity"
                                     step="1"
-                                    min="0"
+                                    min="0.1"
                                     required
                             >
                             <span class="input-icon">
@@ -377,7 +377,7 @@
 
         if (khalsaValue === "no" && !versementValue) {
             e.preventDefault();
-            alert("Please enter the versement amount for partial payments");
+            alert("Please enter the versement amount for partial payments at least 0");
             return false;
         }
     });
