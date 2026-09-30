@@ -53,7 +53,7 @@ def login_required():
 # ============================== HOME =========================================
 
 @app.route("/log_in", methods=["POST", "GET"])
-@limiter.limit("10 per minute")
+#@limiter.limit("10 per minute")
 def home():
 
     if request.method == "GET":

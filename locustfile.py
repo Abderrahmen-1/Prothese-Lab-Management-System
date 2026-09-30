@@ -60,7 +60,7 @@ class MyUser(HttpUser):
     @task
     def home(self):
 
-        response = self.client.get("/HomePage")
+        response = self.client.get("/AllTotalAccount")
 
         if response.status_code == 302:
             print("✅ LOGIN SUCCESS")
