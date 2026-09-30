@@ -4,7 +4,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from dotenv import load_dotenv
 from flask import Flask
 from flask_mail import Mail
-from FlaskTry.email_service import send_deadline_emails, send_quantity_email
+from FlaskTry.email_service import send_deadline_emails, send_quantity_email, send_prothesists_email
 from FlaskTry.flasktry import app, mail
 from FlaskTry.FunctionFile import get_connection
 
@@ -133,6 +133,42 @@ def check_quantity():
         conn.close()
 
 
+def check_prothesist_deadline():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+        today = date.today()
+        limit_date = today + timedelta(days=2)
+
+        cursor.execute("""
+                        SELECT p.patient_number, p.pName, p.DeadLine, u.user_email, u.user_name, p.pKhedma
+                        FROM other_prothesists_khedma p 
+                        JOIN users u ON u.id = p.user_id 
+                        WHERE 
+                        p.pFinished = 'no' AND p.DeadLine >= %s AND p.DeadLine <= %s
+                        """,(today, limit_date))
+        results = cursor.fetchall()
+
+        for result in results :
+            DeadLine = datetime.strptime(result[2], "%Y-%m-%d").date()
+            remain = (DeadLine - today).days
+
+            with app.app_context():
+                send_prothesists_email(result[3], mail, result[4], result[5], result[1], result[0], remain, result[2])
+                print(f"Email sent to : {result[3]}")
+
+    except Exception as e :
+        conn.rollback()
+        return f"error {str(e)}"
+
+    finally:
+        cursor.close()
+        conn.close()
+
+
+
+
 
 scheduler = BlockingScheduler()
 
@@ -146,13 +182,21 @@ scheduler.add_job(
 scheduler.add_job(
     check_quantity,
     trigger="cron",
-    hour=9,
-    minute=5
+    hour=11,
+    minute=0
+)
+
+scheduler.add_job(
+    check_prothesist_deadline(),
+    trigger="cron",
+    hour=10,
+    minute=0
 )
 
 print("Scheduler started.")
 print("Deadline check scheduled every day at 09:00.")
-print("Quantities check scheduled every day at 09:05.")
+print("Quantities check scheduled every day at 11:00.")
+print("Prothesists DeadLine check schuled every day at 10:00.")
 
 scheduler.start()
 

@@ -317,6 +317,179 @@
 
             </div>
 
+            <section class="panel services-chart-panel">
+
+                <div class="panel-header">
+                    <div>
+                        <span class="panel-eyebrow">SERVICES ANALYTICS</span>
+
+                        <h2>Laboratory Services</h2>
+
+                        <p>Monthly services from patients and dentists</p>
+                    </div>
+                </div>
+
+                <div class="chart-wrapper">
+                    <canvas id="servicesChart"></canvas>
+
+                    <div class="chart-empty" id="servicesChartEmpty">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>No services data available</span>
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="panel finished-services-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+            <span class="panel-eyebrow">
+                COMPLETION ANALYTICS
+            </span>
+
+                        <h2>
+                            Finished Services
+                        </h2>
+
+                        <p>
+                            Monthly service completion performance
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table class="finished-services-table">
+
+                        <thead>
+                        <tr>
+                            <th>Period</th>
+
+                            <th>Finished Patients Services</th>
+                            <th>Not Finished Patients Services</th>
+
+                            <th>Finished Dentists Services</th>
+                            <th>Not Finished Dentists Services</th>
+
+                            <th>Total Services</th>
+                            <th>Finished</th>
+                            <th>Not Finished</th>
+
+                            <th>Completion Rate</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        {% for row in total_finished %}
+
+                        <tr>
+
+                            <!-- PERIOD -->
+                            <td>
+                                <div class="period-info">
+                                    <strong>{{ row[0] }}</strong>
+                                    <span>{{ row[1] }}</span>
+                                </div>
+                            </td>
+
+                            <!-- PATIENT SERVICES -->
+                            <td>
+                                <div class="service-breakdown">
+
+                                    <div class="finished-value">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        {{ row[2]|float|int }}
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="service-breakdown">
+                                    <div class="unfinished-value">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        {{ row[3]|float|int }}
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <!-- DENTIST SERVICES -->
+                            <td>
+                                <div class="service-breakdown">
+
+                                    <div class="finished-value">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        {{ row[4]|float|int }}
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td>
+                                <div class="service-breakdown">
+
+                                    <div class="unfinished-value">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        {{ row[5]|float|int }}
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <!-- TOTAL SERVICES -->
+                            <td>
+                                <strong>
+                                    {{ (row[6]|float + row[7]|float)|int }}
+                                </strong>
+                            </td>
+
+                            <!-- TOTAL FINISHED -->
+                            <td>
+                                <div class="finished-value">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    {{ row[6]|float|int }}
+                                </div>
+                            </td>
+
+                            <!-- TOTAL NOT FINISHED -->
+                            <td>
+                                <div class="unfinished-value">
+                                    <i class="fa-solid fa-clock"></i>
+                                    {{ row[7]|float|int }}
+                                </div>
+                            </td>
+
+                            <!-- COMPLETION RATE -->
+                            <td>
+                                <div class="completion-rate">
+
+                                    <strong>
+                                        {{ "%.1f"|format(row[8]|float) }}%
+                                    </strong>
+
+                                    <div class="completion-bar">
+                                        <div
+                                                class="completion-bar-fill"
+                                                style="width: {{ row[8]|float }}%;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
         </article>
 
 
@@ -1160,12 +1333,18 @@
 
     document.addEventListener("DOMContentLoaded", function () {
 
+        console.log("AllTotalStats script loaded");
+
+
         /* =========================================================
            ELEMENTS
         ========================================================== */
 
-        const exportBtn = document.getElementById("exportBtn");
-        const printBtn = document.getElementById("printBtn");
+        const exportBtn =
+            document.getElementById("exportBtn");
+
+        const printBtn =
+            document.getElementById("printBtn");
 
         const categoryToggle =
             document.getElementById("categoryToggle");
@@ -1182,8 +1361,16 @@
         const collapseAllBtn =
             document.getElementById("collapseAllBtn");
 
-        const paymentCircle = document.querySelector(".payment-circle");
-        const paidPercentage = document.getElementById("paidPercentage");
+        const paymentCircle =
+            document.querySelector(".payment-circle");
+
+        const paidPercentage =
+            document.getElementById("paidPercentage");
+
+
+        /* =========================================================
+           PAYMENT CIRCLE
+        ========================================================== */
 
         if (paymentCircle && paidPercentage) {
 
@@ -1196,6 +1383,82 @@
                     var(--border) ${percentage}% 100%
                 )`;
         }
+
+
+        /* =========================================================
+           SERVICES DATA
+
+           Total_khedma:
+           row[0] = month
+           row[1] = year
+           row[2] = total services
+
+           patients:
+           row[0] = total patient services
+           row[1] = month
+           row[2] = year
+
+           dentists:
+           row[0] = total dentist services
+           row[1] = month
+           row[2] = year
+        ========================================================== */
+
+        const servicesData = [
+
+            {% for row in Total_khedma %}
+
+            {
+                month: {{ row[0]|tojson }},
+                year: {{ row[1]|tojson }},
+                total: {{ row[2]|float|tojson }}
+            }
+
+            {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const patientsData = [
+
+            {% for row in patients %}
+
+            {
+                total: {{ row[0]|float|tojson }},
+                month: {{ row[1]|tojson }},
+                year: {{ row[2]|tojson }}
+            }
+
+            {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        const dentistsData = [
+
+            {% for row in dentists %}
+
+            {
+                total: {{ row[0]|float|tojson }},
+                month: {{ row[1]|tojson }},
+                year: {{ row[2]|tojson }}
+            }
+
+            {% if not loop.last %},{% endif %}
+
+            {% endfor %}
+
+        ];
+
+
+        console.log("Total_khedma:", servicesData);
+        console.log("Patients:", patientsData);
+        console.log("Dentists:", dentistsData);
+
 
         /* =========================================================
            CATEGORY COLLAPSE
@@ -1212,7 +1475,6 @@
             });
 
         }
-
 
 
         /* =========================================================
@@ -1239,6 +1501,7 @@
                 const index =
                     row.dataset.index;
 
+
                 const details =
                     document.querySelector(
                         `.details-row[data-details="${index}"]`
@@ -1254,14 +1517,20 @@
                     details.classList.contains("open");
 
 
-                details.classList.toggle("open", !isOpen);
+                details.classList.toggle(
+                    "open",
+                    !isOpen
+                );
 
-                row.classList.toggle("expanded", !isOpen);
+
+                row.classList.toggle(
+                    "expanded",
+                    !isOpen
+                );
 
             });
 
         });
-
 
 
         /* =========================================================
@@ -1292,7 +1561,6 @@
         }
 
 
-
         /* =========================================================
            COLLAPSE ALL
         ========================================================== */
@@ -1321,9 +1589,8 @@
         }
 
 
-
         /* =========================================================
-           CHART DATA
+           FINANCIAL CHART DATA
         ========================================================== */
 
         const chartCanvas =
@@ -1345,26 +1612,29 @@
                 year: {{ row[1]|tojson }},
 
                 paid:
-                    {{ (
-                        row[2]|float
-                        + row[4]|float
-                        + row[6]|float
-                        + row[8]|float
-                        + row[10]|float
-                    )|tojson }},
+                    {{
+                        (
+                            row[2]|float
+                            + row[4]|float
+                            + row[6]|float
+                            + row[8]|float
+                            + row[10]|float
+                        )|tojson
+                    }},
 
                 unpaid:
-                    {{ (
-                        row[3]|float
-                        + row[5]|float
-                        + row[7]|float
-                        + row[9]|float
-                        + row[11]|float
-                    )|tojson }},
+                    {{
+                        (
+                            row[3]|float
+                            + row[5]|float
+                            + row[7]|float
+                            + row[9]|float
+                            + row[11]|float
+                        )|tojson
+                    }},
 
                 profit:
                     {{ row[-1]|float|tojson }}
-
             }
 
             {% if not loop.last %},{% endif %}
@@ -1372,7 +1642,6 @@
             {% endfor %}
 
         ];
-
 
 
         /* =========================================================
@@ -1400,150 +1669,196 @@
             script.onload = callback;
 
 
+            script.onerror = function () {
+
+                console.error(
+                    "Could not load Chart.js"
+                );
+
+            };
+
+
             document.head.appendChild(script);
 
         }
 
 
-
         /* =========================================================
-           CREATE CHART
+           CREATE FINANCIAL CHART
         ========================================================== */
 
         function createChart(data) {
 
-        if (!chartCanvas) {
-            return;
-        }
-
-        if (!data.length) {
-
-            if (chartEmpty) {
-                chartEmpty.classList.add("visible");
+            if (!chartCanvas) {
+                return;
             }
 
-            return;
-        }
 
-        if (chartEmpty) {
-            chartEmpty.classList.remove("visible");
-        }
+            if (!data.length) {
 
-        const labels = data.map(function (item) {
-            return item.month + " " + item.year;
-        });
+                if (chartEmpty) {
+                    chartEmpty.classList.add("visible");
+                }
 
-        const profitData = data.map(function (item) {
-            return item.profit;
-        });
+                return;
+            }
 
-        if (chart) {
-            chart.destroy();
-        }
 
-        chart = new Chart(chartCanvas, {
+            if (chartEmpty) {
+                chartEmpty.classList.remove("visible");
+            }
 
-            type: "line",
 
-            data: {
+            const labels =
+                data.map(function (item) {
 
-                labels: labels,
+                    return item.month +
+                        " " +
+                        item.year;
 
-                datasets: [
+                });
 
-                    {
-                        label: "Net Profit",
 
-                        data: profitData,
+            const profitData =
+                data.map(function (item) {
 
-                        borderWidth: 3,
+                    return item.profit;
 
-                        pointRadius: 4,
+                });
 
-                        pointHoverRadius: 6,
 
-                        tension: 0.35,
+            if (chart) {
+                chart.destroy();
+            }
 
-                        fill: true
-                    }
 
-                ]
+            chart = new Chart(
 
-            },
+                chartCanvas,
 
-            options: {
+                {
 
-                responsive: true,
+                    type: "line",
 
-                maintainAspectRatio: false,
+                    data: {
 
-                interaction: {
-                    mode: "index",
-                    intersect: false
-                },
+                        labels: labels,
 
-                plugins: {
+                        datasets: [
 
-                    legend: {
-                        display: false
-                    },
+                            {
+                                label: "Net Profit",
 
-                    tooltip: {
+                                data: profitData,
 
-                        callbacks: {
+                                borderWidth: 3,
 
-                            label: function (context) {
+                                pointRadius: 4,
 
-                                return "Net Profit: " +
-                                    Number(context.raw)
-                                        .toLocaleString("en-US", {
-                                            minimumFractionDigits: 2,
-                                            maximumFractionDigits: 2
-                                        })
-                                    + " DA";
+                                pointHoverRadius: 6,
 
+                                tension: 0.35,
+
+                                fill: true
                             }
 
-                        }
+                        ]
 
-                    }
+                    },
 
-                },
 
-                scales: {
+                    options: {
 
-                    x: {
+                        responsive: true,
 
-                        grid: {
-                            display: false
+                        maintainAspectRatio: false,
+
+                        interaction: {
+                            mode: "index",
+                            intersect: false
                         },
 
-                        ticks: {
 
-                            font: {
-                                family: "Outfit",
-                                size: 11
+                        plugins: {
+
+                            legend: {
+                                display: false
+                            },
+
+
+                            tooltip: {
+
+                                callbacks: {
+
+                                    label: function (context) {
+
+                                        return (
+                                            "Net Profit: " +
+
+                                            Number(context.raw)
+                                                .toLocaleString(
+                                                    "en-US",
+                                                    {
+                                                        minimumFractionDigits: 2,
+                                                        maximumFractionDigits: 2
+                                                    }
+                                                )
+
+                                            + " DA"
+                                        );
+
+                                    }
+
+                                }
+
                             }
 
-                        }
+                        },
 
-                    },
 
-                    y: {
+                        scales: {
 
-                        ticks: {
+                            x: {
 
-                            callback: function (value) {
+                                grid: {
+                                    display: false
+                                },
 
-                                return Number(value)
-                                    .toLocaleString("en-US")
-                                    + " DA";
+
+                                ticks: {
+
+                                    font: {
+                                        family: "Outfit",
+                                        size: 11
+                                    }
+
+                                }
 
                             },
 
-                            font: {
-                                family: "Outfit",
-                                size: 11
+
+                            y: {
+
+                                ticks: {
+
+                                    callback: function (value) {
+
+                                        return (
+                                            Number(value)
+                                                .toLocaleString("en-US")
+                                            + " DA"
+                                        );
+
+                                    },
+
+
+                                    font: {
+                                        family: "Outfit",
+                                        size: 11
+                                    }
+
+                                }
+
                             }
 
                         }
@@ -1552,15 +1867,440 @@
 
                 }
 
+            );
+
+        }
+
+
+        /* =========================================================
+           SERVICES CHART
+        ========================================================== */
+
+        const servicesCanvas =
+            document.getElementById("servicesChart");
+
+        const servicesEmpty =
+            document.getElementById("servicesChartEmpty");
+
+
+        let servicesChart = null;
+
+
+        function createServicesChart() {
+
+            console.log(
+                "Creating services chart"
+            );
+
+
+            if (!servicesCanvas) {
+
+                console.error(
+                    "servicesChart canvas not found"
+                );
+
+                return;
             }
 
-        });
-    }
 
+            if (!servicesData.length) {
+
+                console.warn(
+                    "No services data available"
+                );
+
+
+                if (servicesEmpty) {
+
+                    servicesEmpty.classList.add(
+                        "visible"
+                    );
+
+                }
+
+                return;
+            }
+
+
+            if (servicesEmpty) {
+
+                servicesEmpty.classList.remove(
+                    "visible"
+                );
+
+            }
+
+
+            /* =====================================================
+               LABELS
+            ====================================================== */
+
+            const labels =
+                servicesData.map(function (item) {
+
+                    return item.month +
+                        " " +
+                        item.year;
+
+                });
+
+
+            /* =====================================================
+               TOTAL SERVICES
+            ====================================================== */
+
+            const totalValues =
+                servicesData.map(function (item) {
+
+                    return Number(item.total);
+
+                });
+
+
+            /* =====================================================
+               PATIENT SERVICES
+
+               Find the patient statistic corresponding
+               to the same month and year.
+            ====================================================== */
+
+            const patientValues =
+                servicesData.map(function (item) {
+
+                    const found =
+                        patientsData.find(function (patient) {
+
+                            return (
+                                patient.month == item.month &&
+                                patient.year == item.year
+                            );
+
+                        });
+
+
+                    return found
+                        ? Number(found.total)
+                        : 0;
+
+                });
+
+
+            /* =====================================================
+               DENTIST SERVICES
+
+               Find the dentist statistic corresponding
+               to the same month and year.
+            ====================================================== */
+
+            const dentistValues =
+                servicesData.map(function (item) {
+
+                    const found =
+                        dentistsData.find(function (dentist) {
+
+                            return (
+                                dentist.month == item.month &&
+                                dentist.year == item.year
+                            );
+
+                        });
+
+
+                    return found
+                        ? Number(found.total)
+                        : 0;
+
+                });
+
+
+            console.log(
+                "Service chart labels:",
+                labels
+            );
+
+            console.log(
+                "Total services:",
+                totalValues
+            );
+
+            console.log(
+                "Patient services:",
+                patientValues
+            );
+
+            console.log(
+                "Dentist services:",
+                dentistValues
+            );
+
+
+            /* =====================================================
+               DESTROY OLD CHART
+            ====================================================== */
+
+            if (servicesChart) {
+
+                servicesChart.destroy();
+
+            }
+
+
+            /* =====================================================
+               CREATE SERVICES CHART
+            ====================================================== */
+
+            servicesChart = new Chart(
+
+                servicesCanvas,
+
+                {
+
+                    type: "line",
+
+
+                    data: {
+
+                        labels: labels,
+
+
+                        datasets: [
+
+                            /* =====================================
+                               TOTAL SERVICES
+                            ====================================== */
+
+                            {
+
+                                label: "Total Services",
+
+                                data: totalValues,
+
+                                borderColor: "#6366f1",
+
+                                backgroundColor:
+                                    "rgba(99, 102, 241, 0.10)",
+
+                                borderWidth: 3,
+
+                                pointRadius: 4,
+
+                                pointHoverRadius: 6,
+
+                                tension: 0.35,
+
+                                fill: true
+
+                            },
+
+
+                            /* =====================================
+                               PATIENT SERVICES
+                            ====================================== */
+
+                            {
+
+                                label: "Patients Services",
+
+                                data: patientValues,
+
+                                borderColor: "#22c55e",
+
+                                backgroundColor:
+                                    "rgba(34, 197, 94, 0.08)",
+
+                                borderWidth: 3,
+
+                                pointRadius: 4,
+
+                                pointHoverRadius: 6,
+
+                                tension: 0.35,
+
+                                fill: false
+
+                            },
+
+
+                            /* =====================================
+                               DENTIST SERVICES
+                            ====================================== */
+
+                            {
+
+                                label: "Dentists Services",
+
+                                data: dentistValues,
+
+                                borderColor: "#f59e0b",
+
+                                backgroundColor:
+                                    "rgba(245, 158, 11, 0.08)",
+
+                                borderWidth: 3,
+
+                                pointRadius: 4,
+
+                                pointHoverRadius: 6,
+
+                                tension: 0.35,
+
+                                fill: false
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+
+                        interaction: {
+
+                            mode: "index",
+
+                            intersect: false
+
+                        },
+
+
+                        plugins: {
+
+                            legend: {
+
+                                display: true,
+
+                                position: "top",
+
+
+                                labels: {
+
+                                    usePointStyle: true,
+
+                                    padding: 20,
+
+                                    font: {
+
+                                        family: "Outfit",
+
+                                        size: 12
+
+                                    }
+
+                                }
+
+                            },
+
+
+                            tooltip: {
+
+                                callbacks: {
+
+                                    label: function (context) {
+
+                                        return (
+
+                                            context.dataset.label +
+
+                                            ": " +
+
+                                            Number(context.raw)
+                                                .toLocaleString("en-US")
+
+                                        );
+
+                                    }
+
+                                }
+
+                            }
+
+                        },
+
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+
+                                    display: false
+
+                                },
+
+
+                                ticks: {
+
+                                    font: {
+
+                                        family: "Outfit",
+
+                                        size: 11
+
+                                    }
+
+                                }
+
+                            },
+
+
+                            y: {
+
+                                beginAtZero: true,
+
+
+                                title: {
+
+                                    display: true,
+
+                                    text: "Services"
+
+                                },
+
+
+                                ticks: {
+
+                                    callback: function (value) {
+
+                                        return Number(value)
+                                            .toLocaleString("en-US");
+
+                                    },
+
+
+                                    font: {
+
+                                        family: "Outfit",
+
+                                        size: 11
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+        }
 
 
         /* =========================================================
            PERIOD FILTER
+
+           This filter affects the FINANCIAL chart only,
+           exactly like your previous version.
         ========================================================== */
 
         function getFilteredData() {
@@ -1586,7 +2326,9 @@
 
 
             if (isNaN(count)) {
+
                 return statisticsData;
+
             }
 
 
@@ -1595,37 +2337,53 @@
         }
 
 
-
         if (periodFilter) {
 
-            periodFilter.addEventListener("change", function () {
+            periodFilter.addEventListener(
+                "change",
+                function () {
 
-                createChart(
-                    getFilteredData()
-                );
+                    createChart(
+                        getFilteredData()
+                    );
 
-            });
+                }
+            );
 
         }
 
 
-
         /* =========================================================
-           INITIALIZE CHART
+           INITIALIZE BOTH CHARTS
         ========================================================== */
 
-        if (chartCanvas) {
+        loadChartJS(function () {
 
-            loadChartJS(function () {
+            console.log(
+                "Chart.js loaded successfully"
+            );
+
+
+            /* Existing financial chart */
+
+            if (chartCanvas) {
 
                 createChart(
                     statisticsData
                 );
 
-            });
+            }
 
-        }
 
+            /* New services chart */
+
+            if (servicesCanvas) {
+
+                createServicesChart();
+
+            }
+
+        });
 
 
         /* =========================================================
@@ -1634,124 +2392,129 @@
 
         if (exportBtn) {
 
-            exportBtn.addEventListener("click", function () {
+            exportBtn.addEventListener(
+                "click",
+                function () {
 
-                const rows = [];
-
-
-                rows.push([
-
-                    "Month",
-                    "Year",
-
-                    "Patients Paid",
-                    "Patients Unpaid",
-
-                    "Dentists Paid",
-                    "Dentists Unpaid",
-
-                    "Prosthetists Paid",
-                    "Prosthetists Unpaid",
-
-                    "Inventory Paid",
-                    "Inventory Unpaid",
-
-                    "Other Services Paid",
-                    "Other Services Unpaid",
-
-                    "Net Profit"
-
-                ]);
+                    const rows = [];
 
 
-                {% for row in result %}
+                    rows.push([
 
-                rows.push([
+                        "Month",
+                        "Year",
 
-                    {{ row[0]|tojson }},
-                    {{ row[1]|tojson }},
+                        "Patients Paid",
+                        "Patients Unpaid",
 
-                    {{ row[2]|float|tojson }},
-                    {{ row[3]|float|tojson }},
+                        "Dentists Paid",
+                        "Dentists Unpaid",
 
-                    {{ row[4]|float|tojson }},
-                    {{ row[5]|float|tojson }},
+                        "Prosthetists Paid",
+                        "Prosthetists Unpaid",
 
-                    {{ row[6]|float|tojson }},
-                    {{ row[7]|float|tojson }},
+                        "Inventory Paid",
+                        "Inventory Unpaid",
 
-                    {{ row[8]|float|tojson }},
-                    {{ row[9]|float|tojson }},
+                        "Other Services Paid",
+                        "Other Services Unpaid",
 
-                    {{ row[10]|float|tojson }},
-                    {{ row[11]|float|tojson }},
+                        "Net Profit"
 
-                    {{ row[-1]|float|tojson }}
-
-                ]);
+                    ]);
 
 
-                {% endfor %}
+                    {% for row in result %}
+
+                    rows.push([
+
+                        {{ row[0]|tojson }},
+                        {{ row[1]|tojson }},
+
+                        {{ row[2]|float|tojson }},
+                        {{ row[3]|float|tojson }},
+
+                        {{ row[4]|float|tojson }},
+                        {{ row[5]|float|tojson }},
+
+                        {{ row[6]|float|tojson }},
+                        {{ row[7]|float|tojson }},
+
+                        {{ row[8]|float|tojson }},
+                        {{ row[9]|float|tojson }},
+
+                        {{ row[10]|float|tojson }},
+                        {{ row[11]|float|tojson }},
+
+                        {{ row[-1]|float|tojson }}
+
+                    ]);
 
 
-                const csv =
-                    rows.map(function (row) {
-
-                        return row.map(function (value) {
-
-                            const stringValue =
-                                String(value ?? "");
+                    {% endfor %}
 
 
-                            return '"' +
-                                stringValue
-                                    .replace(/"/g, '""')
-                                + '"';
+                    const csv =
+                        rows.map(function (row) {
 
-                        }).join(",");
+                            return row.map(function (value) {
 
-                    }).join("\n");
-
-
-                const blob =
-                    new Blob(
-                        [csv],
-                        {
-                            type: "text/csv;charset=utf-8;"
-                        }
-                    );
+                                const stringValue =
+                                    String(value ?? "");
 
 
-                const url =
-                    URL.createObjectURL(blob);
+                                return '"' +
+                                    stringValue.replace(
+                                        /"/g,
+                                        '""'
+                                    ) +
+                                    '"';
+
+                            }).join(",");
+
+                        }).join("\n");
 
 
-                const link =
-                    document.createElement("a");
+                    const blob =
+                        new Blob(
+                            [csv],
+                            {
+                                type:
+                                    "text/csv;charset=utf-8;"
+                            }
+                        );
 
 
-                link.href = url;
+                    const url =
+                        URL.createObjectURL(blob);
 
 
-                link.download =
-                    "lab_statistics.csv";
+                    const link =
+                        document.createElement("a");
 
 
-                document.body.appendChild(link);
+                    link.href = url;
 
 
-                link.click();
+                    link.download =
+                        "lab_statistics.csv";
 
 
-                document.body.removeChild(link);
+                    document.body.appendChild(link);
 
 
-                URL.revokeObjectURL(url);
+                    link.click();
 
-            });
+
+                    document.body.removeChild(link);
+
+
+                    URL.revokeObjectURL(url);
+
+                }
+            );
 
         }
-
 
 
         /* =========================================================
@@ -1760,14 +2523,16 @@
 
         if (printBtn) {
 
-            printBtn.addEventListener("click", function () {
+            printBtn.addEventListener(
+                "click",
+                function () {
 
-                window.print();
+                    window.print();
 
-            });
+                }
+            );
 
         }
-
 
 
         /* =========================================================
@@ -1778,40 +2543,47 @@
             ".action-button, .icon-button, .table-tool"
         ).forEach(function (button) {
 
-            button.addEventListener("click", function (event) {
+            button.addEventListener(
+                "click",
+                function (event) {
 
-                const ripple =
-                    document.createElement("span");
-
-
-                ripple.classList.add("ripple");
-
-
-                const rect =
-                    button.getBoundingClientRect();
+                    const ripple =
+                        document.createElement("span");
 
 
-                ripple.style.left =
-                    (event.clientX - rect.left) + "px";
+                    ripple.classList.add("ripple");
 
 
-                ripple.style.top =
-                    (event.clientY - rect.top) + "px";
+                    const rect =
+                        button.getBoundingClientRect();
 
 
-                button.appendChild(ripple);
+                    ripple.style.left =
+                        (event.clientX - rect.left) +
+                        "px";
 
 
-                setTimeout(function () {
+                    ripple.style.top =
+                        (event.clientY - rect.top) +
+                        "px";
 
-                    ripple.remove();
 
-                }, 600);
+                    button.appendChild(ripple);
 
-            });
+
+                    setTimeout(
+                        function () {
+
+                            ripple.remove();
+
+                        },
+                        600
+                    );
+
+                }
+            );
 
         });
-
 
 
         /* =========================================================

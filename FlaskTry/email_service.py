@@ -158,3 +158,69 @@ def send_quantity_email(user_email, mail, sel3a_name, quantity, max_quantity, un
         mail.send(msg)
 
     return (low_stock_notified, out_of_stock_notified)
+
+def send_prothesists_email(user_email, mail, user_name, service_name, prothesist_name, patient_number, remain, deadline):
+    msg = Message(
+        subject="Prothesists DeadLine Services Remaining",
+        sender=mail.username,
+        recipients=[user_email]
+    )
+
+    if remain == 2 :
+        msg.body = f"""
+                    Bonjour,
+                    Nous vous informons qu'un travail prothétique confié à l'un de vos prothésistes arrive prochainement à échéance.
+                    
+                    **Prothésiste :** { prothesist_name }
+                    **Patient :** { patient_number }
+                    **Travail :** { service_name }
+                    **Date limite :** { deadline }
+                    
+                    Il reste **2 jours avant la date limite**.
+                    
+                    Nous vous invitons à vérifier l'avancement de ce travail afin de vous assurer qu'il sera finalisé dans les délais prévus.
+                    
+                    Cordialement,
+                    **DentaFlow**
+                    Système de gestion de laboratoire prothétique
+                    """
+
+    if remain == 1 :
+        msg.body = f"""
+                    Bonjour,
+                    Nous vous informons qu'un travail prothétique confié à l'un de vos prothésistes arrive à échéance **demain**.
+                    
+                    **Prothésiste :** { prothesist_name }
+                    **Patient :** { patient_number }
+                    **Travail :** { service_name }
+                    **Date limite :** { deadline }
+                    
+                    Il ne reste plus que **1 jour avant la date limite**.
+                    
+                    Nous vous recommandons de vérifier l'avancement du travail et de vous assurer qu'il pourra être finalisé dans le délai prévu.
+                    
+                    Cordialement,
+                    **DentaFlow**
+                    Système de gestion de laboratoire prothétique """
+
+    if remain == 0 :
+        msg.body = f"""
+                    Bonjour,
+                    Nous vous informons qu'un travail prothétique confié à l'un de vos prothésistes arrive à échéance **aujourd'hui**.
+                    
+                    **Prothésiste :** { prothesist_name }
+                    **Patient :** { patient_number }
+                    **Travail :** { service_name }
+                    **Date limite :** { deadline }
+                    
+                    La date limite est **aujourd'hui**.
+                    
+                    Nous vous invitons à vérifier immédiatement l'état de ce travail et à prendre les mesures nécessaires afin de respecter le délai prévu.
+                    
+                    Cordialement,
+                    **DentaFlow**
+                    Système de gestion de laboratoire prothétique
+                    """
+
+    if msg.body :
+        mail.send(msg)

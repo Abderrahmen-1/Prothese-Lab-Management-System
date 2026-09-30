@@ -1275,13 +1275,156 @@ def AllTotal():
         GROUP BY month, year
         ORDER BY year, month
         """, (session['id'], session['id'], session['id'], session['id'], session['id']))
-
         result = cursor.fetchall()
-        return render_template("AllTotalStats.html", result=result)
+
+        cursor.execute("""
+                        SELECT SUM(patients_number) AS total_patients, month, year 
+                        FROM patient_stat
+                        WHERE user_id = %s
+
+                        GROUP BY month, year
+                        ORDER BY month, year """, (session['id'],))
+        total_patients = cursor.fetchall()
+
+        cursor.execute("""
+                        SELECT SUM(total_khedma) AS total_khedma, month, year 
+                        FROM dentist_stat
+                        WHERE user_id = %s 
+
+                        GROUP BY month, year 
+                        ORDER BY month, year """, (session['id'],))
+        total_dentists = cursor.fetchall()
+
+        cursor.execute("""
+                        SELECT MONTH, YEAR , 
+                        SUM(CASE WHEN k_source = 'patient' THEN total_khedma ELSE 0 END) +
+                        SUM(CASE WHEN k_source = 'dentist' THEN total_khedma ELSE 0 END) AS TOTAL
+
+                        FROM (
+                                SELECT MONTH, YEAR , SUM(patients_number) AS total_khedma , 'patient' AS k_source
+                                FROM patient_stat 
+                                WHERE user_id = %s 
+                                GROUP BY MONTH, YEAR 
+
+                                UNION ALL 
+
+                                SELECT MONTH, YEAR , SUM(total_khedma) AS total_khedma , 'dentist' AS k_source 
+                                FROM dentist_stat 
+                                WHERE user_id = %s 
+                                GROUP BY MONTH, YEAR 
+                        ) AS stats 
+                        GROUP BY MONTH, YEAR 
+                        ORDER BY MONTH, YEAR  """, (session['id'], session['id']))
+        total_khedma = cursor.fetchall()
+
+        cursor.execute("""
+                        SELECT
+                        months.month,
+                        months.year,
+                
+                        COALESCE(p.total_finished, 0) AS total_patient_finished,
+                        COALESCE(p.total_notFinished, 0) AS total_patient_notFinished,
+                
+                        COALESCE(d.total_finished, 0) AS total_dentists_finished,
+                        COALESCE(d.total_notFinished, 0) AS total_dentists_notFinished,
+                
+                        COALESCE(p.total_finished, 0)
+                        + COALESCE(d.total_finished, 0) AS total_finished,
+                
+                        COALESCE(p.total_notFinished, 0)
+                        + COALESCE(d.total_notFinished, 0) AS total_notFinished,
+                
+                        (
+                            (
+                                COALESCE(p.total_finished, 0)
+                                + COALESCE(d.total_finished, 0)
+                            ) * 100
+                        )
+                        /
+                        NULLIF(
+                            COALESCE(p.total_finished, 0)
+                            + COALESCE(d.total_finished, 0)
+                            + COALESCE(p.total_notFinished, 0)
+                            + COALESCE(d.total_notFinished, 0),
+                            0
+                        ) AS Finished_Percentage_per100
+                
+                    FROM
+                    (
+                        SELECT DISTINCT MONTH(pDate) AS month, YEAR(pDate) AS year
+                        FROM patient_history
+                        WHERE user_id = %s
+                
+                        UNION
+                
+                        SELECT DISTINCT MONTH(pDate) AS month, YEAR(pDate) AS year
+                        FROM dentist_history
+                        WHERE user_id = %s
+                    ) AS months
+                
+                    LEFT JOIN
+                    (
+                        SELECT
+                            MONTH(pDate) AS month,
+                            YEAR(pDate) AS year,
+                
+                            SUM(CASE
+                                WHEN STATUS = 'finished' THEN 1
+                                ELSE 0
+                            END) AS total_finished,
+                
+                            SUM(CASE
+                                WHEN STATUS NOT IN ('finished', 'deleted') THEN 1
+                                ELSE 0
+                            END) AS total_notFinished
+                
+                        FROM patient_history
+                
+                        WHERE user_id = %s
+                
+                        GROUP BY MONTH(pDate), YEAR(pDate)
+                
+                    ) AS p
+                        ON p.month = months.month
+                        AND p.year = months.year
+                
+                    LEFT JOIN
+                    (
+                        SELECT
+                            MONTH(pDate) AS month,
+                            YEAR(pDate) AS year,
+                
+                            SUM(CASE
+                                WHEN STATUS = 'finished' THEN 1
+                                ELSE 0
+                            END) AS total_finished,
+                
+                            SUM(CASE
+                                WHEN STATUS NOT IN ('finished', 'deleted') THEN 1
+                                ELSE 0
+                            END) AS total_notFinished
+                
+                        FROM dentist_history
+                
+                        WHERE user_id = %s
+                
+                        GROUP BY MONTH(pDate), YEAR(pDate)
+                
+                    ) AS d
+                        ON d.month = months.month
+                        AND d.year = months.year
+                
+                    ORDER BY months.year, months.month 
+    """,(session['id'], session['id'], session['id'], session['id']))
+        total_finished = cursor.fetchall()
+
+
+        return render_template("AllTotalStats.html", result=result, patients=total_patients, dentists=total_dentists, Total_khedma=total_khedma, total_finished=total_finished)
 
     finally :
         cursor.close()
         conn.close()
+
 
 # ========================================================================================
 

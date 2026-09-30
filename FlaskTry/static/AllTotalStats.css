@@ -106,7 +106,6 @@ body {
 
 }
 
-
 .topbar-left {
 
     display: flex;
@@ -301,6 +300,13 @@ body {
 
 }
 
+.services-chart-panel {
+    margin-top: 8%;
+}
+
+.panel-eyebrow{
+    margin-top: 8%;
+}
 
 /* =========================================================
    RIPPLE
