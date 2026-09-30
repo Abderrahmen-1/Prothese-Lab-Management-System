@@ -1635,7 +1635,8 @@ def ProStat():
                         SUM(CASE WHEN o.status NOT IN ('finished' , 'deleted') THEN 1 ELSE 0 END) AS total_not_finished,
                         p.khalsin, p.machi_khalsin, p.month, p.year
                 FROM prothesist_stat p
-                JOIN other_prothesists_history o ON p.user_id = o.user_id AND p.prothesist_name = o.prothesist AND p.prothesist_number = o.pNumber
+                JOIN other_prothesists_history o ON p.user_id = o.user_id AND p.prothesist_name = o.prothesist 
+                                                AND p.prothesist_number = o.pNumber AND MONTH(o.pDate) = p.month AND YEAR(o.pDate) = p.year
                 WHERE p.user_id = %s
                   AND p.prothesist_name = %s
                   AND p.prothesist_number = %s
