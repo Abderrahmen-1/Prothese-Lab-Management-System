@@ -1200,7 +1200,6 @@ def ShowTotal():
                     WHERE user_id = %s AND khalsa = %s AND dentist_name = %s 
                 """, (session['id'], "no", dentist_name))
                 row = cursor.fetchone()
-                cursor.fetchall()
                 result[dentist_name] = row[0] if row and row[0] is not None else 0
             except Exception as e:
                 print(f"Error on {dentist_name}: {e}")
