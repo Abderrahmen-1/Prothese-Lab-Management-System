@@ -24,7 +24,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-limiter = Limiter(get_remote_address, app=app)
+limiter = Limiter(get_remote_address, app=app, default_limits=["200 per hour"])
 
 app.register_blueprint(users)
 app.register_blueprint(patients)
@@ -57,7 +57,7 @@ def login_required():
 # ============================== HOME =========================================
 
 @app.route("/log_in", methods=["POST", "GET"])
-# @limiter.limit("10 per minute")
+@limiter.limit("10 per minute")
 def home():
     if request.method == "GET":
         session.clear()
@@ -251,6 +251,7 @@ def getHome():
 # ============================ CREATE ACCOUNT =================================
 
 @app.route("/CreateAnAccount", methods=["POST", "GET"])
+@limiter.limit("15 per minute")
 def Create():
     if request.method == "GET":
         token = secrets.token_hex(16)
