@@ -132,25 +132,17 @@
 
 
     <div class="SearchBar">
+        {% if not stats %}
 
-        <form action="/services/OtherSearchBar" method="POST">
-
-            <input type="hidden"
-                   name="csrf_token"
-                   value="{{ csrf_token }}">
-
-            <input type="search"
-                   name="SearchBar"
-                   placeholder="Rechercher ici le nom de la personne">
-
+        <form action="/services/OtherServices" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <input type="search" name="SearchBar" placeholder="Rechercher ici le nom de la personne">
             <button type="submit">
-
                 <i class="fas fa-search"></i>
                 Confirmer
-
             </button>
-
         </form>
+        {% endif %}
 
     </div>
 
@@ -591,12 +583,8 @@
                 </div>
 
 
-                <div class="table-card"
-                     id="StatTable"
-                     style="display: {% if stats %}block{% else %}none{% endif %};">
-
+                <div class="table-card" id="StatTable" style="display: {% if stats %}block{% else %}none{% endif %};">
                     <div class="table-header">
-
                         <div class="header-left">
 
                             <h2>

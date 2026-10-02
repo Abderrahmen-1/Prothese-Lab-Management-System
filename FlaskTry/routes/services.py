@@ -10,40 +10,82 @@ def is_logged_in():
     return "id" in session
 
 
-@services.route("/OtherServices")
+@services.route("/OtherServices" , methods=["POST", "GET"])
 def OtherServices():
     if not is_logged_in():
         return redirect(url_for('home'))
 
-    token = secrets.token_hex(16)
-    session['csrf_token'] = token
+    if request.method == "GET":
 
-    conn = get_connection()
-    cursor = conn.cursor()
+        token = secrets.token_hex(16)
+        session['csrf_token'] = token
 
-    try:
-        cursor.execute(""" 
-                        DELETE FROM others_services  
-                        WHERE  
-                        date <= DATE_SUB(CURDATE() , INTERVAL 6 MONTH) AND user_id = %s 
-                         AND khalsa = 'yes' """
-                       , (session['id'],))
-        conn.commit()
+        conn = get_connection()
+        cursor = conn.cursor()
 
-        cursor.execute(""" 
-                        SELECT * FROM others_services 
-                        WHERE user_id = %s """, (session['id'],))
-        result = cursor.fetchall()
+        try:
+            cursor.execute(""" 
+                            DELETE FROM others_services  
+                            WHERE  
+                            date <= DATE_SUB(CURDATE() , INTERVAL 6 MONTH) AND user_id = %s 
+                             AND khalsa = 'yes' """
+                           , (session['id'],))
+            conn.commit()
 
-        return render_template("OtherServices.html", result=result, csrf_token=token)
+            cursor.execute(""" 
+                            SELECT * FROM others_services 
+                            WHERE user_id = %s """, (session['id'],))
+            result = cursor.fetchall()
 
-    finally:
-        cursor.close()
-        conn.close()
+            return render_template("OtherServices.html", result=result, csrf_token=token)
 
-    # -------------------------------
+        finally:
+            cursor.close()
+            conn.close()
+    if request.method == "POST":
+        form_token = request.form.get("csrf_token")
+        session_token = session.get("csrf_token")
+
+        if not form_token or form_token != session_token:
+            return "Attaque CSRF détectée", 403
+
+        new_token = secrets.token_hex(16)
+        session["csrf_token"] = new_token
+
+        SearchBar = request.form.get("SearchBar")
+
+        conn = get_connection()
+        cursor = conn.cursor(buffered=True)
+
+        try:
+            if SearchBar.isdigit():
+                cursor.execute(""" 
+                                SELECT * FROM others_services  
+                                WHERE user_id = %s AND number = %s """,
+                               (session['id'], SearchBar))
+                result = cursor.fetchall()
+
+            else:
+                cursor.execute(""" 
+                                SELECT * FROM others_services  
+                                WHERE user_id = %s AND name = %s """,
+                               (session['id'], SearchBar))
+
+                result = cursor.fetchall()
+
+            if not result:
+                return render_template("OtherServices.html", error="Service introuvable",
+                                       csrf_token=session['csrf_token'])
+
+            return render_template("OtherServices.html", result=result, message=f"Tableau de {SearchBar}",
+                                   csrf_token=session['csrf_token'])
+
+        finally:
+            cursor.close()
+            conn.close()
 
 
+# -------------------------------
 # DISPLAY TABLE
 # -------------------------------
 @services.route("/OtherServicesTable")
@@ -75,58 +117,7 @@ def OtherServicesTable():
         cursor.close()
         conn.close()
 
-
-@services.route("/OtherSearchBar", methods=["POST", "GET"])
-def SearchBar():
-    if not is_logged_in():
-        return redirect(url_for('home'))
-
-    if request.method == "GET":
-        token = secrets.token_hex(16)
-        session["csrf_token"] = token
-
-        return render_template(
-            "OtherServices.html",
-            csrf_token=token
-        )
-
-    if request.method == "POST":
-        form_token = request.form.get("csrf_token")
-        session_token = session.get("csrf_token")
-
-        if not form_token or form_token != session_token:
-            return "Attaque CSRF détectée", 403
-
-        new_token = secrets.token_hex(16)
-        session["csrf_token"] = new_token
-
-        SearchBar = request.form.get("SearchBar")
-
-        conn = get_connection()
-        cursor = conn.cursor(buffered=True)
-
-        try:
-
-            cursor.execute(""" 
-                            SELECT * FROM others_services  
-                            WHERE user_id = %s AND name = %s """,
-                           (session['id'], SearchBar))
-
-            result = cursor.fetchall()
-
-            if not result:
-                return render_template("OtherServices.html", error="Service introuvable", csrf_token=new_token)
-
-            return render_template("OtherServices.html", result=result, message=f"Tableau de {SearchBar}",
-                                   csrf_token=new_token)
-
-        finally:
-            cursor.close()
-            conn.close()
-
-        # -------------------------------
-
-
+# -------------------------------
 # ADD SERVICE
 # -------------------------------
 @services.route("/AddService", methods=["GET", "POST"])

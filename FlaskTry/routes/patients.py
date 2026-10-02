@@ -454,7 +454,7 @@ def DeletePatient():
             cursor.execute(""" 
                                 UPDATE patient_stat  
                                 SET  
-                                patient_number = patient_number - 1 , 
+                                patients_number = patients_number - 1 , 
                                 khalsin = khalsin - %s , 
                                 machi_khalsin = machi_khalsin - %s  
                                 WHERE user_id = %s AND month = %s AND year = %s  
@@ -926,7 +926,7 @@ def ShowByB9aw():
     try:
         cursor.execute("SELECT * FROM patient WHERE user_id = %s ORDER BY b9aw DESC", (session['id'],))
         rows = cursor.fetchall()
-        return render_template("PatientsFile.html", dataPrice=rows)
+        return render_template("PatientsFile.html", dataPrix=rows)
     finally:
         cursor.close()
         conn.close()
