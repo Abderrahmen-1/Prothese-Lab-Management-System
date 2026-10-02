@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Services Management - Professional Hub">
-    <meta name="keywords" content="Services, Management, Professional">
-    <title>Services Management - Professional Hub</title>
+    <meta name="description" content="Gestion des services - Centre professionnel">
+    <meta name="keywords" content="Services, Gestion, Professionnel">
+    <title>Gestion des services - Centre professionnel</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='OtherServices.css') }}">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         .context-menu {
             position: absolute;
@@ -22,6 +28,7 @@
             min-width: 190px;
             animation: fadeInMenu 0.15s ease-out;
         }
+
         .context-menu-item {
             width: 100%;
             padding: 12px 16px;
@@ -36,35 +43,44 @@
             gap: 10px;
             transition: background 0.2s ease, color 0.2s ease;
         }
+
         .context-menu-item.paid-action {
             color: #198754;
         }
+
         .context-menu-item.paid-action:hover {
             background: #e8f7ee;
             color: #146c43;
         }
+
         .context-menu-item.versement-action {
             color: #0d6efd;
         }
+
         .context-menu-item.versement-action:hover {
             background: #e7f1ff;
             color: #084298;
         }
+
         .context-menu-item.delete-action {
             color: #e63946;
         }
+
         .context-menu-item.delete-action:hover {
             background: #ffebe9;
             color: #c01927;
         }
+
         tr.row-selected {
             background-color: rgba(13, 110, 253, 0.12) !important;
         }
+
         @keyframes fadeInMenu {
             from {
                 opacity: 0;
                 transform: scale(0.95);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -72,589 +88,1401 @@
         }
     </style>
 </head>
+
 <body>
+
 <div class="animated-bg"></div>
+
 <div class="container">
+
     <header class="header">
+
         <div class="header-content">
+
             <div class="logo-section">
+
                 <div class="logo-icon">
                     <i class="fas fa-briefcase"></i>
                 </div>
+
                 <div class="logo-text">
-                    <h1>Services Hub</h1>
-                    <p>Professional Services Management</p>
+
+                    <h1>Centre des services</h1>
+
+                    <p>Gestion professionnelle des services</p>
+
                 </div>
+
             </div>
+
             <nav class="header-nav">
+
                 <a href="/HomePage" class="nav-btn back-btn">
-                    <i class="fas fa-arrow-left"></i> Back to Menu
+
+                    <i class="fas fa-arrow-left"></i>
+                    Retour au menu
+
                 </a>
+
             </nav>
+
         </div>
+
     </header>
+
+
     <div class="SearchBar">
+
         <form action="/services/OtherSearchBar" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-            <input type="search" name="SearchBar" placeholder="Search here the name of the person">
+
+            <input type="hidden"
+                   name="csrf_token"
+                   value="{{ csrf_token }}">
+
+            <input type="search"
+                   name="SearchBar"
+                   placeholder="Rechercher ici le nom de la personne">
+
             <button type="submit">
-                <i class="fas fa-search"></i> Confirm
+
+                <i class="fas fa-search"></i>
+                Confirmer
+
             </button>
+
         </form>
+
     </div>
+
+
     <div class="main-layout">
+
         <aside class="sidebar">
+
             <div class="sidebar-header">
-                <h2>Service Actions</h2>
+
+                <h2>Actions des services</h2>
+
                 <div class="header-accent"></div>
+
             </div>
+
+
             <nav class="sidebar-menu">
+
                 <div class="menu-group">
-                    <h3 class="group-title">📋 Service Management</h3>
-                    <a href="/services/OtherServicesTable" class="menu-item view-item">
+
+                    <h3 class="group-title">
+                        📋 Gestion des services
+                    </h3>
+
+
+                    <a href="/services/OtherServicesTable"
+                       class="menu-item view-item">
+
                         <i class="fas fa-table"></i>
-                        <span>View Services</span>
-                        <span class="badge badge-primary">View</span>
+
+                        <span>Afficher les services</span>
+
+                        <span class="badge badge-primary">
+                            Afficher
+                        </span>
+
                     </a>
-                    <a href="/services/AddService" class="menu-item add-item">
+
+
+                    <a href="/services/AddService"
+                       class="menu-item add-item">
+
                         <i class="fas fa-plus-circle"></i>
-                        <span>Add Service</span>
-                        <span class="badge badge-success">+</span>
+
+                        <span>Ajouter un service</span>
+
+                        <span class="badge badge-success">
+                            +
+                        </span>
+
                     </a>
-                    <a href="/services/ServicesStats" class="menu-item stats-item">
+
+
+                    <a href="/services/ServicesStats"
+                       class="menu-item stats-item">
+
                         <i class="fas fa-chart-bar"></i>
-                        <span>Statistics</span>
-                        <span class="badge badge-info">📊</span>
+
+                        <span>Statistiques</span>
+
+                        <span class="badge badge-info">
+                            📊
+                        </span>
+
                     </a>
+
                 </div>
+
+
                 <div class="menu-group">
-                    <h3 class="group-title">📈 Quick Stats</h3>
+
+                    <h3 class="group-title">
+                        📈 Statistiques rapides
+                    </h3>
+
+
                     <div class="stat-card">
+
                         <div class="stat-icon">
+
                             <i class="fas fa-briefcase"></i>
+
                         </div>
+
                         <div class="stat-content">
-                            <p class="stat-label">Total Services</p>
-                            <p class="stat-value" id="totalServices">--</p>
+
+                            <p class="stat-label">
+                                Nombre total de services
+                            </p>
+
+                            <p class="stat-value"
+                               id="totalServices">
+                                --
+                            </p>
+
                         </div>
+
                     </div>
+
                 </div>
+
+
                 <div class="menu-group">
-                    <h3 class="group-title">🔗 Navigation</h3>
-                    <a href="/HomePage" class="menu-item nav-home-item">
+
+                    <h3 class="group-title">
+                        🔗 Navigation
+                    </h3>
+
+
+                    <a href="/HomePage"
+                       class="menu-item nav-home-item">
+
                         <i class="fas fa-house"></i>
-                        <span>Main Menu</span>
+
+                        <span>Menu principal</span>
+
                     </a>
+
                 </div>
+
             </nav>
+
         </aside>
+
+
         <main class="content">
+
             {% if error %}
+
             <div class="alert-container">
+
                 <div class="alert alert-error fade-in-slow">
+
                     <i class="fas fa-exclamation-triangle"></i>
+
                     <div class="alert-content">
-                        <h3>Error / Not Found</h3>
+
+                        <h3>Erreur / Introuvable</h3>
+
                         <p>{{ error }}</p>
+
                     </div>
-                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+
+                    <button class="alert-close"
+                            onclick="this.parentElement.style.display='none'">
+
                         <i class="fas fa-times"></i>
+
                     </button>
+
                 </div>
+
             </div>
+
             {% endif %}
+
+
             {% if message %}
+
             <div class="alert-container">
+
                 <div class="alert alert-success fade-in-slow">
+
                     <i class="fas fa-check-circle"></i>
+
                     <div class="alert-content">
-                        <h3>Success</h3>
+
+                        <h3>Opération réussie</h3>
+
                         <p>{{ message }}</p>
+
                     </div>
-                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+
+                    <button class="alert-close"
+                            onclick="this.parentElement.style.display='none'">
+
                         <i class="fas fa-times"></i>
+
                     </button>
+
                 </div>
+
             </div>
+
             {% endif %}
+
+
             <div class="hero-section">
+
                 <div class="hero-content">
+
                     <div class="hero-text">
-                            <span class="hero-badge">
-                                <i class="fas fa-bolt"></i>
-                                Dashboard Overview
-                            </span>
-                        <h2 class="hero-title">Services Management Hub</h2>
+
+                        <span class="hero-badge">
+
+                            <i class="fas fa-bolt"></i>
+
+                            Vue d'ensemble
+
+                        </span>
+
+
+                        <h2 class="hero-title">
+                            Centre de gestion des services
+                        </h2>
+
+
                         <p class="hero-description">
-                            Manage all your professional services in one place.
-                            Track service details, monitor payments, and analyze
-                            performance metrics with ease.
+
+                            Gérez tous vos services professionnels
+                            depuis un seul endroit.
+                            Suivez les détails des services, surveillez
+                            les paiements et analysez facilement
+                            les indicateurs de performance.
+
                         </p>
+
+
                         <div class="hero-actions">
-                            <a href="/AddService" class="hero-btn">
+
+                            <a href="/AddService"
+                               class="hero-btn">
+
                                 <i class="fas fa-plus-circle"></i>
-                                Add New Service
+
+                                Ajouter un nouveau service
+
                             </a>
+
                         </div>
+
                     </div>
+
+
                     <div class="hero-visual">
+
                         <div class="hero-icon-wrapper">
+
                             <i class="fas fa-briefcase"></i>
+
                             <span class="pulse-ring"></span>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
+
             <div class="data-section">
-                <div class="table-card" id="MainTable" style="display: {% if result %}block{% else %}none{% endif %};">
+
+                <div class="table-card"
+                     id="MainTable"
+                     style="display: {% if result %}block{% else %}none{% endif %};">
+
                     <div class="table-header">
+
                         <div class="header-left">
+
                             <h2>
+
                                 <i class="fas fa-database"></i>
-                                Services Database
+
+                                Base de données des services
+
                             </h2>
+
+
                             {% if result %}
+
                             <span class="record-badge">
-                                    {{ result|length }} Records Found
-                                </span>
+
+                                {{ result|length }} enregistrements trouvés
+
+                            </span>
+
                             {% endif %}
+
                         </div>
+
                     </div>
+
+
                     {% if result %}
+
                     <div class="table-wrapper">
+
                         <table class="data-table">
+
                             <thead>
+
                             <tr>
-                                <th><span><i class="fas fa-hashtag"></i> Service ID</span></th>
-                                <th><span><i class="fas fa-user"></i> Name</span></th>
-                                <th><span><i class="fas fa-phone"></i> Number</span></th>
-                                <th><span><i class="fas fa-calendar"></i> Date</span></th>
-                                <th><span><i class="fas fa-dollar-sign"></i> Price</span></th>
-                                <th><span><i class="fas fa-money-bill"></i> Khalsa</span></th>
-                                <th><span><i class="fas fa-coins"></i> Versement</span></th>
-                                <th><span><i class="fas fa-wallet"></i> B9aw</span></th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-hashtag"></i>
+                                        ID du service
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-user"></i>
+                                        Nom
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-phone"></i>
+                                        Numéro
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-calendar"></i>
+                                        Date
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-dollar-sign"></i>
+                                        Prix
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-money-bill"></i>
+                                        Khalsa
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-coins"></i>
+                                        Versement
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-wallet"></i>
+                                        Reste
+                                    </span>
+                                </th>
+
                             </tr>
+
                             </thead>
+
+
                             <tbody>
+
                             {% for row in result %}
+
                             <tr class="table-row"
                                 data-id="{{ row[0] }}"
                                 data-name="{{ row[1] }}"
                                 data-number="{{ row[2] }}"
                                 style="animation-delay: {{ loop.index * 0.05 }}s;">
-                                <td><span class="cell-content">{{ row[0] }}</span></td>
-                                <td><span class="cell-content">{{ row[1] }}</span></td>
-                                <td><span class="cell-content">{{ row[2] }}</span></td>
-                                <td><span class="cell-content">{{ row[3] }}</span></td>
-                                <td><span class="cell-content">{{ row[4] }}</span></td>
-                                <td><span class="cell-content">{{ row[5] }}</span></td>
-                                <td><span class="cell-content">{{ row[6] }}</span></td>
-                                <td><span class="cell-content">{{ row[7] }}</span></td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[0] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[1] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[2] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[3] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[4] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[5] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[6] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[7] }}
+                                    </span>
+                                </td>
+
                             </tr>
+
                             {% endfor %}
+
                             </tbody>
+
                         </table>
+
                     </div>
+
                     {% else %}
+
                     <div class="empty-table">
+
                         <i class="fas fa-inbox"></i>
-                        <p>No services found</p>
+
+                        <p>Aucun service trouvé</p>
+
                     </div>
+
                     {% endif %}
+
                 </div>
-                <div class="table-card" id="StatTable" style="display: {% if stats %}block{% else %}none{% endif %};">
+
+
+                <div class="table-card"
+                     id="StatTable"
+                     style="display: {% if stats %}block{% else %}none{% endif %};">
+
                     <div class="table-header">
+
                         <div class="header-left">
+
                             <h2>
+
                                 <i class="fas fa-chart-pie"></i>
-                                Services Statistics
+
+                                Statistiques des services
+
                             </h2>
+
+
                             {% if stats %}
-                            <span class="record-badge">Analytics Dashboard</span>
+
+                            <span class="record-badge">
+                                Tableau de bord analytique
+                            </span>
+
                             {% endif %}
+
                         </div>
+
                     </div>
+
+
                     {% if stats %}
+
                     <div class="table-wrapper">
+
                         <table class="data-table">
+
                             <thead>
+
                             <tr>
-                                <th><span><i class="fas fa-user"></i> Name</span></th>
-                                <th><span><i class="fas fa-phone"></i> Number</span></th>
-                                <th><span><i class="fas fa-briefcase"></i> Total Khedma</span></th>
-                                <th><span><i class="fas fa-check-circle"></i> Khalsin</span></th>
-                                <th><span><i class="fas fa-times-circle"></i> Not Khalsin</span></th>
-                                <th><span><i class="fas fa-calendar-alt"></i> Month</span></th>
-                                <th><span><i class="fas fa-calendar"></i> Year</span></th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-user"></i>
+                                        Nom
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-phone"></i>
+                                        Numéro
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-briefcase"></i>
+                                        Total des Khedma
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-check-circle"></i>
+                                        Khalsin
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-times-circle"></i>
+                                        Non Khalsin
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-calendar-alt"></i>
+                                        Mois
+                                    </span>
+                                </th>
+
+                                <th>
+                                    <span>
+                                        <i class="fas fa-calendar"></i>
+                                        Année
+                                    </span>
+                                </th>
+
                             </tr>
+
                             </thead>
+
+
                             <tbody>
+
                             {% for row in stats %}
-                            <tr class="table-row" style="animation-delay: {{ loop.index * 0.05 }}s;">
-                                <td><span class="cell-content">{{ row[1] }}</span></td>
-                                <td><span class="cell-content">{{ row[2] }}</span></td>
-                                <td><span class="cell-content">{{ row[3] }}</span></td>
-                                <td><span class="cell-content">{{ row[4] }}</span></td>
-                                <td><span class="cell-content">{{ row[5] }}</span></td>
-                                <td><span class="cell-content">{{ row[6] }}</span></td>
-                                <td><span class="cell-content">{{ row[7] }}</span></td>
+
+                            <tr class="table-row"
+                                style="animation-delay: {{ loop.index * 0.05 }}s;">
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[1] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[2] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[3] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[4] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[5] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[6] }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="cell-content">
+                                        {{ row[7] }}
+                                    </span>
+                                </td>
+
                             </tr>
+
                             {% endfor %}
+
                             </tbody>
+
                         </table>
+
                     </div>
+
                     {% else %}
+
                     <div class="empty-table">
+
                         <i class="fas fa-chart-line"></i>
-                        <p>No statistics available</p>
+
+                        <p>Aucune statistique disponible</p>
+
                     </div>
+
                     {% endif %}
+
                 </div>
+
+
                 {% if not result and not stats %}
+
                 <div class="empty-state">
+
                     <div class="empty-icon">
+
                         <i class="fas fa-inbox"></i>
+
                     </div>
-                    <h2>No Information Available</h2>
-                    <p>Use the sidebar menu to view services or add new ones</p>
+
+                    <h2>Aucune information disponible</h2>
+
+                    <p>
+                        Utilisez le menu latéral pour afficher les services
+                        ou en ajouter de nouveaux
+                    </p>
+
                 </div>
+
                 {% endif %}
+
             </div>
+
         </main>
+
     </div>
+
 </div>
-<div id="custom-context-menu" class="context-menu" style="display: none;">
-    <button id="paid-row-btn" class="context-menu-item paid-action">
+
+
+<div id="custom-context-menu"
+     class="context-menu"
+     style="display: none;">
+
+    <button id="paid-row-btn"
+            class="context-menu-item paid-action">
+
         <i class="fas fa-check-circle"></i>
-        Mark as Paid
+
+        Marquer comme payé
+
     </button>
-    <button id="modify-versement-btn" class="context-menu-item versement-action">
+
+
+    <button id="modify-versement-btn"
+            class="context-menu-item versement-action">
+
         <i class="fas fa-money-bill-wave"></i>
-        Modify Versement
+
+        Modifier le versement
+
     </button>
-    <button id="delete-row-btn" class="context-menu-item delete-action">
+
+
+    <button id="delete-row-btn"
+            class="context-menu-item delete-action">
+
         <i class="fas fa-trash-alt"></i>
-        Delete Service
+
+        Supprimer le service
+
     </button>
+
 </div>
+
+
 <script>
+
     // ==========================================
-    // UPDATE TOTAL SERVICES
+    // METTRE À JOUR LE NOMBRE TOTAL DE SERVICES
     // ==========================================
+
     function updateTotalServices() {
+
         let total = 0;
-        const mainTable = document.querySelector('#MainTable tbody');
+
+        const mainTable =
+            document.querySelector('#MainTable tbody');
+
 
         if (mainTable) {
-            total = mainTable.querySelectorAll('tr').length;
+
+            total =
+                mainTable.querySelectorAll('tr').length;
+
         }
 
-        const totalElement = document.getElementById('totalServices');
+
+        const totalElement =
+            document.getElementById('totalServices');
+
 
         if (totalElement) {
-            totalElement.textContent = total || '--';
+
+            totalElement.textContent =
+                total || '--';
+
         }
+
     }
 
-    // ==========================================
-    // RIPPLE EFFECT
-    // ==========================================
-    function createRipple(e) {
-        const button = e.currentTarget;
-        const ripple = document.createElement('span');
-        const rect = button.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
 
-        ripple.style.width = ripple.style.height = size + 'px';
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
+    // ==========================================
+    // EFFET D'ONDULATION
+    // ==========================================
+
+    function createRipple(e) {
+
+        const button =
+            e.currentTarget;
+
+        const ripple =
+            document.createElement('span');
+
+        const rect =
+            button.getBoundingClientRect();
+
+        const size =
+            Math.max(rect.width, rect.height);
+
+        const x =
+            e.clientX - rect.left - size / 2;
+
+        const y =
+            e.clientY - rect.top - size / 2;
+
+
+        ripple.style.width =
+            ripple.style.height =
+            size + 'px';
+
+        ripple.style.left =
+            x + 'px';
+
+        ripple.style.top =
+            y + 'px';
+
         ripple.classList.add('ripple');
 
+
         button.appendChild(ripple);
+
         setTimeout(() => ripple.remove(), 600);
+
     }
 
+
     // ==========================================
-    // INITIALIZE PAGE
+    // INITIALISATION DE LA PAGE
     // ==========================================
+
     document.addEventListener('DOMContentLoaded', function() {
 
-        // Ripple effect
+
+        // Effet d'ondulation
         document.querySelectorAll('.menu-item, .nav-btn').forEach(item => {
+
             item.addEventListener('click', createRipple);
+
         });
 
-        // Update total services
+
+        // Mettre à jour le nombre total de services
         updateTotalServices();
 
-        // Auto-close alerts
+
+        // Fermeture automatique des alertes
         document.querySelectorAll('.alert').forEach(alert => {
+
             setTimeout(() => {
-                alert.style.animation = 'fadeOut 0.5s ease forwards';
+
+                alert.style.animation =
+                    'fadeOut 0.5s ease forwards';
+
 
                 setTimeout(() => {
+
                     alert.remove();
+
                 }, 500);
+
             }, 5000);
+
         });
 
+
         // ==========================================
-        // CONTEXT MENU
+        // MENU CONTEXTUEL
         // ==========================================
-        const contextMenu = document.getElementById('custom-context-menu');
-        const paidBtn = document.getElementById('paid-row-btn');
-        const modifyVersementBtn = document.getElementById('modify-versement-btn');
-        const deleteBtn = document.getElementById('delete-row-btn');
+
+        const contextMenu =
+            document.getElementById('custom-context-menu');
+
+        const paidBtn =
+            document.getElementById('paid-row-btn');
+
+        const modifyVersementBtn =
+            document.getElementById('modify-versement-btn');
+
+        const deleteBtn =
+            document.getElementById('delete-row-btn');
+
 
         let targetRow = null;
+
         let longPressTimer = null;
+
         const LONG_PRESS_DURATION = 500;
 
+
         // ==========================================
-        // RIGHT CLICK
+        // CLIC DROIT
         // ==========================================
+
         document.addEventListener('contextmenu', (e) => {
-            const row = e.target.closest('.table-row');
+
+            const row =
+                e.target.closest('.table-row');
+
 
             if (row && row.hasAttribute('data-id')) {
+
                 e.preventDefault();
-                openContextMenu(e.pageX, e.pageY, row);
+
+                openContextMenu(
+                    e.pageX,
+                    e.pageY,
+                    row
+                );
+
             }
+
         });
 
+
         // ==========================================
-        // MOBILE LONG PRESS
+        // APPUI LONG SUR MOBILE
         // ==========================================
+
         document.addEventListener('touchstart', (e) => {
-            const row = e.target.closest('.table-row');
+
+            const row =
+                e.target.closest('.table-row');
+
 
             if (!row || !row.hasAttribute('data-id')) {
+
                 return;
+
             }
 
-            const touch = e.touches[0];
+
+            const touch =
+                e.touches[0];
+
 
             longPressTimer = setTimeout(() => {
-                openContextMenu(touch.pageX, touch.pageY, row);
+
+                openContextMenu(
+                    touch.pageX,
+                    touch.pageY,
+                    row
+                );
+
             }, LONG_PRESS_DURATION);
+
         }, { passive: true });
 
-        document.addEventListener('touchend', cancelLongPress);
-        document.addEventListener('touchmove', cancelLongPress);
+
+        document.addEventListener(
+            'touchend',
+            cancelLongPress
+        );
+
+        document.addEventListener(
+            'touchmove',
+            cancelLongPress
+        );
+
 
         function cancelLongPress() {
+
             if (longPressTimer) {
+
                 clearTimeout(longPressTimer);
+
                 longPressTimer = null;
+
             }
+
         }
 
+
         // ==========================================
-        // OPEN CONTEXT MENU
+        // OUVRIR LE MENU CONTEXTUEL
         // ==========================================
+
         function openContextMenu(x, y, row) {
+
             if (targetRow) {
-                targetRow.classList.remove('row-selected');
+
+                targetRow.classList.remove(
+                    'row-selected'
+                );
+
             }
+
 
             targetRow = row;
-            targetRow.classList.add('row-selected');
 
-            contextMenu.style.left = `${x}px`;
-            contextMenu.style.top = `${y}px`;
-            contextMenu.style.display = 'block';
-        }
-
-        // ==========================================
-        // HIDE CONTEXT MENU
-        // ==========================================
-        function hideContextMenu() {
-            contextMenu.style.display = 'none';
-
-            if (targetRow) {
-                targetRow.classList.remove('row-selected');
-                targetRow = null;
-            }
-        }
-
-        // ==========================================
-        // CLICK OUTSIDE MENU
-        // ==========================================
-        document.addEventListener('click', (e) => {
-            if (!contextMenu.contains(e.target)) {
-                hideContextMenu();
-            }
-        });
-
-        // ==========================================
-        // MARK SERVICE AS PAID
-        // ==========================================
-        paidBtn.addEventListener('click', async () => {
-            if (!targetRow) return;
-
-            const recordId = targetRow.getAttribute('data-id');
-            const name = targetRow.getAttribute('data-name');
-            const number = targetRow.getAttribute('data-number');
-
-            if (!confirm(`Mark service #${recordId} as fully paid?`)) {
-                hideContextMenu();
-                return;
-            }
-
-            try {
-                const response = await fetch(`/services/ServicePaid/${recordId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        name: name,
-                        number: number
-                    })
-                });
-
-                const data = await response.json();
-
-                console.log("Status:", response.status);
-                console.log("Response:", data);
-
-                if (response.ok && data.success) {
-                    location.reload();
-                } else {
-                    alert(data.error || data.message || 'Failed to mark service as paid.');
-                }
-
-            } catch (err) {
-                console.error('Paid error:', err);
-                alert('An error occurred while communicating with the server.');
-            }
-
-            hideContextMenu();
-        });
-
-
-
-        // ==========================================
-        // MODIFY VERSEMENT
-        // ==========================================
-        modifyVersementBtn.addEventListener('click', async () => {
-            if (!targetRow) return;
-
-            const recordId = targetRow.getAttribute('data-id');
-            const name = targetRow.getAttribute('data-name');
-            const number = targetRow.getAttribute('data-number');
-
-            const newVersement = prompt(
-                `Enter the new versement amount for service #${recordId}:`
+            targetRow.classList.add(
+                'row-selected'
             );
 
-            if (newVersement === null) {
+
+            contextMenu.style.left =
+                `${x}px`;
+
+            contextMenu.style.top =
+                `${y}px`;
+
+            contextMenu.style.display =
+                'block';
+
+        }
+
+
+        // ==========================================
+        // MASQUER LE MENU CONTEXTUEL
+        // ==========================================
+
+        function hideContextMenu() {
+
+            contextMenu.style.display =
+                'none';
+
+
+            if (targetRow) {
+
+                targetRow.classList.remove(
+                    'row-selected'
+                );
+
+                targetRow = null;
+
+            }
+
+        }
+
+
+        // ==========================================
+        // CLIC EN DEHORS DU MENU
+        // ==========================================
+
+        document.addEventListener('click', (e) => {
+
+            if (!contextMenu.contains(e.target)) {
+
                 hideContextMenu();
-                return;
+
             }
 
-            if (newVersement.trim() === '' || isNaN(newVersement)) {
-                alert('Please enter a valid amount.');
-                hideContextMenu();
-                return;
-            }
-
-            try {
-                const response = await fetch(`/services/ModifyServiceVersement/${recordId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        name: name,
-                        number: number,
-                        newVersement: parseFloat(newVersement)
-                    })
-                });
-
-                const data = await response.json();
-
-                console.log("Status:", response.status);
-                console.log("Response:", data);
-
-                if (response.ok && data.success) {
-                    location.reload();
-                } else {
-                    alert(data.error || data.message || 'Failed to modify versement.');
-                }
-
-            } catch (err) {
-                console.error('Versement error:', err);
-                alert('An error occurred while communicating with the server.');
-            }
-
-            hideContextMenu();
         });
 
 
         // ==========================================
-        // DELETE SERVICE
+        // MARQUER LE SERVICE COMME PAYÉ
         // ==========================================
-        deleteBtn.addEventListener('click', async () => {
+
+        paidBtn.addEventListener('click', async () => {
+
             if (!targetRow) return;
 
-            const recordId = targetRow.getAttribute('data-id');
-            const name = targetRow.getAttribute('data-name');
-            const number = targetRow.getAttribute('data-number');
 
-            if (!confirm(`Are you sure you want to delete service #${recordId}?`)) {
+            const recordId =
+                targetRow.getAttribute('data-id');
+
+            const name =
+                targetRow.getAttribute('data-name');
+
+            const number =
+                targetRow.getAttribute('data-number');
+
+
+            if (!confirm(
+                `Marquer le service #${recordId} comme entièrement payé ?`
+            )) {
+
                 hideContextMenu();
+
                 return;
+
             }
+
 
             try {
-                const response = await fetch(`/services/DeleteService/${recordId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        name: name,
-                        number: number
-                    })
-                });
 
-                const data = await response.json();
+                const response =
+                    await fetch(
+                        `/services/ServicePaid/${recordId}`,
+                        {
+                            method: 'POST',
 
-                console.log("Status:", response.status);
-                console.log("Response:", data);
+                            headers: {
+                                'Content-Type':
+                                    'application/json'
+                            },
 
-                if (response.ok && data.success) {
-                    const matchingRows = document.querySelectorAll(
-                        `tr[data-id="${recordId}"]`
+                            body: JSON.stringify({
+                                name: name,
+                                number: number
+                            })
+                        }
                     );
 
-                    matchingRows.forEach(row => {
-                        row.style.transition = 'all 0.3s ease';
-                        row.style.opacity = '0';
-                        row.style.transform = 'translateX(20px)';
 
-                        setTimeout(() => {
-                            row.remove();
-                            updateTotalServices();
-                        }, 300);
-                    });
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "Statut :",
+                    response.status
+                );
+
+                console.log(
+                    "Réponse :",
+                    data
+                );
+
+
+                if (response.ok && data.success) {
+
+                    location.reload();
 
                 } else {
-                    alert(data.error || data.message || 'Failed to delete service.');
+
+                    alert(
+                        data.error ||
+                        data.message ||
+                        'Impossible de marquer le service comme payé.'
+                    );
+
                 }
 
+
             } catch (err) {
-                console.error('Delete error:', err);
-                alert('An error occurred while communicating with the server.');
+
+                console.error(
+                    'Erreur de paiement :',
+                    err
+                );
+
+                alert(
+                    'Une erreur est survenue lors de la communication avec le serveur.'
+                );
+
             }
 
+
             hideContextMenu();
+
         });
 
+
+        // ==========================================
+        // MODIFIER LE VERSEMENT
+        // ==========================================
+
+        modifyVersementBtn.addEventListener(
+            'click',
+            async () => {
+
+                if (!targetRow) return;
+
+
+                const recordId =
+                    targetRow.getAttribute('data-id');
+
+                const name =
+                    targetRow.getAttribute('data-name');
+
+                const number =
+                    targetRow.getAttribute('data-number');
+
+
+                const newVersement =
+                    prompt(
+                        `Saisissez le nouveau montant du versement pour le service #${recordId} :`
+                    );
+
+
+                if (newVersement === null) {
+
+                    hideContextMenu();
+
+                    return;
+
+                }
+
+
+                if (
+                    newVersement.trim() === '' ||
+                    isNaN(newVersement)
+                ) {
+
+                    alert(
+                        'Veuillez saisir un montant valide.'
+                    );
+
+                    hideContextMenu();
+
+                    return;
+
+                }
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `/services/ModifyServiceVersement/${recordId}`,
+                            {
+                                method: 'POST',
+
+                                headers: {
+                                    'Content-Type':
+                                        'application/json'
+                                },
+
+                                body: JSON.stringify({
+                                    name: name,
+                                    number: number,
+                                    newVersement:
+                                        parseFloat(
+                                            newVersement
+                                        )
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    console.log(
+                        "Statut :",
+                        response.status
+                    );
+
+                    console.log(
+                        "Réponse :",
+                        data
+                    );
+
+
+                    if (response.ok && data.success) {
+
+                        location.reload();
+
+                    } else {
+
+                        alert(
+                            data.error ||
+                            data.message ||
+                            'Impossible de modifier le versement.'
+                        );
+
+                    }
+
+
+                } catch (err) {
+
+                    console.error(
+                        'Erreur de versement :',
+                        err
+                    );
+
+                    alert(
+                        'Une erreur est survenue lors de la communication avec le serveur.'
+                    );
+
+                }
+
+
+                hideContextMenu();
+
+            }
+        );
+
+
+        // ==========================================
+        // SUPPRIMER LE SERVICE
+        // ==========================================
+
+        deleteBtn.addEventListener(
+            'click',
+            async () => {
+
+                if (!targetRow) return;
+
+
+                const recordId =
+                    targetRow.getAttribute('data-id');
+
+                const name =
+                    targetRow.getAttribute('data-name');
+
+                const number =
+                    targetRow.getAttribute('data-number');
+
+
+                if (!confirm(
+                    `Êtes-vous sûr de vouloir supprimer le service #${recordId} ?`
+                )) {
+
+                    hideContextMenu();
+
+                    return;
+
+                }
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `/services/DeleteService/${recordId}`,
+                            {
+                                method: 'POST',
+
+                                headers: {
+                                    'Content-Type':
+                                        'application/json'
+                                },
+
+                                body: JSON.stringify({
+                                    name: name,
+                                    number: number
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    console.log(
+                        "Statut :",
+                        response.status
+                    );
+
+                    console.log(
+                        "Réponse :",
+                        data
+                    );
+
+
+                    if (response.ok && data.success) {
+
+                        const matchingRows =
+                            document.querySelectorAll(
+                                `tr[data-id="${recordId}"]`
+                            );
+
+
+                        matchingRows.forEach(row => {
+
+                            row.style.transition =
+                                'all 0.3s ease';
+
+                            row.style.opacity =
+                                '0';
+
+                            row.style.transform =
+                                'translateX(20px)';
+
+
+                            setTimeout(() => {
+
+                                row.remove();
+
+                                updateTotalServices();
+
+                            }, 300);
+
+                        });
+
+
+                    } else {
+
+                        alert(
+                            data.error ||
+                            data.message ||
+                            'Impossible de supprimer le service.'
+                        );
+
+                    }
+
+
+                } catch (err) {
+
+                    console.error(
+                        'Erreur de suppression :',
+                        err
+                    );
+
+                    alert(
+                        'Une erreur est survenue lors de la communication avec le serveur.'
+                    );
+
+                }
+
+
+                hideContextMenu();
+
+            }
+        );
+
     });
+
 </script>
+
 </body>
 </html>

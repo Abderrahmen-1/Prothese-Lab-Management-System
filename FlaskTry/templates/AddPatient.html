@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Add Patient to Prosthetics Lab Management System">
-    <meta name="keywords" content="Add Patient, Prosthetics Lab, Healthcare Management">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Add Patient - Prosthetics Lab</title>
+    <meta name="description" content="Ajouter un patient au système de gestion du laboratoire de prothèse">
+    <meta name="keywords" content="Ajout de patient, laboratoire de prothèse, gestion des soins">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+    <title>Ajouter un patient - Laboratoire de prothèse</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='AddPatient.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
@@ -25,14 +25,14 @@
             <div class="header-content">
                 <a href="/patients/Patient" class="back-btn">
                     <i class="fas fa-chevron-left"></i>
-                    Back to Patients
+                    Retour aux patients
                 </a>
                 <div class="header-title">
-                    <h1><i class="fas fa-user-plus"></i> Add New Patient</h1>
-                    <p>Complete patient information and appointment details</p>
+                    <h1><i class="fas fa-user-plus"></i> Ajouter un nouveau patient</h1>
+                    <p>Renseignez les informations du patient et les détails du rendez-vous</p>
                 </div>
                 <div class="header-badge">
-                    <span class="step-indicator">Patient Registration</span>
+                    <span class="step-indicator">Enregistrement du patient</span>
                 </div>
             </div>
         </header>
@@ -41,62 +41,62 @@
         <div class="form-container">
             <form action="/patients/AddPatient" method="POST" class="patient-form">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <!-- Patient Information Section -->
+                <!-- Informations sur le patient Section -->
                 <div class="form-section">
                     <div class="section-header">
                         <div class="section-icon">
                             <i class="fas fa-id-card"></i>
                         </div>
                         <div>
-                            <h2>Patient Information</h2>
-                            <p>Basic details about the patient</p>
+                            <h2>Informations sur le patient</h2>
+                            <p>Informations générales sur le patient</p>
                         </div>
                     </div>
 
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="firstname">
-                                <i class="fas fa-user"></i> First Name *
+                                <i class="fas fa-user"></i> Prénom *
                             </label>
                             <input
                                 type="text"
                                 id="firstname"
                                 name="PatientFirstName"
-                                placeholder="Enter patient's first name"
+                                placeholder="Saisissez le prénom du patient"
                                 required
                                 class="form-input"
                             >
-                            <div class="input-hint">Required field</div>
+                            <div class="input-hint">Champ obligatoire</div>
                         </div>
 
                         <div class="form-group">
                             <label for="lastname">
-                                <i class="fas fa-user"></i> Last Name *
+                                <i class="fas fa-user"></i> Nom *
                             </label>
                             <input
                                 type="text"
                                 id="lastname"
                                 name="PatientLastName"
-                                placeholder="Enter patient's last name"
+                                placeholder="Saisissez le nom du patient"
                                 required
                                 class="form-input"
                             >
-                            <div class="input-hint">Required field</div>
+                            <div class="input-hint">Champ obligatoire</div>
                         </div>
 
                         <div class="form-group full-width">
                             <label for="uniquenumber">
-                                <i class="fas fa-hashtag"></i> Unique Patient Number *
+                                <i class="fas fa-hashtag"></i> Numéro unique du patient *
                             </label>
                             <input
                                 type="text"
                                 id="uniquenumber"
                                 name="PatientUnique"
-                                placeholder="Patient ID or reference number"
+                                placeholder="Identifiant ou numéro de référence du patient"
                                 required
                                 class="form-input"
                             >
-                            <div class="input-hint">Used for identification</div>
+                            <div class="input-hint">Utilisé pour l’identification</div>
                         </div>
                     </div>
                 </div>
@@ -108,45 +108,45 @@
                             <i class="fas fa-briefcase"></i>
                         </div>
                         <div>
-                            <h2>Work Information</h2>
-                            <p>Service details and timeline</p>
+                            <h2>Informations sur le travail</h2>
+                            <p>Détails du service et calendrier</p>
                         </div>
                     </div>
 
                     <div class="form-grid">
                         <div class="form-group full-width">
                             <label for="khedmachoice">
-                                <i class="fas fa-hammer"></i> Service Type (Khedma) *
+                                <i class="fas fa-hammer"></i> Type de service (Khedma) *
                             </label>
                             <input
                                 type="text"
                                 id="khedmachoice"
                                 name="KhedmaChoice"
-                                placeholder="e.g., Prosthetic limb, Dental prosthetics, etc."
+                                placeholder="ex. : prothèse dentaire, couronne, etc."
                                 required
                                 class="form-input"
                             >
-                            <div class="input-hint">What service will be provided?</div>
+                            <div class="input-hint">Quel service sera réalisé ?</div>
                         </div>
 
                         <div class="form-group">
                             <label for="khedmaprice">
-                                <i class="fas fa-coins"></i> Price (DA) *
+                                <i class="fas fa-coins"></i> Prix (DA) *
                             </label>
                             <input
                                 type="text"
                                 id="khedmaprice"
                                 name="KhedmaPrice"
-                                placeholder="Cost in Dinars"
+                                placeholder="Coût en dinars"
                                 required
                                 class="form-input"
                             >
-                            <div class="input-hint">Service cost</div>
+                            <div class="input-hint">Coût du service</div>
                         </div>
 
                         <div class="form-group">
                             <label for="startdate">
-                                <i class="fas fa-calendar-check"></i> Start Date *
+                                <i class="fas fa-calendar-check"></i> Date de début *
                             </label>
                             <input
                                 type="date"
@@ -155,12 +155,12 @@
                                 required
                                 class="form-input"
                             >
-                            <div class="input-hint">Service start date</div>
+                            <div class="input-hint">Date de début du service</div>
                         </div>
 
                         <div class="form-group">
                             <label for="deadline">
-                                <i class="fas fa-calendar-times"></i> Deadline *
+                                <i class="fas fa-calendar-times"></i> Date limite *
                             </label>
                             <input
                                 type="date"
@@ -169,7 +169,7 @@
                                 required
                                 class="form-input"
                             >
-                            <div class="input-hint">Expected completion date</div>
+                            <div class="input-hint">Date prévue de fin</div>
                         </div>
                     </div>
                 </div>
@@ -181,15 +181,15 @@
                             <i class="fas fa-credit-card"></i>
                         </div>
                         <div>
-                            <h2>Payment Status</h2>
-                            <p>Payment information and deposits</p>
+                            <h2>État du paiement</h2>
+                            <p>Informations sur le paiement et les acomptes</p>
                         </div>
                     </div>
 
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="khalsa">
-                                <i class="fas fa-check-circle"></i> Paid (Khalsa)? *
+                                <i class="fas fa-check-circle"></i> Payé (Khalsa) ? *
                             </label>
                             <select
                                 id="khalsa"
@@ -198,11 +198,11 @@
                                 onchange="versaCheckFunction()"
                                 required
                             >
-                                <option value="">-- Select --</option>
-                                <option value="yes">Yes - Paid</option>
-                                <option value="no">No - Not Paid</option>
+                                <option value="">-- Sélectionner --</option>
+                                <option value="yes">Oui - Payé</option>
+                                <option value="no">Non - Non payé</option>
                             </select>
-                            <div class="input-hint">Is the full amount paid?</div>
+                            <div class="input-hint">Le montant total est-il payé ?</div>
                         </div>
                     </div>
 
@@ -210,13 +210,13 @@
                     <div id="versaCheck" class="nested-section" style="display: none;">
                         <div class="nested-header">
                             <i class="fas fa-hand-holding-dollar"></i>
-                            <span>Deposit Information (Versa)</span>
+                            <span>Informations sur l’acompte (Versa)</span>
                         </div>
 
                         <div class="form-grid">
                             <div class="form-group">
                                 <label for="versainput">
-                                    <i class="fas fa-percent"></i> Is there a deposit? *
+                                    <i class="fas fa-percent"></i> Y a-t-il un acompte ? *
                                 </label>
                                 <select
                                     id="versainput"
@@ -224,11 +224,11 @@
                                     class="form-input"
                                     onchange="showVersaAmount()"
                                 >
-                                    <option value="">-- Select --</option>
-                                    <option value="yes">Yes - There is a deposit</option>
-                                    <option value="no">No - No deposit</option>
+                                    <option value="">-- Sélectionner --</option>
+                                    <option value="yes">Oui - Il y a un acompte</option>
+                                    <option value="no">Non - Aucun acompte</option>
                                 </select>
-                                <div class="input-hint">Is a deposit being made?</div>
+                                <div class="input-hint">Un acompte est-il versé ?</div>
                             </div>
                         </div>
 
@@ -236,37 +236,37 @@
                         <div id="versaAmountSection" class="form-grid" style="display: none;">
                             <div class="form-group full-width">
                                 <label for="versaamount">
-                                    <i class="fas fa-money-bill"></i> Deposit Amount (DA) *
+                                    <i class="fas fa-money-bill"></i> Montant de l’acompte (DA) *
                                 </label>
                                 <input
                                     type="text"
                                     id="versaamount"
                                     name="Versa"
-                                    placeholder="Enter deposit amount in Dinars"
+                                    placeholder="Saisissez le montant de l’acompte en dinars"
                                     class="form-input"
                                 >
-                                <div class="input-hint">Amount paid as deposit</div>
+                                <div class="input-hint">Montant versé comme acompte</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Other Prosthetist Section -->
+                <!-- Autre prothésiste Section -->
                 <div class="form-section">
                     <div class="section-header">
                         <div class="section-icon">
                             <i class="fas fa-users"></i>
                         </div>
                         <div>
-                            <h2>Other Prosthetist</h2>
-                            <p>If another prosthetist is involved</p>
+                            <h2>Autre prothésiste</h2>
+                            <p>Si un autre prothésiste intervient</p>
                         </div>
                     </div>
 
                     <div class="form-grid">
                         <div class="form-group full-width">
                             <label for="otherprocheckbox">
-                                <i class="fas fa-person-circle-plus"></i> Is another prosthetist involved? *
+                                <i class="fas fa-person-circle-plus"></i> Un autre prothésiste intervient-il ? *
                             </label>
                             <select
                                 id="otherprocheckbox"
@@ -275,64 +275,64 @@
                                 onchange="OtherProthesists()"
                                 required
                             >
-                                <option value="">-- Select --</option>
-                                <option value="yes">Yes - Another prosthetist</option>
-                                <option value="no">No - Only main service</option>
+                                <option value="">-- Sélectionner --</option>
+                                <option value="yes">Oui - Un autre prothésiste</option>
+                                <option value="no">Non - Service principal uniquement</option>
                             </select>
-                            <div class="input-hint">Is this a shared case?</div>
+                            <div class="input-hint">S’agit-il d’un cas partagé ?</div>
                         </div>
                     </div>
 
-                    <!-- Other Prosthetist Details - Hidden by default -->
+                    <!-- Informations sur l’autre prothésiste - Hidden by default -->
                     <div id="OtherProInformations" style="display: none;">
                         <div class="nested-header">
                             <i class="fas fa-user-doctor"></i>
-                            <span>Other Prosthetist Details</span>
+                            <span>Informations sur l’autre prothésiste</span>
                         </div>
 
                         <div class="form-grid">
                             <div class="form-group">
                                 <label for="proname">
-                                    <i class="fas fa-user"></i> Prosthetist Name *
+                                    <i class="fas fa-user"></i> Nom du prothésiste *
                                 </label>
                                 <input
                                     type="text"
                                     id="proname"
                                     name="ProName"
-                                    placeholder="Name of the other prosthetist"
+                                    placeholder="Nom de l’autre prothésiste"
                                     class="form-input"
                                 >
                             </div>
 
                             <div class="form-group">
                                 <label for="pronumber">
-                                    <i class="fas fa-phone"></i> Contact Number *
+                                    <i class="fas fa-phone"></i> Numéro de téléphone *
                                 </label>
                                 <input
                                     type="text"
                                     id="pronumber"
                                     name="ProNumber"
-                                    placeholder="Phone number"
+                                    placeholder="Numéro de téléphone"
                                     class="form-input"
                                 >
                             </div>
 
                             <div class="form-group">
                                 <label for="proprice">
-                                    <i class="fas fa-coins"></i> Price (DA) *
+                                    <i class="fas fa-coins"></i> Prix (DA) *
                                 </label>
                                 <input
                                     type="text"
                                     id="proprice"
                                     name="ProPrice"
-                                    placeholder="Cost for their service"
+                                    placeholder="Coût de son service"
                                     class="form-input"
                                 >
                             </div>
 
                             <div class="form-group">
                                 <label for="prodate">
-                                    <i class="fas fa-calendar"></i> Start Date *
+                                    <i class="fas fa-calendar"></i> Date de début *
                                 </label>
                                 <input
                                     type="date"
@@ -344,7 +344,7 @@
 
                             <div class="form-group">
                                 <label for="prodeadline">
-                                    <i class="fas fa-calendar-times"></i> Deadline *
+                                    <i class="fas fa-calendar-times"></i> Date limite *
                                 </label>
                                 <input
                                     type="date"
@@ -356,7 +356,7 @@
 
                             <div class="form-group">
                                 <label for="prokhalsa">
-                                    <i class="fas fa-check-circle"></i> Paid (Khalsa)? *
+                                    <i class="fas fa-check-circle"></i> Payé (Khalsa) ? *
                                 </label>
                                 <select
                                     id="prokhalsa"
@@ -364,9 +364,9 @@
                                     class="form-input"
                                     onchange="ProversaCheckFunction()"
                                 >
-                                    <option value="">-- Select --</option>
-                                    <option value="yes">Yes - Paid</option>
-                                    <option value="no">No - Not Paid</option>
+                                    <option value="">-- Sélectionner --</option>
+                                    <option value="yes">Oui - Payé</option>
+                                    <option value="no">Non - Non payé</option>
                                 </select>
                             </div>
                         </div>
@@ -375,13 +375,13 @@
                         <div id="ProversaCheck" class="nested-section" style="display: none;">
                             <div class="nested-header">
                                 <i class="fas fa-hand-holding-dollar"></i>
-                                <span>Deposit Information</span>
+                                <span>Informations sur l’acompte</span>
                             </div>
 
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label for="proversament">
-                                        <i class="fas fa-percent"></i> Is there a deposit? *
+                                        <i class="fas fa-percent"></i> Y a-t-il un acompte ? *
                                     </label>
                                     <select
                                         id="proversament"
@@ -389,9 +389,9 @@
                                         class="form-input"
                                         onchange="showProVersaAmount()"
                                     >
-                                        <option value="">-- Select --</option>
-                                        <option value="yes">Yes - There is a deposit</option>
-                                        <option value="no">No - No deposit</option>
+                                        <option value="">-- Sélectionner --</option>
+                                        <option value="yes">Oui - Il y a un acompte</option>
+                                        <option value="no">Non - Aucun acompte</option>
                                     </select>
                                 </div>
                             </div>
@@ -400,13 +400,13 @@
                             <div id="ProversaAmountSection" class="form-grid" style="display: none;">
                                 <div class="form-group full-width">
                                     <label for="proversamount">
-                                        <i class="fas fa-money-bill"></i> Deposit Amount (DA) *
+                                        <i class="fas fa-money-bill"></i> Montant de l’acompte (DA) *
                                     </label>
                                     <input
                                         type="text"
                                         id="proversamount"
                                         name="ProVersa"
-                                        placeholder="Enter deposit amount in Dinars"
+                                        placeholder="Saisissez le montant de l’acompte en dinars"
                                         class="form-input"
                                     >
                                 </div>
@@ -418,20 +418,20 @@
                 <!-- Form Actions -->
                 <div class="form-actions">
                     <a href="/patients/Patient" class="cancel-btn">
-                        <i class="fas fa-times"></i> Cancel
+                        <i class="fas fa-times"></i> Annuler
                     </a>
                     <button type="submit" class="submit-btn">
-                        <i class="fas fa-check"></i> Confirm & Save Patient
+                        <i class="fas fa-check"></i> Confirmer et enregistrer le patient
                     </button>
                 </div>
 
-                <!-- Success/Error Messages -->
+                <!-- Succès/Erreur Messages -->
                 {% if message %}
                 <div class="alert-container">
                     <div class="alert alert-success fade-in">
                         <i class="fas fa-check-circle"></i>
                         <div class="alert-content">
-                            <h3>Success</h3>
+                            <h3>Succès</h3>
                             <p>{{ message }}</p>
                         </div>
                         <button class="alert-close" onclick="this.parentElement.style.display='none'">
@@ -447,7 +447,7 @@
                         <i class="fas fa-exclamation-circle"></i>
 
                         <div class="alert-content">
-                            <h3>Error</h3>
+                            <h3>Erreur</h3>
                             <p>{{ error }}</p>
                         </div>
 

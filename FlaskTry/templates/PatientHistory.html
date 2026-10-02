@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Patient History Records - Prosthetics Lab Management System">
-    <meta name="keywords" content="Patient History, Records, Prosthetics Lab, Healthcare Management">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Patient History - Prosthetics Lab</title>
+    <meta name="description" content="Historique des patients - Système de gestion du laboratoire de prothèse">
+    <meta name="keywords" content="Historique des patients, Dossiers, Laboratoire de prothèse, Gestion des soins">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+    <title>Historique des patients - Laboratoire de prothèse</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='PatientHistory.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
@@ -16,11 +16,11 @@
 </head>
 
 <body>
-    <!-- Animated Background -->
+    <!-- Arrière-plan animé -->
     <div class="animated-bg"></div>
 
     <div class="page-container">
-        <!-- Header -->
+        <!-- En-tête -->
         <header class="page-header">
             <div class="header-content">
                 <div class="logo-section">
@@ -28,26 +28,26 @@
                         <i class="fas fa-history"></i>
                     </div>
                     <div class="logo-text">
-                        <h1>Patient History</h1>
-                        <p>Track and review patient records over time</p>
+                        <h1>Historique des patients</h1>
+                        <p>Consultez et suivez les dossiers des patients au fil du temps</p>
                     </div>
                 </div>
                 <nav class="header-nav">
                     <a href="/patients/Patient" class="nav-btn back-btn">
-                        <i class="fas fa-arrow-left"></i> Back to Patients
+                        <i class="fas fa-arrow-left"></i> Retour aux patients
                     </a>
                 </nav>
             </div>
         </header>
 
-        <!-- Main Content -->
+        <!-- Contenu principal -->
         <div class="main-content">
-            <!-- Search Section -->
+            <!-- Section de recherche -->
             <div class="search-section">
                 <div class="search-card">
                     <div class="search-header">
-                        <h2><i class="fas fa-search"></i> Search Patient History</h2>
-                        <p>Enter a patient name to view their specific history</p>
+                        <h2><i class="fas fa-search"></i> Rechercher dans l'historique des patients</h2>
+                        <p>Saisissez le nom d'un patient pour consulter son historique</p>
                     </div>
 
                     <form action="/patients/PatientHistory" method="POST" class="search-form">
@@ -59,12 +59,12 @@
                                 <input
                                     type="text"
                                     name="SearchName"
-                                    placeholder="Enter patient's name... or the patient number... "
+                                    placeholder="Saisissez le nom du patient... ou le numéro du patient..."
                                     class="search-input"
                                 >
                             </div>
                             <button type="submit" class="search-btn">
-                                <i class="fas fa-search"></i> Search
+                                <i class="fas fa-search"></i> Rechercher
                             </button>
                         </div>
                     </form>
@@ -72,14 +72,14 @@
                     <div class="quick-actions">
                         <a href="/patients/AllPatientsHistory" class="action-btn all-history">
                             <i class="fas fa-list"></i>
-                            <span>Show All History</span>
+                            <span>Afficher tout l'historique</span>
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <!-- Message Alert -->
+            <!-- Message d'alerte -->
             {% if message %}
             <div class="alert-container">
                 <div class="alert alert-info fade-in">
@@ -94,16 +94,16 @@
             </div>
             {% endif %}
 
-            <!-- Tables Section -->
+            <!-- Section des tableaux -->
             <div class="tables-section">
-                <!-- All History Table -->
+                <!-- Tableau de tout l'historique -->
                 <div id="AllHistory" style="display: {% if HistoryPatient %}none{% else %}block{% endif %};" class="table-wrapper">
                     {% if History %}
                     <div class="table-card fade-in">
                         <div class="table-header highlight-primary">
                             <div class="header-left">
-                                <h2><i class="fas fa-file-alt"></i> Complete Patient History</h2>
-                                <span class="result-count">{{ History|length }} records</span>
+                                <h2><i class="fas fa-file-alt"></i> Historique complet des patients</h2>
+                                <span class="result-count">{{ History|length }} enregistrements</span>
                             </div>
                         </div>
 
@@ -111,16 +111,16 @@
                             <table class="data-table">
                                 <thead>
                                     <tr>
-                                        <th><span class="th-content">Service ID</span></th>
-                                        <th><span class="th-content">First Name</span></th>
-                                        <th><span class="th-content">Last Name</span></th>
-                                        <th><span class="th-content">Patient Number</span></th>
-                                        <th><span class="th-content">Enter Date</span></th>
-                                        <th><span class="th-content">Service Type</span></th>
-                                        <th><span class="th-content">Price</span></th>
+                                        <th><span class="th-content">ID du service</span></th>
+                                        <th><span class="th-content">Prénom</span></th>
+                                        <th><span class="th-content">Nom</span></th>
+                                        <th><span class="th-content">Numéro du patient</span></th>
+                                        <th><span class="th-content">Date d'entrée</span></th>
+                                        <th><span class="th-content">Type de service</span></th>
+                                        <th><span class="th-content">Prix</span></th>
                                         <th><span class="th-content">Versement</span></th>
-                                        <th><span class="th-content">Rest</span></th>
-                                        <th><span class="th-content">Status</span></th>
+                                        <th><span class="th-content">Reste</span></th>
+                                        <th><span class="th-content">Statut</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -149,20 +149,20 @@
                         <div class="empty-icon">
                             <i class="fas fa-inbox"></i>
                         </div>
-                        <h2>No History Available</h2>
-                        <p>There are no patient records available yet</p>
+                        <h2>Aucun historique disponible</h2>
+                        <p>Aucun dossier patient n'est encore disponible</p>
                     </div>
                     {% endif %}
                 </div>
 
-                <!-- Individual Patient History Table -->
+                <!-- Tableau de l'historique d'un patient -->
                 <div id="PatientHistory" style="display: {% if HistoryPatient %}block{% else %}none{% endif %};" class="table-wrapper">
                     {% if HistoryPatient %}
                     <div class="table-card fade-in">
                         <div class="table-header highlight-success">
                             <div class="header-left">
-                                <h2><i class="fas fa-user-check"></i> Patient Search Results</h2>
-                                <span class="result-count">{{ HistoryPatient|length }} records found</span>
+                                <h2><i class="fas fa-user-check"></i> Résultats de recherche du patient</h2>
+                                <span class="result-count">{{ HistoryPatient|length }} enregistrements trouvés</span>
                             </div>
                         </div>
 
@@ -170,16 +170,16 @@
                             <table class="data-table">
                                 <thead>
                                     <tr>
-                                        <th><span class="th-content">Service ID</span></th>
-                                        <th><span class="th-content">First Name</span></th>
-                                        <th><span class="th-content">Last Name</span></th>
-                                        <th><span class="th-content">Patient Number</span></th>
-                                        <th><span class="th-content">Enter Date</span></th>
-                                        <th><span class="th-content">Service Type</span></th>
-                                        <th><span class="th-content">Price</span></th>
+                                        <th><span class="th-content">ID du service</span></th>
+                                        <th><span class="th-content">Prénom</span></th>
+                                        <th><span class="th-content">Nom</span></th>
+                                        <th><span class="th-content">Numéro du patient</span></th>
+                                        <th><span class="th-content">Date d'entrée</span></th>
+                                        <th><span class="th-content">Type de service</span></th>
+                                        <th><span class="th-content">Prix</span></th>
                                         <th><span class="th-content">Versement</span></th>
-                                        <th><span class="th-content">Rest</span></th>
-                                        <th><span class="th-content">Status</span></th>
+                                        <th><span class="th-content">Reste</span></th>
+                                        <th><span class="th-content">Statut</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -208,10 +208,10 @@
                         <div class="empty-icon">
                             <i class="fas fa-search"></i>
                         </div>
-                        <h2>No Results Found</h2>
-                        <p>Try searching with a different patient name</p>
+                        <h2>Aucun résultat trouvé</h2>
+                        <p>Essayez de rechercher avec un autre nom de patient</p>
                         <a href="/patients/PatientHistory" class="empty-action">
-                            <i class="fas fa-redo"></i> Clear Search
+                            <i class="fas fa-redo"></i> Effacer la recherche
                         </a>
                     </div>
                     {% endif %}
@@ -222,7 +222,7 @@
 
     <!-- JavaScript -->
     <script>
-        // Ripple effect for buttons
+        // Effet ripple pour les boutons
         function createRipple(e) {
             const button = e.currentTarget;
             const ripple = document.createElement('span');
@@ -240,14 +240,14 @@
             setTimeout(() => ripple.remove(), 600);
         }
 
-        // Add ripple effect to buttons
+        // Ajouter l'effet ripple aux boutons
         document.querySelectorAll('.search-btn, .nav-btn, .action-btn').forEach(item => {
             item.addEventListener('click', function(e) {
                 createRipple(e);
             });
         });
 
-        // Auto-scroll to table on page load
+        // Faire défiler automatiquement jusqu'au tableau au chargement de la page
         document.addEventListener('DOMContentLoaded', () => {
             const activeTable = document.querySelector('.table-card');
             if (activeTable) {
@@ -257,7 +257,7 @@
             }
         });
 
-        // Close alert on button click
+        // Fermer l'alerte en cliquant sur le bouton
         document.querySelectorAll('.alert-close').forEach(btn => {
             btn.addEventListener('click', function() {
                 this.parentElement.style.display = 'none';

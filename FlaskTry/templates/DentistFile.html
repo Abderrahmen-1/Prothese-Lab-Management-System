@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
     <meta name="keywords" content="Dentist, Prosthetics, Lab Management, Flask">
     <meta name="author" content="Prosthetics Lab Team">
 
-    <title>Dentist Management System</title>
+    <title>Système de gestion des dentistes</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='Dentist.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
@@ -41,7 +41,7 @@
 
                 <div class="logo-text">
                     <h1>DentistHub</h1>
-                    <p>Professional Dentist Management System</p>
+                    <p>Système professionnel de gestion des dentistes</p>
                 </div>
 
             </div>
@@ -50,12 +50,12 @@
 
                 <a href="/HomePage" class="nav-btn back-btn">
                     <i class="fas fa-arrow-left"></i>
-                    Back to Menu
+                    Retour au menu
                 </a>
 
                 <a href="/dentists/DentistHistory" class="nav-btn history-btn">
                     <i class="fas fa-history"></i>
-                    History
+                    Historique
                 </a>
 
             </nav>
@@ -89,13 +89,13 @@
                     <input
                             type="text"
                             name="SearchBar"
-                            placeholder="Search dentist by name... or patient by number..."
+                            placeholder="Rechercher un dentiste par nom... ou un patient par numéro..."
                             class="search-input"
                     >
 
                     <button type="submit" class="search-btn">
                         <i class="fas fa-magnifying-glass"></i>
-                        Search
+                        Rechercher
                     </button>
 
                 </div>
@@ -121,7 +121,7 @@
 
                 <h2>
                     <i class="fas fa-user-md"></i>
-                    Dentist Actions
+                    Actions du dentiste
                 </h2>
 
                 <div class="header-accent"></div>
@@ -136,7 +136,7 @@
                 <div class="menu-group">
 
                     <h3 class="group-title">
-                        Analytics
+                        Analyses
                     </h3>
 
                     <a href="/dentists/DentistMainTable"
@@ -144,10 +144,10 @@
 
                         <i class="fas fa-table"></i>
 
-                        <span>Main Table</span>
+                        <span>Tableau principal</span>
 
                         <span class="badge">
-                            Main
+                            Principal
                         </span>
 
                     </a>
@@ -158,10 +158,10 @@
 
                         <i class="fas fa-chart-line"></i>
 
-                        <span>Most Khedma</span>
+                        <span>Plus de tâches</span>
 
                         <span class="badge">
-                            Top
+                            Plus
                         </span>
 
                     </a>
@@ -172,10 +172,10 @@
 
                         <i class="fas fa-chart-bar"></i>
 
-                        <span>Less Khedma</span>
+                        <span>Moins de tâches</span>
 
                         <span class="badge">
-                            Low
+                            Moins
                         </span>
 
                     </a>
@@ -186,7 +186,7 @@
 
                         <i class="fas fa-calendar-check"></i>
 
-                        <span>By DeadLine</span>
+                        <span>Par échéance</span>
 
                         <span class="badge">
                             Dates
@@ -200,10 +200,10 @@
 
                         <i class="fas fa-users"></i>
 
-                        <span>Total Dentists</span>
+                        <span>Total des dentistes</span>
 
                         <span class="badge">
-                            Sum
+                            Total
                         </span>
 
                     </a>
@@ -214,7 +214,7 @@
 
                         <i class="fas fa-chart-pie"></i>
 
-                        <span>Statistics</span>
+                        <span>Statistiques</span>
 
                         <span class="badge">
                             Stats
@@ -230,7 +230,7 @@
                 <div class="menu-group">
 
                     <h3 class="group-title">
-                        Management
+                        Gestion
                     </h3>
 
 
@@ -239,7 +239,7 @@
 
                         <i class="fas fa-user-plus"></i>
 
-                        <span>Add Dentist</span>
+                        <span>Ajouter un dentiste</span>
 
                         <span class="badge badge-add">
                             +
@@ -253,7 +253,7 @@
 
                         <i class="fas fa-user-minus"></i>
 
-                        <span>Delete Patient Khedma</span>
+                        <span>Supprimer une tâche patient</span>
 
                         <span class="badge badge-delete">
                             −
@@ -267,10 +267,10 @@
 
                         <i class="fas fa-handshake"></i>
 
-                        <span>Get Khedma</span>
+                        <span>Recevoir une tâche</span>
 
                         <span class="badge badge-get">
-                            In
+                            Entrée
                         </span>
 
                     </a>
@@ -281,7 +281,7 @@
 
                         <i class="fas fa-money-bill-wave"></i>
 
-                        <span>Modify Versement</span>
+                        <span>Modifier le versement</span>
 
                         <span class="badge badge-modify">
                             ✎
@@ -290,6 +290,7 @@
                     </a>
 
                 </div>
+
             </nav>
 
         </aside>
@@ -311,7 +312,7 @@
 
                     <div class="alert-content">
 
-                        <h3>Error</h3>
+                        <h3>Erreur</h3>
 
                         <p>{{ error }}</p>
 
@@ -337,7 +338,7 @@
 
                     <div class="alert-content">
 
-                        <h3>Success</h3>
+                        <h3>Succès</h3>
 
                         <p>{{ message }}</p>
 
@@ -382,11 +383,11 @@
 
                         <h2>
                             <i class="fas fa-table"></i>
-                            Main Table
+                            Tableau principal
                         </h2>
 
                         <span class="result-count">
-                            {{ main|length }} records
+                            {{ main|length }} enregistrements
                         </span>
 
                     </div>
@@ -399,20 +400,20 @@
                             <thead>
 
                             <tr>
-                                <th><span class="th-content">Service ID</span></th>
-                                <th><span class="th-content">Dentist Name</span></th>
-                                <th><span class="th-content">First Name</span></th>
-                                <th><span class="th-content">Last Name</span></th>
-                                <th><span class="th-content">Number</span></th>
-                                <th><span class="th-content">Khedma</span></th>
-                                <th><span class="th-content">Price</span></th>
+                                <th><span class="th-content">ID du service</span></th>
+                                <th><span class="th-content">Nom du dentiste</span></th>
+                                <th><span class="th-content">Prénom</span></th>
+                                <th><span class="th-content">Nom</span></th>
+                                <th><span class="th-content">Numéro</span></th>
+                                <th><span class="th-content">Tâche</span></th>
+                                <th><span class="th-content">Prix</span></th>
                                 <th><span class="th-content">Versement</span></th>
-                                <th><span class="th-content">b9aw</span></th>
-                                <th><span class="th-content">Finished</span></th>
-                                <th><span class="th-content">Khalsa</span></th>
+                                <th><span class="th-content">Reste</span></th>
+                                <th><span class="th-content">Terminée</span></th>
+                                <th><span class="th-content">Payée</span></th>
                                 <th><span class="th-content">Date</span></th>
-                                <th><span class="th-content">DeadLine</span></th>
-                                <th><span class="th-content">Status</span></th>
+                                <th><span class="th-content">Échéance</span></th>
+                                <th><span class="th-content">Statut</span></th>
                             </tr>
 
                             </thead>
@@ -448,15 +449,15 @@
                                             data-dentist-name="{{ row[2] }}">
 
                                         {% if row[14] == 'in process' %}
-                                        <option value="in process" selected>In Process</option>
+                                        <option value="in process" selected>En cours</option>
                                         {% else %}
-                                        <option value="in process">In Process</option>
+                                        <option value="in process">En cours</option>
                                         {% endif %}
 
                                         {% if row[14] == 'prothesist' %}
-                                        <option value="prothesist" selected>Prothesist</option>
+                                        <option value="prothesist" selected>Prothésiste</option>
                                         {% else %}
-                                        <option value="prothesist">Prothesist</option>
+                                        <option value="prothesist">Prothésiste</option>
                                         {% endif %}
 
                                         {% if row[14] == 'montage' %}
@@ -466,9 +467,9 @@
                                         {% endif %}
 
                                         {% if row[14] == 'esseyage' %}
-                                        <option value="esseyage" selected>Esseyage</option>
+                                        <option value="esseyage" selected>Essayage</option>
                                         {% else %}
-                                        <option value="esseyage">Esseyage</option>
+                                        <option value="esseyage">Essayage</option>
                                         {% endif %}
 
                                     </select>
@@ -509,11 +510,11 @@
 
                         <h2>
                             <i class="fas fa-search"></i>
-                            Search Results
+                            Résultats de recherche
                         </h2>
 
                         <span class="result-count">
-                            {{ result|length }} results
+                            {{ result|length }} résultats
                         </span>
 
                     </div>
@@ -526,20 +527,20 @@
                             <thead>
 
                             <tr>
-                                <th>Service ID</th>
-                                <th>Dentist Name</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Number</th>
-                                <th>Khedma</th>
-                                <th>Price</th>
+                                <th>ID du service</th>
+                                <th>Nom du dentiste</th>
+                                <th>Prénom</th>
+                                <th>Nom</th>
+                                <th>Numéro</th>
+                                <th>Tâche</th>
+                                <th>Prix</th>
                                 <th>Versement</th>
-                                <th>b9aw</th>
-                                <th>Finished</th>
-                                <th>Khalsa</th>
+                                <th>Reste</th>
+                                <th>Terminée</th>
+                                <th>Payée</th>
                                 <th>Date</th>
-                                <th>DeadLine</th>
-                                <th>Status</th>
+                                <th>Échéance</th>
+                                <th>Statut</th>
                             </tr>
 
                             </thead>
@@ -592,7 +593,7 @@
 
                         <h2>
                             <i class="fas fa-chart-line"></i>
-                            Most Khedma
+                            Plus de tâches
                         </h2>
 
                         <span class="dentist-highlight">
@@ -609,20 +610,20 @@
                             <thead>
 
                             <tr>
-                                <th>Service ID</th>
-                                <th>Dentist Name</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Number</th>
-                                <th>Khedma</th>
-                                <th>Price</th>
+                                <th>ID du service</th>
+                                <th>Nom du dentiste</th>
+                                <th>Prénom</th>
+                                <th>Nom</th>
+                                <th>Numéro</th>
+                                <th>Tâche</th>
+                                <th>Prix</th>
                                 <th>Versement</th>
-                                <th>b9aw</th>
-                                <th>Finished</th>
-                                <th>Khalsa</th>
+                                <th>Reste</th>
+                                <th>Terminée</th>
+                                <th>Payée</th>
                                 <th>Date</th>
-                                <th>DeadLine</th>
-                                <th>Status</th>
+                                <th>Échéance</th>
+                                <th>Statut</th>
                             </tr>
 
                             </thead>
@@ -675,7 +676,7 @@
 
                         <h2>
                             <i class="fas fa-chart-bar"></i>
-                            Less Khedma
+                            Moins de tâches
                         </h2>
 
                         <span class="dentist-highlight">
@@ -692,20 +693,20 @@
                             <thead>
 
                             <tr>
-                                <th>Service ID</th>
-                                <th>Dentist Name</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Number</th>
-                                <th>Khedma</th>
-                                <th>Price</th>
+                                <th>ID du service</th>
+                                <th>Nom du dentiste</th>
+                                <th>Prénom</th>
+                                <th>Nom</th>
+                                <th>Numéro</th>
+                                <th>Tâche</th>
+                                <th>Prix</th>
                                 <th>Versement</th>
-                                <th>b9aw</th>
-                                <th>Finished</th>
-                                <th>Khalsa</th>
+                                <th>Reste</th>
+                                <th>Terminée</th>
+                                <th>Payée</th>
                                 <th>Date</th>
-                                <th>DeadLine</th>
-                                <th>Status</th>
+                                <th>Échéance</th>
+                                <th>Statut</th>
                             </tr>
 
                             </thead>
@@ -758,11 +759,11 @@
 
                         <h2>
                             <i class="fas fa-calendar-check"></i>
-                            DeadLine Schedule
+                            Planning des échéances
                         </h2>
 
                         <span class="result-count">
-                            {{ dateDeadLine|length }} items
+                            {{ dateDeadLine|length }} éléments
                         </span>
 
                     </div>
@@ -775,20 +776,20 @@
                             <thead>
 
                             <tr>
-                                <th>Service ID</th>
-                                <th>Dentist Name</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Number</th>
-                                <th>Khedma</th>
-                                <th>Price</th>
+                                <th>ID du service</th>
+                                <th>Nom du dentiste</th>
+                                <th>Prénom</th>
+                                <th>Nom</th>
+                                <th>Numéro</th>
+                                <th>Tâche</th>
+                                <th>Prix</th>
                                 <th>Versement</th>
-                                <th>b9aw</th>
-                                <th>Finished</th>
-                                <th>Khalsa</th>
+                                <th>Reste</th>
+                                <th>Terminée</th>
+                                <th>Payée</th>
                                 <th>Date</th>
-                                <th>DeadLine</th>
-                                <th>Status</th>
+                                <th>Échéance</th>
+                                <th>Statut</th>
                             </tr>
 
                             </thead>
@@ -841,11 +842,11 @@
 
                         <h2>
                             <i class="fas fa-users"></i>
-                            Total Khedma Summary
+                            Résumé total des tâches
                         </h2>
 
                         <span class="result-count">
-                            {{ total|length }} dentists
+                            {{ total|length }} dentistes
                         </span>
 
                     </div>
@@ -858,8 +859,8 @@
                             <thead>
 
                             <tr>
-                                <th>Dentist</th>
-                                <th>Total pas encore payee</th>
+                                <th>Dentiste</th>
+                                <th>Total restant à payer</th>
                             </tr>
 
                             </thead>
@@ -908,12 +909,12 @@
 
                         <h2>
                             <i class="fas fa-chart-pie"></i>
-                            Dentist Statistics
+                            Statistiques des dentistes
                         </h2>
 
                         <span class="result-count">
-            Detailed Analysis
-        </span>
+                            Analyse détaillée
+                        </span>
 
                     </div>
 
@@ -922,17 +923,20 @@
                         <table class="data-table">
 
                             <thead>
+
                             <tr>
-                                <th>DATA ID</th>
-                                <th>Dentist</th>
-                                <th>Total Khedma</th>
-                                <th>Khedma Khalsa</th>
-                                <th>Not Khalsa</th>
-                                <th>Month</th>
-                                <th>Year</th>
-                                <th>User ID</th>
+                                <th>ID DES DONNÉES</th>
+                                <th>Dentiste</th>
+                                <th>Total des tâches</th>
+                                <th>Tâches payées</th>
+                                <th>Non payées</th>
+                                <th>Mois</th>
+                                <th>Année</th>
+                                <th>ID utilisateur</th>
                             </tr>
+
                             </thead>
+
 
                             <tbody>
 
@@ -977,10 +981,10 @@
                     <i class="fas fa-inbox"></i>
                 </div>
 
-                <h2>No Data Yet</h2>
+                <h2>Aucune donnée pour le moment</h2>
 
                 <p>
-                    Select an action from the menu to view dentist information
+                    Sélectionnez une action dans le menu pour afficher les informations des dentistes
                 </p>
 
             </div>
@@ -1088,7 +1092,7 @@
             if (message) {
 
                 message.textContent =
-                    data.message || "✓ Status updated successfully";
+                    data.message || "✓ Statut mis à jour avec succès";
 
                 message.className =
                     "status-message success";
@@ -1113,7 +1117,7 @@
             if (message) {
 
                 message.textContent =
-                    "✗ Error updating status";
+                    "✗ Erreur lors de la mise à jour du statut";
 
                 message.className =
                     "status-message error";

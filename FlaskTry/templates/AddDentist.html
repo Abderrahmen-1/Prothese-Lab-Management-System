@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional Add Dentist Form for Prosthetics Lab Management">
-    <meta name="keywords" content="Dentist, Add, Management, Lab, Prosthetics">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Add Dentist</title>
+    <meta name="description" content="Formulaire professionnel d’ajout d’un dentiste pour la gestion d’un laboratoire de prothèse">
+    <meta name="keywords" content="Dentiste, Ajout, Gestion, Laboratoire, Prothèse">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+    <title>Ajouter un dentiste</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='AddDentist.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
@@ -29,7 +29,7 @@
         <div class="header-content">
             <a href="/dentists/Dentist" class="back-button">
                 <i class="fas fa-arrow-left"></i>
-                <span>Back</span>
+                <span>Retour</span>
             </a>
 
             <div class="header-title">
@@ -37,8 +37,8 @@
                     <i class="fas fa-user-md"></i>
                 </div>
                 <div class="title-text">
-                    <h1>Add Dentist</h1>
-                    <p>Register a new dentist to your system</p>
+                    <h1>Ajouter un dentiste</h1>
+                    <p>Enregistrez un nouveau dentiste dans votre système</p>
                 </div>
             </div>
         </div>
@@ -59,8 +59,8 @@
                             <i class="fas fa-user-plus"></i>
                         </div>
                     </div>
-                    <h2>Dentist Information</h2>
-                    <p>Enter the dentist's name to add them to the system</p>
+                    <h2>Informations sur le dentiste</h2>
+                    <p>Saisissez le nom du dentiste pour l’ajouter au système</p>
                 </div>
 
                 <!-- Messages Section -->
@@ -71,7 +71,7 @@
                             <i class="fas fa-check-circle"></i>
                         </div>
                         <div class="alert-content">
-                            <h3>Success!</h3>
+                            <h3>Opération réussie !</h3>
                             <p>{{ message }}</p>
                         </div>
                         <button class="alert-close" onclick="this.parentElement.style.display='none'">
@@ -86,8 +86,8 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                     <div class="form-group">
                         <label for="dentist-name" class="form-label">
-                            <span class="label-text">Dentist Full Name</span>
-                            <span class="required-badge">Required</span>
+                            <span class="label-text">Nom complet du dentiste</span>
+                            <span class="required-badge">Obligatoire</span>
                         </label>
 
                         <div class="input-wrapper">
@@ -99,7 +99,7 @@
                                 id="dentist-name"
                                 name="AddDentists"
                                 class="form-input"
-                                placeholder="e.g., Mohamed"
+                                placeholder="ex. : Mohamed"
                                 required
                                 autocomplete="off"
                             >
@@ -118,7 +118,7 @@
                             <span class="btn-icon">
                                 <i class="fas fa-plus"></i>
                             </span>
-                            <span class="btn-text">Add Dentist</span>
+                            <span class="btn-text">Ajouter le dentiste</span>
                             <span class="btn-loader" style="display: none;">
                                 <i class="fas fa-spinner fa-spin"></i>
                             </span>
@@ -128,22 +128,22 @@
                     <!-- Additional Info -->
                     <div class="form-info">
                         <i class="fas fa-lightbulb"></i>
-                        <span>The dentist will be immediately available in your system</span>
+                        <span>Le dentiste sera immédiatement disponible dans votre système</span>
                     </div>
                 </form>
             </div>
 
             <!-- Alternative Actions -->
             <div class="action-card">
-                <h3>Other Actions</h3>
+                <h3>Autres actions</h3>
                 <div class="action-links">
                     <a href="/dentists/DentistTotal" class="action-link">
                         <i class="fas fa-list"></i>
-                        <span>View All Dentists</span>
+                        <span>Voir tous les dentistes</span>
                     </a>
                    <!-- <a href="/DeleteDentist" class="action-link">
                         <i class="fas fa-trash-alt"></i>
-                        <span>Delete Dentist</span>
+                        <span>Supprimer le dentiste</span>
                     </a> -->
                 </div>
             </div>
@@ -152,7 +152,7 @@
 
     <!-- Footer -->
     <footer class="page-footer">
-        <p>&copy; 2024 Prosthetics Lab Management System. All rights reserved.</p>
+        <p>&copy; 2024 Système de gestion du laboratoire de prothèse. Tous droits réservés.</p>
     </footer>
 </div>
 
@@ -168,12 +168,12 @@
 
         // Validation
         if (!input.value.trim()) {
-            showError(input, 'Please enter a dentist name');
+            showError(input, 'Veuillez saisir le nom du dentiste');
             return;
         }
 
         if (input.value.trim().length < 2) {
-            showError(input, 'Name must be at least 2 characters');
+            showError(input, 'Le nom doit contenir au moins 2 caractères');
             return;
         }
 

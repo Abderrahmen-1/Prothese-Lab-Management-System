@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Sel3a Inventory Management - Prosthetics Lab Product Tracking">
     <meta name="keywords" content="Inventory, Products, Sel3a, Prosthetics Lab">
-    <title>Sel3a - Inventory Management</title>
+    <title>Sel3a - Gestion des stocks</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='Sel3a.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
@@ -78,12 +78,12 @@
                 </div>
                 <div class="logo-text">
                     <h1>Sel3a Hub</h1>
-                    <p>Inventory & Products Management</p>
+                    <p>Gestion des stocks et des produits</p>
                 </div>
             </div>
             <nav class="header-nav">
                 <a href="/HomePage" class="nav-btn back-btn">
-                    <i class="fas fa-arrow-left"></i> Back to Menu
+                    <i class="fas fa-arrow-left"></i> Retour au menu
                 </a>
             </nav>
         </div>
@@ -91,142 +91,160 @@
 
     <!-- Main Layout -->
     <div class="main-layout">
+
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h2>View Options</h2>
+                <h2>Options d'affichage</h2>
                 <div class="header-accent"></div>
             </div>
 
             <nav class="sidebar-menu">
+
                 <!-- Display Modes -->
                 <div class="menu-group">
-                    <h3 class="group-title">📊 Display Modes</h3>
+                    <h3 class="group-title">📊 Modes d'affichage</h3>
 
                     <a href="javascript:void(0);" onclick="ShowMainTable(); return false;"
                        class="menu-item main-item active-item" data-table="MainTable">
                         <i class="fas fa-th"></i>
-                        <span>Main Inventory</span>
-                        <span class="badge badge-primary">All</span>
+                        <span>Stock principal</span>
+                        <span class="badge badge-primary">Tous</span>
                     </a>
 
                     <a href="javascript:void(0);" onclick="ShowTableByPrice(); return false;"
                        class="menu-item price-item" data-table="PriceTable">
                         <i class="fas fa-arrow-down-up"></i>
-                        <span>By Price</span>
+                        <span>Par prix</span>
                         <span class="badge badge-warning">💰</span>
                     </a>
 
                     <a href="javascript:void(0);" onclick="ShowTableByDate(); return false;" class="menu-item date-item"
                        data-table="DateTable">
                         <i class="fas fa-calendar"></i>
-                        <span>By Date</span>
+                        <span>Par date</span>
                         <span class="badge badge-info">📅</span>
                     </a>
 
                     <a href="javascript:void(0);" onclick="ShowStatTable(); return false;" class="menu-item stats-item"
                        data-table="StatTable">
                         <i class="fas fa-chart-bar"></i>
-                        <span>Monthly Stats</span>
+                        <span>Statistiques mensuelles</span>
                         <span class="badge badge-info">📊</span>
                     </a>
                 </div>
 
                 <!-- Quick Actions -->
                 <div class="menu-group">
-                    <h3 class="group-title">⚡ Quick Actions</h3>
+                    <h3 class="group-title">⚡ Actions rapides</h3>
 
                     <a href="/products/AddSel3a" class="menu-item add-item">
                         <i class="fas fa-plus-circle"></i>
-                        <span>Add Product</span>
+                        <span>Ajouter un produit</span>
                         <span class="badge badge-success">+</span>
                     </a>
                 </div>
 
                 <!-- Quick Stats -->
                 <div class="menu-group">
-                    <h3 class="group-title">📊 Statistics</h3>
+                    <h3 class="group-title">📊 Statistiques</h3>
                     <div class="stat-card">
                         <div class="stat-icon">
                             <i class="fas fa-boxes"></i>
                         </div>
                         <div class="stat-content">
-                            <p class="stat-label">Total Products</p>
+                            <p class="stat-label">Nombre total de produits</p>
                             <p class="stat-value" id="totalProducts">--</p>
                         </div>
                     </div>
                 </div>
+
             </nav>
         </aside>
 
         <!-- Main Content -->
         <main class="content">
+
             <!-- Hero Section -->
             <div class="hero-section">
                 <div class="hero-content">
                     <div class="hero-text">
+
                         <h2 class="hero-title">
                             <span class="title-icon">📦</span>
-                            Inventory Management
+                            Gestion des stocks
                         </h2>
+
                         <p class="hero-description">
-                            Track all products and materials in your prosthetics laboratory. Manage inventory, monitor
-                            costs, and organize by price or date.
+                            Suivez tous les produits et matériaux de votre laboratoire de prothèses.
+                            Gérez les stocks, surveillez les coûts et organisez les produits par prix ou par date.
                         </p>
+
                         <div class="hero-stats">
+
                             <div class="hero-stat">
                                 <i class="fas fa-box"></i>
-                                <span>Products</span>
+                                <span>Produits</span>
                             </div>
+
                             <div class="hero-stat">
                                 <i class="fas fa-dollar-sign"></i>
-                                <span>Pricing</span>
+                                <span>Prix</span>
                             </div>
+
                             <div class="hero-stat">
                                 <i class="fas fa-calendar-alt"></i>
-                                <span>Timeline</span>
+                                <span>Chronologie</span>
                             </div>
+
                         </div>
                     </div>
+
                     <div class="hero-visual">
                         <div class="floating-shape shape-1"></div>
                         <div class="floating-shape shape-2"></div>
                         <i class="fas fa-warehouse hero-icon"></i>
                     </div>
+
                 </div>
             </div>
 
             <!-- Display Area -->
             <div class="display-area">
+
                 <!-- Main Table -->
                 <div class="table-container" id="MainTable"
                      style="display: {% if table %}block{% else %}none{% endif %};">
+
                     <div class="table-header">
                         <div class="table-title">
                             <i class="fas fa-table"></i>
-                            <h3>Main Inventory</h3>
+                            <h3>Stock principal</h3>
                         </div>
+
                         <div class="table-info">
-                            <span class="info-badge">All Products</span>
+                            <span class="info-badge">Tous les produits</span>
                         </div>
                     </div>
+
                     {% if table %}
                     <div class="table-wrapper">
                         <table class="data-table">
                             <thead>
                             <tr>
-                                <th><i class="fas fa-box-open"></i> Product Name</th>
-                                <th><i class="fas fa-box-open"></i> Quantity</th>
-                                <th><i class="fas fa-box-open"></i> Max Quantity</th>
-                                <th><i class="fas fa-box-open"></i> Unit</th>
-                                <th><i class="fas fa-dollar-sign"></i> Unit Price</th>
-                                <th><i class="fas fa-dollar-sign"></i> Total Price</th>
+                                <th><i class="fas fa-box-open"></i> Nom du produit</th>
+                                <th><i class="fas fa-box-open"></i> Quantité</th>
+                                <th><i class="fas fa-box-open"></i> Quantité maximale</th>
+                                <th><i class="fas fa-box-open"></i> Unité</th>
+                                <th><i class="fas fa-dollar-sign"></i> Prix unitaire</th>
+                                <th><i class="fas fa-dollar-sign"></i> Prix total</th>
                                 <th><i class="fas fa-calendar"></i> Date</th>
-                                <th><i class="fas fa-credit-card"></i> Khalsa</th>
+                                <th><i class="fas fa-credit-card"></i> Payé</th>
                                 <th><i class="fas fa-money-bill"></i> Versement</th>
-                                <th><i class="fas fa-coins"></i> B9aw</th>
+                                <th><i class="fas fa-coins"></i> Reste</th>
                             </tr>
                             </thead>
+
                             <tbody>
                             {% for row in table %}
                             <tr class="table-row" data-id="{{ row[0] }}"
@@ -246,10 +264,11 @@
                             </tbody>
                         </table>
                     </div>
+
                     {% else %}
                     <div class="empty-table">
                         <i class="fas fa-inbox"></i>
-                        <p>No products available</p>
+                        <p>Aucun produit disponible</p>
                     </div>
                     {% endif %}
                 </div>
@@ -257,32 +276,36 @@
                 <!-- Price Table -->
                 <div class="table-container" id="PriceTable"
                      style="display: {% if Pricetable %}block{% else %}none{% endif %};">
+
                     <div class="table-header">
                         <div class="table-title">
                             <i class="fas fa-arrow-down-up"></i>
-                            <h3>Sorted by Price (Expensive to Cheap)</h3>
+                            <h3>Trié par prix (du plus cher au moins cher)</h3>
                         </div>
+
                         <div class="table-info">
-                            <span class="info-badge info-price">Price Sorted</span>
+                            <span class="info-badge info-price">Trié par prix</span>
                         </div>
                     </div>
+
                     {% if Pricetable %}
                     <div class="table-wrapper">
                         <table class="data-table">
                             <thead>
                             <tr>
-                                <th><i class="fas fa-box-open"></i> Product Name</th>
-                                <th><i class="fas fa-box-open"></i> Quantity</th>
-                                <th><i class="fas fa-box-open"></i> Max Quantity</th>
-                                <th><i class="fas fa-box-open"></i> Unit</th>
-                                <th><i class="fas fa-dollar-sign"></i> Unit Price</th>
-                                <th><i class="fas fa-dollar-sign"></i> Total Price</th>
+                                <th><i class="fas fa-box-open"></i> Nom du produit</th>
+                                <th><i class="fas fa-box-open"></i> Quantité</th>
+                                <th><i class="fas fa-box-open"></i> Quantité maximale</th>
+                                <th><i class="fas fa-box-open"></i> Unité</th>
+                                <th><i class="fas fa-dollar-sign"></i> Prix unitaire</th>
+                                <th><i class="fas fa-dollar-sign"></i> Prix total</th>
                                 <th><i class="fas fa-calendar"></i> Date</th>
-                                <th><i class="fas fa-credit-card"></i> Khalsa</th>
+                                <th><i class="fas fa-credit-card"></i> Payé</th>
                                 <th><i class="fas fa-money-bill"></i> Versement</th>
-                                <th><i class="fas fa-coins"></i> B9aw</th>
+                                <th><i class="fas fa-coins"></i> Reste</th>
                             </tr>
                             </thead>
+
                             <tbody>
                             {% for row in Pricetable %}
                             <tr class="table-row" data-id="{{ row[0] }}"
@@ -302,10 +325,11 @@
                             </tbody>
                         </table>
                     </div>
+
                     {% else %}
                     <div class="empty-table">
                         <i class="fas fa-inbox"></i>
-                        <p>No products available</p>
+                        <p>Aucun produit disponible</p>
                     </div>
                     {% endif %}
                 </div>
@@ -313,32 +337,36 @@
                 <!-- Date Table -->
                 <div class="table-container" id="DateTable"
                      style="display: {% if Datetable %}block{% else %}none{% endif %};">
+
                     <div class="table-header">
                         <div class="table-title">
                             <i class="fas fa-calendar-alt"></i>
-                            <h3>Sorted by Date (Newest First)</h3>
+                            <h3>Trié par date (du plus récent au plus ancien)</h3>
                         </div>
+
                         <div class="table-info">
-                            <span class="info-badge info-date">Date Sorted</span>
+                            <span class="info-badge info-date">Trié par date</span>
                         </div>
                     </div>
+
                     {% if Datetable %}
                     <div class="table-wrapper">
                         <table class="data-table">
                             <thead>
                             <tr>
-                                <th><i class="fas fa-box-open"></i> Product Name</th>
-                                <th><i class="fas fa-box-open"></i> Quantity</th>
-                                <th><i class="fas fa-box-open"></i> Max Quantity</th>
-                                <th><i class="fas fa-box-open"></i> Unit</th>
-                                <th><i class="fas fa-dollar-sign"></i> Unit Price</th>
-                                <th><i class="fas fa-dollar-sign"></i> Total Price</th>
+                                <th><i class="fas fa-box-open"></i> Nom du produit</th>
+                                <th><i class="fas fa-box-open"></i> Quantité</th>
+                                <th><i class="fas fa-box-open"></i> Quantité maximale</th>
+                                <th><i class="fas fa-box-open"></i> Unité</th>
+                                <th><i class="fas fa-dollar-sign"></i> Prix unitaire</th>
+                                <th><i class="fas fa-dollar-sign"></i> Prix total</th>
                                 <th><i class="fas fa-calendar"></i> Date</th>
-                                <th><i class="fas fa-credit-card"></i> Khalsa</th>
+                                <th><i class="fas fa-credit-card"></i> Payé</th>
                                 <th><i class="fas fa-money-bill"></i> Versement</th>
-                                <th><i class="fas fa-coins"></i> B9aw</th>
+                                <th><i class="fas fa-coins"></i> Reste</th>
                             </tr>
                             </thead>
+
                             <tbody>
                             {% for row in Datetable %}
                             <tr class="table-row" data-id="{{ row[0] }}"
@@ -358,10 +386,11 @@
                             </tbody>
                         </table>
                     </div>
+
                     {% else %}
                     <div class="empty-table">
                         <i class="fas fa-inbox"></i>
-                        <p>No products available</p>
+                        <p>Aucun produit disponible</p>
                     </div>
                     {% endif %}
                 </div>
@@ -369,26 +398,30 @@
                 <!-- Statistics Table -->
                 <div class="table-container" id="StatTable"
                      style="display: {% if stat_table %}block{% else %}none{% endif %};">
+
                     <div class="table-header">
                         <div class="table-title">
                             <i class="fas fa-chart-bar"></i>
-                            <h3>Monthly Statistics</h3>
+                            <h3>Statistiques mensuelles</h3>
                         </div>
+
                         <div class="table-info">
-                            <span class="info-badge info-stats">Summary</span>
+                            <span class="info-badge info-stats">Résumé</span>
                         </div>
                     </div>
+
                     {% if stat_table %}
                     <div class="table-wrapper">
                         <table class="data-table">
                             <thead>
                             <tr>
-                                <th><i class="fas fa-calendar-days"></i> Month</th>
-                                <th><i class="fas fa-calendar"></i> Year</th>
-                                <th><i class="fas fa-dollar-sign"></i> Payed</th>
-                                <th><i class="fas fa-dollar-sign"></i> Rest</th>
+                                <th><i class="fas fa-calendar-days"></i> Mois</th>
+                                <th><i class="fas fa-calendar"></i> Année</th>
+                                <th><i class="fas fa-dollar-sign"></i> Payé</th>
+                                <th><i class="fas fa-dollar-sign"></i> Reste</th>
                             </tr>
                             </thead>
+
                             <tbody>
                             {% for row in stat_table %}
                             <tr class="table-row" style="animation-delay: {{ loop.index * 0.05 }}s;">
@@ -401,10 +434,11 @@
                             </tbody>
                         </table>
                     </div>
+
                     {% else %}
                     <div class="empty-table">
                         <i class="fas fa-inbox"></i>
-                        <p>No statistics available</p>
+                        <p>Aucune statistique disponible</p>
                     </div>
                     {% endif %}
                 </div>
@@ -415,13 +449,17 @@
                     <div class="no-data-icon">
                         <i class="fas fa-inbox"></i>
                     </div>
-                    <h2>No Products Available</h2>
-                    <p>Start by adding products to your inventory</p>
+
+                    <h2>Aucun produit disponible</h2>
+
+                    <p>Commencez par ajouter des produits à votre stock</p>
+
                     <a href="/products/AddSel3a" class="add-btn">
-                        <i class="fas fa-plus"></i> Add First Product
+                        <i class="fas fa-plus"></i> Ajouter le premier produit
                     </a>
                 </div>
                 {% endif %}
+
             </div>
         </main>
     </div>
@@ -429,22 +467,24 @@
 
 <!-- Custom Floating Context Menu -->
 <div id="custom-context-menu" class="context-menu" style="display: none;">
+
     <button id="paid-row-btn" class="context-menu-item paid-action">
-        <i class="fas fa-check-circle"></i> Mark as Paid
+        <i class="fas fa-check-circle"></i> Marquer comme payé
     </button>
 
     <button id="modify-versement-btn" class="context-menu-item versement-action">
-        <i class="fas fa-money-bill-wave"></i> Modify Versement
+        <i class="fas fa-money-bill-wave"></i> Modifier le versement
     </button>
 
     <!-- Change Quantity -->
     <button id="use-product-btn" class="context-menu-item quantity-action">
-        <i class="fas fa-box-open"></i> Use Product
+        <i class="fas fa-box-open"></i> Utiliser le produit
     </button>
 
     <button id="delete-row-btn" class="context-menu-item delete-action">
-        <i class="fas fa-trash-alt"></i> Delete Product
+        <i class="fas fa-trash-alt"></i> Supprimer le produit
     </button>
+
 </div>
 
 <script>
@@ -637,7 +677,7 @@
 
             const recordId = targetRow.getAttribute('data-id');
 
-            if (confirm(`Are you sure you want to delete product #${recordId}?`)) {
+            if (confirm(`Êtes-vous sûr de vouloir supprimer le produit #${recordId} ?`)) {
                 try {
                     const response = await fetch(`/products/DeleteSel3a/${recordId}`, {
                         method: 'POST',
@@ -660,12 +700,12 @@
 
                         hideContextMenu();
                     } else {
-                        alert('Failed to delete product record.');
+                        alert('Échec de la suppression du produit.');
                         hideContextMenu();
                     }
                 } catch (err) {
                     console.error('Delete error:', err);
-                    alert('An error occurred while communicating with the server.');
+                    alert('Une erreur est survenue lors de la communication avec le serveur.');
                     hideContextMenu();
                 }
             } else {
@@ -679,7 +719,7 @@
 
             const recordId = targetRow.getAttribute('data-id');
 
-            if (!confirm(`Mark product #${recordId} as fully paid?`)) {
+            if (!confirm(`Marquer le produit #${recordId} comme entièrement payé ?`)) {
                 hideContextMenu();
                 return;
             }
@@ -695,12 +735,12 @@
                 if (response.ok) {
                     location.reload();
                 } else {
-                    alert('Failed to mark product as paid.');
+                    alert('Échec du marquage du produit comme payé.');
                 }
 
             } catch (err) {
                 console.error('Paid error:', err);
-                alert('An error occurred while communicating with the server.');
+                alert('Une erreur est survenue lors de la communication avec le serveur.');
             }
 
             hideContextMenu();
@@ -714,7 +754,7 @@
         const recordId = targetRow.getAttribute('data-id');
 
         const newVersement = prompt(
-            `Enter the new versement amount for product #${recordId}:`
+            `Entrez le nouveau montant du versement pour le produit #${recordId} :`
         );
 
         if (newVersement === null) {
@@ -723,7 +763,7 @@
         }
 
         if (newVersement.trim() === '' || isNaN(newVersement)) {
-            alert('Please enter a valid amount.');
+            alert('Veuillez entrer un montant valide.');
             hideContextMenu();
             return;
         }
@@ -748,12 +788,12 @@
             if (response.ok && data.success) {
                 location.reload();
             } else {
-                alert(data.error || data.message || 'Failed to modify versement.');
+                alert(data.error || data.message || 'Échec de la modification du versement.');
             }
 
         } catch (err) {
             console.error('Versement error:', err);
-            alert('An error occurred while communicating with the server.');
+            alert('Une erreur est survenue lors de la communication avec le serveur.');
         }
 
         hideContextMenu();
@@ -767,7 +807,7 @@
             const recordId = targetRow.getAttribute('data-id');
 
             const newQuantity = prompt(
-                `How many did you used? #${recordId}:`
+                `Combien en avez-vous utilisé ? #${recordId} :`
             );
 
             if (newQuantity === null) {
@@ -780,7 +820,7 @@
                 isNaN(newQuantity) ||
                 parseFloat(newQuantity) < 0
             ) {
-                alert('Please enter a valid quantity.');
+                alert('Veuillez entrer une quantité valide.');
                 hideContextMenu();
                 return;
             }
@@ -808,7 +848,7 @@
                     alert(
                         data.error ||
                         data.message ||
-                        'Failed to modify quantity.'
+                        'Échec de la modification de la quantité.'
                     );
                 }
 
@@ -817,7 +857,7 @@
                 console.error('Quantity error:', err);
 
                 alert(
-                    'An error occurred while communicating with the server.'
+                    'Une erreur est survenue lors de la communication avec le serveur.'
                 );
             }
 

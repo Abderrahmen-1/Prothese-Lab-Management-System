@@ -5,8 +5,10 @@ from FlaskTry.ConnectToSql import get_connection
 
 dentists = Blueprint("dentists", __name__, url_prefix="/dentists")
 
+
 def is_logged_in():
     return "id" in session
+
 
 @dentists.route("/Dentist", methods=["POST", "GET"])
 def DentistPage():
@@ -16,16 +18,16 @@ def DentistPage():
     if request.method == "GET":
         token = secrets.token_hex(16)
         session["csrf_token"] = token
-        print(f"GET - Generated token: {token}")# Debug
+        print(f"GET - Generated token: {token}")  # Debug
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
 
-        try :
+        try:
 
-            cursor.execute("""
-                            DELETE FROM dentists 
-                            WHERE 
+            cursor.execute(""" 
+                            DELETE FROM dentists  
+                            WHERE  
                             finished = %s AND khalsa = %s AND user_id = %s """,
                            ('yes', 'yes', session['id']))
             conn.commit()
@@ -34,13 +36,13 @@ def DentistPage():
                            (session["id"],))
             rows = cursor.fetchall()
 
-        finally :
+        finally:
             cursor.close()
             conn.close()
 
         return render_template("DentistFile.html", result=rows, csrf_token=token)
 
-    # POST request handling
+        # POST request handling
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
 
@@ -55,7 +57,7 @@ def DentistPage():
         print(f"POST - Tokens match: {form_token == session_token}")
 
         if not form_token or form_token != session_token:
-            return "CSRF attack detected", 403
+            return "Attaque CSRF détectée", 403
 
         token = secrets.token_hex(16)
         session["csrf_token"] = token
@@ -68,10 +70,10 @@ def DentistPage():
 
             return render_template("DentistFile.html", result=rows, csrf_token=token)
 
-        elif DentistName.isdigit() :
-            if not DentistName or not DentistName.isdigit() or int(DentistName) < 0 :
+        elif DentistName.isdigit():
+            if not DentistName or not DentistName.isdigit() or int(DentistName) < 0:
                 return render_template("DentistFile.html",
-                                       message="Invalide ID ", csrf_token=token)
+                                       message="ID invalide ", csrf_token=token)
 
             cursor.execute("SELECT * FROM dentists WHERE user_id = %s AND patient_number = %s",
                            (session['id'], DentistName))
@@ -80,7 +82,8 @@ def DentistPage():
             return render_template("DentistFile.html", result=rows, csrf_token=token)
 
         else:
-            return render_template("DentistFile.html", error=f"Dentist {DentistName} Not Found or Patient not found", csrf_token=token)
+            return render_template("DentistFile.html",
+                                   error=f"Dentiste {DentistName} introuvable ou patient introuvable", csrf_token=token)
     finally:
         cursor.close()
         conn.close()
@@ -109,22 +112,21 @@ def AddDentist():
             session_token = session.get("csrf_token")
 
             if not form_token or form_token != session_token:
-                return "CSRF attack detected", 403
+                return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)
             session["csrf_token"] = new_token
 
-
             dentist_name = request.form.get("AddDentists")
             if not dentist_name or dentist_name.isdigit():
-                return render_template("AddDentist.html", message="Invalide Dentist name", csrf_token=new_token)
-
+                return render_template("AddDentist.html", message="Nom du dentiste invalide", csrf_token=new_token)
 
             if not SearcheTable(cursor, dentist_name):
                 AddDentistTable(cursor, conn, dentist_name)
-                return render_template("AddDentist.html", message=f"Dentist {dentist_name} Added Successfully", csrf_token=new_token)
+                return render_template("AddDentist.html", message=f"Dentiste {dentist_name} ajouté avec succès",
+                                       csrf_token=new_token)
             else:
-                return render_template("AddDentist.html", message="Dentist Already exists", csrf_token=new_token)
+                return render_template("AddDentist.html", message="Le dentiste existe déjà", csrf_token=new_token)
     finally:
         cursor.close()
         conn.close()
@@ -153,18 +155,17 @@ def DeleteDentist():
             session_token = session.get("csrf_token")
 
             if not form_token or form_token != session_token:
-                return "CSRF attack detected", 403
+                return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)
             session["csrf_token"] = new_token
-
 
             Dentist_deleted = request.form.get("DeleteDentist")
             Confirm_Dentist = request.form.get("ConfirmDeleteDentist")
 
             if SearcheTable(cursor, Dentist_deleted):
                 if Dentist_deleted != Confirm_Dentist:
-                    return render_template("DeleteDentist.html", message="Invalide Confirmation", csrf_token=new_token)
+                    return render_template("DeleteDentist.html", message="Confirmation invalide", csrf_token=new_token)
 
                 cursor.execute("DELETE FROM dentists WHERE user_id = %s AND dentist_name = %s",
                                (session['id'], Dentist_deleted))
@@ -176,13 +177,14 @@ def DeleteDentist():
                                (session['id'], f"Dr.{Dentist_deleted}"))
 
                 conn.commit()
-                return render_template("DeleteDentist.html", message="Dentist Deleted Successfully", csrf_token=new_token)
+                return render_template("DeleteDentist.html", message="Dentiste supprimé avec succès",
+                                       csrf_token=new_token)
             else:
-                return render_template("DeleteDentist.html", message="Dentist doesn't exist", csrf_token=new_token)
+                return render_template("DeleteDentist.html", message="Le dentiste n'existe pas", csrf_token=new_token)
 
     except Exception as e:
         conn.rollback()
-        return render_template("DeleteDentist.html", message=f"error {str(e)}", csrf_token=new_token)
+        return render_template("DeleteDentist.html", message=f"Erreur : {str(e)}", csrf_token=new_token)
 
     finally:
         cursor.close()
@@ -191,7 +193,6 @@ def DeleteDentist():
 
 @dentists.route("/GetFromDentist", methods=["POST", "GET"])
 def Get_From_Dentist():
-
     # ==========================================
     # CHECK LOGIN
     # ==========================================
@@ -199,8 +200,7 @@ def Get_From_Dentist():
     if not is_logged_in():
         return redirect(url_for('home'))
 
-
-    # ==========================================
+        # ==========================================
     # GET REQUEST
     # ==========================================
 
@@ -212,8 +212,7 @@ def Get_From_Dentist():
             "GetFromDentist.html",
             csrf_token=token)
 
-
-    # ==========================================
+        # ==========================================
     # POST REQUEST
     # ==========================================
 
@@ -226,11 +225,10 @@ def Get_From_Dentist():
         print("POST - Session token:", session_token)
 
         if not form_token or form_token != session_token:
-            return "CSRF attack detected", 403
+            return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
-
 
         # ======================================
         # GET BASIC FORM VALUES
@@ -250,53 +248,44 @@ def Get_From_Dentist():
         # This is now .get() instead of ['OtherPro']
         ProCheck = request.form.get("OtherPro")
 
-
         print("FORM DATA:", request.form)
-
 
         # ======================================
         # BASIC VALIDATION
         # ======================================
 
         if not dentist or not dentist.strip():
-
             return render_template(
                 "GetFromDentist.html",
-                error="Dentist name cannot be empty",
+                error="Le nom du dentiste ne peut pas être vide",
                 csrf_token=new_token
             )
-
 
         if not firstName or not firstName.strip():
-
             return render_template(
                 "GetFromDentist.html",
-                error="Patient first name cannot be empty",
+                error="Le prénom du patient ne peut pas être vide",
                 csrf_token=new_token
             )
 
-
         if not lastName or not lastName.strip():
-
             return render_template(
                 "GetFromDentist.html",
-                error="Patient last name cannot be empty",
+                error="Le nom du patient ne peut pas être vide",
                 csrf_token=new_token
             )
 
         if not unique or not unique.isdigit() or len(unique) >= 10:
             return render_template("GetFromDentist.html",
-                                   message="Invalide Patient ID ",
+                                   message="ID du patient invalide ",
                                    csrf_token=new_token)
 
         if not choice or not choice.strip():
-
             return render_template(
                 "GetFromDentist.html",
-                error="Invalid Choice",
+                error="Choix invalide",
                 csrf_token=new_token
             )
-
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -305,14 +294,14 @@ def Get_From_Dentist():
             if not SearcheTable(cursor, dentist):
                 return render_template(
                     "GetFromDentist.html",
-                    error="Dentist doesn't exist",
+                    error="Le dentiste n'existe pas",
                     csrf_token=new_token
                 )
 
             if not price:
                 return render_template(
                     "GetFromDentist.html",
-                    error="Price cannot be empty",
+                    error="Le prix ne peut pas être vide",
                     csrf_token=new_token
                 )
 
@@ -321,7 +310,7 @@ def Get_From_Dentist():
                 if not checkValue(price):
                     return render_template(
                         "GetFromDentist.html",
-                        error="Invalid Price value",
+                        error="Valeur du prix invalide",
                         csrf_token=new_token
                     )
 
@@ -330,58 +319,53 @@ def Get_From_Dentist():
             except (ValueError, TypeError):
                 return render_template(
                     "GetFromDentist.html",
-                    error="Invalid Price Value",
+                    error="Valeur du prix invalide",
                     csrf_token=new_token
                 )
 
             if not khalsa or khalsa.strip().lower() not in ["yes", "no"]:
                 return render_template(
                     "GetFromDentist.html",
-                    error="You must put 'yes' or 'no' in Khalsa",
+                    error="Vous devez saisir « yes » ou « no » dans Khalsa",
                     csrf_token=new_token
                 )
-
 
             if not date or not deadLine:
                 return render_template(
                     "GetFromDentist.html",
-                    error="Date and deadline are required",
+                    error="La date et la date limite sont obligatoires",
                     csrf_token=new_token
                 )
-
 
             if deadLine < date:
                 return render_template(
                     "GetFromDentist.html",
-                    error="Invalid Deadline",
+                    error="Date limite invalide",
                     csrf_token=new_token
                 )
 
-
             cursor.execute(
-                """
-                SELECT id
-                FROM dentists
-                WHERE user_id = %s AND patient_number = %s AND dentist_name = %s
-                """,( session["id"], unique, dentist ))
+                """ 
+                SELECT id 
+                FROM dentists 
+                WHERE user_id = %s AND patient_number = %s AND dentist_name = %s 
+                """, (session["id"], unique, dentist))
 
             if cursor.fetchone():
-                return render_template("GetFromDentist.html", message="Unique number already exists")
+                return render_template("GetFromDentist.html", message="Le numéro unique existe déjà", csrf_token=new_token)
 
-
-            # ==================================
+                # ==================================
             # CHECK OTHER PROTHESIST
             # ==================================
 
             if not ProCheck or ProCheck.strip().lower() not in ["yes", "no"]:
                 return render_template(
                     "GetFromDentist.html",
-                    error="You must select Yes or No in the Prothesist check part",
+                    error="Vous devez sélectionner Oui ou Non dans la partie de vérification du prothésiste",
                     csrf_token=new_token
                 )
 
-
-            # ==================================
+                # ==================================
             # DENTIST PAYMENT VALUES
             # ==================================
 
@@ -393,7 +377,6 @@ def Get_From_Dentist():
                 b9aw = price
 
             dentist_khalsa = 'yes' if b9aw == 0 else 'no'
-
 
             # ==================================
             # DEFAULT PROTHESIST VALUES
@@ -408,7 +391,6 @@ def Get_From_Dentist():
             Proversa = "no"
             ProVersa = 0
             Prob9aw = 0
-
 
             # ==================================
             # OTHER PROTHESIST = YES
@@ -433,50 +415,43 @@ def Get_From_Dentist():
                 # the user's selections.
                 ProVersa = request.form.get("ProVersaAmount")
 
-
                 # ----------------------------------
                 # PROTHESIST NAME
                 # ----------------------------------
 
                 if not ProName or not ProName.strip():
-
                     return render_template(
                         "GetFromDentist.html",
-                        error="Prothesist Name must not be empty",
+                        error="Le nom du prothésiste ne peut pas être vide",
                         csrf_token=new_token
                     )
 
-
-                # ----------------------------------
+                    # ----------------------------------
                 # PROTHESIST NUMBER
                 # ----------------------------------
 
                 if not ProNumber or not ProNumber.isdigit():
-
                     return render_template(
                         "GetFromDentist.html",
-                        error="Prothesist Number must be a positive number",
+                        error="Le numéro du prothésiste doit être un nombre positif",
                         csrf_token=new_token
                     )
-
 
                 if int(ProNumber) < 0:
-
                     return render_template(
                         "GetFromDentist.html",
-                        error="Prothesist Number must be a positive number",
+                        error="Le numéro du prothésiste doit être un nombre positif",
                         csrf_token=new_token
                     )
 
-
-                # ----------------------------------
+                    # ----------------------------------
                 # PROTHESIST PRICE
                 # ----------------------------------
 
                 if not ProPrice:
                     return render_template(
                         "GetFromDentist.html",
-                        error="Prothesist Price cannot be empty",
+                        error="Le prix du prothésiste ne peut pas être vide",
                         csrf_token=new_token
                     )
 
@@ -490,51 +465,48 @@ def Get_From_Dentist():
 
                     return render_template(
                         "GetFromDentist.html",
-                        error="Invalid Prothesist Price",
+                        error="Prix du prothésiste invalide",
                         csrf_token=new_token
                     )
 
-
-                # ----------------------------------
+                    # ----------------------------------
                 # PROTHESIST DATES
                 # ----------------------------------
 
                 if not ProDate or not ProDeadLine:
-                    return render_template("GetFromDentist.html",error="Prothesist Date and Deadline are required",
-                        csrf_token=new_token
-                    )
+                    return render_template("GetFromDentist.html",
+                                           error="La date et la date limite du prothésiste sont obligatoires",
+                                           csrf_token=new_token
+                                           )
 
                 if ProDate < date:
-                    return render_template("GetFromDentist.html",error="Invalid Prothesist Date",
-                        csrf_token=new_token
-                    )
-
+                    return render_template("GetFromDentist.html", error="Date du prothésiste invalide",
+                                           csrf_token=new_token
+                                           )
 
                 if ProDeadLine < ProDate:
-                    return render_template("GetFromDentist.html",error="Invalid Prothesist Dead Line",
-                        csrf_token=new_token
-                    )
-
+                    return render_template("GetFromDentist.html", error="Date limite du prothésiste invalide",
+                                           csrf_token=new_token
+                                           )
 
                 if ProDeadLine > deadLine:
-                    return render_template("GetFromDentist.html",error="Prothesist Deadline cannot be after Dentist Deadline",
-                        csrf_token=new_token
-                    )
+                    return render_template("GetFromDentist.html",
+                                           error="La date limite du prothésiste ne peut pas être postérieure à celle du dentiste",
+                                           csrf_token=new_token
+                                           )
 
-
-                # ----------------------------------
+                    # ----------------------------------
                 # PROTHESIST KHALSA
                 # ----------------------------------
 
                 if not ProKhalsa or ProKhalsa.lower() not in ["yes", "no"]:
                     return render_template(
                         "GetFromDentist.html",
-                        error="You must put 'yes' or 'no' in Prothesist Khalsa",
+                        error="Vous devez saisir « yes » ou « no » dans Khalsa du prothésiste",
                         csrf_token=new_token
                     )
 
-
-                # ==================================
+                    # ==================================
                 # PROTHESIST FULLY PAID
                 # ==================================
 
@@ -544,8 +516,7 @@ def Get_From_Dentist():
                     Proversa = "yes"
                     Prob9aw = 0
 
-
-                # ==================================
+                    # ==================================
                 # PROTHESIST NOT FULLY PAID
                 # ==================================
 
@@ -557,11 +528,11 @@ def Get_From_Dentist():
                     if not Proversa or Proversa.lower() not in ["yes", "no"]:
                         return render_template(
                             "GetFromDentist.html",
-                            error="Please select Yes or No for Prothesist Versa",
+                            error="Veuillez sélectionner Oui ou Non pour le versement du prothésiste",
                             csrf_token=new_token
                         )
 
-                    # ----------------------------------
+                        # ----------------------------------
                     # NO VERSEMENT
                     # ----------------------------------
 
@@ -569,17 +540,17 @@ def Get_From_Dentist():
                         ProVersa = 0
                         Prob9aw = ProPrice
 
-                    # ----------------------------------
+                        # ----------------------------------
                     # VERSEMENT = YES
                     # ----------------------------------
 
                     else:
 
                         if not ProVersa:
-                            return render_template("GetFromDentist.html", error="Please enter the Prothesist Versa amount",
-                                csrf_token=new_token
-                            )
-
+                            return render_template("GetFromDentist.html",
+                                                   error="Veuillez saisir le montant du versement du prothésiste",
+                                                   csrf_token=new_token
+                                                   )
 
                         try:
                             ProVersa = float(ProVersa)
@@ -588,70 +559,72 @@ def Get_From_Dentist():
 
                             return render_template(
                                 "GetFromDentist.html",
-                                error="Invalid Prothesist Versa amount",
+                                error="Montant du versement du prothésiste invalide",
                                 csrf_token=new_token
                             )
 
                         if ProVersa < 0:
-                            return render_template("GetFromDentist.html", error="Prothesist Versa cannot be negative",
-                                csrf_token=new_token
-                            )
-
+                            return render_template("GetFromDentist.html",
+                                                   error="Le versement du prothésiste ne peut pas être négatif",
+                                                   csrf_token=new_token
+                                                   )
 
                         if ProVersa > ProPrice:
-                            return render_template("GetFromDentist.html", message="Prothesist Versa must not be bigger than his price",
-                                csrf_token=new_token
-                            )
+                            return render_template("GetFromDentist.html",
+                                                   message="Le versement du prothésiste ne doit pas être supérieur à son prix",
+                                                   csrf_token=new_token
+                                                   )
 
-                        Prob9aw = round( ProPrice - ProVersa, 2 )
+                        Prob9aw = round(ProPrice - ProVersa, 2)
 
-                # ==================================
+                        # ==================================
                 # CHECK PROTHESIST EXISTENCE
                 # ==================================
 
-                cursor.execute("""
-                                SELECT id
-                                FROM other_prothesists
-                                WHERE pName = %s
-                                AND pNumber = %s
-                                AND user_id = %s
-                                """, ( ProName, ProNumber, session["id"] ))
+                cursor.execute(""" 
+                                SELECT id 
+                                FROM other_prothesists 
+                                WHERE pName = %s 
+                                AND pNumber = %s 
+                                AND user_id = %s 
+                                """, (ProName, ProNumber, session["id"]))
 
                 # ==================================
                 # INSERT PROTHESIST IF NOT EXISTS
                 # ==================================
 
                 if not cursor.fetchone():
-                    return render_template("GetFromDentist.html", error="Prothesist not found", csrf_token=new_token)
+                    return render_template("GetFromDentist.html", error="Prothésiste introuvable", csrf_token=new_token)
 
                 cursor.execute(
-                    """
-                    INSERT INTO other_prothesists_khedma
-                    ( user_id, patient_number, dentist_name, pName, pNumber, pDate, pKhedma, pPrice, pVersa, pB9aw, 
-                    pKhalsa, pFinished, DeadLine )
-                    VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ) """,( session['id'], unique, dentist, ProName, ProNumber, ProDate, choice, ProPrice, ProVersa,
-                          Prob9aw, ProKhalsa, "no", ProDeadLine ))
+                    """ 
+                    INSERT INTO other_prothesists_khedma 
+                    ( user_id, patient_number, dentist_name, pName, pNumber, pDate, pKhedma, pPrice, pVersa, pB9aw,  
+                    pKhalsa, pFinished, DeadLine ) 
+                    VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ) """,
+                    (session['id'], unique, dentist, ProName, ProNumber, ProDate, choice, ProPrice, ProVersa,
+                     Prob9aw, ProKhalsa, "no", ProDeadLine))
 
-                Prothesist_History(cursor,conn,ProName,ProNumber,unique)
+                Prothesist_History(cursor, conn, ProName, ProNumber, unique, firstName, lastName)
 
-                ProthesistsStat( cursor, conn, ProPrice, ProNumber, ProName,
-                                 ProKhalsa, ProDate, ProVersa )
+                ProthesistsStat(cursor, conn, ProPrice, ProNumber, ProName,
+                                ProKhalsa, ProDate, ProVersa)
 
             status = 'in process'
-            infos = [ session["id"], dentist, firstName, lastName, unique, choice, price,
-                      versement, b9aw, "no", dentist_khalsa, date, deadLine, status ]
+            infos = [session["id"], dentist, firstName, lastName, unique, choice, price,
+                     versement, b9aw, "no", dentist_khalsa, date, deadLine, status]
 
             if ProCheck == 'yes':
                 infos[13] = 'prothesist'
 
             cursor.execute(
-                """
-                INSERT INTO dentists
-                    ( user_id, dentist_name, patient_firstname, patient_lastname, patient_number, 
-                    Dkhedma, price, versement, b9aw, finished, khalsa, date, DeadLine, status )
-                VALUES
+                """ 
+                INSERT INTO dentists 
+                    ( user_id, dentist_name, patient_firstname, patient_lastname, patient_number,  
+                    Dkhedma, price, versement, b9aw, finished, khalsa, date, DeadLine, status ) 
+                VALUES 
                     ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ) """
-                , tuple(infos) )
+                , tuple(infos))
 
             if ProCheck.lower() == "yes":
                 prothesist_name = ProName
@@ -660,39 +633,36 @@ def Get_From_Dentist():
                 prothesist_name = None
                 prothesist_number = 0
 
-
             cursor.execute(
-                """
-                INSERT INTO khedma
-                    ( khedman, khedma_price, khedma_date, khedma_dentist, khedma_patient, 
-                    khedma_wajda, khedma_khalsa, prothesist_name, prothesist_number, user_id, DeadLine )
-                VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )
+                """ 
+                INSERT INTO khedma 
+                    ( khedman, khedma_price, khedma_date, khedma_dentist, khedma_patient,  
+                    khedma_wajda, khedma_khalsa, prothesist_name, prothesist_number, user_id, DeadLine ) 
+                VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ) 
                 """,
-                ( choice, price, date, f"Dr.{dentist}", unique, "no", dentist_khalsa,
-                  prothesist_name, prothesist_number, session["id"], deadLine ) )
+                (choice, price, date, f"Dr.{dentist}", unique, "no", dentist_khalsa,
+                 prothesist_name, prothesist_number, session["id"], deadLine))
 
-            Dentist_History( cursor, conn, dentist )
+            Dentist_History(cursor, conn, dentist)
 
-            DentistStats( cursor, conn, dentist, price, khalsa, date )
-
+            DentistStats(cursor, conn, dentist, price, khalsa, date)
 
             conn.commit()
 
             cursor.execute(
-                """
-                SELECT *
-                FROM dentists
-                WHERE user_id = %s
+                """ 
+                SELECT * 
+                FROM dentists 
+                WHERE user_id = %s 
                 """,
                 (session["id"],)
             )
 
             result = cursor.fetchall()
 
-
             return render_template(
                 "DentistFile.html",
-                message="Khedma Added Successfully",
+                message="Tâche ajoutée avec succès",
                 result=result
             )
 
@@ -701,7 +671,7 @@ def Get_From_Dentist():
             print("ERROR IN /GetFromDentist:", e)
             return render_template(
                 "GetFromDentist.html",
-                error=f"An error occurred: {str(e)}",
+                error=f"Une erreur s'est produite : {str(e)}",
                 csrf_token=new_token
             )
 
@@ -710,7 +680,7 @@ def Get_From_Dentist():
             conn.close()
 
 
-@dentists.route("/DentistVersement" , methods=["POST" , "GET"])
+@dentists.route("/DentistVersement", methods=["POST", "GET"])
 def ModifyDentistVersement():
     if not is_logged_in():
         return redirect(url_for("home"))
@@ -724,46 +694,47 @@ def ModifyDentistVersement():
             csrf_token=token
         )
 
-    if request.method == "POST" :
+    if request.method == "POST":
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
         if not form_token or form_token != session_token:
-            return "CSRF attack detected", 403
+            return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
-
 
         DentistName = request.form.get('DName')
         KhedmaId = request.form.get('KhedmaId')
         Versement = request.form.get('Versement')
 
         if not Versement:
-            return render_template("ModifyDentistVersement.html", error="Versement cannot be empty", csrf_token=new_token)
+            return render_template("ModifyDentistVersement.html", error="Le versement ne peut pas être vide",
+                                   csrf_token=new_token)
 
         try:
             Versement = float(Versement)
         except (ValueError, TypeError):
-            return render_template("ModifyDentistVersement.html", error="Invalid Versement value", csrf_token=new_token)
+            return render_template("ModifyDentistVersement.html", error="Valeur du versement invalide",
+                                   csrf_token=new_token)
 
-        #if Versement < 0:
-         #   return render_template("ModifyDentistVersement.html", error="Versement cannot be negative", csrf_token=new_token)
-
+            # if Versement < 0:
+        #   return render_template("ModifyDentistVersement.html", error="Versement cannot be negative", csrf_token=new_token)
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
 
-        try :
-            cursor.execute("""
-                            SELECT price, khalsa, versement, b9aw, MONTH(date), YEAR(date) 
-                            FROM dentists 
+        try:
+            cursor.execute(""" 
+                            SELECT price, khalsa, versement, b9aw, MONTH(date), YEAR(date)  
+                            FROM dentists  
                             WHERE user_id = %s AND dentist_name = %s AND patient_number = %s """
-                           ,(session['id'] , DentistName , KhedmaId ))
+                           , (session['id'], DentistName, KhedmaId))
             result = cursor.fetchone()
 
-            if not result :
-                return render_template("ModifyDentistVersement.html" , message="Khedma not found ", csrf_token=new_token)
+            if not result:
+                return render_template("ModifyDentistVersement.html", message="Tâche introuvable ",
+                                       csrf_token=new_token)
 
             price = result[0]
             oldkhalsa = result[1]
@@ -771,111 +742,112 @@ def ModifyDentistVersement():
             month = result[4]
             year = result[5]
 
-            if oldkhalsa.lower() == "yes" and Versement > 0 :
-                cursor.execute("SELECT * FROM dentists WHERE user_id = %s ",(session['id'],))
+            if oldkhalsa.lower() == "yes" and Versement > 0:
+                cursor.execute("SELECT * FROM dentists WHERE user_id = %s ", (session['id'],))
                 result = cursor.fetchall()
-                return render_template("DentistFile.html" , message="Khedma Already Khalsa", result=result, csrf_token=new_token)
+                return render_template("DentistFile.html", message="Tâche déjà Khalsa", result=result,
+                                       csrf_token=new_token)
 
             NewVersement = oldversement + Versement
 
-            if NewVersement > price :
-                return render_template("ModifyDentistVersement.html" , error="Invalide versement", csrf_token=new_token)
+            if NewVersement > price:
+                return render_template("ModifyDentistVersement.html", error="Versement invalide", csrf_token=new_token)
 
-            elif NewVersement == price :
+            elif NewVersement == price:
                 b9aw = 0
 
-                cursor.execute("""
-                                UPDATE dentists 
-                                SET 
-                                khalsa = "yes",  
-                                versement = %s ,
-                                b9aw = %s 
-                                WHERE user_id = %s AND dentist_name = %s AND patient_number = %s
-                                """,(NewVersement, b9aw, session['id'], DentistName, KhedmaId ))
+                cursor.execute(""" 
+                                UPDATE dentists  
+                                SET  
+                                khalsa = "yes",   
+                                versement = %s , 
+                                b9aw = %s  
+                                WHERE user_id = %s AND dentist_name = %s AND patient_number = %s 
+                                """, (NewVersement, b9aw, session['id'], DentistName, KhedmaId))
 
-                cursor.execute("""
-                                UPDATE dentist_history 
-                                SET 
-                                versement = %s , b9aw = %s  
-                                WHERE user_id = %s AND dentistname = %s AND pNumber = %s 
-                                """,(NewVersement, b9aw, session['id'], DentistName, KhedmaId))
+                cursor.execute(""" 
+                                UPDATE dentist_history  
+                                SET  
+                                versement = %s , b9aw = %s   
+                                WHERE user_id = %s AND dentistname = %s AND pNumber = %s  
+                                """, (NewVersement, b9aw, session['id'], DentistName, KhedmaId))
 
-                cursor.execute("""
-                                UPDATE khedma 
-                                SET khedma_khalsa = 'yes' 
-                                WHERE user_id = %s AND khedma_patient = %s """,(session['id'], KhedmaId))
+                cursor.execute(""" 
+                                UPDATE khedma  
+                                SET khedma_khalsa = 'yes'  
+                                WHERE user_id = %s AND khedma_patient = %s """, (session['id'], KhedmaId))
 
-                cursor.execute("""
-                                UPDATE dentist_stat 
-                                SET 
-                                khalsin = khalsin + %s ,
-                                machi_khalsin = machi_khalsin - %s
+                cursor.execute(""" 
+                                UPDATE dentist_stat  
+                                SET  
+                                khalsin = khalsin + %s , 
+                                machi_khalsin = machi_khalsin - %s 
                                 WHERE user_id = %s AND dentist_name = %s AND month = %s AND year = %s """
-                               ,(Versement, Versement, session['id'], DentistName, month, year ) )
+                               , (Versement, Versement, session['id'], DentistName, month, year))
 
-
-                cursor.execute("""
-                                SELECT * FROM dentists
+                cursor.execute(""" 
+                                SELECT * FROM dentists 
                                 WHERE user_id = %s """, (session['id'],))
 
                 result = cursor.fetchall()
                 conn.commit()
 
-                return render_template("DentistFile.html", message="Informations Updated Successeful", result=result,
+                return render_template("DentistFile.html", message="Informations mises à jour avec succès",
+                                       result=result,
                                        csrf_token=new_token)
 
             else:
                 b9aw = price - NewVersement
 
-                if b9aw > price :
-                    return render_template("ModifyDentistVersement.html", message="Invalid Versement",
+                if b9aw > price:
+                    return render_template("ModifyDentistVersement.html", message="Versement invalide",
                                            csrf_token=new_token)
 
-
-                cursor.execute("""
-                                 UPDATE dentists 
-                                 SET 
-                                 khalsa = "no",  
-                                 versement = %s ,
-                                 b9aw = %s 
-                                 WHERE user_id = %s AND dentist_name = %s AND patient_number = %s
+                cursor.execute(""" 
+                                 UPDATE dentists  
+                                 SET  
+                                 khalsa = "no",   
+                                 versement = %s , 
+                                 b9aw = %s  
+                                 WHERE user_id = %s AND dentist_name = %s AND patient_number = %s 
                                  """, (NewVersement, b9aw, session['id'], DentistName, KhedmaId))
 
-                cursor.execute("""
-                                UPDATE dentist_history 
-                                SET 
-                                versement = %s , b9aw = %s 
-                                WHERE user_id = %s AND dentistname = %s AND pNumber = %s 
+                cursor.execute(""" 
+                                UPDATE dentist_history  
+                                SET  
+                                versement = %s , b9aw = %s  
+                                WHERE user_id = %s AND dentistname = %s AND pNumber = %s  
                                 """, (NewVersement, b9aw, session['id'], DentistName, KhedmaId))
 
-                cursor.execute("""
-                                UPDATE dentist_stat 
-                                SET 
-                                khalsin = khalsin + %s ,
-                                machi_khalsin = machi_khalsin - %s
+                cursor.execute(""" 
+                                UPDATE dentist_stat  
+                                SET  
+                                khalsin = khalsin + %s , 
+                                machi_khalsin = machi_khalsin - %s 
                                 WHERE user_id = %s AND dentist_name = %s AND month = %s AND year = %s """
                                , (Versement, Versement, session['id'], DentistName, month, year))
 
                 conn.commit()
 
-                cursor.execute("""
-                                SELECT * FROM dentists
-                                 WHERE user_id = %s """,(session['id'],))
+                cursor.execute(""" 
+                                SELECT * FROM dentists 
+                                 WHERE user_id = %s """, (session['id'],))
 
                 result = cursor.fetchall()
 
-                return render_template("DentistFile.html" , message="Information Updated Sucssufully", result=result, csrf_token=new_token)
+                return render_template("DentistFile.html", message="Informations mises à jour avec succès",
+                                       result=result, csrf_token=new_token)
 
-        except Exception as e :
+        except Exception as e:
             conn.rollback()
-            return render_template("ModifyDentistVersement.html", error=f"error {str(e)}", csrf_token=new_token)
+            return render_template("ModifyDentistVersement.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
 
-        finally :
+        finally:
             cursor.close()
             conn.close()
 
 
-@dentists.route("/DeleteDentistPatient", methods=["POST" , "GET"])
+@dentists.route("/DeleteDentistPatient", methods=["POST", "GET"])
 def DeleteDentistKhedma():
     if not is_logged_in():
         return redirect(url_for('home'))
@@ -894,44 +866,43 @@ def DeleteDentistKhedma():
         session_token = session.get("csrf_token")
 
         if not form_token or form_token != session_token:
-            return "CSRF attack detected", 403
+            return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
-
 
         Dentist_name = request.form.get("DentistName")
         PatientF_deleted = request.form.get("DeleteF")
         Confirm_PatientF = request.form.get("ConfirmDeletePatientF")
         PatientL_deleted = request.form.get("DeleteL")
         Confirm_PatientL = request.form.get("ConfirmDeletePatientL")
-        Patient_unique   = request.form.get("uniquepatient")
-        Confirm_Unique   = request.form.get("confirmunique")
+        Patient_unique = request.form.get("uniquepatient")
+        Confirm_Unique = request.form.get("confirmunique")
 
         if not Patient_unique.isdigit() or len(Patient_unique) >= 10:
-            return render_template("DeleteDentistPatient.html", error="Invalid Unique number", csrf_token=new_token)
+            return render_template("DeleteDentistPatient.html", error="Numéro unique invalide", csrf_token=new_token)
 
         if (PatientF_deleted != Confirm_PatientF or
                 PatientL_deleted != Confirm_PatientL or
                 Patient_unique != Confirm_Unique):
-            return render_template("DeleteDentistPatient.html", error="Invalid Confirmation", csrf_token=new_token)
+            return render_template("DeleteDentistPatient.html", error="Confirmation invalide", csrf_token=new_token)
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
         try:
 
-            cursor.execute("""
-                    SELECT price, khalsa, MONTH(date), YEAR(date), versement, b9aw  
-                    FROM dentists 
-                    WHERE dentist_name = %s AND patient_firstname = %s AND patient_lastname = %s 
-                    AND patient_number = %s AND user_id = %s 
-                    """,(Dentist_name , PatientF_deleted, PatientL_deleted, Patient_unique, session['id']))
+            cursor.execute(""" 
+                    SELECT price, khalsa, MONTH(date), YEAR(date), versement, b9aw   
+                    FROM dentists  
+                    WHERE dentist_name = %s AND patient_firstname = %s AND patient_lastname = %s  
+                    AND patient_number = %s AND user_id = %s  
+                    """, (Dentist_name, PatientF_deleted, PatientL_deleted, Patient_unique, session['id']))
 
             result = cursor.fetchone()
 
-            if not result :
+            if not result:
                 return render_template("DeleteDentistPatient.html"
-                                       ,message="Patient not found", csrf_token=new_token )
+                                       , message="Patient introuvable", csrf_token=new_token)
 
             price = result[0]
             khalsa = result[1]
@@ -940,53 +911,52 @@ def DeleteDentistKhedma():
             versement = result[4]
             b9aw = result[5]
 
-            cursor.execute("""
-                            SELECT d.patient_firstname, d.patient_lastname, pr.pName 
-                            FROM other_prothesists_khedma pr 
-                            JOIN dentists d ON pr.user_id = d.user_id AND pr.patient_number = d.patient_number
-                            WHERE 
+            cursor.execute(""" 
+                            SELECT d.patient_firstname, d.patient_lastname, pr.pName  
+                            FROM other_prothesists_khedma pr  
+                            JOIN dentists d ON pr.user_id = d.user_id AND pr.patient_number = d.patient_number 
+                            WHERE  
                             pr.user_id = %s AND pr.patient_number = %s """, (session['id'], Patient_unique))
             found = cursor.fetchone()
 
-            if found :
+            if found:
                 if found[0] == PatientF_deleted and found[1] == PatientL_deleted:
                     return render_template("DeleteDentistPatient.html",
-                                           message=f"This Service is still with {found[2]} we can't delete it",
+                                           message=f"Ce service est toujours attribué à {found[2]}, nous ne pouvons pas le supprimer",
                                            csrf_token=new_token)
 
             if khalsa.lower() == "yes":
-                cursor.execute("""
-                                UPDATE dentist_stat 
-                                SET 
-                                total_khedma = total_khedma - 1 ,
+                cursor.execute(""" 
+                                UPDATE dentist_stat  
+                                SET  
+                                total_khedma = total_khedma - 1 , 
+                                khalsin = khalsin - %s ,  
+                                WHERE dentist_name = %s AND user_id = %s AND month = %s AND year = %s  
+                                """, (price, price, Dentist_name, session['id'], month, year))
+            else:
+                cursor.execute(""" 
+                                UPDATE dentist_stat  
+                                SET  
+                                total_khedma = total_khedma - 1 , 
                                 khalsin = khalsin - %s , 
-                                WHERE dentist_name = %s AND user_id = %s AND month = %s AND year = %s 
-                                """, (price, price, Dentist_name , session['id'], month, year))
-            else :
-                cursor.execute("""
-                                UPDATE dentist_stat 
-                                SET 
-                                total_khedma = total_khedma - 1 ,
-                                khalsin = khalsin - %s ,
-                                machi_khalsin = machi_khalsin - %s 
+                                machi_khalsin = machi_khalsin - %s  
                                 WHERE dentist_name = %s AND user_id = %s AND month = %s AND year = %s """,
-                                (versement, b9aw, Dentist_name , session['id'] , month , year))
+                               (versement, b9aw, Dentist_name, session['id'], month, year))
 
-            cursor.execute("""
-                            UPDATE dentist_history 
-                            SET status = 'deleted' 
-                            WHERE 
+            cursor.execute(""" 
+                            UPDATE dentist_history  
+                            SET status = 'deleted'  
+                            WHERE  
                             user_id = %s AND dentistname = %s AND pFirstname = %s AND pLastname = %s AND pNumber = %s  """,
                            (session['id'], Dentist_name, PatientF_deleted, PatientL_deleted, Patient_unique))
 
-
-            cursor.execute("DELETE FROM khedma WHERE user_id = %s AND khedma_patient = %s AND khedma_dentist = %s " ,
+            cursor.execute("DELETE FROM khedma WHERE user_id = %s AND khedma_patient = %s AND khedma_dentist = %s ",
                            (session['id'], Patient_unique, f"Dr.{Dentist_name}"))
 
-            cursor.execute("""
-                DELETE FROM dentists
-                WHERE dentist_name = %s AND patient_firstname = %s AND patient_lastname = %s
-                  AND patient_number = %s AND user_id = %s
+            cursor.execute(""" 
+                DELETE FROM dentists 
+                WHERE dentist_name = %s AND patient_firstname = %s AND patient_lastname = %s 
+                  AND patient_number = %s AND user_id = %s 
             """, (Dentist_name, PatientF_deleted, PatientL_deleted, Patient_unique, session['id']))
             conn.commit()
 
@@ -994,11 +964,12 @@ def DeleteDentistKhedma():
                            (session["id"],))
             rows = cursor.fetchall()
 
-            return render_template("DentistFile.html", message="Patient Deleted Successfully", result=rows, csrf_token=new_token)
+            return render_template("DentistFile.html", message="Patient supprimé avec succès", result=rows,
+                                   csrf_token=new_token)
 
-        except Exception as e :
+        except Exception as e:
             conn.rollback()
-            return render_template("DeleteDentistPatient.html", error=f"error {str(e)}", csrf_token=new_token)
+            return render_template("DeleteDentistPatient.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -1021,7 +992,7 @@ def getDentistHistory():
         conn = get_connection()
         cursor = conn.cursor()
 
-        try :
+        try:
             cursor.execute("SELECT * FROM dentist_history WHERE user_id = %s", (session['id'],))
             result = cursor.fetchall()
             if result:
@@ -1034,11 +1005,16 @@ def getDentistHistory():
             else:
                 return render_template(
                     "DentistHistory.html",
-                    message="Table not found",
+                    message="Tableau introuvable",
                     csrf_token=token,
                     my_test_token=token
                 )
-        finally :
+
+        except Exception as e:
+            conn.rollback()
+            return f"Erreur : {str(e)}"
+
+        finally:
             cursor.close()
             conn.close()
 
@@ -1046,16 +1022,15 @@ def getDentistHistory():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        print("FORM TOKEN --> ",form_token)
-        print("SESSION TOKEN --> ",session['csrf_token'])
+        print("FORM TOKEN --> ", form_token)
+        print("SESSION TOKEN --> ", session['csrf_token'])
         print(form_token == session['csrf_token'])
 
         if not form_token or form_token != session_token:
-            return "CSRF attack detected", 403
+            return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
-
 
         dentist_name = request.form.get("SearchName")
 
@@ -1065,27 +1040,27 @@ def getDentistHistory():
         try:
             if dentist_name.isdigit():
                 # dentist name here is the patient number because dentist_name.isdigit() True
-                cursor.execute("""
-                                SELECT * FROM dentist_history 
-                                WHERE user_id = %s AND pNumber = %s 
+                cursor.execute(""" 
+                                SELECT * FROM dentist_history  
+                                WHERE user_id = %s AND pNumber = %s  
                                 """, (session['id'], dentist_name))
                 result = cursor.fetchall()
 
                 if result:
                     return render_template("DentistHistory.html", HistoryDentist=result, csrf_token=new_token)
                 else:
-                    return render_template("DentistHistory.html", message="Patient not found", csrf_token=new_token)
+                    return render_template("DentistHistory.html", message="Patient introuvable", csrf_token=new_token)
 
-            cursor.execute("""
-                        SELECT * FROM dentist_history
-                        WHERE user_id = %s AND dentistname = %s
+            cursor.execute(""" 
+                        SELECT * FROM dentist_history 
+                        WHERE user_id = %s AND dentistname = %s 
                     """, (session['id'], dentist_name.lower()))
             result = cursor.fetchall()
             if result:
                 return render_template("DentistHistory.html", HistoryDentist=result, csrf_token=new_token)
             else:
                 return render_template("DentistHistory.html",
-                                       message="Dentist not found", csrf_token=new_token)
+                                       message="Dentiste introuvable", csrf_token=new_token)
         finally:
             cursor.close()
             conn.close()
@@ -1102,10 +1077,11 @@ def getAllDentistHistory():
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
     try:
-        cursor.execute("""
-                        DELETE FROM dentist_history 
-                        WHERE 
-                            pDate <= DATE_SUB(CURDATE() , INTERVAL 6 MONTH) AND user_id = %s """,
+        cursor.execute(""" 
+                        DELETE FROM other_prothesists_history  
+                        WHERE  
+                            pDate <= DATE_SUB(CURDATE() , INTERVAL 25 MONTH) AND user_id = %s 
+                            AND ( (b9aw = 0 AND status = 'finished') OR (status = 'deleted'))""",
                        (session['id'],))
         conn.commit()
 
@@ -1114,7 +1090,8 @@ def getAllDentistHistory():
         if result:
             return render_template("DentistHistory.html", History=result, csrf_token=session['csrf_token'])
         else:
-            return render_template("DentistHistory.html", message="Table not found", csrf_token=session['csrf_token'])
+            return render_template("DentistHistory.html", message="Tableau introuvable",
+                                   csrf_token=session['csrf_token'])
     finally:
         cursor.close()
         conn.close()
@@ -1135,9 +1112,10 @@ def MainTable():
         cursor.execute("SELECT * FROM dentists WHERE user_id = %s", (session['id'],))
         main = cursor.fetchall()
         if main:
-            return render_template("DentistFile.html", message="Main Table", main=main, csrf_token=token)  # ✅ Pass token
+            return render_template("DentistFile.html", message="Tableau principal", main=main,
+                                   csrf_token=token)  # ✅ Pass token
         else:
-            return render_template("DentistFile.html", message="Empty Table", csrf_token=token)  # ✅ Pass token
+            return render_template("DentistFile.html", message="Tableau vide", csrf_token=token)  # ✅ Pass token
 
     finally:
         cursor.close()
@@ -1153,10 +1131,10 @@ def FindMostDentistKhedma():
     try:
         dentist_dics = DentistsDics(cursor)
         if not dentist_dics:
-            return render_template("DentistFile.html", error="No dentist tables found.")
+            return render_template("DentistFile.html", error="Aucun tableau de dentistes trouvé.")
         name, count = max(dentist_dics.items(), key=lambda x: x[1], default=('none', 0))
         if count == 0:
-            return render_template("DentistFile.html", message="All tables are empty.")
+            return render_template("DentistFile.html", message="Tous les tableaux sont vides.")
         cursor.execute("SELECT * FROM dentists WHERE user_id = %s AND dentist_name = %s",
                        (session['id'], name))
         result = cursor.fetchall()
@@ -1176,7 +1154,7 @@ def FindLessDentistKhedma():
         dentist_dics = DentistsDics(cursor)
         active_dentists = {n: c for n, c in dentist_dics.items() if c > 0}
         if not active_dentists:
-            return render_template("DentistFile.html", message="All dentists currently have 0 Services.")
+            return render_template("DentistFile.html", message="Tous les dentistes ont actuellement 0 service.")
         name, count = min(active_dentists.items(), key=lambda x: x[1])
         cursor.execute("SELECT * FROM dentists WHERE user_id = %s AND dentist_name = %s",
                        (session['id'], name))
@@ -1186,6 +1164,7 @@ def FindLessDentistKhedma():
         cursor.close()
         conn.close()
 
+
 @dentists.route("/DentistDeadLine")
 def ShowDeadLine():
     if not is_logged_in():
@@ -1193,12 +1172,12 @@ def ShowDeadLine():
 
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
-    try :
-        cursor.execute("""
-                        SELECT * FROM dentists WHERE user_id = %s 
-                        ORDER BY DeadLine ASC """,(session['id'],))
+    try:
+        cursor.execute(""" 
+                        SELECT * FROM dentists WHERE user_id = %s  
+                        ORDER BY DeadLine ASC """, (session['id'],))
         dateDeadLine = cursor.fetchall()
-        return render_template("DentistFile.html" , dateDeadLine=dateDeadLine)
+        return render_template("DentistFile.html", dateDeadLine=dateDeadLine)
 
     finally:
         cursor.close()
@@ -1216,9 +1195,9 @@ def ShowTotal():
         result = {}
         for dentist_name in current_dentists:
             try:
-                cursor.execute("""
-                    SELECT SUM(b9aw) FROM dentists
-                    WHERE user_id = %s AND khalsa = %s AND dentist_name = %s
+                cursor.execute(""" 
+                    SELECT SUM(b9aw) FROM dentists 
+                    WHERE user_id = %s AND khalsa = %s AND dentist_name = %s 
                 """, (session['id'], "no", dentist_name))
                 row = cursor.fetchone()
                 cursor.fetchall()
@@ -1228,16 +1207,14 @@ def ShowTotal():
                 result[dentist_name] = 0
         if result:
             return render_template("DentistFile.html", total=result)
-        return render_template("DentistFile.html", message="No dentist data found.")
+        return render_template("DentistFile.html", message="Aucune donnée sur les dentistes trouvée.")
     finally:
         cursor.close()
         conn.close()
 
 
-
 @dentists.route("/DentistsStat")
 def DentistsStat():
-
     if not is_logged_in():
         return redirect(url_for('home'))
 
@@ -1245,27 +1222,14 @@ def DentistsStat():
     cursor = conn.cursor(buffered=True)
 
     try:
-        # Delete statistics older than 12 months
-        cursor.execute("""
-            DELETE FROM dentist_stat
-            WHERE user_id = %s
-              AND (
-                    year < YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
-                    OR (
-                        year = YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
-                        AND month <= MONTH(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
-                    )
-              )
-        """, (session['id'],))
-        conn.commit()
 
         # Delete empty statistics
-        cursor.execute("""
-            DELETE FROM dentist_stat
-            WHERE total_khedma = 0
-              AND khalsin = 0
-              AND machi_khalsin = 0
-              AND user_id = %s
+        cursor.execute(""" 
+            DELETE FROM dentist_stat 
+            WHERE total_khedma = 0 
+              AND khalsin = 0 
+              AND machi_khalsin = 0 
+              AND user_id = %s 
         """, (session['id'],))
 
         conn.commit()
@@ -1275,12 +1239,12 @@ def DentistsStat():
         result = {}
         for dentist in dentists_list:
 
-            cursor.execute("""
-                SELECT *
-                FROM dentist_stat
-                WHERE user_id = %s
-                  AND dentist_name = %s
-                ORDER BY year DESC, month DESC
+            cursor.execute(""" 
+                SELECT * 
+                FROM dentist_stat 
+                WHERE user_id = %s 
+                  AND dentist_name = %s 
+                ORDER BY year DESC, month ASC 
             """, (session['id'], dentist))
 
             rows = cursor.fetchall()
@@ -1289,99 +1253,94 @@ def DentistsStat():
             if rows:
                 result[dentist] = rows
 
-        # Statistics found
+                # Statistics found
         if result:
             return render_template(
                 "DentistFile.html",
-                message="The Stat Table",
+                message="Tableau des statistiques",
                 result=result)
 
-        # No statistics found
+            # No statistics found
         return render_template(
             "DentistFile.html",
-            message="Table Not Found (There are no statistics)")
+            message="Tableau introuvable (aucune statistique disponible)")
 
     except Exception as e:
         conn.rollback()
         return render_template(
             "DentistFile.html",
-            message=f"error {str(e)}")
+            message=f"Erreur : {str(e)}")
 
     finally:
         cursor.close()
         conn.close()
 
 
-@dentists.route("/UpdateDentistStatus", methods=['POST' , 'GET'])
+@dentists.route("/UpdateDentistStatus", methods=['POST', 'GET'])
 def UpdateDentistStatus():
     if not is_logged_in():
         return jsonify({
             'success': False,
-            'message': 'User not allowed'
-        }),403
+            'message': 'Utilisateur non autorisé'
+        }), 403
 
     data = request.get_json()
 
-    if not data :
+    if not data:
         return jsonify({
             'success': False,
-            'message' : 'No data recieved'
-        }),403
+            'message': 'Aucune donnée reçue'
+        }), 403
 
     patientNumber = data.get('patient_number')
     status = data.get('status')
     dentistName = data.get('dentist_name')
 
-    allowed_status = [
-        'in process',
-        'prothesist',
-        'montage',
-        'esseyage',
-        'finished'
-    ]
+    allowed_status = ['in process', 'prothesist', 'montage', 'esseyage', 'finished']
 
-    if status not in allowed_status :
+    if status not in allowed_status:
         return jsonify({
-            'success' : False,
-            'message' : 'Invalide status value'
-        }),403
+            'success': False,
+            'message': 'Valeur du statut invalide'
+        }), 403
 
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
 
-    try :
+    try:
 
-        cursor.execute("""
-                        SELECT 1 FROM dentists 
+        cursor.execute(""" 
+                        SELECT 1 FROM dentists  
                         WHERE dentist_name = %s AND patient_number = %s AND user_id = %s """
-                       ,(dentistName, patientNumber, session['id']))
+                       , (dentistName, patientNumber, session['id']))
         found = cursor.fetchone()
 
-        if not found :
+        if not found:
             return jsonify({
-                'success' : False,
-                'message' : 'Patient not found'
-            }),400
+                'success': False,
+                'message': 'Patient introuvable'
+            }), 400
 
-        cursor.execute("""
-                        UPDATE dentists 
-                        SET status = %s 
+        cursor.execute(""" 
+                        UPDATE dentists  
+                        SET status = %s  
                         WHERE dentist_name = %s AND patient_number = %s AND user_id = %s """
-                       ,(status, dentistName, patientNumber, session['id']))
+                       , (status, dentistName, patientNumber, session['id']))
         conn.commit()
 
     except Exception as e:
         conn.rollback()
         return jsonify({
-            'success' : False,
-            'message' : f'error {str(e)}'
+            'success': False,
+            'message': f'Erreur : {str(e)}'
         })
 
-    finally :
+    finally:
         cursor.close()
         conn.close()
 
     return jsonify({
-        'success' : True,
-        'message' : 'Status updated successfully'
+        'success': True,
+        'message': 'Statut mis à jour avec succès'
     })
+

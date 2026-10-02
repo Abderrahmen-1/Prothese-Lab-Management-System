@@ -1,23 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional Prothesist Management System - Khalsa Payment Page">
-    <meta name="keywords" content="Khalsa, Payment, Prothesist, Prosthetics, Lab Management, Flask">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Khalsa - Prothesist Management</title>
+
+    <meta name="description" content="Système professionnel de gestion des prothésistes - Page de règlement Khalsa">
+    <meta name="keywords" content="Khalsa, Paiement, Prothésiste, Prothèse, Gestion de laboratoire, Flask">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+
+    <title>Khalsa - Gestion des prothésistes</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaProFile.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaProKhalsa.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
           rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
+
 {% if error %}
 <p>{{ error }}</p>
 {% endif %}
@@ -25,150 +30,284 @@
 <div class="animated-bg"></div>
 
 <div class="container">
-    <!-- Header -->
+
+    <!-- En-tête -->
     <header class="header">
+
         <div class="header-content">
+
             <div class="logo-section">
+
                 <div class="logo-icon">
                     <i class="fas fa-tooth"></i>
                 </div>
+
                 <div class="logo-text">
                     <h1>ProLab Hub</h1>
-                    <p>Prosthetics Lab Management System</p>
+                    <p>Système de gestion du laboratoire de prothèse</p>
                 </div>
+
             </div>
+
             <nav class="header-nav">
+
                 <a href="/prothesists/ProKhedma" class="nav-btn back-btn">
-                    <i class="fas fa-arrow-left"></i> Back to Prothesist
+
+                    <i class="fas fa-arrow-left"></i>
+                    Retour au prothésiste
+
                 </a>
+
             </nav>
+
         </div>
+
     </header>
 
-    <!-- Main Layout -->
+
+    <!-- Structure principale -->
     <div class="main-layout">
-        <!-- Sidebar -->
+
+        <!-- Barre latérale -->
         <aside class="sidebar">
+
             <div class="sidebar-header">
+
                 <h2>Khalsa</h2>
+
                 <div class="header-accent"></div>
+
             </div>
+
 
             <nav class="sidebar-menu">
-                <div class="menu-group">
-                    <h3 class="group-title">Navigation</h3>
-                    <a href="/ProAllkhedma" class="menu-item all-item">
-                        <i class="fas fa-list-alt"></i>
-                        <span>All Khedma</span>
-                    </a>
-                    <a href="/prothesists/ProKhedma" class="menu-item get-item">
-                        <i class="fas fa-arrow-left"></i>
-                        <span>Back to Main</span>
-                    </a>
-                </div>
 
                 <div class="menu-group">
-                    <h3 class="group-title">Information</h3>
-                    <div class="info-box">
-                        <i class="fas fa-coins"></i>
-                        <div class="info-content">
-                            <p><strong>Khalsa:</strong> Payment settlements for completed work</p>
-                            <p><strong>Track:</strong> Monitor all payment transactions</p>
-                        </div>
-                    </div>
+
+                    <h3 class="group-title">
+                        Navigation
+                    </h3>
+
+                    <a href="/ProAllkhedma" class="menu-item all-item">
+
+                        <i class="fas fa-list-alt"></i>
+
+                        <span>Toutes les tâches</span>
+
+                    </a>
+
+
+                    <a href="/prothesists/ProKhedma" class="menu-item get-item">
+
+                        <i class="fas fa-arrow-left"></i>
+
+                        <span>Retour à l'accueil</span>
+
+                    </a>
+
                 </div>
+
+
+                <div class="menu-group">
+
+                    <h3 class="group-title">
+                        Informations
+                    </h3>
+
+                    <div class="info-box">
+
+                        <i class="fas fa-coins"></i>
+
+                        <div class="info-content">
+
+                            <p>
+                                <strong>Khalsa :</strong>
+                                Règlements des paiements pour les travaux terminés
+                            </p>
+
+                            <p>
+                                <strong>Suivi :</strong>
+                                Surveillez toutes les transactions de paiement
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </nav>
+
         </aside>
 
-        <!-- Main Content -->
+
+        <!-- Contenu principal -->
         <main class="content">
-            <!-- Welcome Section -->
+
+            <!-- Section d'accueil -->
+
             <div class="form-header khalsa-header">
+
                 <div class="form-header-icon">
+
                     <i class="fas fa-money-bill-wave"></i>
+
                 </div>
+
                 <div class="form-header-content">
-                    <h1>Khalsa Payment Settlement</h1>
-                    <p>Manage and track payment transactions for completed services</p>
+
+                    <h1>Règlement des paiements Khalsa</h1>
+
+                    <p>
+                        Gérez et suivez les transactions de paiement
+                        pour les services terminés
+                    </p>
+
                 </div>
+
             </div>
 
-            <!-- Success/Error Messages -->
+
+            <!-- Messages de succès / erreur -->
+
             {% if message %}
+
             <div class="alert-container">
+
                 <div class="alert alert-success fade-in-slow">
+
                     <i class="fas fa-check-circle"></i>
+
                     <div class="alert-content">
-                        <h3>Success</h3>
+
+                        <h3>Opération réussie</h3>
+
                         <p>{{ message }}</p>
+
                     </div>
-                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+
+                    <button class="alert-close"
+                            onclick="this.parentElement.style.display='none'">
+
                         <i class="fas fa-times"></i>
+
                     </button>
+
                 </div>
+
             </div>
+
             {% endif %}
+
 
             {% if error %}
+
             <p>{{ error }}</p>
+
             {% endif %}
 
-            <!-- Form Section -->
-            <div class="form-container">
-                <form action="/prothesists/ProKhalsa" method="POST" class="khalsa-form" id="khalsa-form">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-                    <!-- Prothesist Information Section -->
+            <!-- Section du formulaire -->
+
+            <div class="form-container">
+
+                <form action="/prothesists/ProKhalsa"
+                      method="POST"
+                      class="khalsa-form"
+                      id="khalsa-form">
+
+                    <input type="hidden"
+                           name="csrf_token"
+                           value="{{ csrf_token }}">
+
+
+                    <!-- Section des informations du prothésiste -->
+
                     <div class="form-section">
+
                         <div class="section-header">
+
                             <i class="fas fa-user-circle"></i>
-                            <h2>Prothesist Information</h2>
+
+                            <h2>Informations du prothésiste</h2>
+
                         </div>
 
+
                         <div class="form-group">
+
                             <label for="ProthesistChoice">
-                                <i class="fas fa-user"></i> Prothesist Name
+
+                                <i class="fas fa-user"></i>
+                                Nom du prothésiste
+
                                 <span class="required">*</span>
+
                             </label>
+
                             <input
                                     type="text"
                                     id="ProthesistChoice"
                                     name="ProthesistChoice"
-                                    placeholder="Enter prothesist name"
+                                    placeholder="Saisissez le nom du prothésiste"
                                     required
                                     class="form-input"
                             >
+
                         </div>
 
+
                         <div class="form-group">
+
                             <label for="ProthesistNumber">
-                                <i class="fas fa-id-card"></i> Prothesist Number
+
+                                <i class="fas fa-id-card"></i>
+                                Numéro du prothésiste
+
                                 <span class="required">*</span>
+
                             </label>
+
                             <input
                                     type="text"
                                     id="ProthesistNumber"
                                     name="ProthesistNumber"
-                                    placeholder="Enter prothesist number"
+                                    placeholder="Saisissez le numéro du prothésiste"
                                     required
                                     class="form-input"
                             >
+
                         </div>
+
                     </div>
 
-                    <!-- Khedma Source Section -->
+
+                    <!-- Section de la source de la tâche -->
+
                     <div class="form-section">
+
                         <div class="section-header">
+
                             <i class="fas fa-layer-group"></i>
-                            <h2>Khedma Source</h2>
+
+                            <h2>Source de la tâche</h2>
+
                         </div>
 
+
                         <div class="form-group">
+
                             <label for="Choice">
-                                <i class="fas fa-code-branch"></i> Source Type
+
+                                <i class="fas fa-code-branch"></i>
+                                Type de source
+
                                 <span class="required">*</span>
+
                             </label>
+
                             <div class="select-wrapper">
+
                                 <select
                                         id="Choice"
                                         name="Choice"
@@ -176,289 +315,575 @@
                                         required
                                         class="form-input"
                                 >
-                                    <option value="" disabled selected>Select source type</option>
-                                    <option value="patient">Patient</option>
-                                    <option value="dentist">Dentist</option>
+
+                                    <option value=""
+                                            disabled
+                                            selected>
+                                        Sélectionnez le type de source
+                                    </option>
+
+                                    <option value="patient">
+                                        Patient
+                                    </option>
+
+                                    <option value="dentist">
+                                        Dentiste
+                                    </option>
+
                                 </select>
+
                             </div>
+
                             <small class="form-help">
-                                Select whether this work order belongs to a patient or a dentist
+
+                                Sélectionnez si ce travail concerne un patient
+                                ou un dentiste
+
                             </small>
+
                         </div>
 
-                        <!-- Patient Choice Section -->
-                        <div id="PatientChoice" class="source-section hidden">
+
+                        <!-- Section patient -->
+
+                        <div id="PatientChoice"
+                             class="source-section hidden">
+
                             <div class="source-badge">
+
                                 <i class="fas fa-hospital-user"></i>
-                                <span>Patient Source</span>
+
+                                <span>
+                                    Source : Patient
+                                </span>
+
                             </div>
 
+
                             <div class="form-group">
+
                                 <label for="PatientID">
-                                    <i class="fas fa-hospital-user"></i> Patient ID
+
+                                    <i class="fas fa-hospital-user"></i>
+                                    ID du patient
+
                                     <span class="required">*</span>
+
                                 </label>
+
                                 <input
                                         type="text"
                                         id="PatientID"
                                         name="PatientID"
-                                        placeholder="Enter patient ID"
+                                        placeholder="Saisissez l'ID du patient"
                                         class="form-input"
                                 >
+
                             </div>
 
+
                             <div class="form-group">
+
                                 <label for="PatientKhedmaName">
-                                    <i class="fas fa-briefcase"></i> Service ID
+
+                                    <i class="fas fa-briefcase"></i>
+                                    ID du service
+
                                     <span class="required">*</span>
+
                                 </label>
+
                                 <input
                                         type="text"
                                         id="PatientKhedmaName"
                                         name="ServiceID"
-                                        placeholder="You find it in the first column of the patient-history table"
+                                        placeholder="Vous le trouverez dans la première colonne du tableau de l'historique des patients"
                                         class="form-input"
                                 >
+
                             </div>
+
                         </div>
 
-                        <!-- Dentist Choice Section -->
-                        <div id="DentistChoice" class="source-section hidden">
+
+                        <!-- Section dentiste -->
+
+                        <div id="DentistChoice"
+                             class="source-section hidden">
+
                             <div class="source-badge">
+
                                 <i class="fas fa-user-md"></i>
-                                <span>Dentist Source</span>
+
+                                <span>
+                                    Source : Dentiste
+                                </span>
+
                             </div>
 
+
                             <div class="form-group">
+
                                 <label for="DentistName">
-                                    <i class="fas fa-user-md"></i> Dentist Name
+
+                                    <i class="fas fa-user-md"></i>
+                                    Nom du dentiste
+
                                     <span class="required">*</span>
+
                                 </label>
+
                                 <input
                                         type="text"
                                         id="DentistName"
                                         name="Dentist"
-                                        placeholder="Enter dentist name"
+                                        placeholder="Saisissez le nom du dentiste"
                                         class="form-input"
                                 >
+
                             </div>
 
+
                             <div class="form-group">
+
                                 <label for="DPatientID">
-                                    <i class="fas fa-hospital-user"></i> Patient ID
+
+                                    <i class="fas fa-hospital-user"></i>
+                                    ID du patient
+
                                     <span class="required">*</span>
+
                                 </label>
+
                                 <input
                                         type="text"
                                         id="DPatientID"
                                         name="DPatientID"
-                                        placeholder="Enter patient ID"
+                                        placeholder="Saisissez l'ID du patient"
                                         class="form-input"
                                 >
+
                             </div>
 
+
                             <div class="form-group">
+
                                 <label for="DentistKhedmaName">
-                                    <i class="fas fa-briefcase"></i> Khedma ID
+
+                                    <i class="fas fa-briefcase"></i>
+                                    ID de la tâche
+
                                     <span class="required">*</span>
+
                                 </label>
+
                                 <input
                                         type="text"
                                         id="DentistKhedmaName"
                                         name="DServiceID"
-                                        placeholder="You can find it in the first column from the dentists-history"
+                                        placeholder="Vous pouvez le trouver dans la première colonne de l'historique des dentistes"
                                         class="form-input"
                                 >
+
                             </div>
+
                         </div>
+
                     </div>
 
-                    <!-- Form Actions -->
+
+                    <!-- Actions du formulaire -->
+
                     <div class="form-actions">
+
                         <button type="reset" class="btn btn-secondary">
-                            <i class="fas fa-redo"></i> Clear Form
+
+                            <i class="fas fa-redo"></i>
+                            Effacer le formulaire
+
                         </button>
+
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-check"></i> Confirm Settlement
+
+                            <i class="fas fa-check"></i>
+                            Confirmer le règlement
+
                         </button>
+
                     </div>
+
                 </form>
+
             </div>
 
-            <!-- Info Cards -->
+
+            <!-- Cartes d'information -->
+
             <div class="info-cards-section">
+
                 <div class="info-card payment-card">
+
                     <div class="card-icon">
+
                         <i class="fas fa-credit-card"></i>
+
                     </div>
+
                     <div class="card-content">
-                        <h3>Payment Tracking</h3>
-                        <p>Keep records of all payment settlements for audit and compliance</p>
+
+                        <h3>Suivi des paiements</h3>
+
+                        <p>
+                            Conservez les informations de tous les règlements
+                            de paiement pour l'audit et la conformité
+                        </p>
+
                     </div>
+
                 </div>
+
 
                 <div class="info-card security-card">
+
                     <div class="card-icon">
+
                         <i class="fas fa-lock"></i>
+
                     </div>
+
                     <div class="card-content">
-                        <h3>Secure Records</h3>
-                        <p>All transactions are securely logged and can be retrieved anytime</p>
+
+                        <h3>Dossiers sécurisés</h3>
+
+                        <p>
+                            Toutes les transactions sont enregistrées
+                            de manière sécurisée et peuvent être consultées à tout moment
+                        </p>
+
                     </div>
+
                 </div>
+
 
                 <div class="info-card analytics-card">
+
                     <div class="card-icon">
+
                         <i class="fas fa-chart-bar"></i>
+
                     </div>
+
                     <div class="card-content">
-                        <h3>Analytics</h3>
-                        <p>View detailed reports of all khalsa transactions and payments</p>
+
+                        <h3>Analyses</h3>
+
+                        <p>
+                            Consultez des rapports détaillés sur toutes
+                            les transactions et tous les paiements Khalsa
+                        </p>
+
                     </div>
+
                 </div>
+
             </div>
+
         </main>
+
     </div>
+
 </div>
 
-<!-- Scripts -->
-<script>
-    // Handle source change
-    function handleSourceChange() {
-        const choice = document.getElementById('Choice').value.toLowerCase().trim();
-        const patientSection = document.getElementById('PatientChoice');
-        const dentistSection = document.getElementById('DentistChoice');
 
-        // Reset sections
+<!-- Scripts -->
+
+<script>
+
+    // Gérer le changement de source
+
+    function handleSourceChange() {
+
+        const choice =
+            document.getElementById('Choice').value.toLowerCase().trim();
+
+        const patientSection =
+            document.getElementById('PatientChoice');
+
+        const dentistSection =
+            document.getElementById('DentistChoice');
+
+
+        // Réinitialiser les sections
+
         patientSection.classList.add('hidden');
+
         dentistSection.classList.add('hidden');
 
-        // Clear inputs
+
+        // Effacer les champs
+
         clearSectionInputs('patient');
+
         clearSectionInputs('dentist');
 
-        // Show appropriate section
+
+        // Afficher la section appropriée
+
         if (choice === 'patient') {
+
             patientSection.classList.remove('hidden');
+
             document.getElementById('PatientID').focus();
+
         } else if (choice === 'dentist') {
+
             dentistSection.classList.remove('hidden');
+
             document.getElementById('DentistName').focus();
+
         }
+
     }
 
-    // Clear section inputs
+
+    // Effacer les champs d'une section
+
     function clearSectionInputs(section) {
+
         if (section === 'patient') {
+
             document.getElementById('PatientID').value = '';
+
             document.getElementById('PatientKhedmaName').value = '';
+
         } else if (section === 'dentist') {
+
             document.getElementById('DentistName').value = '';
+
             document.getElementById('DPatientID').value = '';
+
             document.getElementById('DentistKhedmaName').value = '';
+
         }
+
     }
 
-    // Form validation
+
+    // Validation du formulaire
+
     document.getElementById('khalsa-form').addEventListener('submit', function(e) {
-        const choice = document.getElementById('Choice').value.toLowerCase().trim();
+
+        const choice =
+            document.getElementById('Choice').value.toLowerCase().trim();
+
 
         if (!choice) {
+
             e.preventDefault();
-            showError('Please select a source type (patient or dentist)');
+
+            showError('Veuillez sélectionner un type de source (patient ou dentiste)');
+
             return false;
+
         }
+
 
         if (choice === 'patient') {
+
             if (!document.getElementById('PatientID').value) {
+
                 e.preventDefault();
-                showError('Please enter the patient ID');
+
+                showError('Veuillez saisir l\'ID du patient');
+
                 return false;
+
             }
+
+
             if (!document.getElementById('PatientKhedmaName').value) {
+
                 e.preventDefault();
-                showError('Please enter the khedma name');
+
+                showError('Veuillez saisir le nom de la tâche');
+
                 return false;
+
             }
+
         } else if (choice === 'dentist') {
+
             if (!document.getElementById('DentistName').value) {
+
                 e.preventDefault();
-                showError('Please enter the dentist name');
+
+                showError('Veuillez saisir le nom du dentiste');
+
                 return false;
+
             }
+
+
             if (!document.getElementById('DPatientID').value) {
+
                 e.preventDefault();
-                showError('Please enter the patient ID');
+
+                showError('Veuillez saisir l\'ID du patient');
+
                 return false;
+
             }
+
+
             if (!document.getElementById('DentistKhedmaName').value) {
+
                 e.preventDefault();
-                showError('Please enter the khedma name');
+
+                showError('Veuillez saisir le nom de la tâche');
+
                 return false;
+
             }
+
         } else if (choice !== 'patient' && choice !== 'dentist') {
+
             e.preventDefault();
-            showError('Please enter either "patient" or "dentist"');
+
+            showError('Veuillez saisir « patient » ou « dentiste »');
+
             return false;
+
         }
+
     });
 
-    // Show error message
+
+    // Afficher un message d'erreur
+
     function showError(message) {
-        const alertContainer = document.querySelector('.alert-container') || createAlertContainer();
+
+        const alertContainer =
+            document.querySelector('.alert-container') ||
+            createAlertContainer();
+
         const alertHTML = `
+
             <div class="alert alert-error fade-in-slow">
+
                 <i class="fas fa-exclamation-circle"></i>
+
                 <div class="alert-content">
-                    <h3>Error</h3>
+
+                    <h3>Erreur</h3>
+
                     <p>${message}</p>
+
                 </div>
-                <button class="alert-close" onclick="this.parentElement.style.display='none'">
+
+                <button class="alert-close"
+                        onclick="this.parentElement.style.display='none'">
+
                     <i class="fas fa-times"></i>
+
                 </button>
+
             </div>
+
         `;
+
         alertContainer.innerHTML = alertHTML;
+
         alertContainer.style.display = 'block';
-        alertContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        alertContainer.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest'
+        });
+
     }
 
-    // Create alert container if it doesn't exist
+
+    // Créer le conteneur d'alerte s'il n'existe pas
+
     function createAlertContainer() {
-        const container = document.createElement('div');
-        container.className = 'alert-container';
-        document.querySelector('.content').insertBefore(container, document.querySelector('.form-container'));
+
+        const container =
+            document.createElement('div');
+
+        container.className =
+            'alert-container';
+
+        document
+            .querySelector('.content')
+            .insertBefore(
+                container,
+                document.querySelector('.form-container')
+            );
+
         return container;
+
     }
 
-    // Add ripple effect to buttons
-    function createRipple(e) {
-        const button = e.currentTarget;
-        const ripple = document.createElement('span');
-        const rect = button.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
 
-        ripple.style.width = ripple.style.height = size + 'px';
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
+    // Ajouter l'effet d'ondulation aux boutons
+
+    function createRipple(e) {
+
+        const button =
+            e.currentTarget;
+
+        const ripple =
+            document.createElement('span');
+
+        const rect =
+            button.getBoundingClientRect();
+
+        const size =
+            Math.max(rect.width, rect.height);
+
+        const x =
+            e.clientX - rect.left - size / 2;
+
+        const y =
+            e.clientY - rect.top - size / 2;
+
+
+        ripple.style.width =
+            ripple.style.height =
+            size + 'px';
+
+        ripple.style.left =
+            x + 'px';
+
+        ripple.style.top =
+            y + 'px';
+
         ripple.classList.add('ripple');
 
         button.appendChild(ripple);
+
         setTimeout(() => ripple.remove(), 600);
+
     }
 
+
     document.querySelectorAll('.btn').forEach(btn => {
+
         btn.addEventListener('click', createRipple);
+
     });
 
-    // Add stagger animation to info cards
+
+    // Ajouter une animation décalée aux cartes d'information
+
     document.querySelectorAll('.info-card').forEach((card, i) => {
-        card.style.animationDelay = (i * 0.1) + 's';
+
+        card.style.animationDelay =
+            (i * 0.1) + 's';
+
     });
+
 </script>
 
 </body>
-
 </html>

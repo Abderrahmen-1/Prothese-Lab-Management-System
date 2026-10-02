@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Delete Patient from Prosthetics Lab Management System">
-    <meta name="keywords" content="Delete Patient, Prosthetics Lab, Healthcare Management">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Delete Patient - Prosthetics Lab</title>
+    <meta name="description" content="Supprimer un patient du système de gestion d'un laboratoire de prothèse">
+    <meta name="keywords" content="Supprimer un patient, Laboratoire de prothèse, Gestion des patients">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+    <title>Supprimer un patient - Laboratoire de prothèse</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='DeletePatient.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
@@ -24,7 +24,7 @@
     </div>
 
     <div class="system-alert-content">
-        <h3>Success</h3>
+        <h3>Opération réussie</h3>
         <p>{{ message }}</p>
     </div>
 </div>
@@ -37,193 +37,223 @@
     </div>
 
     <div class="system-alert-content">
-        <h3>Error</h3>
+        <h3>Erreur</h3>
         <p>{{ error }}</p>
     </div>
 </div>
 {% endif %}
 
-    <!-- Animated Background -->
+    <!-- Arrière-plan animé -->
     <div class="animated-bg"></div>
 
     <div class="page-container">
-        <!-- Header -->
+        <!-- En-tête -->
         <header class="page-header">
             <div class="header-content">
                 <a href="/patients/Patient" class="back-btn">
                     <i class="fas fa-chevron-left"></i>
-                    Back to Patients
+                    Retour aux patients
                 </a>
+
                 <div class="header-title">
-                    <h1><i class="fas fa-trash-alt"></i> Delete Patient</h1>
-                    <p>Permanently remove a patient from the system</p>
+                    <h1><i class="fas fa-trash-alt"></i> Supprimer un patient</h1>
+                    <p>Supprimer définitivement un patient du système</p>
                 </div>
             </div>
         </header>
 
-        <!-- Warning Alert -->
+        <!-- Alerte d'avertissement -->
         <div class="warning-alert">
             <div class="alert-icon">
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
+
             <div class="alert-content">
-                <h3>⚠️ Warning: Permanent Action</h3>
+                <h3>⚠️ Attention : action définitive</h3>
                 <p>
-                    Deleting a patient will permanently remove all their records from the system.
-                    This action <strong>cannot be undone</strong>. Please verify the patient information
-                    carefully before proceeding.
+                    La suppression d'un patient supprimera définitivement tous ses dossiers du système.
+                    Cette action <strong>ne peut pas être annulée</strong>. Veuillez vérifier soigneusement
+                    les informations du patient avant de continuer.
                 </p>
             </div>
         </div>
 
-        <!-- Main Form Container -->
+        <!-- Conteneur principal du formulaire -->
         <div class="form-container">
             <form action="/patients/DeletePatient" method="POST" class="delete-form" onsubmit="return confirmDelete()">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-                <!-- Patient Identification Section -->
+                <!-- Section d'identification du patient -->
                 <div class="form-section">
                     <div class="section-header">
                         <div class="section-icon danger">
                             <i class="fas fa-user-times"></i>
                         </div>
+
                         <div>
-                            <h2>Patient Identification</h2>
-                            <p>Enter patient details to identify the record for deletion</p>
+                            <h2>Identification du patient</h2>
+                            <p>Entrez les informations du patient pour identifier le dossier à supprimer</p>
                         </div>
                     </div>
 
                     <div class="form-grid">
-                        <!-- First Name Section -->
+
+                        <!-- Prénom -->
                         <div class="form-group">
                             <label for="deletef">
-                                <i class="fas fa-user"></i> First Name *
+                                <i class="fas fa-user"></i> Prénom *
                             </label>
+
                             <input
                                 type="text"
                                 id="deletef"
                                 name="DeleteF"
-                                placeholder="Enter patient's first name"
+                                placeholder="Entrez le prénom du patient"
                                 required
                                 class="form-input primary-input"
                             >
-                            <div class="input-hint">Required</div>
+
+                            <div class="input-hint">Obligatoire</div>
                         </div>
 
+                        <!-- Confirmation du prénom -->
                         <div class="form-group">
                             <label for="confirmdeletef">
-                                <i class="fas fa-check-double"></i> Confirm First Name *
+                                <i class="fas fa-check-double"></i> Confirmer le prénom *
                             </label>
+
                             <input
                                 type="text"
                                 id="confirmdeletef"
                                 name="ConfirmDeletePatientF"
-                                placeholder="Re-enter the first name"
+                                placeholder="Saisissez à nouveau le prénom"
                                 required
                                 class="form-input confirm-input"
                             >
-                            <div class="input-hint">Must match above</div>
+
+                            <div class="input-hint">Doit correspondre au prénom ci-dessus</div>
                         </div>
 
-                        <!-- Last Name Section -->
+                        <!-- Nom -->
                         <div class="form-group">
                             <label for="deletel">
-                                <i class="fas fa-user"></i> Last Name *
+                                <i class="fas fa-user"></i> Nom *
                             </label>
+
                             <input
                                 type="text"
                                 id="deletel"
                                 name="DeleteL"
-                                placeholder="Enter patient's last name"
+                                placeholder="Entrez le nom du patient"
                                 required
                                 class="form-input primary-input"
                             >
-                            <div class="input-hint">Required</div>
+
+                            <div class="input-hint">Obligatoire</div>
                         </div>
 
+                        <!-- Confirmation du nom -->
                         <div class="form-group">
                             <label for="confirmdeleteel">
-                                <i class="fas fa-check-double"></i> Confirm Last Name *
+                                <i class="fas fa-check-double"></i> Confirmer le nom *
                             </label>
+
                             <input
                                 type="text"
                                 id="confirmdeleteel"
                                 name="ConfirmDeletePatientL"
-                                placeholder="Re-enter the last name"
+                                placeholder="Saisissez à nouveau le nom"
                                 required
                                 class="form-input confirm-input"
                             >
-                            <div class="input-hint">Must match above</div>
+
+                            <div class="input-hint">Doit correspondre au nom ci-dessus</div>
                         </div>
 
-                        <!-- Patient ID Section -->
+                        <!-- Identifiant du patient -->
                         <div class="form-group">
                             <label for="uniquepatient">
-                                <i class="fas fa-hashtag"></i> Patient ID *
+                                <i class="fas fa-hashtag"></i> Identifiant du patient *
                             </label>
+
                             <input
                                 type="text"
                                 id="uniquepatient"
                                 name="uniquepatient"
-                                placeholder="Unique patient number"
+                                placeholder="Numéro unique du patient"
                                 required
                                 class="form-input primary-input"
                             >
-                            <div class="input-hint">Required</div>
+
+                            <div class="input-hint">Obligatoire</div>
                         </div>
 
+                        <!-- Confirmation de l'identifiant -->
                         <div class="form-group">
                             <label for="confirmunique">
-                                <i class="fas fa-check-double"></i> Confirm Patient ID *
+                                <i class="fas fa-check-double"></i> Confirmer l'identifiant du patient *
                             </label>
+
                             <input
                                 type="text"
                                 id="confirmunique"
                                 name="confirmunique"
-                                placeholder="Re-enter the patient ID"
+                                placeholder="Saisissez à nouveau l'identifiant du patient"
                                 required
                                 class="form-input confirm-input"
                             >
-                            <div class="input-hint">Must match above</div>
+
+                            <div class="input-hint">Doit correspondre à l'identifiant ci-dessus</div>
                         </div>
+
                     </div>
 
-                    <!-- Verification Status -->
+                    <!-- Statut de vérification -->
                     <div class="verification-status" id="verificationStatus">
+
                         <div class="status-item">
-                            <span class="status-label">First Name Match:</span>
+                            <span class="status-label">Correspondance du prénom :</span>
+
                             <span class="status-badge unchecked" id="firstNameStatus">
-                                <i class="fas fa-circle"></i> Pending
+                                <i class="fas fa-circle"></i> En attente
                             </span>
                         </div>
+
                         <div class="status-item">
-                            <span class="status-label">Last Name Match:</span>
+                            <span class="status-label">Correspondance du nom :</span>
+
                             <span class="status-badge unchecked" id="lastNameStatus">
-                                <i class="fas fa-circle"></i> Pending
+                                <i class="fas fa-circle"></i> En attente
                             </span>
                         </div>
+
                         <div class="status-item">
-                            <span class="status-label">Patient ID Match:</span>
+                            <span class="status-label">Correspondance de l'identifiant :</span>
+
                             <span class="status-badge unchecked" id="idStatus">
-                                <i class="fas fa-circle"></i> Pending
+                                <i class="fas fa-circle"></i> En attente
                             </span>
                         </div>
+
                     </div>
                 </div>
 
-                <!-- Confirmation Checkbox -->
+                <!-- Case de confirmation -->
                 <div class="form-section danger-section">
+
                     <div class="section-header">
                         <div class="section-icon warning">
                             <i class="fas fa-lock"></i>
                         </div>
+
                         <div>
-                            <h2>Final Confirmation</h2>
-                            <p>Acknowledge the permanent deletion</p>
+                            <h2>Confirmation finale</h2>
+                            <p>Confirmez la suppression définitive</p>
                         </div>
                     </div>
 
                     <div class="confirmation-box">
+
                         <div class="checkbox-group">
                             <input
                                 type="checkbox"
@@ -231,34 +261,44 @@
                                 class="confirmation-checkbox"
                                 onchange="toggleDeleteButton()"
                             >
+
                             <label for="confirmDelete" class="confirmation-label">
                                 <i class="fas fa-exclamation-circle"></i>
-                                I understand that this action will <strong>permanently delete</strong>
-                                all patient records and <strong>cannot be undone</strong>
+                                Je comprends que cette action va
+                                <strong>supprimer définitivement</strong>
+                                tous les dossiers du patient et
+                                <strong>ne peut pas être annulée</strong>
                             </label>
                         </div>
+
                         <div class="confirmation-message">
-                            ⚠️ By confirming, you accept full responsibility for this deletion.
+                            ⚠️ En confirmant, vous acceptez l'entière responsabilité de cette suppression.
                         </div>
+
                     </div>
                 </div>
 
-                <!-- Form Actions -->
+                <!-- Actions du formulaire -->
                 <div class="form-actions">
+
                     <a href="/patients/Patient" class="cancel-btn">
-                        <i class="fas fa-times"></i> Cancel
+                        <i class="fas fa-times"></i> Annuler
                     </a>
+
                     <button type="submit" class="delete-btn" id="deleteButton" disabled>
-                        <i class="fas fa-trash-alt"></i> Permanently Delete Patient
+                        <i class="fas fa-trash-alt"></i> Supprimer définitivement le patient
                     </button>
+
                 </div>
+
             </form>
         </div>
     </div>
 
     <!-- JavaScript -->
     <script>
-        // Get all form inputs
+
+        // Récupérer tous les champs du formulaire
         const firstNameInput = document.getElementById("deletef");
         const confirmFirstNameInput = document.getElementById("confirmdeletef");
         const lastNameInput = document.getElementById("deletel");
@@ -266,85 +306,133 @@
         const idInput = document.getElementById("uniquepatient");
         const confirmIdInput = document.getElementById("confirmunique");
 
-        // Verification status elements
+        // Éléments du statut de vérification
         const firstNameStatus = document.getElementById("firstNameStatus");
         const lastNameStatus = document.getElementById("lastNameStatus");
         const idStatus = document.getElementById("idStatus");
 
-        // Real-time verification
+        // Vérification en temps réel
         function updateVerification() {
-            // Check First Name Match
-            const firstNameMatch = firstNameInput.value.trim() === confirmFirstNameInput.value.trim()
+
+            // Vérifier la correspondance du prénom
+            const firstNameMatch =
+                firstNameInput.value.trim() === confirmFirstNameInput.value.trim()
                 && firstNameInput.value.trim() !== "";
+
             updateStatusBadge(firstNameStatus, firstNameMatch);
 
-            // Check Last Name Match
-            const lastNameMatch = lastNameInput.value.trim() === confirmLastNameInput.value.trim()
+            // Vérifier la correspondance du nom
+            const lastNameMatch =
+                lastNameInput.value.trim() === confirmLastNameInput.value.trim()
                 && lastNameInput.value.trim() !== "";
+
             updateStatusBadge(lastNameStatus, lastNameMatch);
 
-            // Check ID Match
-            const idMatch = idInput.value.trim() === confirmIdInput.value.trim()
+            // Vérifier la correspondance de l'identifiant
+            const idMatch =
+                idInput.value.trim() === confirmIdInput.value.trim()
                 && idInput.value.trim() !== "";
+
             updateStatusBadge(idStatus, idMatch);
 
-            // Enable delete button only if all match
+            // Activer le bouton de suppression uniquement si tout correspond
             const confirmCheckbox = document.getElementById("confirmDelete");
-            const allMatch = firstNameMatch && lastNameMatch && idMatch;
-            document.getElementById("deleteButton").disabled = !(allMatch && confirmCheckbox.checked);
+
+            const allMatch =
+                firstNameMatch &&
+                lastNameMatch &&
+                idMatch;
+
+            document.getElementById("deleteButton").disabled =
+                !(allMatch && confirmCheckbox.checked);
         }
 
         function updateStatusBadge(element, isMatch) {
+
             if (isMatch) {
+
                 element.className = "status-badge matched";
-                element.innerHTML = '<i class="fas fa-check-circle"></i> Matched';
+
+                element.innerHTML =
+                    '<i class="fas fa-check-circle"></i> Correspondance confirmée';
+
             } else {
+
                 element.className = "status-badge unchecked";
-                element.innerHTML = '<i class="fas fa-circle"></i> Pending';
+
+                element.innerHTML =
+                    '<i class="fas fa-circle"></i> En attente';
             }
         }
 
-        // Add event listeners for real-time verification
-        [firstNameInput, confirmFirstNameInput, lastNameInput, confirmLastNameInput, idInput, confirmIdInput].forEach(input => {
+        // Ajouter les écouteurs pour la vérification en temps réel
+        [
+            firstNameInput,
+            confirmFirstNameInput,
+            lastNameInput,
+            confirmLastNameInput,
+            idInput,
+            confirmIdInput
+        ].forEach(input => {
+
             input.addEventListener("input", updateVerification);
             input.addEventListener("change", updateVerification);
+
         });
 
-        // Toggle delete button on confirmation checkbox
+        // Activer/désactiver le bouton de suppression avec la case de confirmation
         function toggleDeleteButton() {
             updateVerification();
         }
 
-        // Final confirmation before deletion
+        // Confirmation finale avant la suppression
         function confirmDelete() {
-            const firstNameMatch = firstNameInput.value.trim() === confirmFirstNameInput.value.trim()
+
+            const firstNameMatch =
+                firstNameInput.value.trim() === confirmFirstNameInput.value.trim()
                 && firstNameInput.value.trim() !== "";
-            const lastNameMatch = lastNameInput.value.trim() === confirmLastNameInput.value.trim()
+
+            const lastNameMatch =
+                lastNameInput.value.trim() === confirmLastNameInput.value.trim()
                 && lastNameInput.value.trim() !== "";
-            const idMatch = idInput.value.trim() === confirmIdInput.value.trim()
+
+            const idMatch =
+                idInput.value.trim() === confirmIdInput.value.trim()
                 && idInput.value.trim() !== "";
-            const confirmCheckbox = document.getElementById("confirmDelete").checked;
+
+            const confirmCheckbox =
+                document.getElementById("confirmDelete").checked;
 
             if (!firstNameMatch || !lastNameMatch || !idMatch) {
-                alert("❌ Patient information does not match. Please verify all fields.");
+
+                alert(
+                    "❌ Les informations du patient ne correspondent pas. Veuillez vérifier tous les champs."
+                );
+
                 return false;
             }
 
             if (!confirmCheckbox) {
-                alert("❌ You must confirm the deletion acknowledgment.");
+
+                alert(
+                    "❌ Vous devez confirmer la reconnaissance de la suppression."
+                );
+
                 return false;
             }
 
-            // Final warning dialog
+            // Boîte de dialogue d'avertissement finale
             return confirm(
-                "⚠️ FINAL WARNING\n\n" +
-                "You are about to permanently delete this patient record:\n" +
+                "⚠️ AVERTISSEMENT FINAL\n\n" +
+                "Vous êtes sur le point de supprimer définitivement le dossier de ce patient :\n" +
                 firstNameInput.value + " " + lastNameInput.value + "\n\n" +
-                "This action CANNOT be undone.\n\n" +
-                "Are you absolutely sure?"
+                "Cette action NE PEUT PAS être annulée.\n\n" +
+                "Êtes-vous absolument sûr de vouloir continuer ?"
             );
         }
+
     </script>
+
 </body>
 
 </html>

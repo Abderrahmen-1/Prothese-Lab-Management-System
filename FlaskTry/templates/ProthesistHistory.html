@@ -1,36 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional Dentist History Viewer for Prosthetics Lab Management">
-    <meta name="keywords" content="Dentist, History, Records, Lab, Prosthetics, Khedma">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Dentist History</title>
+    <meta name="description" content="Visualisation professionnelle de l'historique des prothésistes pour la gestion d'un laboratoire de prothèse">
+    <meta name="keywords" content="Prothésiste, Historique, Dossiers, Laboratoire, Prothèse, Khedma">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+    <title>Historique du prothésiste</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='ProthesistHistory.css') }}">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
           rel="stylesheet">
-    <!-- Font Awesome Icons -->
+    <!-- Icônes Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
 
-<!-- Animated Background -->
+<!-- Arrière-plan animé -->
 <div class="animated-bg"></div>
 
 <div class="page-container">
-    <!-- Header -->
+    <!-- En-tête -->
     <header class="page-header">
         <div class="header-background"></div>
         <div class="header-content">
             <div class="header-left">
                 <a href="/prothesists/ProAllkhedma" class="back-button">
                     <i class="fas fa-arrow-left"></i>
-                    <span>Back to Prothesists Page</span>
+                    <span>Retour à la page des prothésistes</span>
                 </a>
             </div>
 
@@ -39,15 +39,15 @@
                     <i class="fas fa-history"></i>
                 </div>
                 <div class="header-title">
-                    <h1>Prothesist History</h1>
-                    <p>Complete work history and records</p>
+                    <h1>Historique du prothésiste</h1>
+                    <p>Historique complet des travaux et des dossiers</p>
                 </div>
             </div>
 
         </div>
     </header>
 
-    <!-- Search Section -->
+    <!-- Section de recherche -->
     <div class="search-container">
         <div class="search-card">
             <form action="/prothesists/ProthesistHistory" method="POST" class="search-form">
@@ -60,29 +60,29 @@
                     <input
                             type="text"
                             name="SearchName"
-                            placeholder="Search prothesist by name... or by number..."
+                            placeholder="Rechercher un prothésiste par nom... ou par numéro..."
                             class="search-input"
                             autocomplete="off"
                     >
                     <button type="submit" class="search-btn">
                         <i class="fas fa-magnifying-glass"></i>
-                        <span>Search</span>
+                        <span>Rechercher</span>
                     </button>
                 </div>
             </form>
 
             <div class="search-hints">
-                <span class="hint-label">Quick Access:</span>
+                <span class="hint-label">Accès rapide :</span>
                 <a href="/prothesists/AllProthesistHistory" class="hint-link">
-                    <i class="fas fa-layer-group"></i> View All History
+                    <i class="fas fa-layer-group"></i> Afficher tout l'historique
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Contenu principal -->
     <main class="main-content">
-        <!-- Message Section -->
+        <!-- Section des messages -->
         {% if message %}
         <div class="message-box fade-in">
             <div class="message-icon">
@@ -94,18 +94,18 @@
         </div>
         {% endif %}
 
-        <!-- All History Table -->
+        <!-- Tableau de tout l'historique -->
         <div id="AllHistory" class="table-section"
              style="display: {% if HistoryProthesist %}none{% else %}block{% endif %}">
             {% if History %}
             <div class="table-card fade-in">
                 <div class="table-header">
                     <div class="header-left">
-                        <h2><i class="fas fa-list-ul"></i> All Prothesist History</h2>
-                        <p>Complete record of all work done by all dentists</p>
+                        <h2><i class="fas fa-list-ul"></i> Historique complet des prothésistes</h2>
+                        <p>Enregistrement complet de tous les travaux réalisés par tous les prothésistes</p>
                     </div>
                     <div class="header-stats">
-                        <span class="stat-badge">{{ History|length }} Records</span>
+                        <span class="stat-badge">{{ History|length }} enregistrements</span>
                     </div>
                 </div>
 
@@ -113,19 +113,19 @@
                     <table class="data-table">
                         <thead>
                         <tr>
-                            <th><span class="th-content"><i class="fas fa-id-card"></i> History ID</span></th>
-                            <th><span class="th-content"><i class="fas fa-user-md"></i> Dentist Name</span></th>
-                            <th><span class="th-content"><i class="fas fa-user-cog"></i> Prothesist Name</span></th>
-                            <th><span class="th-content"><i class="fas fa-phone"></i> Prothesist Number</span></th>
-                            <th><span class="th-content"><i class="fas fa-user"></i> P.First_Name</span></th>
-                            <th><span class="th-content"><i class="fas fa-user"></i> P.Last_Name</span></th>
-                            <th><span class="th-content"><i class="fas fa-hashtag"></i> Patient Number</span></th>
-                            <th><span class="th-content"><i class="fas fa-tools"></i> Service Type</span></th>
-                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Price</span></th>
+                            <th><span class="th-content"><i class="fas fa-id-card"></i> ID de l'historique</span></th>
+                            <th><span class="th-content"><i class="fas fa-user-md"></i> Nom du dentiste</span></th>
+                            <th><span class="th-content"><i class="fas fa-user-cog"></i> Nom du prothésiste</span></th>
+                            <th><span class="th-content"><i class="fas fa-phone"></i> Numéro du prothésiste</span></th>
+                            <th><span class="th-content"><i class="fas fa-user"></i> Prénom du patient</span></th>
+                            <th><span class="th-content"><i class="fas fa-user"></i> Nom du patient</span></th>
+                            <th><span class="th-content"><i class="fas fa-hashtag"></i> Numéro du patient</span></th>
+                            <th><span class="th-content"><i class="fas fa-tools"></i> Type de service</span></th>
+                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Prix</span></th>
                             <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Versement</span></th>
-                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Rest</span></th>
-                            <th><span class="th-content"><i class="fas fa-calendar-alt"></i> Enter Date</span></th>
-                            <th><span class="th-content"> Status</span></th>
+                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Reste</span></th>
+                            <th><span class="th-content"><i class="fas fa-calendar-alt"></i> Date d'entrée</span></th>
+                            <th><span class="th-content"> Statut</span></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -152,7 +152,7 @@
 
                 <div class="table-footer">
                     <span class="footer-text">
-                        <i class="fas fa-check-circle"></i> Showing {{ History|length }} total records
+                        <i class="fas fa-check-circle"></i> Affichage de {{ History|length }} enregistrements au total
                     </span>
                 </div>
             </div>
@@ -161,24 +161,24 @@
                 <div class="empty-icon">
                     <i class="fas fa-inbox"></i>
                 </div>
-                <h2>No History Records Found</h2>
-                <p>There are no work records available at this moment</p>
+                <h2>Aucun enregistrement historique trouvé</h2>
+                <p>Aucun enregistrement de travail n'est disponible pour le moment</p>
             </div>
             {% endif %}
         </div>
 
-        <!-- Specific Dentist History Table -->
+        <!-- Tableau de l'historique spécifique du prothésiste -->
         <div id="ProthesistHistory" class="table-section"
              style="display: {% if HistoryProthesist %}block{% else %}none{% endif %}">
             {% if HistoryProthesist %}
             <div class="table-card fade-in search-result-card">
                 <div class="table-header highlight-search">
                     <div class="header-left">
-                        <h2><i class="fas fa-user-md"></i> Prothesist Specific History</h2>
-                        <p>Work history for the selected Prothesist</p>
+                        <h2><i class="fas fa-user-md"></i> Historique spécifique du prothésiste</h2>
+                        <p>Historique des travaux du prothésiste sélectionné</p>
                     </div>
                     <div class="header-stats">
-                        <span class="stat-badge">{{ HistoryProthesist|length }} Records</span>
+                        <span class="stat-badge">{{ HistoryProthesist|length }} enregistrements</span>
                     </div>
                 </div>
 
@@ -186,19 +186,19 @@
                     <table class="data-table">
                         <thead>
                         <tr>
-                            <th><span class="th-content"><i class="fas fa-id-card"></i> History ID</span></th>
-                            <th><span class="th-content"><i class="fas fa-user-md"></i> Dentist Name</span></th>
-                            <th><span class="th-content"><i class="fas fa-user-cog"></i> Prothesist Name</span></th>
-                            <th><span class="th-content"><i class="fas fa-phone"></i> Prothesist Number</span></th>
-                            <th><span class="th-content"><i class="fas fa-user"></i> P.First_Name</span></th>
-                            <th><span class="th-content"><i class="fas fa-user"></i> P.Last_Name</span></th>
-                            <th><span class="th-content"><i class="fas fa-hashtag"></i> Patient Number</span></th>
-                            <th><span class="th-content"><i class="fas fa-tools"></i> Service Type</span></th>
-                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Price</span></th>
+                            <th><span class="th-content"><i class="fas fa-id-card"></i> ID de l'historique</span></th>
+                            <th><span class="th-content"><i class="fas fa-user-md"></i> Nom du dentiste</span></th>
+                            <th><span class="th-content"><i class="fas fa-user-cog"></i> Nom du prothésiste</span></th>
+                            <th><span class="th-content"><i class="fas fa-phone"></i> Numéro du prothésiste</span></th>
+                            <th><span class="th-content"><i class="fas fa-user"></i> Prénom du patient</span></th>
+                            <th><span class="th-content"><i class="fas fa-user"></i> Nom du patient</span></th>
+                            <th><span class="th-content"><i class="fas fa-hashtag"></i> Numéro du patient</span></th>
+                            <th><span class="th-content"><i class="fas fa-tools"></i> Type de service</span></th>
+                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Prix</span></th>
                             <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Versement</span></th>
-                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Rest</span></th>
-                            <th><span class="th-content"><i class="fas fa-calendar-alt"></i> Enter Date</span></th>
-                            <th><span class="th-content"> Status</span></th>
+                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Reste</span></th>
+                            <th><span class="th-content"><i class="fas fa-calendar-alt"></i> Date d'entrée</span></th>
+                            <th><span class="th-content"> Statut</span></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -225,43 +225,43 @@
 
                 <div class="table-footer">
                     <span class="footer-text">
-                        <i class="fas fa-check-circle"></i> Showing {{ HistoryProthesist|length }} records for this dentist
+                        <i class="fas fa-check-circle"></i> Affichage de {{ HistoryProthesist|length }} enregistrements pour ce prothésiste
                     </span>
                 </div>
             </div>
             {% endif %}
         </div>
 
-        <!-- Empty Results State -->
+        <!-- État vide des résultats -->
         {% if not History and not HistoryProthesist and not message %}
         <div class="empty-state fade-in">
             <div class="empty-icon">
                 <i class="fas fa-history"></i>
             </div>
-            <h2>No Data Available</h2>
-            <p>Use the search bar to find prothesist history or click "All History" to view complete records</p>
+            <h2>Aucune donnée disponible</h2>
+            <p>Utilisez la barre de recherche pour trouver l'historique d'un prothésiste ou cliquez sur « Tout l'historique » pour afficher tous les dossiers</p>
             <div class="empty-actions">
                 <a href="/prothesists/AllProthesistHistory" class="empty-action-btn">
                     <i class="fas fa-layer-group"></i>
-                    <span>View All History</span>
+                    <span>Afficher tout l'historique</span>
                 </a>
             </div>
         </div>
         {% endif %}
     </main>
 
-    <!-- Footer -->
+    <!-- Pied de page -->
     <footer class="page-footer">
         <div class="footer-content">
-            <p>&copy; 2024 Prosthetics Lab Management System. All rights reserved.</p>
-            <p class="footer-note">Historical records are preserved even if the original khedma is deleted</p>
+            <p>&copy; 2024 Système de gestion du laboratoire de prothèse. Tous droits réservés.</p>
+            <p class="footer-note">Les dossiers historiques sont conservés même si la khedma d'origine est supprimée</p>
         </div>
     </footer>
 </div>
 
 <!-- Scripts -->
 <script>
-    // Smooth table row animations on load
+    // Animations fluides des lignes du tableau au chargement
     window.addEventListener('load', function() {
         const rows = document.querySelectorAll('.table-row-animate');
         rows.forEach((row, index) => {
@@ -269,7 +269,7 @@
         });
     });
 
-    // Search form enhancement
+    // Amélioration du formulaire de recherche
     const searchForm = document.querySelector('.search-form');
     const searchInput = document.querySelector('.search-input');
 
@@ -283,7 +283,7 @@
         });
     }
 
-    // Add focus effects
+    // Effets lors du focus
     if (searchInput) {
         searchInput.addEventListener('focus', function() {
             this.closest('.search-wrapper').classList.add('focused');
@@ -302,7 +302,7 @@
         });
     }
 
-    // Ripple effect on buttons
+    // Effet ripple sur les boutons
     document.querySelectorAll('.search-btn, .empty-action-btn').forEach(button => {
         button.addEventListener('click', function(e) {
             const ripple = document.createElement('span');
@@ -321,7 +321,7 @@
         });
     });
 
-    // Scroll to table on search
+    // Faire défiler jusqu'au tableau après une recherche
     const AllHistoryDiv = document.getElementById('AllHistory');
     const ProthesistHistoryDiv = document.getElementById('ProthesistHistory');
 
@@ -331,16 +331,16 @@
         }, 300);
     }
 
-    // Sort table by column (optional enhancement)
+    // Trier le tableau par colonne (amélioration optionnelle)
     document.querySelectorAll('.data-table th').forEach(th => {
         th.style.cursor = 'pointer';
         th.addEventListener('click', function() {
-            // You can implement sorting here if needed
-            console.log('Column clicked:', this.textContent);
+            // Vous pouvez implémenter le tri ici si nécessaire
+            console.log('Colonne sélectionnée :', this.textContent);
         });
     });
 
-    // Export table to CSV (optional enhancement)
+    // Exporter le tableau au format CSV (amélioration optionnelle)
     function exportTableToCSV(filename, tableId) {
         const table = document.getElementById(tableId);
         if (!table) return;
@@ -370,7 +370,7 @@
         document.body.removeChild(downloadLink);
     }
 
-    // Keyboard shortcut for search (Ctrl/Cmd + K)
+    // Raccourci clavier pour la recherche (Ctrl/Cmd + K)
     document.addEventListener('keydown', function(e) {
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
             e.preventDefault();

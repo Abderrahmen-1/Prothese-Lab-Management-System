@@ -46,7 +46,7 @@ def AddProthesist():
             session_token = session.get("csrf_token")
 
             if not form_token or form_token != session_token:
-                return "CSRF attack detected", 403
+                return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)
             session["csrf_token"] = new_token
@@ -55,10 +55,10 @@ def AddProthesist():
             prothesist_number = request.form.get('prothesistNumber')
 
             if not prothesist_name or prothesist_name.isdigit():
-                return render_template("AddProthesist.html", message="Invalide Prothesist name", csrf_token=new_token)
+                return render_template("AddProthesist.html", message="Nom du prothésiste invalide", csrf_token=new_token)
 
             if not prothesist_number or not prothesist_number.isdigit() or len(prothesist_number) != 10:
-                return render_template("AddProthesist.html", message="Invalide Prothesist number", csrf_token=new_token)
+                return render_template("AddProthesist.html", message="Numéro du prothésiste invalide", csrf_token=new_token)
 
             cursor.execute("""
                             SELECT 1 
@@ -72,9 +72,9 @@ def AddProthesist():
                 cursor.execute("""
                                 INSERT INTO other_prothesists (pName, pNumber, user_id)
                                 VALUES(%s, %s, %s)""",(prothesist_name, prothesist_number, session['id']))
-                return render_template("AddProthesist.html", message=f"Prothesist {prothesist_name} Added Successfully", csrf_token=new_token)
+                return render_template("AddProthesist.html", message=f"Prothésiste {prothesist_name} ajouté avec succès", csrf_token=new_token)
             else:
-                return render_template("AddProthesist.html", message=f"Prothesist {prothesist_name} - {prothesist_number} Already exists", csrf_token=new_token)
+                return render_template("AddProthesist.html", message=f"Le prothésiste {prothesist_name} - {prothesist_number} existe déjà", csrf_token=new_token)
     finally:
         cursor.close()
         conn.close()
@@ -96,6 +96,19 @@ def getProthesistHistory():
         conn = get_connection()
         cursor = conn.cursor()
 
+        try :
+            cursor.execute("""
+                            DELETE FROM other_prothesists_history 
+                            WHERE 
+                                pDate <= DATE_SUB(CURDATE() , INTERVAL 25 MONTH) AND user_id = %s
+                                AND ( (b9aw = 0 AND status = 'finished') OR (status = 'deleted'))""",
+                           (session['id'],))
+            conn.commit()
+
+        except Exception as e :
+            conn.rollback()
+            return f"Erreur : {str(e)}"
+
         cursor.execute("SELECT * FROM other_prothesists_history WHERE user_id = %s", (session['id'],))
         result = cursor.fetchall()
         if result:
@@ -108,7 +121,7 @@ def getProthesistHistory():
             return render_template(
                 "ProthesistHistory.html",
                 HistoryProthesist=result,
-                message="Table not found",
+                message="Tableau introuvable",
                 csrf_token=token
             )
 
@@ -121,7 +134,7 @@ def getProthesistHistory():
         print(form_token == session['csrf_token'])
 
         if not form_token or form_token != session_token:
-            return "CSRF attack detected", 403
+            return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
@@ -144,7 +157,7 @@ def getProthesistHistory():
                 if result:
                     return render_template("ProthesistHistory.html", HistoryProthesist=result, csrf_token=new_token)
                 else:
-                    return render_template("ProthesistHistory.html", message="Prothesist not found", csrf_token=new_token)
+                    return render_template("ProthesistHistory.html", message="Prothésiste introuvable", csrf_token=new_token)
 
             cursor.execute("""
                         SELECT * FROM other_prothesists_history
@@ -155,7 +168,7 @@ def getProthesistHistory():
                 return render_template("ProthesistHistory.html", HistoryProthesist=result, csrf_token=new_token)
             else:
                 return render_template("ProthesistHistory.html",
-                                       message="Prothesist not found", csrf_token=new_token)
+                                       message="Prothésiste introuvable", csrf_token=new_token)
         finally:
             cursor.close()
             conn.close()
@@ -175,7 +188,8 @@ def getAllProthesistHistory():
         cursor.execute("""
                         DELETE FROM other_prothesists_history 
                         WHERE 
-                            pDate <= DATE_SUB(CURDATE() , INTERVAL 6 MONTH) AND user_id = %s """,
+                            pDate <= DATE_SUB(CURDATE() , INTERVAL 25 MONTH) AND user_id = %s
+                            AND ( (b9aw = 0 AND status = 'finished') OR (status = 'deleted'))""",
                        (session['id'],))
         conn.commit()
 
@@ -184,11 +198,10 @@ def getAllProthesistHistory():
         if result:
             return render_template("ProthesistHistory.html", History=result, csrf_token=session['csrf_token'])
         else:
-            return render_template("ProthesistHistory.html", message="Table not found", csrf_token=session['csrf_token'])
+            return render_template("ProthesistHistory.html", message="Tableau introuvable", csrf_token=session['csrf_token'])
     finally:
         cursor.close()
         conn.close()
-
 
 
 @prothesists.route("/ProFinished", methods=["POST", "GET"])
@@ -210,7 +223,7 @@ def khedmaProMkemla():
         session_token = session.get("csrf_token")
 
         if not form_token or form_token != session_token:
-            return "CSRF attack detected", 403
+            return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
@@ -221,7 +234,7 @@ def khedmaProMkemla():
         choice           = request.form.get('Choice')
 
         if not ProthesistNumber or not ProthesistNumber.isdigit() or len(ProthesistNumber) != 10:
-            return render_template("FinishedProKhedma.html", error="Invalid Prothesist Number", csrf_token=new_token)
+            return render_template("FinishedProKhedma.html", error="Numéro du prothésiste invalide", csrf_token=new_token)
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -233,17 +246,17 @@ def khedmaProMkemla():
             """, (session['id'], ProthesistName, ProthesistNumber))
             row = cursor.fetchone()
             if not row:
-                return render_template("FinishedProKhedma.html", message="Prothesist not found", csrf_token=new_token)
+                return render_template("FinishedProKhedma.html", message="Prothésiste introuvable", csrf_token=new_token)
 
             if choice.lower() == "patient":
                 patientId = request.form.get('PatientID')
                 khedmaID = request.form.get('ServiceID')
 
                 if not patientId or not patientId.isdigit() or len(patientId) != 10:
-                    return render_template("FinishedProKhedma.html", error="Invalid Patient ID", csrf_token=new_token)
+                    return render_template("FinishedProKhedma.html", error="ID du patient invalide", csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
-                    return render_template("FinishedProKhedma.html", error="Invalid Service ID", csrf_token=new_token)
+                    return render_template("FinishedProKhedma.html", error="ID du service invalide", csrf_token=new_token)
 
                 cursor.execute("""
                     SELECT 1 FROM patient_history
@@ -253,7 +266,7 @@ def khedmaProMkemla():
                 result = cursor.fetchone()
 
                 if not result:
-                    return render_template("FinishedProKhedma.html", message="Patient Not Found", csrf_token=new_token)
+                    return render_template("FinishedProKhedma.html", message="Patient introuvable", csrf_token=new_token)
 
                 cursor.execute("""
                                SELECT ph.id, pr.id  
@@ -264,7 +277,7 @@ def khedmaProMkemla():
                 result = cursor.fetchone()
 
                 if not result :
-                    return render_template("FinishedProKhedma.html" , message="Service not found", csrf_token=new_token)
+                    return render_template("FinishedProKhedma.html" , message="Service introuvable", csrf_token=new_token)
 
                 cursor.execute("""
                                 UPDATE patient 
@@ -307,10 +320,10 @@ def khedmaProMkemla():
                 khedmaID      = request.form.get('DServiceID')
 
                 if not patientId or not patientId.isdigit() or len(patientId) > 10:
-                    return render_template("FinishedProKhedma.html", error="Invalid Patient ID", csrf_token=new_token)
+                    return render_template("FinishedProKhedma.html", error="ID du patient invalide", csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
-                    return render_template("FinishedProKhedma.html", error="Invalid Service ID", csrf_token=new_token)
+                    return render_template("FinishedProKhedma.html", error="ID du service invalide", csrf_token=new_token)
 
                 #if not SearcheTable(cursor, dentistName):
                  #   return render_template("FinishedProKhedma.html", message="Incorrect dentist name", csrf_token=new_token)
@@ -324,7 +337,7 @@ def khedmaProMkemla():
                 found = cursor.fetchone()
 
                 if not found :
-                    return render_template("FinishedProKhedma.html", message="Patient Not Found",
+                    return render_template("FinishedProKhedma.html", message="Patient introuvable",
                                            csrf_token=new_token)
 
                 cursor.execute("""
@@ -337,7 +350,7 @@ def khedmaProMkemla():
                 result = cursor.fetchone()
 
                 if not result:
-                    return render_template("FinishedProKhedma.html", message="Service Not Found", csrf_token=new_token)
+                    return render_template("FinishedProKhedma.html", message="Service introuvable", csrf_token=new_token)
 
                 cursor.execute("""
                                 UPDATE dentists 
@@ -381,18 +394,18 @@ def khedmaProMkemla():
                         """, (session['id'], 'yes', 'yes'))
 
             else:
-                return render_template("FinishedProKhedma.html", error="You have to enter 'patient' or 'dentist'", csrf_token=new_token)
+                return render_template("FinishedProKhedma.html", error="Vous devez saisir « patient » ou « dentist »", csrf_token=new_token)
 
             conn.commit()
             cursor.execute("""
                             SELECT * FROM other_prothesists_khedma 
                             WHERE user_id = %s """, (session['id'],))
             result = cursor.fetchall()
-            return render_template("ALLProKhedma.html", message="Information Updated Successfully", result=result, csrf_token=new_token)
+            return render_template("ALLProKhedma.html", message="Informations mises à jour avec succès", result=result, csrf_token=new_token)
 
         except Exception as e :
             conn.rollback()
-            return render_template("FinishedProKhedma.html", error=f"error {str(e)}", csrf_token=new_token)
+            return render_template("FinishedProKhedma.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -418,7 +431,7 @@ def KhedmaProKhalsa():
         session_token = session.get("csrf_token")
 
         if not form_token or form_token != session_token:
-            return "CSRF attack detected", 403
+            return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
@@ -429,7 +442,7 @@ def KhedmaProKhalsa():
         choice    = request.form.get('Choice')
 
         if not ProNumber or not ProNumber.isdigit() or len(ProNumber) != 10:
-            return render_template("KhedmaProKhalsa.html", error="Invalid Prothesist Number", csrf_token=new_token)
+            return render_template("KhedmaProKhalsa.html", error="Numéro du prothésiste invalide", csrf_token=new_token)
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -444,7 +457,7 @@ def KhedmaProKhalsa():
             result = cursor.fetchone()
 
             if not result :
-                return render_template("KhedmaProKhalsa.html" , message="Prothesist not found " , csrf_token=new_token)
+                return render_template("KhedmaProKhalsa.html" , message="Prothésiste introuvable" , csrf_token=new_token)
 
 
             if choice.lower() == "patient":
@@ -452,10 +465,10 @@ def KhedmaProKhalsa():
                 khedmaID = request.form.get('ServiceID')
 
                 if not patientId or not patientId.isdigit() or len(patientId) != 10:
-                    return render_template("KhedmaProKhalsa.html", error="Invalid Patient ID", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", error="ID du patient invalide", csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
-                    return render_template("KhedmaProKhalsa.html", error="Invalid Service ID", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", error="ID du service invalide", csrf_token=new_token)
 
                 cursor.execute("""
                     SELECT 1 
@@ -465,7 +478,7 @@ def KhedmaProKhalsa():
                 result = cursor.fetchone()
 
                 if not result:
-                    return render_template("KhedmaProKhalsa.html", message="Patient Not Found", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", message="Patient introuvable", csrf_token=new_token)
 
                 cursor.execute("""
                                 SELECT ph.id, pr.id 
@@ -479,7 +492,7 @@ def KhedmaProKhalsa():
                 print(result)
 
                 if not result:
-                    return render_template("KhedmaProKhalsa.html", message="Service Not Found", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", message="Service introuvable", csrf_token=new_token)
 
                 cursor.execute("""
                                 SELECT pPrice, pDate, pKhalsa, pB9aw 
@@ -490,7 +503,7 @@ def KhedmaProKhalsa():
 
                 print(result)
                 if not data :
-                    return render_template("KhedmaProKhalsa.html", message="Patient Not Found", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", message="Patient introuvable", csrf_token=new_token)
 
                 prothesist_price = data[0]
                 prothesist_date  = data[1]
@@ -519,7 +532,7 @@ def KhedmaProKhalsa():
                                 ,(old[1], 0, session['id'], ProName, ProNumber, patientId))
 
                 else :
-                    return render_template("KhedmaProKhalsa.html", message="Service Already paid", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", message="Service déjà payé", csrf_token=new_token)
 
                 cursor.execute("""
                             DELETE FROM patient
@@ -542,13 +555,13 @@ def KhedmaProKhalsa():
                 khedmaID = request.form.get('DServiceID')
 
                 if not patientId or not patientId.isdigit() or len(patientId) > 10:
-                    return render_template("KhedmaProKhalsa.html", error="Invalid Patient ID", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", error="ID du patient invalide", csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
-                    return render_template("KhedmaProKhalsa.html", error="Invalid Service ID", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", error="ID du service invalide", csrf_token=new_token)
 
                 if not SearcheTable(cursor, Dentistname):
-                    return render_template("KhedmaProKhalsa.html", error="Incorrect dentist name", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", error="Nom du dentiste incorrect", csrf_token=new_token)
 
                 cursor.execute("""
                     SELECT 1 FROM dentist_history
@@ -557,7 +570,7 @@ def KhedmaProKhalsa():
                 result = cursor.fetchone()
 
                 if not result:
-                    return render_template("KhedmaProKhalsa.html", message="Patient Not Found", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", message="Patient introuvable", csrf_token=new_token)
 
                 cursor.execute("""
                                     SELECT d.id, k.id, pr.id 
@@ -570,7 +583,7 @@ def KhedmaProKhalsa():
                 result = cursor.fetchone()
 
                 if not result :
-                    return render_template("KhedmaProKhalsa.html", message="Service Not Found", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", message="Service introuvable", csrf_token=new_token)
 
 
                 cursor.execute("""
@@ -581,7 +594,7 @@ def KhedmaProKhalsa():
                 data = cursor.fetchone()
 
                 if not result :
-                    return render_template("KhedmaProKhalsa.html", message="Patient Not Found", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", message="Patient introuvable", csrf_token=new_token)
 
                 prothesist_price = data[0]
                 prothesist_date  = data[1]
@@ -611,7 +624,7 @@ def KhedmaProKhalsa():
 
 
                 else :
-                    return render_template("KhedmaProKhalsa.html", message="Service Already paid", csrf_token=new_token)
+                    return render_template("KhedmaProKhalsa.html", message="Service déjà payé", csrf_token=new_token)
 
                 print(result)
 
@@ -632,7 +645,7 @@ def KhedmaProKhalsa():
                     UpdateProKhalsaStat(cursor, conn, ProName=ProName, ProNumber=ProNumber,
                                         b9aw=old_b9aw, date=prothesist_date)
             else:
-                return render_template("KhedmaProKhalsa.html", error="You have to enter (patient / dentist)", csrf_token=new_token)
+                return render_template("KhedmaProKhalsa.html", error="Vous devez saisir (patient / dentist)", csrf_token=new_token)
 
             conn.commit()
             cursor.execute("""
@@ -640,11 +653,11 @@ def KhedmaProKhalsa():
                             WHERE user_id = %s """,(session['id'],))
             result = cursor.fetchall()
 
-            return render_template("ALLProKhedma.html", message="Payment Updated Successfully", result=result, csrf_token=new_token)
+            return render_template("ALLProKhedma.html", message="Paiement mis à jour avec succès", result=result, csrf_token=new_token)
 
         except Exception as e :
             conn.rollback()
-            return render_template("KhedmaProKhalsa.html", error=f"error {str(e)}", csrf_token=new_token)
+            return render_template("KhedmaProKhalsa.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -672,7 +685,7 @@ def GetProthesistKhedma():
         session_token = session.get("csrf_token")
 
         if not form_token or form_token != session_token:
-            return "CSRF attack detected", 403
+            return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
@@ -688,24 +701,24 @@ def GetProthesistKhedma():
 
         if not ProthesistNumber or not ProthesistNumber.isdigit() or len(ProthesistNumber) != 10:
             return render_template("ProthesistGetKhedma.html",
-                                   error="❌ Invalid Prothesist Number! Must be exactly 10 digits.",
+                                   error="❌ Numéro du prothésiste invalide ! Il doit comporter exactement 10 chiffres.",
                                    csrf_token=new_token)
 
         try:
             price = float(price)
         except (ValueError, TypeError):
             return render_template("ProthesistGetKhedma.html",
-                                   error="❌ Invalid price value!",
+                                   error="❌ Valeur du prix invalide !",
                                    csrf_token=new_token)
 
         if price < 0:
             return render_template("ProthesistGetKhedma.html",
-                                   error="❌ Price cannot be negative!",
+                                   error="❌ Le prix ne peut pas être négatif !",
                                    csrf_token=new_token)
 
         if khalsa.lower() not in ["yes", "no"]:
             return render_template("ProthesistGetKhedma.html",
-                                   error="❌ Khalsa must be yes or no!",
+                                   error="❌ Khalsa doit être « yes » ou « no » !",
                                    csrf_token=new_token)
 
         try:
@@ -714,13 +727,13 @@ def GetProthesistKhedma():
         except ValueError:
             return render_template(
                 "ProthesistGetKhedma.html",
-                error="❌ Invalid date! Use MM-DD-YYYY.",
+                error="❌ Date invalide ! Utilisez le format MM-JJ-AAAA.",
                 csrf_token=new_token
             )
 
         # Validate dates
         if deadLine < date:
-            return render_template("ProthesistGetKhedma.html", error="❌ Deadline must be after the start date!", csrf_token=new_token)
+            return render_template("ProthesistGetKhedma.html", error="❌ La date limite doit être postérieure à la date de début !", csrf_token=new_token)
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -734,7 +747,7 @@ def GetProthesistKhedma():
 
             resultP = cursor.fetchone()
             if not resultP:
-                return render_template("ProthesistGetKhedma.html", error="Prothesist not found", csrf_token=new_token)
+                return render_template("ProthesistGetKhedma.html", error="Prothésiste introuvable", csrf_token=new_token)
 
 
             # ========== PATIENT SOURCE ==========
@@ -744,7 +757,7 @@ def GetProthesistKhedma():
                 # Validate patient number
                 if not patientNumber or not patientNumber.isdigit() or len(patientNumber) != 10:
                     return render_template("ProthesistGetKhedma.html",
-                                           error="❌ Invalid patient number! Must be a 10-digit number."
+                                           error="❌ Numéro du patient invalide ! Il doit comporter 10 chiffres."
                                            , csrf_token=new_token)
 
                 # Check if patient exists
@@ -759,22 +772,22 @@ def GetProthesistKhedma():
 
                 if not result:
                     return render_template("ProthesistGetKhedma.html",
-                                           error="❌ Patient not found! Check the patient number."
+                                           error="❌ Patient introuvable ! Vérifiez le numéro du patient."
                                            , csrf_token=new_token)
 
                 if result[0].lower() == "yes":
                     return render_template("ProthesistGetKhedma.html",
-                                           message="⚠️ This patient's work order is already completed!"
+                                           message="⚠️ Le travail de ce patient est déjà terminé !"
                                            , csrf_token=new_token)
 
                 if result[2] > date :
                     return render_template("ProthesistGetKhedma.html",
-                                           error="⚠️ Incorrect Enter date "
+                                           error="⚠️ Date d'entrée incorrecte."
                                            , csrf_token=new_token)
 
                 if deadLine >= result[3] :
                     return render_template("ProthesistGetKhedma.html",
-                                           error="⚠️ Incorrect DeadLine date"
+                                           error="⚠️ Date limite incorrecte."
                                            , csrf_token=new_token)
 
 
@@ -787,12 +800,12 @@ def GetProthesistKhedma():
                             versaValue = float(request.form.get("VersementValue"))
                         except (ValueError, KeyError, TypeError):
                             return render_template("ProthesistGetKhedma.html",
-                                                   error="❌ Invalid payment amount! Please enter a valid number."
+                                                   error="❌ Montant du paiement invalide ! Veuillez saisir un nombre valide."
                                                    , csrf_token=new_token)
 
                         if versaValue < 0:
                             return render_template("ProthesistGetKhedma.html",
-                                                   error="❌ Payment amount cannot be negative!"
+                                                   error="❌ Le montant du paiement ne peut pas être négatif !"
                                                    , csrf_token=new_token)
 
                         if versaValue == price:
@@ -800,7 +813,7 @@ def GetProthesistKhedma():
                             khalsa = "yes"
                         elif versaValue > price:
                             return render_template("ProthesistGetKhedma.html",
-                                                   error="❌ Payment amount cannot exceed the total price!"
+                                                   error="❌ Le montant du paiement ne peut pas dépasser le prix total !"
                                                    , csrf_token=new_token)
                         else:
                             b9aw = price - versaValue
@@ -821,7 +834,7 @@ def GetProthesistKhedma():
 
                 if found :
                     return render_template("ProthesistGetKhedma.html",
-                                           message=f"This service is already with {found[0]}"
+                                           message=f"Ce service est déjà attribué à {found[0]}"
                                            , csrf_token=new_token)
 
                 # Insert the work order
@@ -877,7 +890,7 @@ def GetProthesistKhedma():
 
                 conn.commit()
                 return render_template("KhedmaProFile.html",
-                                       message="✅ Work order created successfully! Patient order added to " + ProthesistName + "'s list."
+                                       message="✅ Travail créé avec succès ! Le travail du patient a été ajouté à la liste de " + ProthesistName + "."
                                        , csrf_token=new_token)
 
             # ========== DENTIST SOURCE ==========
@@ -887,11 +900,11 @@ def GetProthesistKhedma():
 
                 if not dentistName or not patientNumber:
                     return render_template("ProthesistGetKhedma.html",
-                                           error="❌ Dentist name and patient number are required!", csrf_token=new_token)
+                                           error="❌ Le nom du dentiste et le numéro du patient sont obligatoires !", csrf_token=new_token)
 
                 if not patientNumber.isdigit() or len(patientNumber) > 10 :
                     return render_template("ProthesistGetKhedma.html",
-                                           error="❌ Invalid patient number!",
+                                           error="❌ Numéro du patient invalide !",
                                            csrf_token=new_token)
 
                 # Check if work order exists
@@ -905,20 +918,20 @@ def GetProthesistKhedma():
 
                 if not result:
                     return render_template("ProthesistGetKhedma.html",
-                                           error="❌ Work order not found! Check dentist name and patient number.", csrf_token=new_token)
+                                           error="❌ Travail introuvable ! Vérifiez le nom du dentiste et le numéro du patient.", csrf_token=new_token)
 
                 if result[0].lower() == "yes":
                     return render_template("ProthesistGetKhedma.html",
-                                           message="⚠️ This work order is already finished!", csrf_token=new_token)
+                                           message="⚠️ Ce travail est déjà terminé !", csrf_token=new_token)
 
                 if result[2] > date :
                     return render_template("ProthesistGetKhedma.html",
-                                           error="⚠️ Incorrect Enter date "
+                                           error="⚠️ Date d'entrée incorrecte."
                                            , csrf_token=new_token)
 
                 if result[3] < deadLine :
                     return render_template("ProthesistGetKhedma.html",
-                                           error="⚠️ Incorrect DeadLine date"
+                                           error="⚠️ Date limite incorrecte."
                                            , csrf_token=new_token)
 
                 # Calculate payment amounts
@@ -930,18 +943,18 @@ def GetProthesistKhedma():
                             versaValue = float(request.form.get("VersementValue"))
                         except (ValueError, KeyError, TypeError):
                             return render_template("ProthesistGetKhedma.html",
-                                                   error="❌ Invalid payment amount! Please enter a valid number.", csrf_token=new_token)
+                                                   error="❌ Montant du paiement invalide ! Veuillez saisir un nombre valide.", csrf_token=new_token)
 
                         if versaValue < 0:
                             return render_template("ProthesistGetKhedma.html",
-                                                   error="❌ Payment amount cannot be negative!", csrf_token=new_token)
+                                                   error="❌ Le montant du paiement ne peut pas être négatif !", csrf_token=new_token)
 
                         if versaValue == price:
                             b9aw = 0
                             khalsa = "yes"
                         elif versaValue > price:
                             return render_template("ProthesistGetKhedma.html",
-                                                   error="❌ Payment amount cannot exceed the total price!", csrf_token=new_token)
+                                                   error="❌ Le montant du paiement ne peut pas dépasser le prix total !", csrf_token=new_token)
                         else:
                             b9aw = price - versaValue
                     else:
@@ -961,7 +974,7 @@ def GetProthesistKhedma():
 
                 if found:
                     return render_template("ProthesistGetKhedma.html",
-                                           message=f"This service is already with {found[0]}"
+                                           message=f"Ce service est déjà attribué à {found[0]}"
                                            , csrf_token=new_token)
 
                 # Insert the work order
@@ -1016,13 +1029,13 @@ def GetProthesistKhedma():
                 conn.commit()
 
                 return render_template("KhedmaProFile.html",
-                                       message="✅ Work order created successfully! Dentist referral added to " + ProthesistName + "'s list."
+                                       message="✅ Travail créé avec succès ! Le travail provenant du dentiste a été ajouté à la liste de " + ProthesistName + "."
                                        , csrf_token=new_token)
 
         except Exception as e:
             conn.rollback()
             return render_template("ProthesistGetKhedma.html",
-                                   error=f"❌ Database error: {str(e)}", csrf_token=new_token)
+                                   error=f"❌ Erreur de base de données : {str(e)}", csrf_token=new_token)
         finally:
             cursor.close()
             conn.close()
@@ -1046,7 +1059,7 @@ def DeleteProKhedma():
         check = session.get('csrf_token')
 
         if not token or token != check :
-            return "error CSRF attack",403
+            return "Erreur : attaque CSRF détectée",403
 
         new_token = secrets.token_hex(16)
         session['csrf_token'] = new_token
@@ -1059,23 +1072,23 @@ def DeleteProKhedma():
         checkPatientNumber = request.form.get('CheckPatientNumber')
 
         if not ProName or not checkProName :
-            return render_template("DeleteProthesistPatient.html", error="The prothesist-name and its confirmation are required", csrf_token=new_token)
+            return render_template("DeleteProthesistPatient.html", error="Le nom du prothésiste et sa confirmation sont obligatoires", csrf_token=new_token)
 
         if not ProNumber or not checkProNumber :
-            return render_template("DeleteProthesistPatient.html", error="The prothesist-number and its confirmation are required", csrf_token=new_token)
+            return render_template("DeleteProthesistPatient.html", error="Le numéro du prothésiste et sa confirmation sont obligatoires", csrf_token=new_token)
 
         if not PatientNumber or not checkPatientNumber :
-            return render_template("DeleteProthesistPatient.html", error="The patient-number and its confirmation are required", csrf_token=new_token)
+            return render_template("DeleteProthesistPatient.html", error="Le numéro du patient et sa confirmation sont obligatoires", csrf_token=new_token)
 
         if not ProNumber.isdigit() or len(ProNumber) != 10 :
-            return render_template("DeleteProthesistPatient.html", error="Invalid prothesist number! Must be exactly 10 digits", csrf_token=new_token)
+            return render_template("DeleteProthesistPatient.html", error="Numéro du prothésiste invalide ! Il doit comporter exactement 10 chiffres", csrf_token=new_token)
 
         if not PatientNumber.isdigit() or len(PatientNumber) > 10 :
-            return render_template("DeleteProthesistPatient.html", error="Invalid patient number! Must be exactly 10 digits", csrf_token=new_token)
+            return render_template("DeleteProthesistPatient.html", error="Numéro du patient invalide ! Il doit comporter exactement 10 chiffres", csrf_token=new_token)
 
         if ProName != checkProName or ProNumber != checkProNumber or PatientNumber != checkPatientNumber :
             return render_template("DeleteProthesistPatient.html",
-                                   error="The confirmation must be the same as the information",
+                                   error="La confirmation doit être identique aux informations saisies",
                                    csrf_token=new_token)
 
         conn = get_connection()
@@ -1092,13 +1105,13 @@ def DeleteProKhedma():
             found = cursor.fetchone()
 
             if not found :
-                return render_template("DeleteProthesistPatient.html", message=f"Service not found for the prothesist {ProName}", csrf_token=new_token)
+                return render_template("DeleteProthesistPatient.html", message=f"Service introuvable pour le prothésiste {ProName}", csrf_token=new_token)
 
             if found[5] == 'yes' :
                 cursor.execute("""
                                 SELECT * FROM other_prothesists_khedma WHERE user_id = %s """,(session['id'],))
                 result = cursor.fetchall()
-                return render_template("ALLProKhedma.html", result=result, message=f"Service Already finished", csrf_token=new_token)
+                return render_template("ALLProKhedma.html", result=result, message=f"Service déjà terminé", csrf_token=new_token)
 
             cursor.execute("""
                             SELECT k.khedma_patient, k.khedma_dentist, k.prothesist_name, k.prothesist_number,
@@ -1160,12 +1173,12 @@ def DeleteProKhedma():
                            (session['id'],))
             result = cursor.fetchall()
 
-            return render_template("ALLProKhedma.html", result=result, message="Service Deleted successfully", csrf_token=new_token)
+            return render_template("ALLProKhedma.html", result=result, message="Service supprimé avec succès", csrf_token=new_token)
 
 
         except Exception as e :
             conn.rollback()
-            return render_template("DeleteProthesistPatient.html", error=f"error {str(e)}", csrf_token=new_token)
+            return render_template("DeleteProthesistPatient.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
 
         finally :
             cursor.close()
@@ -1192,7 +1205,7 @@ def ProModifyVersement():
         session_token = session.get("csrf_token")
 
         if not form_token or form_token != session_token:
-            return "CSRF attack detected", 403
+            return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
@@ -1205,14 +1218,14 @@ def ProModifyVersement():
 
         if not ProthesistNumber or not ProthesistNumber.isdigit() or len(ProthesistNumber) != 10:
             return render_template("ProthesistModifyVersement.html",
-                                   error="Invalid Prothesist Number! Must be exactly 10 digits",
+                                   error="Numéro du prothésiste invalide ! Il doit comporter exactement 10 chiffres",
                                    csrf_token=new_token)
 
         try:
             versaValue = float(versaValue)
         except (ValueError, TypeError):
             return render_template("ProthesistModifyVersement.html",
-                                   error="Invalid Versement value",
+                                   error="Montant du versement invalide",
                                    csrf_token=new_token)
 
         #if versaValue < 0:
@@ -1234,7 +1247,7 @@ def ProModifyVersement():
             found = cursor.fetchone()
 
             if not found :
-                return render_template("ProthesistModifyVersement.html" , message="Prothesist not Found ", csrf_token=new_token)
+                return render_template("ProthesistModifyVersement.html" , message="Prothésiste introuvable", csrf_token=new_token)
 
             if khedmaSource.lower() == "patient" :
                 PatientNumber = request.form.get("PatientNumber")
@@ -1243,12 +1256,12 @@ def ProModifyVersement():
 
                 if not PatientNumber or not PatientNumber.isdigit() or len(PatientNumber) != 10:
                     return render_template("ProthesistModifyVersement.html",
-                                           error="Invalid Patient Number! Must be exactly 10 digits",
+                                           error="Numéro du patient invalide ! Il doit comporter exactement 10 chiffres",
                                            csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
                     return render_template("ProthesistModifyVersement.html",
-                                           error="Invalid Service ID",
+                                           error="ID du service invalide",
                                            csrf_token=new_token)
 
                 cursor.execute("""
@@ -1259,7 +1272,7 @@ def ProModifyVersement():
                 found = cursor.fetchone()
 
                 if not found :
-                    return render_template("ProthesistModifyVersement.html", message="Patient not found ",
+                    return render_template("ProthesistModifyVersement.html", message="Patient introuvable",
                                            csrf_token=new_token)
 
                 cursor.execute("""
@@ -1271,7 +1284,7 @@ def ProModifyVersement():
                 result = cursor.fetchone()
 
                 if not result :
-                    return render_template("ProthesistModifyVersement.html" , message="Service not found ", csrf_token=new_token)
+                    return render_template("ProthesistModifyVersement.html" , message="Service introuvable", csrf_token=new_token)
 
             else :
                 DentistName = request.form.get("DentistName")
@@ -1280,12 +1293,12 @@ def ProModifyVersement():
 
                 if not PatientNumber or not PatientNumber.isdigit() or len(PatientNumber) > 10:
                     return render_template("ProthesistModifyVersement.html",
-                                           error="Invalid Patient Number",
+                                           error="Numéro du patient invalide",
                                            csrf_token=new_token)
 
                 if not khedmaID or not khedmaID.isdigit():
                     return render_template("ProthesistModifyVersement.html",
-                                           error="Invalid Service ID",
+                                           error="ID du service invalide",
                                            csrf_token=new_token)
 
                 cursor.execute("""
@@ -1296,7 +1309,7 @@ def ProModifyVersement():
                 found = cursor.fetchone()
 
                 if not found :
-                    return render_template("ProthesistModifyVersement.html", message="Patient not found ",
+                    return render_template("ProthesistModifyVersement.html", message="Patient introuvable",
                                            csrf_token=new_token)
 
                 cursor.execute("""
@@ -1308,7 +1321,7 @@ def ProModifyVersement():
                 result = cursor.fetchone()
 
                 if not result:
-                    return render_template("ProthesistModifyVersement.html", message="Service not found ", csrf_token=new_token)
+                    return render_template("ProthesistModifyVersement.html", message="Service introuvable", csrf_token=new_token)
 
             oldVersa = result[0]
             price = result[1]
@@ -1320,14 +1333,14 @@ def ProModifyVersement():
             b9aw = float(price) - newVersa
 
             if b9aw > float(price):
-                return render_template("ProthesistModifyVersement.html", error="Invalid Versement ",
+                return render_template("ProthesistModifyVersement.html", error="Montant du versement invalide",
                                        csrf_token=new_token)
 
             if khalsa == "yes" and versaValue > 0 :
-                return render_template("ProthesistModifyVersement.html" , message="Service already payed ", csrf_token=new_token)
+                return render_template("ProthesistModifyVersement.html" , message="Service déjà payé", csrf_token=new_token)
 
             if newVersa > price :
-                return render_template("ProthesistModifyVersement.html" , error="Invalide Versement value ", csrf_token=new_token)
+                return render_template("ProthesistModifyVersement.html" , error="Montant du versement invalide", csrf_token=new_token)
 
             if newVersa == price :
                 khalsa = "yes"
@@ -1390,11 +1403,11 @@ def ProModifyVersement():
 
             conn.commit()
 
-            return render_template("KhedmaProFile.html" , message="Informations Updated Succesfuly", csrf_token=new_token)
+            return render_template("KhedmaProFile.html" , message="Informations mises à jour avec succès", csrf_token=new_token)
 
         except Exception as e :
             conn.rollback()
-            return render_template("ProthesistModifyVersement.html", error=f"error {str(e)}", csrf_token=new_token )
+            return render_template("ProthesistModifyVersement.html", error=f"Erreur : {str(e)}", csrf_token=new_token )
 
         finally :
             cursor.close()
@@ -1425,7 +1438,7 @@ def Proallkhedma():
         check = session.get('csrf_token')
 
         if not token or token != check :
-            return "error CSRF attack ",403
+            return "Erreur : attaque CSRF détectée ",403
 
         new_token = secrets.token_hex(16)
         session['csrf_token'] = new_token
@@ -1446,7 +1459,7 @@ def Proallkhedma():
                 if result :
                     return render_template("ALLProKhedma.html", result=result, csrf_token=new_token)
                 else :
-                    return render_template("ALLProKhedma.html", message="Prothesist not found", csrf_token=new_token)
+                    return render_template("ALLProKhedma.html", message="Prothésiste introuvable", csrf_token=new_token)
 
             else :
                 cursor.execute("""
@@ -1457,7 +1470,7 @@ def Proallkhedma():
                 if result:
                     return render_template("ALLProKhedma.html", result=result, csrf_token=new_token)
                 else:
-                    return render_template("ALLProKhedma.html", message="Prothesist not found", csrf_token=new_token)
+                    return render_template("ALLProKhedma.html", message="Prothésiste introuvable", csrf_token=new_token)
 
         finally :
             cursor.close()
@@ -1513,10 +1526,10 @@ def FindMostProKhedma():
     try:
         Pro_dics = ProthesistDics(cursor)
         if not Pro_dics:
-            return render_template("ALLProKhedma.html", error="No Prothesist tables found.", csrf_toke= new_token)
+            return render_template("ALLProKhedma.html", error="Aucun tableau de prothésiste trouvé.", csrf_toke= new_token)
         name, count = max(Pro_dics.items(), key=lambda x: x[1], default=('none', 0))
         if count == 0:
-            return render_template("ALLProKhedma.html", message="All tables are empty.", csrf_token= new_token)
+            return render_template("ALLProKhedma.html", message="Tous les tableaux sont vides.", csrf_token= new_token)
         cursor.execute("SELECT * FROM other_prothesists_khedma WHERE user_id = %s AND pName = %s",
                        (session['id'], name))
         result = cursor.fetchall()
@@ -1539,7 +1552,7 @@ def FindLessProKhedma():
         Pro_dics = ProthesistDics(cursor)
         active_Pros = {n: c for n, c in Pro_dics.items() if c > 0}
         if not active_Pros:
-            return render_template("ALLProKhedma.html", message="All prothesists currently have 0 Services.", csrf_token= new_token)
+            return render_template("ALLProKhedma.html", message="Tous les prothésistes ont actuellement 0 service.", csrf_token= new_token)
         name, count = min(active_Pros.items(), key=lambda x: x[1])
         cursor.execute("SELECT * FROM other_prothesists_khedma WHERE user_id = %s AND pName = %s",
                        (session['id'], name))
@@ -1583,7 +1596,7 @@ def ShowProTotal():
                 result[Pro[1]] = (Pro[1], '-', 0, 0)
         if result:
             return render_template("ProStats.html", total=result, csrf_token= token)
-        return render_template("ProStats.html", message="No Prothesist data found.", csrf_token= token)
+        return render_template("ProStats.html", message="Aucune donnée sur les prothésistes trouvée.", csrf_token= token)
     finally:
         cursor.close()
         conn.close()
@@ -1601,20 +1614,6 @@ def ProStat():
     cursor = conn.cursor(buffered=True)
 
     try:
-        cursor.execute("""
-            DELETE FROM other_services_stats
-            WHERE
-                user_id = %s
-                AND (
-                    year < YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
-                    OR (
-                        year = YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
-                        AND month <= MONTH(DATE_SUB(CURDATE(), INTERVAL 12 MONTH))
-                    )
-                )
-        """, (session['id'],))
-        conn.commit()
-
         cursor.execute("""
             DELETE FROM prothesist_stat
             WHERE
@@ -1640,6 +1639,7 @@ def ProStat():
                 WHERE p.user_id = %s
                   AND p.prothesist_name = %s
                   AND p.prothesist_number = %s
+                GROUP BY p.month, p.year 
                 ORDER BY p.year DESC, p.month DESC
             """, (session['id'], Pro[1], Pro[0]))
 
@@ -1654,7 +1654,7 @@ def ProStat():
         if result:
             return render_template(
                 "ProStats.html",
-                message="The Stat Table",
+                message="Tableau des statistiques",
                 result=result,
                 csrf_token=token
             )
@@ -1662,7 +1662,7 @@ def ProStat():
 
         return render_template(
             "ProStats.html",
-            message="Table Not Found (There are no statistics)",
+            message="Tableau introuvable (aucune statistique disponible)",
             csrf_token=token
         )
 
@@ -1670,7 +1670,7 @@ def ProStat():
         conn.rollback()
         return render_template(
             "ProStats.html",
-            message=f"error {str(e)}",
+            message=f"Erreur : {str(e)}",
             csrf_token=token
         )
 
@@ -1700,7 +1700,7 @@ def ProSearchPage():
             session_token = session.get("csrf_token")
 
             if not form_token or form_token != session_token:
-                return "CSRF attack detected", 403
+                return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)
             session["csrf_token"] = new_token
@@ -1719,7 +1719,7 @@ def ProSearchPage():
                 rows = cursor.fetchall()
                 return render_template("ProStats.html", result=rows, csrf_token=new_token)
             else:
-                return render_template("ProStats.html", error=f"Prothesist {ProName} Not Found", csrf_token=new_token)
+                return render_template("ProStats.html", error=f"Prothésiste {ProName} introuvable", csrf_token=new_token)
 
     finally:
         cursor.close()

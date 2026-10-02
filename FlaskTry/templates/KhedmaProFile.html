@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="description" content="Professional Prothesist Management System for Prosthetics Lab">
-    <meta name="keywords" content="Prothesist, Prosthetics, Lab Management, Flask">
-    <meta name="author" content="Prosthetics Lab Team">
+    <meta name="description" content="Système professionnel de gestion des prothésistes pour laboratoire de prothèse">
+    <meta name="keywords" content="Prothésiste, Prothèse, Gestion de laboratoire, Flask">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
 
-    <title>Prothesist Management System</title>
+    <title>Système de gestion des prothésistes</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='KhedmaProFile.css') }}">
@@ -32,7 +32,7 @@
 <div class="container">
 
     <!-- =========================
-         HEADER
+         EN-TÊTE
     ========================== -->
 
     <header class="header">
@@ -47,7 +47,7 @@
 
                 <div class="logo-text">
                     <h1>ProLab Hub</h1>
-                    <p>Prosthetics Lab Management System</p>
+                    <p>Système de gestion du laboratoire de prothèse</p>
                 </div>
 
             </div>
@@ -58,7 +58,7 @@
                    class="nav-btn back-btn ripple-btn">
 
                     <i class="fas fa-arrow-left"></i>
-                    Back to Menu
+                    Retour au menu
 
                 </a>
 
@@ -66,7 +66,7 @@
                    class="nav-btn history-btn ripple-btn">
 
                     <i class="fas fa-history"></i>
-                    History
+                    Historique
 
                 </a>
 
@@ -78,14 +78,14 @@
 
 
     <!-- =========================
-         MAIN LAYOUT
+         STRUCTURE PRINCIPALE
     ========================== -->
 
     <div class="main-layout">
 
 
         <!-- =========================
-             SIDEBAR
+             BARRE LATÉRALE
         ========================== -->
 
         <aside class="sidebar">
@@ -102,12 +102,12 @@
             <nav class="sidebar-menu">
 
 
-                <!-- VIEW KHEDMA -->
+                <!-- AFFICHER LES TÂCHES -->
 
                 <div class="menu-group">
 
                     <h3 class="group-title">
-                        View Khedma
+                        Afficher les tâches
                     </h3>
 
                     <a href="/prothesists/ProAllkhedma"
@@ -115,10 +115,10 @@
 
                         <i class="fas fa-list-alt"></i>
 
-                        <span>All Khedma</span>
+                        <span>Toutes les tâches</span>
 
                         <span class="badge">
-                            All
+                            Toutes
                         </span>
 
                     </a>
@@ -129,10 +129,10 @@
 
                         <i class="fas fa-check-circle"></i>
 
-                        <span>Finished</span>
+                        <span>Terminées</span>
 
                         <span class="badge badge-finish">
-                            Done
+                            Terminées
                         </span>
 
                     </a>
@@ -146,7 +146,7 @@
                         <span>Khalsa</span>
 
                         <span class="badge badge-khalsa">
-                            Pay
+                            Payé
                         </span>
 
                     </a>
@@ -154,12 +154,12 @@
                 </div>
 
 
-                <!-- MANAGEMENT -->
+                <!-- GESTION -->
 
                 <div class="menu-group">
 
                     <h3 class="group-title">
-                        Management
+                        Gestion
                     </h3>
 
 
@@ -168,7 +168,7 @@
 
                         <i class="fas fa-user-plus"></i>
 
-                        <span>Add Prothesist</span>
+                        <span>Ajouter un prothésiste</span>
 
                         <span class="badge badge-add">
                             +
@@ -182,10 +182,10 @@
 
                         <i class="fas fa-handshake"></i>
 
-                        <span>Get Khedma</span>
+                        <span>Obtenir une tâche</span>
 
                         <span class="badge badge-get">
-                            In
+                            Entrée
                         </span>
 
                     </a>
@@ -196,10 +196,10 @@
 
                         <i class="fas fa-file-invoice-dollar"></i>
 
-                        <span>Modify Versement</span>
+                        <span>Modifier le versement</span>
 
                         <span class="badge badge-get">
-                            Edit
+                            Modifier
                         </span>
 
                     </a>
@@ -207,12 +207,12 @@
                 </div>
 
 
-                <!-- ANALYTICS -->
+                <!-- ANALYSE -->
 
                 <div class="menu-group">
 
                     <h3 class="group-title">
-                        Analytics
+                        Analyses
                     </h3>
 
 
@@ -221,7 +221,7 @@
 
                         <i class="fas fa-chart-pie"></i>
 
-                        <span>Statistics</span>
+                        <span>Statistiques</span>
 
                         <span class="badge badge-stat">
                             Stats
@@ -237,13 +237,13 @@
 
 
         <!-- =========================
-             CONTENT
+             CONTENU
         ========================== -->
 
         <main class="content">
 
 
-            <!-- SUCCESS MESSAGE -->
+            <!-- MESSAGE DE SUCCÈS -->
 
             {% if message %}
 
@@ -255,7 +255,7 @@
 
                     <div class="alert-content">
 
-                        <h3>Success</h3>
+                        <h3>Opération réussie</h3>
 
                         <p>
                             {{ message }}
@@ -278,7 +278,7 @@
 
 
             <!-- =========================
-                 WELCOME HERO
+                 SECTION D'ACCUEIL
             ========================== -->
 
             <section class="welcome-section">
@@ -292,19 +292,19 @@
                     <div class="welcome-content">
 
                         <span class="welcome-label">
-                            PROSTHETICS WORKSPACE
+                            ESPACE DE TRAVAIL DE PROTHÈSE
                         </span>
 
                         <h2>
-                            Manage your laboratory work
-                            with confidence.
+                            Gérez les travaux de votre laboratoire
+                            en toute confiance.
                         </h2>
 
                         <p>
-                            Keep your prosthetist work organized,
-                            follow incoming cases, manage payments,
-                            and monitor your laboratory activity
-                            from one central workspace.
+                            Gardez les travaux de vos prothésistes organisés,
+                            suivez les dossiers entrants, gérez les paiements
+                            et surveillez l'activité de votre laboratoire
+                            depuis un espace de travail centralisé.
                         </p>
 
                     </div>
@@ -322,7 +322,7 @@
 
 
                 <!-- =========================
-                     WORKFLOW
+                     FLUX DE TRAVAIL
                 ========================== -->
 
                 <section class="workflow-section">
@@ -333,18 +333,18 @@
 
                             <span class="section-label">
                                 <i class="fas fa-route"></i>
-                                LAB WORKFLOW
+                                FLUX DE TRAVAIL DU LABORATOIRE
                             </span>
 
                             <h3>
-                                Your prosthetics workflow
+                                Votre flux de travail de prothèse
                             </h3>
 
                         </div>
 
                         <span class="workflow-status">
                             <span></span>
-                            Workspace ready
+                            Espace de travail prêt
                         </span>
 
                     </div>
@@ -353,7 +353,7 @@
                     <div class="workflow-grid">
 
 
-                        <!-- STEP 1 -->
+                        <!-- ÉTAPE 1 -->
 
                         <div class="workflow-card workflow-add reveal-card">
 
@@ -368,17 +368,17 @@
                             <div class="workflow-content">
 
                                 <span>
-                                    FIRST STEP
+                                    PREMIÈRE ÉTAPE
                                 </span>
 
                                 <h4>
-                                    Register the Prothesist
+                                    Enregistrer le prothésiste
                                 </h4>
 
                                 <p>
-                                    Add the prothesist and keep
-                                    their information organized
-                                    in your laboratory system.
+                                    Ajoutez le prothésiste et gardez
+                                    ses informations organisées
+                                    dans votre système de laboratoire.
                                 </p>
 
                             </div>
@@ -386,7 +386,7 @@
                         </div>
 
 
-                        <!-- STEP 2 -->
+                        <!-- ÉTAPE 2 -->
 
                         <div class="workflow-card workflow-get reveal-card">
 
@@ -401,17 +401,17 @@
                             <div class="workflow-content">
 
                                 <span>
-                                    WORK IN
+                                    TRAVAIL ENTRANT
                                 </span>
 
                                 <h4>
-                                    Receive Khedma
+                                    Recevoir une tâche
                                 </h4>
 
                                 <p>
-                                    Register incoming prosthetic
-                                    work and keep track of cases
-                                    currently being handled.
+                                    Enregistrez les travaux de prothèse
+                                    entrants et suivez les dossiers
+                                    actuellement en cours de traitement.
                                 </p>
 
                             </div>
@@ -419,7 +419,7 @@
                         </div>
 
 
-                        <!-- STEP 3 -->
+                        <!-- ÉTAPE 3 -->
 
                         <div class="workflow-card workflow-payment reveal-card">
 
@@ -434,17 +434,17 @@
                             <div class="workflow-content">
 
                                 <span>
-                                    FOLLOW UP
+                                    SUIVI
                                 </span>
 
                                 <h4>
-                                    Manage Payments
+                                    Gérer les paiements
                                 </h4>
 
                                 <p>
-                                    Update versements and keep
-                                    payment information aligned
-                                    with your laboratory records.
+                                    Mettez à jour les versements et gardez
+                                    les informations de paiement cohérentes
+                                    avec les dossiers de votre laboratoire.
                                 </p>
 
                             </div>
@@ -452,7 +452,7 @@
                         </div>
 
 
-                        <!-- STEP 4 -->
+                        <!-- ÉTAPE 4 -->
 
                         <div class="workflow-card workflow-analysis reveal-card">
 
@@ -467,17 +467,17 @@
                             <div class="workflow-content">
 
                                 <span>
-                                    ANALYZE
+                                    ANALYSE
                                 </span>
 
                                 <h4>
-                                    Review Activity
+                                    Consulter l'activité
                                 </h4>
 
                                 <p>
-                                    Use your statistics and history
-                                    to understand your laboratory
-                                    activity over time.
+                                    Utilisez vos statistiques et votre
+                                    historique pour comprendre l'activité
+                                    de votre laboratoire au fil du temps.
                                 </p>
 
                             </div>
@@ -490,7 +490,7 @@
 
 
                 <!-- =========================
-                     INFORMATION STRIP
+                     BANDEAU D'INFORMATIONS
                 ========================== -->
 
                 <section class="info-strip">
@@ -504,17 +504,17 @@
                         <div>
 
                             <span>
-                                ORGANIZED
+                                ORGANISÉ
                             </span>
 
                             <strong>
-                                Centralized Work Management
+                                Gestion centralisée des travaux
                             </strong>
 
                             <p>
-                                Your prosthetic work, payments,
-                                history and statistics stay
-                                organized inside one workspace.
+                                Vos travaux de prothèse, paiements,
+                                historique et statistiques restent
+                                organisés dans un seul espace de travail.
                             </p>
 
                         </div>
@@ -531,16 +531,16 @@
                         <div>
 
                             <span>
-                                PROFESSIONAL
+                                PROFESSIONNEL
                             </span>
 
                             <strong>
-                                Built for Laboratory Workflow
+                                Conçu pour le flux de travail du laboratoire
                             </strong>
 
                             <p>
-                                Designed to keep daily prosthetics
-                                management simple and structured.
+                                Conçu pour rendre la gestion quotidienne
+                                des travaux de prothèse simple et structurée.
                             </p>
 
                         </div>
@@ -564,7 +564,7 @@
 
 
         /* ==========================================
-           RIPPLE EFFECT
+           EFFET D'ONDULATION
         ========================================== */
 
         document.querySelectorAll(".ripple-btn").forEach(button => {
@@ -603,7 +603,7 @@
 
 
         /* ==========================================
-           REVEAL WORKFLOW CARDS
+           AFFICHER LES CARTES DU FLUX DE TRAVAIL
         ========================================== */
 
         const cards =
@@ -644,7 +644,7 @@
 
 
         /* ==========================================
-           WORKFLOW CARD TILT
+           INCLINAISON DES CARTES DU FLUX DE TRAVAIL
         ========================================== */
 
         document

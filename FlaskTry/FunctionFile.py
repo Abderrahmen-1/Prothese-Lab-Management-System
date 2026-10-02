@@ -128,7 +128,8 @@ def Dentist_History(cursor, conn, dentist_name):
     if result :
         for data in result:
             cursor.execute("""
-                SELECT pNumber, pFirstname, dentistname FROM dentist_history
+                SELECT pNumber, pFirstname, dentistname 
+                FROM dentist_history
                 WHERE dentistname = %s AND pNumber = %s AND pFirstname = %s AND user_id = %s
             """, (dentist_name, data[3], data[1], session['id']))
             exist = cursor.fetchall()
@@ -372,8 +373,8 @@ def ProthesistDics(cursor):
 
 def getprothesist(cursor,prothesist_name, prothesist_number, unique):
     cursor.execute("""
-        SELECT pFirstname, pLastname, patient_number,
-               pDate, pKhedma, user_id, pPrice, versement, b9aw, status, dentist_name
+        SELECT patient_number, pDate, pKhedma, user_id, pPrice, 
+                pVersa, pB9aw, dentist_name
         FROM other_prothesists_khedma
         WHERE patient_number = %s AND pName = %s AND pNumber = %s AND user_id = %s
     """, (unique, prothesist_name, prothesist_number, session['id']))
@@ -381,16 +382,16 @@ def getprothesist(cursor,prothesist_name, prothesist_number, unique):
     return history
 
 
-def Prothesist_History(cursor, conn, prothesistname, prothesist_number, unique):
+def Prothesist_History(cursor, conn, prothesistname, prothesist_number, unique, patient_firstname, patient_lastname):
     result = getprothesist(cursor, prothesistname, prothesist_number, unique)
     if result :
         data = result[0]
         cursor.execute("""
             SELECT 1 
             FROM other_prothesists_history
-            WHERE pNumber = %s AND pName = %s AND patient_number = %s AND pFirstname = %s AND 
+            WHERE pNumber = %s AND prothesist = %s AND patient_number = %s AND pFirstname = %s AND 
              pLastname = %s AND user_id = %s
-        """, (prothesist_number, prothesistname, data[0], data[1], session['id']))
+        """, (prothesist_number, prothesistname, data[0], patient_firstname, patient_lastname, session['id']))
         exist = cursor.fetchall()
 
         if not exist:
@@ -398,11 +399,11 @@ def Prothesist_History(cursor, conn, prothesistname, prothesist_number, unique):
                 INSERT INTO other_prothesists_history
                     (dentistname, prothesist, pNumber, pFirstname, pLastname, patient_number, pKhedma, pPrice, versement, b9aw, pDate, user_id, Status) 
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """, (data[10], prothesistname, prothesist_number, data[0], data[1], data[2], data[4], data[6], data[7], data[8], data[3], session['id'], data[9]))
+            """, (data[7], prothesistname, prothesist_number, patient_firstname, patient_lastname, data[0], data[2], data[4], data[5], data[6], data[1], session['id'], 'active'))
 
         cursor.execute("""
             DELETE FROM other_prothesists_history
-            WHERE pDate < DATE_SUB(NOW(), INTERVAL 6 MONTH)
+            WHERE pDate < DATE_SUB(NOW(), INTERVAL 25 MONTH)
         """)
         conn.commit()
 

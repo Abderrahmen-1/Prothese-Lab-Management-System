@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional Delete Patient Form for Prosthetics Lab Management">
-    <meta name="keywords" content="Patient, Delete, Management, Lab, Prosthetics">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Delete Patient</title>
+    <meta name="description" content="Formulaire professionnel de suppression d'un patient pour la gestion d'un laboratoire de prothèse">
+    <meta name="keywords" content="Patient, Suppression, Gestion, Laboratoire, Prothèse">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+    <title>Supprimer un patient</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='DeleteDentistPatient.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
@@ -19,84 +19,114 @@
 
 <body>
 
-<!-- Animated Background -->
+<!-- Arrière-plan animé -->
 <div class="animated-bg"></div>
 
 <div class="page-wrapper">
-    <!-- Header -->
+
+    <!-- En-tête -->
     <header class="page-header danger-theme">
         <div class="header-background"></div>
         <div class="header-content">
+
             <a href="/dentists/Dentist" class="back-button">
                 <i class="fas fa-arrow-left"></i>
-                <span>Back</span>
+                <span>Retour</span>
             </a>
 
             <div class="header-title">
                 <div class="icon-wrapper danger-icon">
                     <i class="fas fa-user-injured"></i>
                 </div>
+
                 <div class="title-text">
-                    <h1>Delete Patient</h1>
-                    <p>Permanently remove a patient from the system</p>
+                    <h1>Supprimer un patient</h1>
+                    <p>Supprimer définitivement un patient du système</p>
                 </div>
             </div>
+
         </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- Contenu principal -->
     <main class="main-content">
+
         <div class="form-wrapper">
-            <!-- Decorative Elements -->
+
+            <!-- Éléments décoratifs -->
             <div class="decoration decoration-1"></div>
             <div class="decoration decoration-2"></div>
 
-            <!-- Warning Banner -->
+            <!-- Bannière d'avertissement -->
             <div class="warning-banner fade-in">
+
                 <div class="warning-icon">
                     <i class="fas fa-exclamation-triangle"></i>
                 </div>
+
                 <div class="warning-content">
-                    <h3>Caution: Permanent Action</h3>
-                    <p>Deleting a patient record cannot be undone. All medical records, work orders, and history will be permanently removed.</p>
+                    <h3>Attention : action définitive</h3>
+                    <p>
+                        La suppression d'un dossier patient est irréversible.
+                        Tous les dossiers médicaux, travaux et historiques seront définitivement supprimés.
+                    </p>
                 </div>
+
             </div>
 
-            <!-- Form Container -->
+            <!-- Conteneur du formulaire -->
             <div class="form-card danger-card">
+
                 <div class="form-header-inner">
+
                     <div class="step-indicator">
                         <div class="step-dot">
                             <i class="fas fa-shield-alt"></i>
                         </div>
                     </div>
-                    <h2>Confirm Patient Deletion</h2>
-                    <p>Enter patient details twice to confirm deletion</p>
+
+                    <h2>Confirmer la suppression du patient</h2>
+                    <p>
+                        Saisissez deux fois les informations du patient pour confirmer la suppression
+                    </p>
+
                 </div>
 
-                <!-- Messages Section -->
+                <!-- Section des messages -->
+
                 {% if message %}
+
                 <div class="alert-container">
+
                     <div class="alert alert-success fade-in">
+
                         <i class="fas fa-check-circle"></i>
+
                         <div class="alert-content">
-                            <h3>Success</h3>
+                            <h3>Opération réussie</h3>
                             <p>{{ message }}</p>
                         </div>
+
                         <button class="alert-close" onclick="this.parentElement.style.display='none'">
                             <i class="fas fa-times"></i>
                         </button>
+
                     </div>
+
                 </div>
+
                 {% endif %}
 
                 {% if error %}
+
                 <div class="alert-container">
+
                     <div class="alert alert-error fade-in-slow">
+
                         <i class="fas fa-exclamation-circle"></i>
 
                         <div class="alert-content">
-                            <h3>Error</h3>
+                            <h3>Erreur</h3>
                             <p>{{ error }}</p>
                         </div>
 
@@ -105,318 +135,469 @@
                                 onclick="this.parentElement.style.display='none'">
                             <i class="fas fa-times"></i>
                         </button>
+
                     </div>
+
                 </div>
+
                 {% endif %}
 
-                <!-- Form Content -->
-                <form action="/dentists/DeleteDentistPatient" method="POST" class="delete-patient-form" onsubmit="handleSubmit(event)">
+                <!-- Contenu du formulaire -->
+
+                <form action="/dentists/DeleteDentistPatient"
+                      method="POST"
+                      class="delete-patient-form"
+                      onsubmit="handleSubmit(event)">
+
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-                    <!-- Dentist Name -->
+                    <!-- Nom du dentiste -->
+
                     <div class="form-group">
+
                         <label for="dentist-name" class="form-label">
-                            <span class="label-text">Dentist Name</span>
-                            <span class="required-badge">Required</span>
+                            <span class="label-text">Nom du dentiste</span>
+                            <span class="required-badge">Obligatoire</span>
                         </label>
 
                         <div class="input-wrapper">
+
                             <div class="input-icon">
                                 <i class="fas fa-user-md"></i>
                             </div>
+
                             <input
                                 type="text"
                                 id="dentist-name"
                                 name="DentistName"
                                 class="form-input"
-                                placeholder="Enter the dentist's name"
+                                placeholder="Saisissez le nom du dentiste"
                                 required
                                 autocomplete="off"
                             >
+
                             <div class="input-underline danger-underline"></div>
+
                         </div>
 
                         <span class="field-hint">
                             <i class="fas fa-info-circle"></i>
-                            Enter the name of the dentist associated with this patient
+                            Saisissez le nom du dentiste associé à ce patient
                         </span>
+
                     </div>
 
-                    <!-- Divider -->
+                    <!-- Séparateur -->
+
                     <div class="section-divider">
-                        <span>Patient Information</span>
+                        <span>Informations du patient</span>
                     </div>
 
-                    <!-- First Name - Primary -->
+                    <!-- Prénom - Principal -->
+
                     <div class="form-group">
+
                         <label for="first-name-1" class="form-label">
-                            <span class="label-text">First Name</span>
-                            <span class="required-badge">Required</span>
+                            <span class="label-text">Prénom</span>
+                            <span class="required-badge">Obligatoire</span>
                         </label>
 
                         <div class="input-wrapper">
+
                             <div class="input-icon">
                                 <i class="fas fa-id-card"></i>
                             </div>
+
                             <input
                                 type="text"
                                 id="first-name-1"
                                 name="DeleteF"
                                 class="form-input"
-                                placeholder="Enter patient's first name"
+                                placeholder="Saisissez le prénom du patient"
                                 required
                                 autocomplete="off"
                             >
+
                             <div class="input-underline danger-underline"></div>
+
                         </div>
 
                         <span class="field-hint">
                             <i class="fas fa-info-circle"></i>
-                            Type the patient's first name carefully
+                            Saisissez soigneusement le prénom du patient
                         </span>
+
                     </div>
 
-                    <!-- First Name - Confirmation -->
+                    <!-- Prénom - Confirmation -->
+
                     <div class="form-group">
+
                         <label for="first-name-2" class="form-label">
-                            <span class="label-text">Confirm First Name</span>
+                            <span class="label-text">Confirmer le prénom</span>
                             <span class="required-badge danger">Confirmation</span>
                         </label>
 
                         <div class="input-wrapper">
+
                             <div class="input-icon">
                                 <i class="fas fa-check-double"></i>
                             </div>
+
                             <input
                                 type="text"
                                 id="first-name-2"
                                 name="ConfirmDeletePatientF"
                                 class="form-input"
-                                placeholder="Re-enter patient's first name"
+                                placeholder="Saisissez à nouveau le prénom du patient"
                                 required
                                 autocomplete="off"
                                 oninput="checkMatchingFields()"
                             >
+
                             <div class="input-underline danger-underline"></div>
                             <div class="match-indicator" id="first-name-indicator"></div>
+
                         </div>
 
                         <span class="field-hint">
                             <i class="fas fa-lock"></i>
-                            Must match the first name above exactly
+                            Doit correspondre exactement au prénom ci-dessus
                         </span>
+
                     </div>
 
-                    <!-- Last Name - Primary -->
+                    <!-- Nom - Principal -->
+
                     <div class="form-group">
+
                         <label for="last-name-1" class="form-label">
-                            <span class="label-text">Last Name</span>
-                            <span class="required-badge">Required</span>
+                            <span class="label-text">Nom</span>
+                            <span class="required-badge">Obligatoire</span>
                         </label>
 
                         <div class="input-wrapper">
+
                             <div class="input-icon">
                                 <i class="fas fa-id-card"></i>
                             </div>
+
                             <input
                                 type="text"
                                 id="last-name-1"
                                 name="DeleteL"
                                 class="form-input"
-                                placeholder="Enter patient's last name"
+                                placeholder="Saisissez le nom du patient"
                                 required
                                 autocomplete="off"
                             >
+
                             <div class="input-underline danger-underline"></div>
+
                         </div>
 
                         <span class="field-hint">
                             <i class="fas fa-info-circle"></i>
-                            Type the patient's last name carefully
+                            Saisissez soigneusement le nom du patient
                         </span>
+
                     </div>
 
-                    <!-- Last Name - Confirmation -->
+                    <!-- Nom - Confirmation -->
+
                     <div class="form-group">
+
                         <label for="last-name-2" class="form-label">
-                            <span class="label-text">Confirm Last Name</span>
+                            <span class="label-text">Confirmer le nom</span>
                             <span class="required-badge danger">Confirmation</span>
                         </label>
 
                         <div class="input-wrapper">
+
                             <div class="input-icon">
                                 <i class="fas fa-check-double"></i>
                             </div>
+
                             <input
                                 type="text"
                                 id="last-name-2"
                                 name="ConfirmDeletePatientL"
                                 class="form-input"
-                                placeholder="Re-enter patient's last name"
+                                placeholder="Saisissez à nouveau le nom du patient"
                                 required
                                 autocomplete="off"
                                 oninput="checkMatchingFields()"
                             >
+
                             <div class="input-underline danger-underline"></div>
                             <div class="match-indicator" id="last-name-indicator"></div>
+
                         </div>
 
                         <span class="field-hint">
                             <i class="fas fa-lock"></i>
-                            Must match the last name above exactly
+                            Doit correspondre exactement au nom ci-dessus
                         </span>
+
                     </div>
 
-                    <!-- Unique Number - Primary -->
+                    <!-- Numéro unique - Principal -->
+
                     <div class="form-group">
+
                         <label for="unique-number-1" class="form-label">
-                            <span class="label-text">Unique Number</span>
-                            <span class="required-badge">Required</span>
+                            <span class="label-text">Numéro unique</span>
+                            <span class="required-badge">Obligatoire</span>
                         </label>
 
                         <div class="input-wrapper">
+
                             <div class="input-icon">
                                 <i class="fas fa-hashtag"></i>
                             </div>
+
                             <input
                                 type="text"
                                 id="unique-number-1"
                                 name="uniquepatient"
                                 class="form-input"
-                                placeholder="Enter patient's unique number"
+                                placeholder="Saisissez le numéro unique du patient"
                                 required
                                 autocomplete="off"
                             >
+
                             <div class="input-underline danger-underline"></div>
+
                         </div>
 
                         <span class="field-hint">
                             <i class="fas fa-info-circle"></i>
-                            Patient's unique identification number
+                            Numéro d'identification unique du patient
                         </span>
+
                     </div>
 
-                    <!-- Unique Number - Confirmation -->
+                    <!-- Numéro unique - Confirmation -->
+
                     <div class="form-group">
+
                         <label for="unique-number-2" class="form-label">
-                            <span class="label-text">Confirm Unique Number</span>
+                            <span class="label-text">Confirmer le numéro unique</span>
                             <span class="required-badge danger">Confirmation</span>
                         </label>
 
                         <div class="input-wrapper">
+
                             <div class="input-icon">
                                 <i class="fas fa-check-double"></i>
                             </div>
+
                             <input
                                 type="text"
                                 id="unique-number-2"
                                 name="confirmunique"
                                 class="form-input"
-                                placeholder="Re-enter patient's unique number"
+                                placeholder="Saisissez à nouveau le numéro unique du patient"
                                 required
                                 autocomplete="off"
                                 oninput="checkMatchingFields()"
                             >
+
                             <div class="input-underline danger-underline"></div>
                             <div class="match-indicator" id="unique-number-indicator"></div>
+
                         </div>
 
                         <span class="field-hint">
                             <i class="fas fa-lock"></i>
-                            Must match the unique number above exactly
+                            Doit correspondre exactement au numéro unique ci-dessus
                         </span>
+
                     </div>
 
-                    <!-- Match Status Display -->
-                    <div class="match-status-container" id="match-status" style="display: none;">
-                        <div class="match-status" id="match-status-content"></div>
-                    </div>
+                    <!-- Affichage de l'état des correspondances -->
 
-                    <!-- Additional Safety Check -->
-                    <div class="safety-checklist">
-                        <h3>Safety Checklist</h3>
-                        <div class="checklist-items">
-                            <div class="checklist-item">
-                                <input type="checkbox" id="check-1" class="checklist-input">
-                                <label for="check-1">I have confirmed this is the correct patient</label>
-                            </div>
-                            <div class="checklist-item">
-                                <input type="checkbox" id="check-2" class="checklist-input">
-                                <label for="check-2">I understand all patient records will be permanently deleted</label>
-                            </div>
-                            <div class="checklist-item">
-                                <input type="checkbox" id="check-3" class="checklist-input">
-                                <label for="check-3">I understand this action cannot be undone</label>
-                            </div>
+                    <div class="match-status-container"
+                         id="match-status"
+                         style="display: none;">
+
+                        <div class="match-status"
+                             id="match-status-content">
                         </div>
+
                     </div>
 
-                    <!-- Submit Button -->
+                    <!-- Vérifications de sécurité supplémentaires -->
+
+                    <div class="safety-checklist">
+
+                        <h3>Liste de vérification de sécurité</h3>
+
+                        <div class="checklist-items">
+
+                            <div class="checklist-item">
+
+                                <input
+                                    type="checkbox"
+                                    id="check-1"
+                                    class="checklist-input"
+                                >
+
+                                <label for="check-1">
+                                    J'ai confirmé qu'il s'agit du bon patient
+                                </label>
+
+                            </div>
+
+                            <div class="checklist-item">
+
+                                <input
+                                    type="checkbox"
+                                    id="check-2"
+                                    class="checklist-input"
+                                >
+
+                                <label for="check-2">
+                                    Je comprends que tous les dossiers du patient seront définitivement supprimés
+                                </label>
+
+                            </div>
+
+                            <div class="checklist-item">
+
+                                <input
+                                    type="checkbox"
+                                    id="check-3"
+                                    class="checklist-input"
+                                >
+
+                                <label for="check-3">
+                                    Je comprends que cette action est irréversible
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Boutons d'action -->
+
                     <div class="form-actions">
-                        <button type="button" class="btn btn-cancel" onclick="window.location.href='/dentists/Dentist'">
+
+                        <button
+                            type="button"
+                            class="btn btn-cancel"
+                            onclick="window.location.href='/dentists/Dentist'"
+                        >
+
                             <span class="btn-icon">
                                 <i class="fas fa-times"></i>
                             </span>
-                            <span class="btn-text">Cancel</span>
+
+                            <span class="btn-text">Annuler</span>
+
                         </button>
-                        <button type="submit" class="btn btn-delete" id="delete-btn" disabled>
+
+                        <button
+                            type="submit"
+                            class="btn btn-delete"
+                            id="delete-btn"
+                            disabled
+                        >
+
                             <span class="btn-icon">
                                 <i class="fas fa-trash-alt"></i>
                             </span>
-                            <span class="btn-text">Delete Patient</span>
+
+                            <span class="btn-text">Supprimer le patient</span>
+
                             <span class="btn-loader" style="display: none;">
                                 <i class="fas fa-spinner fa-spin"></i>
                             </span>
+
                         </button>
+
                     </div>
 
-                    <!-- Warning Text -->
+                    <!-- Texte d'avertissement -->
+
                     <div class="form-warning">
+
                         <i class="fas fa-exclamation-circle"></i>
-                        <span>This action will permanently delete all patient records, work orders, and history</span>
+
+                        <span>
+                            Cette action supprimera définitivement tous les dossiers,
+                            travaux et historiques du patient
+                        </span>
+
                     </div>
+
                 </form>
+
             </div>
 
-            <!-- Information Box -->
+            <!-- Boîte d'information -->
+
             <div class="info-box fade-in">
-                <h3>Before You Delete</h3>
+
+                <h3>Avant de supprimer</h3>
+
                 <ul class="info-list">
+
                     <li>
                         <i class="fas fa-notes-medical"></i>
-                        <span>All medical records will be permanently removed</span>
+                        <span>Tous les dossiers médicaux seront définitivement supprimés</span>
                     </li>
+
                     <li>
                         <i class="fas fa-clipboard-list"></i>
-                        <span>All work orders (khedma) associated will be deleted</span>
+                        <span>Tous les travaux (khedma) associés seront supprimés</span>
                     </li>
+
                     <li>
                         <i class="fas fa-history"></i>
-                        <span>Patient history and billing records will be lost</span>
+                        <span>L'historique du patient et les informations de facturation seront perdus</span>
                     </li>
+
                     <li>
                         <i class="fas fa-undo"></i>
-                        <span>This action cannot be reversed</span>
+                        <span>Cette action est irréversible</span>
                     </li>
+
                     <li>
                         <i class="fas fa-info-circle"></i>
-                        <span>Consider archiving instead of deleting if possible</span>
+                        <span>Envisagez l'archivage au lieu de la suppression si possible</span>
                     </li>
+
                 </ul>
+
             </div>
+
         </div>
+
     </main>
 
-    <!-- Footer -->
+    <!-- Pied de page -->
+
     <footer class="page-footer">
-        <p>&copy; 2024 Prosthetics Lab Management System. All rights reserved.</p>
+
+        <p>
+            &copy; 2024 Système de gestion du laboratoire de prothèse.
+            Tous droits réservés.
+        </p>
+
     </footer>
+
 </div>
 
 <!-- Scripts -->
+
 <script>
-    // Check if all fields match
+
+    // Vérifier si tous les champs correspondent
     function checkMatchingFields() {
+
         const firstName1 = document.getElementById('first-name-1').value.trim();
         const firstName2 = document.getElementById('first-name-2').value.trim();
         const lastName1 = document.getElementById('last-name-1').value.trim();
@@ -424,20 +605,21 @@
         const uniqueNum1 = document.getElementById('unique-number-1').value.trim();
         const uniqueNum2 = document.getElementById('unique-number-2').value.trim();
 
-        // Check first name match
+        // Vérifier la correspondance du prénom
         updateMatchIndicator('first-name-indicator', firstName1, firstName2);
 
-        // Check last name match
+        // Vérifier la correspondance du nom
         updateMatchIndicator('last-name-indicator', lastName1, lastName2);
 
-        // Check unique number match
+        // Vérifier la correspondance du numéro unique
         updateMatchIndicator('unique-number-indicator', uniqueNum1, uniqueNum2);
 
-        // Update overall status
+        // Mettre à jour l'état général
         updateOverallStatus();
     }
 
     function updateMatchIndicator(indicatorId, value1, value2) {
+
         const indicator = document.getElementById(indicatorId);
 
         if (value2.length === 0) {
@@ -445,20 +627,27 @@
             return;
         }
 
-        const isMatching = value1.toLowerCase() === value2.toLowerCase() && value1.length > 0;
+        const isMatching =
+            value1.toLowerCase() === value2.toLowerCase() &&
+            value1.length > 0;
 
         if (isMatching) {
+
             indicator.className = 'match-indicator match-success';
             indicator.innerHTML = '<i class="fas fa-check-circle"></i>';
             indicator.style.display = 'flex';
+
         } else {
+
             indicator.className = 'match-indicator match-error';
             indicator.innerHTML = '<i class="fas fa-times-circle"></i>';
             indicator.style.display = 'flex';
+
         }
     }
 
     function updateOverallStatus() {
+
         const firstName1 = document.getElementById('first-name-1').value.trim();
         const firstName2 = document.getElementById('first-name-2').value.trim();
         const lastName1 = document.getElementById('last-name-1').value.trim();
@@ -470,50 +659,99 @@
         const matchStatusContent = document.getElementById('match-status-content');
         const deleteBtn = document.getElementById('delete-btn');
 
-        const firstNameMatch = firstName1.toLowerCase() === firstName2.toLowerCase() && firstName1.length > 0;
-        const lastNameMatch = lastName1.toLowerCase() === lastName2.toLowerCase() && lastName1.length > 0;
-        const uniqueNumMatch = uniqueNum1.toLowerCase() === uniqueNum2.toLowerCase() && uniqueNum1.length > 0;
+        const firstNameMatch =
+            firstName1.toLowerCase() === firstName2.toLowerCase() &&
+            firstName1.length > 0;
 
-        const allMatch = firstNameMatch && lastNameMatch && uniqueNumMatch;
-        const anyConfirmation = firstName2.length > 0 || lastName2.length > 0 || uniqueNum2.length > 0;
+        const lastNameMatch =
+            lastName1.toLowerCase() === lastName2.toLowerCase() &&
+            lastName1.length > 0;
+
+        const uniqueNumMatch =
+            uniqueNum1.toLowerCase() === uniqueNum2.toLowerCase() &&
+            uniqueNum1.length > 0;
+
+        const allMatch =
+            firstNameMatch &&
+            lastNameMatch &&
+            uniqueNumMatch;
+
+        const anyConfirmation =
+            firstName2.length > 0 ||
+            lastName2.length > 0 ||
+            uniqueNum2.length > 0;
 
         if (!anyConfirmation) {
+
             matchStatus.style.display = 'none';
             deleteBtn.disabled = true;
             return;
         }
 
         if (allMatch) {
+
             matchStatusContent.className = 'status-success';
-            matchStatusContent.innerHTML = '<i class="fas fa-check-circle"></i> <span>All fields match! Deletion is ready.</span>';
+
+            matchStatusContent.innerHTML =
+                '<i class="fas fa-check-circle"></i> <span>Tous les champs correspondent ! La suppression est prête.</span>';
+
             matchStatus.style.display = 'block';
 
-            // Check if all checkboxes are checked
-            const allChecked = Array.from(document.querySelectorAll('.checklist-input')).every(cb => cb.checked);
+            // Vérifier si toutes les cases sont cochées
+            const allChecked =
+                Array.from(
+                    document.querySelectorAll('.checklist-input')
+                ).every(cb => cb.checked);
+
             deleteBtn.disabled = !allChecked;
+
         } else {
+
             matchStatusContent.className = 'status-error';
-            matchStatusContent.innerHTML = '<i class="fas fa-times-circle"></i> <span>Fields do not match. Please check again.</span>';
+
+            matchStatusContent.innerHTML =
+                '<i class="fas fa-times-circle"></i> <span>Les champs ne correspondent pas. Veuillez vérifier à nouveau.</span>';
+
             matchStatus.style.display = 'block';
+
             deleteBtn.disabled = true;
         }
     }
 
-    // Handle form submission
+    // Gérer l'envoi du formulaire
     function handleSubmit(event) {
+
         event.preventDefault();
 
-        const firstName1 = document.getElementById('first-name-1').value.trim();
-        const firstName2 = document.getElementById('first-name-2').value.trim();
-        const lastName1 = document.getElementById('last-name-1').value.trim();
-        const lastName2 = document.getElementById('last-name-2').value.trim();
-        const uniqueNum1 = document.getElementById('unique-number-1').value.trim();
-        const uniqueNum2 = document.getElementById('unique-number-2').value.trim();
-        const dentistName = document.getElementById('dentist-name').value.trim();
+        const firstName1 =
+            document.getElementById('first-name-1').value.trim();
 
-        const check1 = document.getElementById('check-1').checked;
-        const check2 = document.getElementById('check-2').checked;
-        const check3 = document.getElementById('check-3').checked;
+        const firstName2 =
+            document.getElementById('first-name-2').value.trim();
+
+        const lastName1 =
+            document.getElementById('last-name-1').value.trim();
+
+        const lastName2 =
+            document.getElementById('last-name-2').value.trim();
+
+        const uniqueNum1 =
+            document.getElementById('unique-number-1').value.trim();
+
+        const uniqueNum2 =
+            document.getElementById('unique-number-2').value.trim();
+
+        const dentistName =
+            document.getElementById('dentist-name').value.trim();
+
+        const check1 =
+            document.getElementById('check-1').checked;
+
+        const check2 =
+            document.getElementById('check-2').checked;
+
+        const check3 =
+            document.getElementById('check-3').checked;
 
         const form = event.target;
         const submitBtn = form.querySelector('.btn-delete');
@@ -521,204 +759,378 @@
         const btnLoader = submitBtn.querySelector('.btn-loader');
 
         // Validation
+
         if (!dentistName) {
-            showError(document.getElementById('dentist-name'), 'Please enter the dentist name');
+            showError(
+                document.getElementById('dentist-name'),
+                'Veuillez saisir le nom du dentiste'
+            );
             return;
         }
 
         if (!firstName1) {
-            showError(document.getElementById('first-name-1'), 'Please enter the first name');
+            showError(
+                document.getElementById('first-name-1'),
+                'Veuillez saisir le prénom'
+            );
             return;
         }
 
         if (firstName1.toLowerCase() !== firstName2.toLowerCase()) {
-            showError(document.getElementById('first-name-2'), 'First names do not match');
+            showError(
+                document.getElementById('first-name-2'),
+                'Les prénoms ne correspondent pas'
+            );
             return;
         }
 
         if (!lastName1) {
-            showError(document.getElementById('last-name-1'), 'Please enter the last name');
+            showError(
+                document.getElementById('last-name-1'),
+                'Veuillez saisir le nom'
+            );
             return;
         }
 
         if (lastName1.toLowerCase() !== lastName2.toLowerCase()) {
-            showError(document.getElementById('last-name-2'), 'Last names do not match');
+            showError(
+                document.getElementById('last-name-2'),
+                'Les noms ne correspondent pas'
+            );
             return;
         }
 
         if (!uniqueNum1) {
-            showError(document.getElementById('unique-number-1'), 'Please enter the unique number');
+            showError(
+                document.getElementById('unique-number-1'),
+                'Veuillez saisir le numéro unique'
+            );
             return;
         }
 
         if (uniqueNum1.toLowerCase() !== uniqueNum2.toLowerCase()) {
-            showError(document.getElementById('unique-number-2'), 'Unique numbers do not match');
+            showError(
+                document.getElementById('unique-number-2'),
+                'Les numéros uniques ne correspondent pas'
+            );
             return;
         }
 
         if (!check1 || !check2 || !check3) {
-            showWarning('Please confirm all safety checks before deleting');
+            showWarning(
+                'Veuillez confirmer toutes les vérifications de sécurité avant de supprimer le patient'
+            );
             return;
         }
 
-        // Show loading state
+        // Afficher l'état de chargement
+
         submitBtn.disabled = true;
         btnIcon.style.display = 'none';
         btnLoader.style.display = 'inline';
 
-        // Show confirmation dialog
-        if (confirm(`Are you absolutely sure you want to delete patient "${firstName1} ${lastName1}"?\n\nThis action cannot be undone.`)) {
+        // Afficher la boîte de confirmation
+
+        if (
+            confirm(
+                `Êtes-vous absolument sûr de vouloir supprimer le patient "${firstName1} ${lastName1}" ?\n\nCette action est irréversible.`
+            )
+        ) {
+
             setTimeout(() => {
                 form.submit();
             }, 500);
+
         } else {
+
             submitBtn.disabled = false;
             btnIcon.style.display = 'inline-flex';
             btnLoader.style.display = 'none';
         }
     }
 
-    // Show error message
+    // Afficher un message d'erreur
     function showError(input, message) {
+
         const group = input.closest('.form-group');
 
-        // Remove existing error
-        const existingError = group.querySelector('.error-message');
+        // Supprimer l'erreur existante
+        const existingError =
+            group.querySelector('.error-message');
+
         if (existingError) {
             existingError.remove();
         }
 
-        // Add error state
+        // Ajouter l'état d'erreur
         input.classList.add('error');
         group.classList.add('error-state');
 
-        // Create error message
+        // Créer le message d'erreur
         const errorMsg = document.createElement('span');
+
         errorMsg.className = 'error-message';
-        errorMsg.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+
+        errorMsg.innerHTML =
+            `<i class="fas fa-exclamation-circle"></i> ${message}`;
+
         group.appendChild(errorMsg);
 
-        // Shake animation
+        // Animation
         input.classList.add('shake');
-        setTimeout(() => input.classList.remove('shake'), 500);
 
-        // Focus the input
+        setTimeout(
+            () => input.classList.remove('shake'),
+            500
+        );
+
+        // Donner le focus au champ
         input.focus();
     }
 
-    // Show warning message
+    // Afficher un message d'avertissement
     function showWarning(message) {
-        const form = document.querySelector('.delete-patient-form');
 
-        // Remove existing warning
-        const existingWarning = form.querySelector('.temp-warning');
+        const form =
+            document.querySelector('.delete-patient-form');
+
+        // Supprimer l'avertissement existant
+        const existingWarning =
+            form.querySelector('.temp-warning');
+
         if (existingWarning) {
             existingWarning.remove();
         }
 
-        // Create warning
-        const warningDiv = document.createElement('div');
-        warningDiv.className = 'alert alert-warning temp-warning fade-in';
+        // Créer l'avertissement
+        const warningDiv =
+            document.createElement('div');
+
+        warningDiv.className =
+            'alert alert-warning temp-warning fade-in';
+
         warningDiv.innerHTML = `
             <div class="alert-icon">
                 <i class="fas fa-exclamation-circle"></i>
             </div>
+
             <div class="alert-content">
-                <h3>Attention Required</h3>
+                <h3>Attention requise</h3>
                 <p>${message}</p>
             </div>
-            <button type="button" class="alert-close" onclick="this.parentElement.remove()">
+
+            <button
+                type="button"
+                class="alert-close"
+                onclick="this.parentElement.remove()"
+            >
                 <i class="fas fa-times"></i>
             </button>
         `;
 
-        form.insertBefore(warningDiv, form.firstChild);
+        form.insertBefore(
+            warningDiv,
+            form.firstChild
+        );
 
-        // Scroll to warning
-        warningDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Faire défiler jusqu'à l'avertissement
+        warningDiv.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
     }
 
-    // Clear error on input
-    document.querySelectorAll('.form-input').forEach(input => {
-        input.addEventListener('input', function() {
-            if (this.classList.contains('error')) {
-                this.classList.remove('error');
-                this.closest('.form-group').classList.remove('error-state');
-                const errorMsg = this.closest('.form-group').querySelector('.error-message');
-                if (errorMsg) {
-                    errorMsg.remove();
+    // Effacer l'erreur lors de la saisie
+
+    document
+        .querySelectorAll('.form-input')
+        .forEach(input => {
+
+            input.addEventListener(
+                'input',
+                function() {
+
+                    if (this.classList.contains('error')) {
+
+                        this.classList.remove('error');
+
+                        this
+                            .closest('.form-group')
+                            .classList.remove('error-state');
+
+                        const errorMsg =
+                            this
+                                .closest('.form-group')
+                                .querySelector('.error-message');
+
+                        if (errorMsg) {
+                            errorMsg.remove();
+                        }
+                    }
+
+                    // Revérifier les champs de correspondance
+                    // lorsque les champs principaux changent
+
+                    if (
+                        this.id === 'first-name-1' ||
+                        this.id === 'last-name-1' ||
+                        this.id === 'unique-number-1'
+                    ) {
+                        checkMatchingFields();
+                    }
                 }
-            }
+            );
 
-            // Recheck matching fields when primary inputs change
-            if (this.id === 'first-name-1' || this.id === 'last-name-1' || this.id === 'unique-number-1') {
-                checkMatchingFields();
-            }
+            // Ajouter l'effet au focus
+
+            input.addEventListener(
+                'focus',
+                function() {
+                    this
+                        .closest('.form-group')
+                        .classList.add('focused');
+                }
+            );
+
+            input.addEventListener(
+                'blur',
+                function() {
+
+                    if (!this.value) {
+                        this
+                            .closest('.form-group')
+                            .classList.remove('focused');
+                    }
+                }
+            );
+
+            // Indication de saisie
+
+            input.addEventListener(
+                'input',
+                function() {
+
+                    const length = this.value.length;
+
+                    if (length > 0) {
+
+                        this
+                            .closest('.form-group')
+                            .classList.add('has-value');
+
+                    } else {
+
+                        this
+                            .closest('.form-group')
+                            .classList.remove('has-value');
+                    }
+                }
+            );
         });
 
-        // Add focus effect
-        input.addEventListener('focus', function() {
-            this.closest('.form-group').classList.add('focused');
+    // Fonctionnalité de la liste de vérification
+
+    document
+        .querySelectorAll('.checklist-input')
+        .forEach(checkbox => {
+
+            checkbox.addEventListener(
+                'change',
+                function() {
+                    updateOverallStatus();
+                }
+            );
         });
 
-        input.addEventListener('blur', function() {
-            if (!this.value) {
-                this.closest('.form-group').classList.remove('focused');
-            }
+    // Fermer les messages d'alerte
+
+    document
+        .querySelectorAll('.alert-close')
+        .forEach(btn => {
+
+            btn.addEventListener(
+                'click',
+                function() {
+
+                    const alert =
+                        this.closest('.alert');
+
+                    alert.style.animation =
+                        'fadeOut 0.4s ease forwards';
+
+                    setTimeout(
+                        () => alert.remove(),
+                        400
+                    );
+                }
+            );
         });
 
-        // Character feedback
-        input.addEventListener('input', function() {
-            const length = this.value.length;
-            if (length > 0) {
-                this.closest('.form-group').classList.add('has-value');
-            } else {
-                this.closest('.form-group').classList.remove('has-value');
-            }
+    // Effet d'ondulation sur les boutons
+
+    document
+        .querySelectorAll('.btn')
+        .forEach(button => {
+
+            button.addEventListener(
+                'click',
+                function(e) {
+
+                    if (this.disabled) return;
+
+                    const ripple =
+                        document.createElement('span');
+
+                    const rect =
+                        this.getBoundingClientRect();
+
+                    const size =
+                        Math.max(
+                            rect.width,
+                            rect.height
+                        );
+
+                    const x =
+                        e.clientX -
+                        rect.left -
+                        size / 2;
+
+                    const y =
+                        e.clientY -
+                        rect.top -
+                        size / 2;
+
+                    ripple.style.width =
+                        ripple.style.height =
+                        size + 'px';
+
+                    ripple.style.left =
+                        x + 'px';
+
+                    ripple.style.top =
+                        y + 'px';
+
+                    ripple.classList.add('ripple');
+
+                    this.appendChild(ripple);
+
+                    setTimeout(
+                        () => ripple.remove(),
+                        600
+                    );
+                }
+            );
         });
-    });
 
-    // Checklist functionality
-    document.querySelectorAll('.checklist-input').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            updateOverallStatus();
-        });
-    });
+    // Vérification de l'état initial
 
-    // Close alert messages
-    document.querySelectorAll('.alert-close').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const alert = this.closest('.alert');
-            alert.style.animation = 'fadeOut 0.4s ease forwards';
-            setTimeout(() => alert.remove(), 400);
-        });
-    });
+    window.addEventListener(
+        'load',
+        function() {
+            checkMatchingFields();
+        }
+    );
 
-    // Ripple effect on buttons
-    document.querySelectorAll('.btn').forEach(button => {
-        button.addEventListener('click', function(e) {
-            if (this.disabled) return;
-
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            ripple.classList.add('ripple');
-
-            this.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 600);
-        });
-    });
-
-    // Initial state check
-    window.addEventListener('load', function() {
-        checkMatchingFields();
-    });
 </script>
 
 </body>

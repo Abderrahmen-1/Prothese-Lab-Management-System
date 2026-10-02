@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Prosthetics Lab Management System - Assign and track prosthetic work orders">
-    <meta name="keywords" content="Prosthetics, Lab Management, Dental, Work Orders, Patient Care">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Get Khedma - ProLab Hub</title>
+    <meta name="description" content="Système de gestion du laboratoire de prothèse - Attribution et suivi des travaux de prothèse">
+    <meta name="keywords" content="Prothèse, Gestion de laboratoire, Dentaire, Travaux, Soins des patients">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+    <title>Obtenir une tâche - ProLab Hub</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='ProthesistGetKhedma.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
@@ -29,12 +29,12 @@
                 </div>
                 <div class="logo-text">
                     <h1>ProLab Hub</h1>
-                    <p>Work Order Management</p>
+                    <p>Gestion des travaux</p>
                 </div>
             </div>
             <nav class="header-nav">
                 <a href="/prothesists/ProKhedma" class="nav-btn back-btn">
-                    <i class="fas fa-arrow-left"></i> Back to Prosthesists
+                    <i class="fas fa-arrow-left"></i> Retour aux prothésistes
                 </a>
             </nav>
         </div>
@@ -49,11 +49,11 @@
             <div class="alert-content">
                 <h3>
                     {% if 'successfully' in message or '✅' in message %}
-                    Success
+                    Opération réussie
                     {% elif 'Invalid' in message or '❌' in message %}
-                    Error
+                    Erreur
                     {% else %}
-                    Notice
+                    Information
                     {% endif %}
                 </h3>
 
@@ -76,7 +76,7 @@
             <i class="fas fa-exclamation-circle"></i>
 
             <div class="alert-content">
-                <h3>Error</h3>
+                <h3>Erreur</h3>
                 <p>{{ error }}</p>
             </div>
 
@@ -94,8 +94,8 @@
                 <i class="fas fa-handshake"></i>
             </div>
             <div class="page-header-content">
-                <h2>New Work Order</h2>
-                <p>Complete all fields to create a new prosthetic work order assignment</p>
+                <h2>Nouveau travail</h2>
+                <p>Remplissez tous les champs pour créer une nouvelle attribution de travail de prothèse</p>
             </div>
         </div>
 
@@ -103,15 +103,15 @@
             <form action="/prothesists/ProGetKhedma" method="POST" id="khedmaForm" class="form-layout">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-                <!-- Prosthesist Information -->
+                <!-- Informations du prothésiste -->
                 <div class="form-section fade-in" style="animation-delay: 0.1s">
                     <div class="section-header">
                         <div class="section-icon">
                             <i class="fas fa-user-md"></i>
                         </div>
                         <div class="section-title-wrapper">
-                            <h3 class="section-title">Prosthesist Information</h3>
-                            <p class="section-subtitle">Identify the responsible prosthesist</p>
+                            <h3 class="section-title">Informations du prothésiste</h3>
+                            <p class="section-subtitle">Identifiez le prothésiste responsable</p>
                         </div>
                     </div>
 
@@ -119,44 +119,44 @@
                         <div class="form-group">
                             <label for="ProthesistName">
                                 <i class="fas fa-user"></i>
-                                Prosthesist Name
+                                Nom du prothésiste
                             </label>
                             <input
                                     type="text"
                                     id="ProthesistName"
                                     name="ProthesistName"
-                                    placeholder="Enter prosthesist name"
+                                    placeholder="Saisissez le nom du prothésiste"
                                     required
                                     class="form-input">
-                            <span class="input-hint">Full name of the responsible prosthesist</span>
+                            <span class="input-hint">Nom complet du prothésiste responsable</span>
                         </div>
 
                         <div class="form-group">
                             <label for="ProthesistNumber">
                                 <i class="fas fa-id-card"></i>
-                                Prosthesist ID Number
+                                Numéro d’identification du prothésiste
                             </label>
                             <input
                                     type="text"
                                     id="ProthesistNumber"
                                     name="ProthesistNumber"
-                                    placeholder="Enter prosthesist ID"
+                                    placeholder="Saisissez l’identifiant du prothésiste"
                                     required
                                     class="form-input">
-                            <span class="input-hint">Unique identification number</span>
+                            <span class="input-hint">Numéro d’identification unique</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Work Order Source -->
+                <!-- Source du travail -->
                 <div class="form-section fade-in" style="animation-delay: 0.2s">
                     <div class="section-header">
                         <div class="section-icon">
                             <i class="fas fa-route"></i>
                         </div>
                         <div class="section-title-wrapper">
-                            <h3 class="section-title">Work Order Source</h3>
-                            <p class="section-subtitle">Specify the origin of the work order</p>
+                            <h3 class="section-title">Source du travail</h3>
+                            <p class="section-subtitle">Précisez l’origine du travail</p>
                         </div>
                     </div>
 
@@ -164,7 +164,7 @@
                         <div class="form-group full-width">
                             <label for="Source">
                                 <i class="fas fa-sitemap"></i>
-                                Khedma Source
+                                Source de la tâche
                             </label>
                             <select
                                     id="Source"
@@ -172,11 +172,11 @@
                                     oninput="GetSourceFunction()"
                                     required
                                     class="form-input form-select">
-                                <option value="">-- Select Source --</option>
-                                <option value="patient">Direct Patient</option>
-                                <option value="dentist">Through Dentist</option>
+                                <option value="">-- Sélectionnez la source --</option>
+                                <option value="patient">Patient direct</option>
+                                <option value="dentist">Par l’intermédiaire d’un dentiste</option>
                             </select>
-                            <span class="input-hint">Choose the source of the work order</span>
+                            <span class="input-hint">Choisissez la source du travail</span>
                         </div>
                     </div>
 
@@ -185,20 +185,20 @@
                             <div class="conditional-icon patient-icon">
                                 <i class="fas fa-user"></i>
                             </div>
-                            <h4>Patient Source Details</h4>
+                            <h4>Informations sur la source : patient</h4>
                         </div>
                         <div class="form-group">
                             <label for="PatientSourceInput">
                                 <i class="fas fa-hashtag"></i>
-                                Patient Unique Number
+                                Numéro unique du patient
                             </label>
                             <input
                                     type="text"
                                     id="PatientSourceInput"
                                     name="PatientSource"
-                                    placeholder="Enter 10-digit patient number"
+                                    placeholder="Saisissez le numéro du patient à 10 chiffres"
                                     class="form-input">
-                            <span class="input-hint">10-digit unique patient identifier</span>
+                            <span class="input-hint">Identifiant unique du patient à 10 chiffres</span>
                         </div>
                     </div>
 
@@ -207,48 +207,48 @@
                             <div class="conditional-icon dentist-icon">
                                 <i class="fas fa-user-doctor"></i>
                             </div>
-                            <h4>Dentist Source Details</h4>
+                            <h4>Informations sur la source : dentiste</h4>
                         </div>
                         <div class="form-grid">
                             <div class="form-group">
                                 <label for="DentistSourceInput">
                                     <i class="fas fa-user-doctor"></i>
-                                    Dentist Name
+                                    Nom du dentiste
                                 </label>
                                 <input
                                         type="text"
                                         id="DentistSourceInput"
                                         name="DentistSource"
-                                        placeholder="Enter dentist name"
+                                        placeholder="Saisissez le nom du dentiste"
                                         class="form-input">
-                                <span class="input-hint">Name of the referring dentist</span>
+                                <span class="input-hint">Nom du dentiste prescripteur</span>
                             </div>
                             <div class="form-group">
                                 <label for="DentistNumberInput">
                                     <i class="fas fa-hashtag"></i>
-                                    Patient Number
+                                    Numéro du patient
                                 </label>
                                 <input
                                         type="text"
                                         id="DentistNumberInput"
                                         name="Dentistnumber"
-                                        placeholder="Enter patient number"
+                                        placeholder="Saisissez le numéro du patient"
                                         class="form-input">
-                                <span class="input-hint">Associated patient identifier</span>
+                                <span class="input-hint">Identifiant du patient associé</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project Timeline -->
+                <!-- Calendrier du travail -->
                 <div class="form-section fade-in" style="animation-delay: 0.3s">
                     <div class="section-header">
                         <div class="section-icon">
                             <i class="fas fa-calendar-alt"></i>
                         </div>
                         <div class="section-title-wrapper">
-                            <h3 class="section-title">Project Timeline</h3>
-                            <p class="section-subtitle">Set start date and deadline</p>
+                            <h3 class="section-title">Calendrier du travail</h3>
+                            <p class="section-subtitle">Définissez la date de début et la date limite</p>
                         </div>
                     </div>
 
@@ -256,7 +256,7 @@
                         <div class="form-group">
                             <label for="GetDate">
                                 <i class="fas fa-calendar-check"></i>
-                                Start Date
+                                Date de début
                             </label>
                             <input
                                     type="date"
@@ -264,13 +264,13 @@
                                     name="GetDate"
                                     required
                                     class="form-input">
-                            <span class="input-hint">Work order start date</span>
+                            <span class="input-hint">Date de début du travail</span>
                         </div>
 
                         <div class="form-group">
                             <label for="GetDeadLine">
                                 <i class="fas fa-calendar-times"></i>
-                                Deadline
+                                Date limite
                             </label>
                             <input
                                     type="date"
@@ -278,20 +278,20 @@
                                     name="GetDeadLine"
                                     required
                                     class="form-input">
-                            <span class="input-hint">Expected completion date</span>
+                            <span class="input-hint">Date prévue de réalisation</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Financial Details -->
+                <!-- Détails financiers -->
                 <div class="form-section fade-in" style="animation-delay: 0.4s">
                     <div class="section-header">
                         <div class="section-icon">
                             <i class="fas fa-money-bill-wave"></i>
                         </div>
                         <div class="section-title-wrapper">
-                            <h3 class="section-title">Financial Details</h3>
-                            <p class="section-subtitle">Payment information and pricing</p>
+                            <h3 class="section-title">Détails financiers</h3>
+                            <p class="section-subtitle">Informations sur le paiement et la tarification</p>
                         </div>
                     </div>
 
@@ -299,7 +299,7 @@
                         <div class="form-group">
                             <label for="PriceValue">
                                 <i class="fas fa-tag"></i>
-                                Work Order Price (DA)
+                                Prix du travail (DA)
                             </label>
                             <div class="price-input-wrapper">
                                 <span class="currency-symbol">DA</span>
@@ -312,13 +312,13 @@
                                         required
                                         class="form-input price-input">
                             </div>
-                            <span class="input-hint">Total work order amount</span>
+                            <span class="input-hint">Montant total du travail</span>
                         </div>
 
                         <div class="form-group">
                             <label for="khalsaCheck">
                                 <i class="fas fa-coins"></i>
-                                Fully Paid (Khalsa)?
+                                Entièrement payé (Khalsa) ?
                             </label>
                             <select
                                     id="khalsaCheck"
@@ -326,11 +326,11 @@
                                     oninput="KhalsaCheckFunction()"
                                     required
                                     class="form-input form-select">
-                                <option value="">-- Select --</option>
-                                <option value="yes">Yes, Fully Paid</option>
-                                <option value="no">No, Partial/Pending</option>
+                                <option value="">-- Sélectionnez --</option>
+                                <option value="yes">Oui, entièrement payé</option>
+                                <option value="no">Non, partiel/en attente</option>
                             </select>
-                            <span class="input-hint">Indicate payment status</span>
+                            <span class="input-hint">Indiquez le statut du paiement</span>
                         </div>
                     </div>
 
@@ -339,23 +339,23 @@
                             <div class="conditional-icon payment-icon">
                                 <i class="fas fa-credit-card"></i>
                             </div>
-                            <h4>Partial Payment (Versa)</h4>
+                            <h4>Paiement partiel (Versement)</h4>
                         </div>
                         <div class="form-group">
                             <label for="versaChoice">
                                 <i class="fas fa-hand-holding-usd"></i>
-                                Received Partial Payment?
+                                Paiement partiel reçu ?
                             </label>
                             <select
                                     id="versaChoice"
                                     name="VersaChoice"
                                     oninput="GetVersaChoiceFunction()"
                                     class="form-input form-select">
-                                <option value="">-- Select --</option>
-                                <option value="yes">Yes, Received</option>
-                                <option value="no">No, Not Yet</option>
+                                <option value="">-- Sélectionnez --</option>
+                                <option value="yes">Oui, reçu</option>
+                                <option value="no">Non, pas encore</option>
                             </select>
-                            <span class="input-hint">Has partial payment been received?</span>
+                            <span class="input-hint">Un paiement partiel a-t-il été reçu ?</span>
                         </div>
                     </div>
 
@@ -364,12 +364,12 @@
                             <div class="conditional-icon amount-icon">
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
-                            <h4>Payment Amount</h4>
+                            <h4>Montant du paiement</h4>
                         </div>
                         <div class="form-group">
                             <label for="VersementValue">
                                 <i class="fas fa-money-check-alt"></i>
-                                Payment Received Amount (DA)
+                                Montant du paiement reçu (DA)
                             </label>
                             <div class="price-input-wrapper">
                                 <span class="currency-symbol">DA</span>
@@ -381,7 +381,7 @@
                                         step="0.01"
                                         class="form-input price-input">
                             </div>
-                            <span class="input-hint">Amount of partial payment received</span>
+                            <span class="input-hint">Montant du paiement partiel reçu</span>
                         </div>
                     </div>
                 </div>
@@ -390,11 +390,11 @@
                 <div class="form-actions fade-in" style="animation-delay: 0.5s">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-check-circle"></i>
-                        <span>Create Work Order</span>
+                        <span>Créer le travail</span>
                     </button>
                     <a href="/prothesists/ProKhedma" class="btn btn-secondary">
                         <i class="fas fa-times-circle"></i>
-                        <span>Cancel</span>
+                        <span>Annuler</span>
                     </a>
                 </div>
             </form>
@@ -404,35 +404,35 @@
         <div class="info-box fade-in" style="animation-delay: 0.6s">
             <div class="info-header">
                 <i class="fas fa-lightbulb"></i>
-                <h4>Quick Guide</h4>
+                <h4>Guide rapide</h4>
             </div>
             <ul class="info-list">
                 <li>
                     <i class="fas fa-check"></i>
                     <div>
-                        <strong>Work Order Source:</strong>
-                        <span>Choose whether the order comes directly from a patient or through a dentist referral</span>
+                        <strong>Source du travail:</strong>
+                        <span>Choisissez si le travail provient directement d’un patient ou d’une orientation par un dentiste</span>
                     </div>
                 </li>
                 <li>
                     <i class="fas fa-check"></i>
                     <div>
-                        <strong>Timeline:</strong>
-                        <span>Ensure the deadline is after the start date</span>
+                        <strong>Calendrier :</strong>
+                        <span>Assurez-vous que la date limite est postérieure à la date de début</span>
                     </div>
                 </li>
                 <li>
                     <i class="fas fa-check"></i>
                     <div>
-                        <strong>Payment:</strong>
-                        <span>Track whether payment is full (Khalsa) or partial</span>
+                        <strong>Paiement :</strong>
+                        <span>Indiquez si le paiement est complet (Khalsa) ou partiel</span>
                     </div>
                 </li>
                 <li>
                     <i class="fas fa-check"></i>
                     <div>
-                        <strong>Versa:</strong>
-                        <span>Partial payment received towards the total amount</span>
+                        <strong>Versement :</strong>
+                        <span>Paiement partiel reçu sur le montant total</span>
                     </div>
                 </li>
             </ul>
@@ -446,11 +446,11 @@
         const patientSection = document.getElementById("PatientSource");
         const dentistSection = document.getElementById("DentistSource");
 
-        // Hide both sections
+        // Masquer les deux sections
         patientSection.style.display = "none";
         dentistSection.style.display = "none";
 
-        // Show the appropriate section with animation
+        // Afficher la section appropriée avec une animation
         if (source === "patient") {
             patientSection.style.display = "block";
             patientSection.style.animation = "slideDown 0.4s ease";
@@ -489,7 +489,7 @@
         }
     }
 
-    // Form validation
+    // Validation du formulaire
     document.getElementById('khedmaForm').addEventListener('submit', function(e) {
         const startDate = document.getElementById('GetDate').value;
         const deadline = document.getElementById('GetDeadLine').value;
@@ -497,23 +497,23 @@
 
         if (startDate && deadline && startDate > deadline) {
             e.preventDefault();
-            alert('❌ Deadline must be after the start date!');
+            alert('❌ Date limite must be after the start date!');
             return false;
         }
 
         if (!khalsa) {
             e.preventDefault();
-            alert('❌ Please select payment status!');
+            alert('❌ Veuillez sélectionner le statut du paiement !');
             return false;
         }
 
-        // Add loading state to submit button
+        // Ajouter l’état de chargement au bouton de validation
         const submitBtn = this.querySelector('button[type="submit"]');
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Creating...</span>';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Création en cours...</span>';
         submitBtn.disabled = true;
     });
 
-    // Ripple effect for buttons
+    // Effet ripple pour les boutons
     document.querySelectorAll('.btn').forEach(button => {
         button.addEventListener('click', function(e) {
             const ripple = document.createElement('span');
@@ -532,7 +532,7 @@
         });
     });
 
-    // Auto-dismiss alerts
+    // Masquer automatiquement les alertes
     document.querySelectorAll('.alert').forEach(alert => {
         setTimeout(() => {
             alert.style.animation = 'fadeOut 0.4s ease';

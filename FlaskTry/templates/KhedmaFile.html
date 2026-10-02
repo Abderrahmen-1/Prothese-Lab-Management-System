@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional Prosthetics Lab Work Management System">
-    <meta name="keywords" content="Prosthetics, Lab Management, Work Tracking, Khedma">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Khedma Management - Prosthetics Lab</title>
+    <meta name="description" content="Système professionnel de gestion des travaux d'un laboratoire de prothèse">
+    <meta name="keywords" content="Prothèse, Gestion de laboratoire, Suivi des travaux, Khedma">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+    <title>Gestion des tâches - Laboratoire de prothèse</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaFile.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
@@ -20,7 +20,7 @@
 <div class="animated-bg"></div>
 <div class="container">
 
-    <!-- ================= HEADER ================= -->
+    <!-- ================= EN-TÊTE ================= -->
 
     <header class="header">
 
@@ -35,9 +35,9 @@
                 <div class="logo-text">
                     <h1>Services</h1>
                     {% if name %}
-                        <p>{{ name }} Lab Work Management</p>
+                        <p>Gestion des travaux du laboratoire {{ name }}</p>
                     {% else %}
-                        <p>Your Lab Work Management</p>
+                        <p>Gestion des travaux de votre laboratoire</p>
                     {% endif %}
                 </div>
             </div>
@@ -46,12 +46,12 @@
 
                 <div class="status-indicator">
                     <span class="status-dot"></span>
-                    System Active
+                    Système actif
                 </div>
 
                 <a href="/HomePage" class="nav-btn back-btn ripple-btn">
                     <i class="fas fa-arrow-left"></i>
-                    Back to Menu
+                    Retour au menu
                 </a>
 
             </div>
@@ -61,13 +61,12 @@
     </header>
 
 
-
-    <!-- ================= MAIN ================= -->
+    <!-- ================= CONTENU PRINCIPAL ================= -->
 
     <main class="main-content">
 
 
-        <!-- ================= WELCOME ================= -->
+        <!-- ================= BIENVENUE ================= -->
 
         <section class="welcome-section">
 
@@ -75,18 +74,18 @@
 
                 <span class="section-label">
                     <i class="fas fa-layer-group"></i>
-                    WORK MANAGEMENT
+                    GESTION DES TRAVAUX
                 </span>
 
                 <h2>
-                    Keep your lab work
-                    <span>under control.</span>
+                    Gardez vos travaux de laboratoire
+                    <span>sous contrôle.</span>
                 </h2>
 
                 <p>
-                    Manage your prosthetic work, monitor completion,
-                    follow payments and keep track of important deadlines
-                    from one place.
+                    Gérez vos travaux de prothèse, suivez leur réalisation,
+                    contrôlez les paiements et gardez une trace des dates limites
+                    importantes depuis un seul endroit.
                 </p>
 
             </div>
@@ -106,8 +105,7 @@
         </section>
 
 
-
-        <!-- ================= QUICK OVERVIEW ================= -->
+        <!-- ================= APERÇU RAPIDE ================= -->
 
         <section class="overview-section">
 
@@ -116,15 +114,15 @@
                 <div>
                     <span class="section-label">
                         <i class="fas fa-chart-simple"></i>
-                        OVERVIEW
+                        APERÇU
                     </span>
 
-                    <h3>Work at a glance</h3>
+                    <h3>Vue d'ensemble des travaux</h3>
                 </div>
 
                 <span class="live-badge">
                     <span></span>
-                    Live workspace
+                    Espace de travail en direct
                 </span>
 
             </div>
@@ -133,7 +131,7 @@
             <div class="overview-grid">
 
 
-                <!-- ALL -->
+                <!-- TOUS LES TRAVAUX -->
 
                 <a href="/Allkhedma"
                    class="overview-card all-card ripple-btn">
@@ -145,13 +143,13 @@
                     <div class="overview-info">
 
                         <span class="overview-label">
-                            ALL WORK
+                            TOUS LES TRAVAUX
                         </span>
 
-                        <h4>All Work Items</h4>
+                        <h4>Tous les travaux</h4>
 
                         <p>
-                            View and manage every active work item.
+                            Consultez et gérez tous les travaux actifs.
                         </p>
 
                     </div>
@@ -163,8 +161,7 @@
                 </a>
 
 
-
-                <!-- FINISHED -->
+                <!-- TERMINÉS -->
 
                 <a href="/Finished"
                    class="overview-card finished-card ripple-btn">
@@ -176,13 +173,13 @@
                     <div class="overview-info">
 
                         <span class="overview-label">
-                            COMPLETED
+                            TERMINÉS
                         </span>
 
-                        <h4>Finished Work</h4>
+                        <h4>Travaux terminés</h4>
 
                         <p>
-                            Review work that has already been completed.
+                            Consultez les travaux qui ont déjà été terminés.
                         </p>
 
                     </div>
@@ -194,8 +191,7 @@
                 </a>
 
 
-
-                <!-- PAYMENT -->
+                <!-- PAIEMENTS -->
 
                 <a href="/Khalsa"
                    class="overview-card payment-card ripple-btn">
@@ -207,13 +203,13 @@
                     <div class="overview-info">
 
                         <span class="overview-label">
-                            PAYMENTS
+                            PAIEMENTS
                         </span>
 
-                        <h4>Payment Status</h4>
+                        <h4>Statut des paiements</h4>
 
                         <p>
-                            Check paid and outstanding work items.
+                            Vérifiez les travaux payés et les paiements restants.
                         </p>
 
                     </div>
@@ -225,8 +221,7 @@
                 </a>
 
 
-
-                <!-- DEADLINES -->
+                <!-- DATES LIMITES -->
 
                 <!--<a href="/KhedmaByDeadLine"
                    class="overview-card deadline-card ripple-btn">
@@ -238,13 +233,13 @@
                     <div class="overview-info">
 
                         <span class="overview-label">
-                            TIME CONTROL
+                            CONTRÔLE DU TEMPS
                         </span>
 
-                        <h4>Deadlines</h4>
+                        <h4>Dates limites</h4>
 
                         <p>
-                            Check upcoming deadlines and prioritize work.
+                            Consultez les prochaines dates limites et priorisez les travaux.
                         </p>
 
                     </div>
@@ -259,7 +254,8 @@
 
         </section>
 
-        <!-- ================= TIPS ================= -->
+
+        <!-- ================= CONSEILS ================= -->
 
         <section class="bottom-section">
 
@@ -272,11 +268,11 @@
 
                 <div>
 
-                    <span>QUICK TIP</span>
+                    <span>CONSEIL RAPIDE</span>
 
                     <p id="tipText">
-                        Keep an eye on deadlines to avoid delays
-                        in your laboratory workflow.
+                        Surveillez les dates limites afin d'éviter les retards
+                        dans le fonctionnement de votre laboratoire.
                     </p>
 
                 </div>
@@ -291,9 +287,10 @@
                 </div>
 
                 <div>
-                    <strong>Khedma Workspace</strong>
+                    <strong>Espace de travail Khedma</strong>
+
                     <small>
-                        Organized workflow for your prosthetics lab
+                        Flux de travail organisé pour votre laboratoire de prothèse
                     </small>
                 </div>
 
@@ -308,7 +305,6 @@
 </div>
 
 
-
 <!-- ================= JAVASCRIPT ================= -->
 
 <script>
@@ -317,7 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================
-       RIPPLE EFFECT
+       EFFET D'ONDULATION
     ========================================= */
 
     document.querySelectorAll(".ripple-btn").forEach(button => {
@@ -352,9 +348,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-
     /* =========================================
-       SCROLL REVEAL
+       APPARITION AU DÉFILEMENT
     ========================================= */
 
     const elements = document.querySelectorAll(".overview-card, .tip-card, .system-card");
@@ -393,20 +388,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-
     /* =========================================
-       ROTATING QUICK TIPS
+       CONSEILS RAPIDES ROTATIFS
     ========================================= */
 
     const tips = [
 
-        "Keep an eye on deadlines to avoid delays in your laboratory workflow.",
+        "Surveillez les dates limites afin d'éviter les retards dans le fonctionnement de votre laboratoire.",
 
-        "Use All Work to search and manage your active cases from one place.",
+        "Utilisez Tous les travaux pour rechercher et gérer vos dossiers actifs depuis un seul endroit.",
 
-        "Check Payment Tracking regularly to keep outstanding payments under control.",
+        "Consultez régulièrement le suivi des paiements afin de garder les paiements restants sous contrôle.",
 
-        "Use the Deadline Monitor to prioritize work that needs attention soon."
+        "Utilisez le suivi des dates limites pour prioriser les travaux nécessitant bientôt votre attention."
 
     ];
 
@@ -435,9 +429,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 5000);
 
 
-
     /* =========================================
-       CARD TILT EFFECT
+       EFFET D'INCLINAISON DES CARTES
     ========================================= */
 
     document.querySelectorAll(".overview-card")
@@ -484,4 +477,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
-

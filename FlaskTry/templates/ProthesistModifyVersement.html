@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -7,18 +7,15 @@
     <meta name="description" content="Professional Prothesist Management System - Modify Versement">
     <meta name="keywords" content="Prothesist, Prosthetics, Versement, Lab Management, Flask">
     <meta name="author" content="Prosthetics Lab Team">
-    <title>Modify Versement - Prothesist Management</title>
+    <title>Modifier le versement - Gestion des prothésistes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaProFile.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='ProthesistModifyVersement.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-
 
 {% if message %}
 <div class="alert-container">
@@ -28,7 +25,7 @@
         </div>
 
         <div class="alert-content">
-            <h3>Success</h3>
+            <h3>Succès</h3>
             <p>{{ message }}</p>
         </div>
 
@@ -48,7 +45,7 @@
         </div>
 
         <div class="alert-content">
-            <h3>Error</h3>
+            <h3>Erreur</h3>
             <p>{{ error }}</p>
         </div>
 
@@ -63,7 +60,7 @@
 <div class="animated-bg"></div>
 
 <div class="container">
-    <!-- Header -->
+    <!-- En-tête -->
     <header class="header">
         <div class="header-content">
             <div class="logo-section">
@@ -72,87 +69,100 @@
                 </div>
                 <div class="logo-text">
                     <h1>ProLab Hub</h1>
-                    <p>Prosthetics Lab Management System</p>
+                    <p>Système de gestion de laboratoire de prothèses</p>
                 </div>
             </div>
             <nav class="header-nav">
                 <a href="/prothesists/ProKhedma" class="nav-btn back-btn">
-                    <i class="fas fa-arrow-left"></i> Back to Prothesist
+                    <i class="fas fa-arrow-left"></i> Retour aux prothésistes
                 </a>
             </nav>
         </div>
     </header>
 
-    <!-- Main Layout -->
+    <!-- Mise en page principale -->
     <div class="main-layout">
-        <!-- Sidebar -->
+
+        <!-- Barre latérale -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h2>Modify Versement</h2>
+                <h2>Modifier le versement</h2>
                 <div class="header-accent"></div>
             </div>
 
             <nav class="sidebar-menu">
+
                 <div class="menu-group">
                     <h3 class="group-title">Navigation</h3>
+
                     <a href="{{ url_for('prothesists.Proallkhedma') }}" class="menu-item all-item">
                         <i class="fas fa-list-alt"></i>
-                        <span>All Khedma</span>
+                        <span>Toutes les tâches</span>
                     </a>
+
                     <a href="/prothesists/ProKhedma" class="menu-item get-item">
                         <i class="fas fa-arrow-left"></i>
-                        <span>Back to Main</span>
+                        <span>Retour à l'accueil</span>
                     </a>
                 </div>
 
                 <div class="menu-group">
-                    <h3 class="group-title">Form Info</h3>
+                    <h3 class="group-title">Informations du formulaire</h3>
+
                     <div class="info-box">
                         <i class="fas fa-info-circle"></i>
+
                         <div class="info-content">
-                            <p><strong>Khedma Source:</strong> Select either "patient" or "dentist"</p>
-                            <p><strong>Versement:</strong> The payment amount to modify</p>
+                            <p><strong>Source de la tâche :</strong> Sélectionnez « patient » ou « dentiste »</p>
+                            <p><strong>Versement :</strong> Montant du paiement à modifier</p>
                         </div>
                     </div>
                 </div>
+
             </nav>
         </aside>
 
-        <!-- Main Content -->
+        <!-- Contenu principal -->
         <main class="content">
-            <!-- Welcome Section -->
+
+            <!-- Section d'accueil -->
             <div class="form-header">
                 <div class="form-header-icon">
                     <i class="fas fa-pencil-alt"></i>
                 </div>
+
                 <div class="form-header-content">
-                    <h1>Modify Versement</h1>
-                    <p>Update payment information for prothesist services</p>
+                    <h1>Modifier le versement</h1>
+                    <p>Mettre à jour les informations de paiement des services du prothésiste</p>
                 </div>
             </div>
 
-            <!-- Form Section -->
+            <!-- Section du formulaire -->
             <div class="form-container">
+
                 <form action="/prothesists/ProModifyVersement" method="POST" class="modify-form" id="modifyVersementForm">
+
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-                    <!-- Prothesist Information Section -->
+                    <!-- Informations du prothésiste -->
                     <div class="form-section">
+
                         <div class="section-header">
                             <i class="fas fa-user-circle"></i>
-                            <h2>Prothesist Information</h2>
+                            <h2>Informations du prothésiste</h2>
                         </div>
 
                         <div class="form-group">
                             <label for="ProthesistName">
-                                <i class="fas fa-user"></i> Prothesist Name
+                                <i class="fas fa-user"></i> Nom du prothésiste
                                 <span class="required">*</span>
                             </label>
+
                             <input
                                     type="text"
                                     id="ProthesistName"
                                     name="ProthesistName"
-                                    placeholder="Enter the prothesist name"
+                                    placeholder="Entrez le nom du prothésiste"
                                     required
                                     class="form-input"
                             >
@@ -160,33 +170,39 @@
 
                         <div class="form-group">
                             <label for="ProthesistNumber">
-                                <i class="fas fa-id-card"></i> Prothesist Number
+                                <i class="fas fa-id-card"></i> Numéro du prothésiste
                                 <span class="required">*</span>
                             </label>
+
                             <input
                                     type="text"
                                     id="ProthesistNumber"
                                     name="ProthesistNumber"
-                                    placeholder="Enter the prothesist number"
+                                    placeholder="Entrez le numéro du prothésiste"
                                     required
                                     class="form-input"
                             >
                         </div>
+
                     </div>
 
-                    <!-- Khedma Source Section -->
+                    <!-- Informations sur la tâche -->
                     <div class="form-section">
+
                         <div class="section-header">
                             <i class="fas fa-list"></i>
-                            <h2>Khedma Information</h2>
+                            <h2>Informations sur la tâche</h2>
                         </div>
 
                         <div class="form-group">
+
                             <label for="KhedmaSource">
-                                <i class="fas fa-layer-group"></i> Khedma Source
+                                <i class="fas fa-layer-group"></i> Source de la tâche
                                 <span class="required">*</span>
                             </label>
+
                             <div class="select-wrapper">
+
                                 <select
                                         id="KhedmaSource"
                                         name="khedmaSource"
@@ -194,157 +210,201 @@
                                         class="form-select"
                                         onchange="handleSourceChange()"
                                 >
-                                    <option value="">-- Select Source --</option>
+                                    <option value="">-- Sélectionnez une source --</option>
                                     <option value="patient">Patient</option>
-                                    <option value="dentist">Dentist</option>
+                                    <option value="dentist">Dentiste</option>
                                 </select>
+
                                 <span class="select-icon">
-                                        <i class="fas fa-chevron-down"></i>
-                                    </span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </span>
+
                             </div>
                         </div>
 
-                        <!-- Patient Source Section -->
+                        <!-- Section Patient -->
                         <div id="PatientSource" class="source-section hidden">
+
                             <div class="form-group">
+
                                 <label for="PatientNumber">
-                                    <i class="fas fa-hospital-user"></i> Patient Number
+                                    <i class="fas fa-hospital-user"></i> Numéro du patient
                                     <span class="required">*</span>
                                 </label>
+
                                 <input
                                         type="text"
                                         id="PatientNumber"
                                         name="PatientNumber"
-                                        placeholder="Enter the patient number"
+                                        placeholder="Entrez le numéro du patient"
                                         class="form-input"
                                 >
+
                             </div>
 
                             <div class="form-group">
+
                                 <label for="PatientKhedmaName">
-                                    <i class="fas fa-briefcase"></i> Service ID
+                                    <i class="fas fa-briefcase"></i> ID du service
                                     <span class="required">*</span>
                                 </label>
+
                                 <input
                                         type="text"
                                         id="PatientKhedmaName"
                                         name="ServiceID"
-                                        placeholder="You find it in the first column of the patient-history table"
+                                        placeholder="Vous le trouverez dans la première colonne du tableau de l'historique des patients"
                                         class="form-input"
                                 >
+
                             </div>
 
                         </div>
 
-                        <!-- Dentist Source Section -->
+                        <!-- Section Dentiste -->
                         <div id="DentistSource" class="source-section hidden">
+
                             <div class="form-group">
+
                                 <label for="DentistName">
-                                    <i class="fas fa-user-md"></i> Dentist Name
+                                    <i class="fas fa-user-md"></i> Nom du dentiste
                                     <span class="required">*</span>
                                 </label>
+
                                 <input
                                         type="text"
                                         id="DentistName"
                                         name="DentistName"
-                                        placeholder="Enter the dentist name"
+                                        placeholder="Entrez le nom du dentiste"
                                         class="form-input"
                                 >
+
                             </div>
 
                             <div class="form-group">
+
                                 <label for="DentistNumber">
-                                    <i class="fas fa-id-badge"></i> Service ID
+                                    <i class="fas fa-id-badge"></i> ID du service
                                     <span class="required">*</span>
                                 </label>
+
                                 <input
                                         type="text"
                                         id="DentistNumber"
                                         name="DentistNumber"
-                                        placeholder="Enter the Service ID"
+                                        placeholder="Entrez l'ID du service"
                                         class="form-input"
                                 >
+
                             </div>
 
                             <div class="form-group">
+
                                 <label for="DentistKhedmaName">
-                                    <i class="fas fa-briefcase"></i> ID from the dentist history table
+                                    <i class="fas fa-briefcase"></i> ID provenant de l'historique du dentiste
                                     <span class="required">*</span>
                                 </label>
+
                                 <input
                                         type="text"
                                         id="DentistKhedmaName"
                                         name="DServiceID"
-                                        placeholder="You can find it in the first column from the dentists-history"
+                                        placeholder="Vous le trouverez dans la première colonne de l'historique des dentistes"
                                         class="form-input"
                                 >
+
                             </div>
 
                         </div>
+
                     </div>
 
-                    <!-- Versement Section -->
+                    <!-- Section Versement -->
                     <div class="form-section">
+
                         <div class="section-header">
                             <i class="fas fa-money-bill-wave"></i>
-                            <h2>Payment Information</h2>
+                            <h2>Informations sur le paiement</h2>
                         </div>
 
                         <div class="form-group">
+
                             <label for="VersaValue">
-                                <i class="fas fa-coins"></i> Versement Amount
+                                <i class="fas fa-coins"></i> Montant du versement
                                 <span class="required">*</span>
                             </label>
+
                             <div class="input-wrapper">
+
                                 <input
                                         type="number"
                                         id="VersaValue"
                                         name="VersaValue"
-                                        placeholder="Enter the amount to add"
+                                        placeholder="Entrez le montant à ajouter"
                                         required
                                         step="0.01"
                                         class="form-input currency-input"
                                 >
+
                                 <span class="input-suffix">DZD</span>
+
                             </div>
-                            <small class="form-help">Enter the payment amount you want to add or modify</small>
+
+                            <small class="form-help">
+                                Entrez le montant du paiement que vous souhaitez ajouter ou modifier
+                            </small>
+
                         </div>
+
                     </div>
 
-                    <!-- Form Actions -->
+                    <!-- Actions du formulaire -->
                     <div class="form-actions">
+
                         <button type="reset" class="btn btn-secondary">
-                            <i class="fas fa-redo"></i> Clear Form
+                            <i class="fas fa-redo"></i> Effacer le formulaire
                         </button>
+
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-check"></i> Confirm Modification
+                            <i class="fas fa-check"></i> Confirmer la modification
                         </button>
+
                     </div>
+
                 </form>
             </div>
 
-            <!-- Info Cards -->
+            <!-- Cartes d'information -->
             <div class="info-cards-section">
+
                 <div class="info-card success-card">
+
                     <div class="card-icon">
                         <i class="fas fa-lightbulb"></i>
                     </div>
+
                     <div class="card-content">
-                        <h3>Tip</h3>
-                        <p>Ensure all information is accurate before confirming the modification</p>
+                        <h3>Conseil</h3>
+                        <p>Vérifiez que toutes les informations sont correctes avant de confirmer la modification</p>
                     </div>
+
                 </div>
 
                 <div class="info-card info-card-blue">
+
                     <div class="card-icon">
                         <i class="fas fa-shield-alt"></i>
                     </div>
+
                     <div class="card-content">
-                        <h3>Data Security</h3>
-                        <p>All modifications are logged and can be audited for compliance</p>
+                        <h3>Sécurité des données</h3>
+                        <p>Toutes les modifications sont enregistrées et peuvent être auditées à des fins de conformité</p>
                     </div>
+
                 </div>
+
             </div>
+
         </main>
     </div>
 </div>
@@ -413,7 +473,7 @@
 
             e.preventDefault();
 
-            alert('Please enter the prothesist name and number');
+            alert('Veuillez entrer le nom et le numéro du prothésiste');
 
             return false;
         }
@@ -424,7 +484,7 @@
 
             e.preventDefault();
 
-            alert('Please select a Khedma source');
+            alert('Veuillez sélectionner une source pour la tâche');
 
             return false;
         }
@@ -435,7 +495,7 @@
 
             e.preventDefault();
 
-            alert('Please enter the versement amount');
+            alert('Veuillez entrer le montant du versement');
 
             return false;
         }
@@ -458,7 +518,7 @@
 
                 e.preventDefault();
 
-                alert('Please enter the patient number');
+                alert('Veuillez entrer le numéro du patient');
 
                 return false;
             }
@@ -468,7 +528,7 @@
 
                 e.preventDefault();
 
-                alert('Please enter the service ID');
+                alert('Veuillez entrer l\'ID du service');
 
                 return false;
             }
@@ -495,7 +555,7 @@
 
                 e.preventDefault();
 
-                alert('Please enter the dentist name');
+                alert('Veuillez entrer le nom du dentiste');
 
                 return false;
             }
@@ -505,7 +565,7 @@
 
                 e.preventDefault();
 
-                alert('Please enter the Service number');
+                alert('Veuillez entrer le numéro du service');
 
                 return false;
             }
@@ -515,7 +575,7 @@
 
                 e.preventDefault();
 
-                alert('Please enter the table service ID');
+                alert('Veuillez entrer l\'ID du service dans le tableau');
 
                 return false;
             }
@@ -523,7 +583,7 @@
 
 
         // Form is valid
-        console.log('Form submitted successfully');
+        console.log('Formulaire envoyé avec succès');
 
     });
 

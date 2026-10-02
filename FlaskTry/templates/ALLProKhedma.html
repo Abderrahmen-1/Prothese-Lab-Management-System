@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="description"
-          content="Professional Khedma Database Management System">
-    <meta name="keywords"
-          content="Khedma, Prosthesist, Prosthetics, Lab Management">
+          content="Système professionnel de gestion de la base de données des tâches">
 
-    <title>Khedma Hub - Database Management</title>
+    <meta name="keywords"
+          content="Tâches, Prothésiste, Prothèse, Gestion de laboratoire">
+
+    <title>Centre des tâches - Gestion de la base de données</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='ALLProKhedma.css') }}">
@@ -29,7 +30,7 @@
 <div class="container">
 
     <!-- =====================================================
-         HEADER
+         EN-TÊTE
     ====================================================== -->
     <header class="header">
 
@@ -42,8 +43,8 @@
                 </div>
 
                 <div class="logo-text">
-                    <h1>Khedma Hub</h1>
-                    <p>Professional Work Management</p>
+                    <h1>Centre des tâches</h1>
+                    <p>Gestion professionnelle des travaux</p>
                 </div>
 
             </div>
@@ -54,7 +55,7 @@
                    class="nav-btn back-btn">
 
                     <i class="fas fa-arrow-left"></i>
-                    <span>Back to Menu</span>
+                    <span>Retour au menu</span>
 
                 </a>
 
@@ -62,7 +63,7 @@
                    class="nav-btn history-btn">
 
                     <i class="fas fa-history"></i>
-                    <span>History</span>
+                    <span>Historique</span>
 
                 </a>
 
@@ -74,7 +75,7 @@
 
 
     <!-- =====================================================
-         SEARCH
+         RECHERCHE
     ====================================================== -->
 
     <div id="search-bar-container">
@@ -99,7 +100,7 @@
                     <input
                             type="text"
                             name="SearchBar"
-                            placeholder="Search prothesist by name or by number..."
+                            placeholder="Rechercher un prothésiste par nom ou par numéro..."
                             class="search-input"
                     >
 
@@ -107,7 +108,7 @@
                             class="search-btn">
 
                         <i class="fas fa-magnifying-glass"></i>
-                        <span>Search</span>
+                        <span>Rechercher</span>
 
                     </button>
 
@@ -123,14 +124,14 @@
 
 
     <!-- =====================================================
-         MAIN LAYOUT
+         MISE EN PAGE PRINCIPALE
     ====================================================== -->
 
     <div class="main-layout">
 
 
         <!-- =================================================
-             SIDEBAR
+             BARRE LATÉRALE
         ================================================== -->
 
         <aside class="sidebar">
@@ -140,7 +141,7 @@
                 <div>
                     <h2>
                         <i class="fas fa-sliders"></i>
-                        View Options
+                        Options d'affichage
                     </h2>
                 </div>
 
@@ -152,12 +153,12 @@
             <nav class="sidebar-menu">
 
 
-                <!-- ================= DISPLAY ================= -->
+                <!-- ================= AFFICHAGE ================= -->
 
                 <div class="menu-group">
 
                     <h3 class="group-title">
-                        Display Tables
+                        Afficher les tableaux
                     </h3>
 
 
@@ -166,10 +167,10 @@
 
                         <i class="fas fa-table-list"></i>
 
-                        <span>Main Table</span>
+                        <span>Tableau principal</span>
 
                         <span class="badge badge-main">
-                            View
+                            Afficher
                         </span>
 
                     </a>
@@ -180,7 +181,7 @@
 
                         <i class="fas fa-arrow-up"></i>
 
-                        <span>Oldest First</span>
+                        <span>Les plus anciennes d'abord</span>
 
                         <span class="badge badge-asc">
                             ASC
@@ -194,7 +195,7 @@
 
                         <i class="fas fa-arrow-down"></i>
 
-                        <span>Newest First</span>
+                        <span>Les plus récentes d'abord</span>
 
                         <span class="badge badge-desc">
                             DESC
@@ -208,7 +209,7 @@
 
                         <i class="fas fa-arrow-trend-up"></i>
 
-                        <span>Most Khedma</span>
+                        <span>Plus de tâches</span>
 
                     </a>
 
@@ -218,19 +219,19 @@
 
                         <i class="fas fa-arrow-trend-down"></i>
 
-                        <span>Less Khedma</span>
+                        <span>Moins de tâches</span>
 
                     </a>
 
                 </div>
 
 
-                <!-- ================= MANAGEMENT ================= -->
+                <!-- ================= GESTION ================= -->
 
                 <div class="menu-group">
 
                     <h3 class="group-title">
-                        Management
+                        Gestion
                     </h3>
 
 
@@ -239,10 +240,10 @@
 
                         <i class="fas fa-plus-circle"></i>
 
-                        <span>New Khedma</span>
+                        <span>Nouvelle tâche</span>
 
                         <span class="badge badge-get">
-                            Add
+                            Ajouter
                         </span>
 
                     </a>
@@ -253,10 +254,10 @@
 
                         <i class="fas fa-user-minus"></i>
 
-                        <span>Delete Patient</span>
+                        <span>Supprimer un patient</span>
 
                         <span class="badge badge-delete">
-                            Delete
+                            Supprimer
                         </span>
 
                     </a>
@@ -269,13 +270,13 @@
 
 
         <!-- =================================================
-             CONTENT
+             CONTENU
         ================================================== -->
 
         <main class="content">
 
 
-            <!-- ================= ALERTS ================= -->
+            <!-- ================= ALERTES ================= -->
 
             {% if message or error %}
 
@@ -289,7 +290,7 @@
 
                     <div class="alert-content">
 
-                        <h3>Error</h3>
+                        <h3>Erreur</h3>
 
                         <p>{{ error }}</p>
 
@@ -315,7 +316,7 @@
 
                     <div class="alert-content">
 
-                        <h3>Success</h3>
+                        <h3>Opération réussie</h3>
 
                         <p>{{ message }}</p>
 
@@ -337,14 +338,14 @@
             {% endif %}
 
 
-            <!-- ================= TABLES ================= -->
+            <!-- ================= TABLEAUX ================= -->
 
             <div class="table-section fade-in"
                  id="table-section">
 
 
                 <!-- =================================================
-                     MAIN TABLE
+                     TABLEAU PRINCIPAL
                 ================================================== -->
 
                 <div class="TableContainer"
@@ -357,11 +358,11 @@
 
                             <h3>
                                 <i class="fas fa-table-list"></i>
-                                Main Registry
+                                Registre principal
                             </h3>
 
                             <p>
-                                Complete Khedma work order database
+                                Base de données complète des tâches
                             </p>
 
                         </div>
@@ -378,19 +379,19 @@
                             <thead>
 
                             <tr>
-                                <th>User ID</th>
-                                <th>Patient Number</th>
-                                <th>Dentist</th>
-                                <th>Prosthesist</th>
-                                <th>Prosthesist ID</th>
-                                <th>Khedma</th>
-                                <th>Price</th>
-                                <th>Versa</th>
-                                <th>B9aw</th>
-                                <th>Khalsa</th>
-                                <th>Finished</th>
+                                <th>ID utilisateur</th>
+                                <th>Numéro du patient</th>
+                                <th>Dentiste</th>
+                                <th>Prothésiste</th>
+                                <th>ID du prothésiste</th>
+                                <th>Tâche</th>
+                                <th>Prix</th>
+                                <th>Versement</th>
+                                <th>Reste</th>
+                                <th>Payé</th>
+                                <th>Terminé</th>
                                 <th>Date</th>
-                                <th>Deadline</th>
+                                <th>Date limite</th>
                             </tr>
 
                             </thead>
@@ -432,7 +433,7 @@
 
                             <i class="fas fa-database"></i>
 
-                            Total Records:
+                            Nombre total d'enregistrements :
                             <strong>{{ result|length }}</strong>
 
                         </span>
@@ -448,10 +449,10 @@
                             <i class="fas fa-inbox"></i>
                         </div>
 
-                        <h3>No Data Available</h3>
+                        <h3>Aucune donnée disponible</h3>
 
                         <p>
-                            No main registry records found.
+                            Aucun enregistrement trouvé dans le registre principal.
                         </p>
 
                     </div>
@@ -462,7 +463,7 @@
 
 
                 <!-- =================================================
-                     ASC TABLE
+                     TABLEAU ASC
                 ================================================== -->
 
                 <div class="TableContainer"
@@ -473,11 +474,11 @@
 
                         <h3>
                             <i class="fas fa-arrow-up"></i>
-                            Oldest to Newest
+                            Du plus ancien au plus récent
                         </h3>
 
                         <p>
-                            Khedma records ordered chronologically
+                            Enregistrements des tâches classés chronologiquement
                         </p>
 
                     </div>
@@ -492,19 +493,19 @@
                             <thead>
 
                             <tr>
-                                <th>User ID</th>
-                                <th>Patient Number</th>
-                                <th>Dentist</th>
-                                <th>Prosthesist</th>
-                                <th>Prosthesist ID</th>
-                                <th>Khedma</th>
-                                <th>Price</th>
-                                <th>Versa</th>
-                                <th>B9aw</th>
-                                <th>Khalsa</th>
-                                <th>Finished</th>
+                                <th>ID utilisateur</th>
+                                <th>Numéro du patient</th>
+                                <th>Dentiste</th>
+                                <th>Prothésiste</th>
+                                <th>ID du prothésiste</th>
+                                <th>Tâche</th>
+                                <th>Prix</th>
+                                <th>Versement</th>
+                                <th>Reste</th>
+                                <th>Payé</th>
+                                <th>Terminé</th>
                                 <th>Date</th>
-                                <th>Deadline</th>
+                                <th>Date limite</th>
                             </tr>
 
                             </thead>
@@ -546,7 +547,7 @@
 
                             <i class="fas fa-clock-rotate-left"></i>
 
-                            Total Records:
+                            Nombre total d'enregistrements :
                             <strong>{{ asc|length }}</strong>
 
                         </span>
@@ -561,10 +562,10 @@
                             <i class="fas fa-inbox"></i>
                         </div>
 
-                        <h3>No Data Available</h3>
+                        <h3>Aucune donnée disponible</h3>
 
                         <p>
-                            No records in oldest to newest order.
+                            Aucun enregistrement classé du plus ancien au plus récent.
                         </p>
 
                     </div>
@@ -575,7 +576,7 @@
 
 
                 <!-- =================================================
-                     DESC TABLE
+                     TABLEAU DESC
                 ================================================== -->
 
                 <div class="TableContainer"
@@ -586,11 +587,11 @@
 
                         <h3>
                             <i class="fas fa-arrow-down"></i>
-                            Newest to Oldest
+                            Du plus récent au plus ancien
                         </h3>
 
                         <p>
-                            Khedma records ordered from newest to oldest
+                            Enregistrements des tâches classés du plus récent au plus ancien
                         </p>
 
                     </div>
@@ -605,19 +606,19 @@
                             <thead>
 
                             <tr>
-                                <th>User ID</th>
-                                <th>Patient Number</th>
-                                <th>Dentist</th>
-                                <th>Prosthesist</th>
-                                <th>Prosthesist ID</th>
-                                <th>Khedma</th>
-                                <th>Price</th>
-                                <th>Versa</th>
-                                <th>B9aw</th>
-                                <th>Khalsa</th>
-                                <th>Finished</th>
+                                <th>ID utilisateur</th>
+                                <th>Numéro du patient</th>
+                                <th>Dentiste</th>
+                                <th>Prothésiste</th>
+                                <th>ID du prothésiste</th>
+                                <th>Tâche</th>
+                                <th>Prix</th>
+                                <th>Versement</th>
+                                <th>Reste</th>
+                                <th>Payé</th>
+                                <th>Terminé</th>
                                 <th>Date</th>
-                                <th>Deadline</th>
+                                <th>Date limite</th>
                             </tr>
 
                             </thead>
@@ -659,7 +660,7 @@
 
                             <i class="fas fa-clock"></i>
 
-                            Total Records:
+                            Nombre total d'enregistrements :
                             <strong>{{ desc|length }}</strong>
 
                         </span>
@@ -674,10 +675,10 @@
                             <i class="fas fa-inbox"></i>
                         </div>
 
-                        <h3>No Data Available</h3>
+                        <h3>Aucune donnée disponible</h3>
 
                         <p>
-                            No records in newest to oldest order.
+                            Aucun enregistrement classé du plus récent au plus ancien.
                         </p>
 
                     </div>
@@ -688,7 +689,7 @@
 
 
                 <!-- =================================================
-                     MOST KHEDMA
+                     PLUS DE TÂCHES
                 ================================================== -->
 
                 <div id="MostTable"
@@ -699,18 +700,21 @@
 
                         <h3>
                             <i class="fas fa-arrow-trend-up"></i>
-                            Most Khedma
+                            Plus de tâches
                         </h3>
 
                         <p>
-                            Prothesist with the highest number of Khedma records
+                            Prothésiste ayant le plus grand nombre de tâches
                         </p>
 
                         {% if most and most_name %}
 
                         <div class="highlight-badge">
+
                             <i class="fas fa-user"></i>
+
                             <span>{{ most_name }}</span>
+
                         </div>
 
                         {% endif %}
@@ -727,19 +731,19 @@
                             <thead>
 
                             <tr>
-                                <th>User ID</th>
-                                <th>Patient Number</th>
-                                <th>Dentist</th>
-                                <th>Prosthesist</th>
-                                <th>Prosthesist ID</th>
-                                <th>Khedma</th>
-                                <th>Price</th>
-                                <th>Versa</th>
-                                <th>B9aw</th>
-                                <th>Khalsa</th>
-                                <th>Finished</th>
+                                <th>ID utilisateur</th>
+                                <th>Numéro du patient</th>
+                                <th>Dentiste</th>
+                                <th>Prothésiste</th>
+                                <th>ID du prothésiste</th>
+                                <th>Tâche</th>
+                                <th>Prix</th>
+                                <th>Versement</th>
+                                <th>Reste</th>
+                                <th>Payé</th>
+                                <th>Terminé</th>
                                 <th>Date</th>
-                                <th>Deadline</th>
+                                <th>Date limite</th>
                             </tr>
 
                             </thead>
@@ -775,7 +779,7 @@
                             <tr>
                                 <td colspan="13"
                                     class="table-empty-row">
-                                    No data available
+                                    Aucune donnée disponible
                                 </td>
                             </tr>
 
@@ -794,7 +798,7 @@
 
                             <i class="fas fa-chart-line"></i>
 
-                            Total Records:
+                            Nombre total d'enregistrements :
                             <strong>{{ most|length if most else 0 }}</strong>
 
                         </span>
@@ -809,10 +813,10 @@
                             <i class="fas fa-chart-column"></i>
                         </div>
 
-                        <h3>No Data Available</h3>
+                        <h3>Aucune donnée disponible</h3>
 
                         <p>
-                            No data available for Most Khedma.
+                            Aucune donnée disponible pour les prothésistes ayant le plus de tâches.
                         </p>
 
                     </div>
@@ -823,7 +827,7 @@
 
 
                 <!-- =================================================
-                     LESS KHEDMA
+                     MOINS DE TÂCHES
                 ================================================== -->
 
                 <div id="LessTable"
@@ -834,11 +838,11 @@
 
                         <h3>
                             <i class="fas fa-arrow-trend-down"></i>
-                            Less Khedma
+                            Moins de tâches
                         </h3>
 
                         <p>
-                            Prothesist with the lowest number of Khedma records
+                            Prothésiste ayant le plus petit nombre de tâches
                         </p>
 
                         {% if less and not less is mapping and less_name %}
@@ -865,19 +869,19 @@
                             <thead>
 
                             <tr>
-                                <th>User ID</th>
-                                <th>Patient Number</th>
-                                <th>Dentist</th>
-                                <th>Prosthesist</th>
-                                <th>Prosthesist ID</th>
-                                <th>Khedma</th>
-                                <th>Price</th>
-                                <th>Versa</th>
-                                <th>B9aw</th>
-                                <th>Khalsa</th>
-                                <th>Finished</th>
+                                <th>ID utilisateur</th>
+                                <th>Numéro du patient</th>
+                                <th>Dentiste</th>
+                                <th>Prothésiste</th>
+                                <th>ID du prothésiste</th>
+                                <th>Tâche</th>
+                                <th>Prix</th>
+                                <th>Versement</th>
+                                <th>Reste</th>
+                                <th>Payé</th>
+                                <th>Terminé</th>
                                 <th>Date</th>
-                                <th>Deadline</th>
+                                <th>Date limite</th>
                             </tr>
 
                             </thead>
@@ -913,7 +917,7 @@
                             <tr>
                                 <td colspan="13"
                                     class="table-empty-row">
-                                    No data available
+                                    Aucune donnée disponible
                                 </td>
                             </tr>
 
@@ -932,7 +936,7 @@
 
                             <i class="fas fa-chart-line"></i>
 
-                            Total Records:
+                            Nombre total d'enregistrements :
                             <strong>{{ less|length if less else 0 }}</strong>
 
                         </span>
@@ -947,10 +951,10 @@
                             <i class="fas fa-chart-column"></i>
                         </div>
 
-                        <h3>No Data Available</h3>
+                        <h3>Aucune donnée disponible</h3>
 
                         <p>
-                            No data available for Less Khedma.
+                            Aucune donnée disponible pour les prothésistes ayant le moins de tâches.
                         </p>
 
                     </div>
@@ -975,7 +979,7 @@
 <script>
 
     /* =========================================================
-       Ripple Effect
+       Effet d'ondulation
     ========================================================== */
 
     function createRipple(e) {
@@ -1018,7 +1022,7 @@
 
 
     /* =========================================================
-       Row Animations
+       Animations des lignes
     ========================================================== */
 
     function applyRowAnimations() {
@@ -1036,7 +1040,7 @@
 
 
     /* =========================================================
-       INITIALIZATION
+       INITIALISATION
     ========================================================== */
 
     document.addEventListener(
@@ -1061,7 +1065,7 @@
 
 
     /* =========================================================
-       AJAX TABLE NAVIGATION
+       NAVIGATION AJAX DES TABLEAUX
     ========================================================== */
 
     document
@@ -1091,7 +1095,7 @@
                     }
 
 
-                    /* Active sidebar item */
+                    /* Élément actif de la barre latérale */
 
                     document
                         .querySelectorAll(
@@ -1108,7 +1112,7 @@
                     this.classList.add('active');
 
 
-                    /* Loading state */
+                    /* État de chargement */
 
                     sectionContainer.classList.add(
                         'loading'
@@ -1122,7 +1126,7 @@
                             if (!response.ok) {
 
                                 throw new Error(
-                                    'Request failed: ' +
+                                    'Échec de la requête : ' +
                                     response.status
                                 );
 
@@ -1175,7 +1179,7 @@
                         .catch(error => {
 
                             console.error(
-                                'AJAX Load Error:',
+                                'Erreur de chargement AJAX :',
                                 error
                             );
 

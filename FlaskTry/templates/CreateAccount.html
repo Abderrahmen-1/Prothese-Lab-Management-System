@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="DentaFlow - Create Your Account">
+    <meta name="description" content="DentaFlow - Créez votre compte">
     <meta name="author" content="Abderrahmen">
-    <title>DentaFlow - Create Account</title>
+    <title>DentaFlow - Créer un compte</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='CreateAccount.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
@@ -30,7 +30,7 @@
                 <div class="logo-ring"></div>
             </div>
             <h1 class="brand-title">DentaFlow</h1>
-            <p class="brand-subtitle">Join Our Prosthetics Lab Management System</p>
+            <p class="brand-subtitle">Rejoignez notre système de gestion de laboratoire de prothèse</p>
 
             <div class="benefits-list">
                 <div class="benefit-item">
@@ -38,8 +38,8 @@
                         <i class="fas fa-rocket"></i>
                     </div>
                     <div class="benefit-text">
-                        <h3>Quick Setup</h3>
-                        <p>Get started in less than 2 minutes</p>
+                        <h3>Configuration rapide</h3>
+                        <p>Commencez en moins de 2 minutes</p>
                     </div>
                 </div>
                 <div class="benefit-item">
@@ -47,8 +47,8 @@
                         <i class="fas fa-shield-alt"></i>
                     </div>
                     <div class="benefit-text">
-                        <h3>Secure & Safe</h3>
-                        <p>Your data is encrypted and protected</p>
+                        <h3>Sécurisé et fiable</h3>
+                        <p>Vos données sont chiffrées et protégées</p>
                     </div>
                 </div>
                 <div class="benefit-item">
@@ -56,15 +56,15 @@
                         <i class="fas fa-chart-line"></i>
                     </div>
                     <div class="benefit-text">
-                        <h3>Boost Productivity</h3>
-                        <p>Manage your lab efficiently</p>
+                        <h3>Améliorez votre productivité</h3>
+                        <p>Gérez efficacement votre laboratoire</p>
                     </div>
                 </div>
 
                 {% if session %}
                     <a href="{{ url_for('users.ConfirmOwnerData') }}" class="users-generated">
                         <i class="fas fa-user-shield"></i>
-                        <span>Back to previous</span>
+                        <span>Retour à la page précédente</span>
                     </a>
                 {% endif %}
 
@@ -84,8 +84,8 @@
     <div class="form-side">
         <div class="form-wrapper">
             <div class="form-header">
-                <h2>Create Your Account</h2>
-                <p>Start managing your prosthetics lab today</p>
+                <h2>Créez votre compte</h2>
+                <p>Commencez à gérer votre laboratoire de prothèse dès aujourd'hui</p>
             </div>
 
             <form action="/CreateAnAccount" method="POST" class="signup-form" id="signupForm">
@@ -95,7 +95,7 @@
                 <div class="alert alert-error fade-in-slow">
                     <i class="fas fa-exclamation-triangle"></i>
                     <div class="alert-content">
-                        <h3>Error</h3>
+                        <h3>Erreur</h3>
                         <p>{{ error }}</p>
                     </div>
                     <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
@@ -108,7 +108,7 @@
                 <div class="alert alert-success fade-in-slow">
                     <i class="fas fa-check-circle"></i>
                     <div class="alert-content">
-                        <h3>Success</h3>
+                        <h3>Succès</h3>
                         <p>{{ success }}</p>
                     </div>
                     <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
@@ -121,7 +121,7 @@
                 <div class="alert alert-success fade-in-slow">
                     <i class="fas fa-check-circle"></i>
                     <div class="alert-content">
-                        <h3>Success</h3>
+                        <h3>Succès</h3>
                         <p>{{ message }}</p>
                     </div>
                     <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
@@ -132,50 +132,50 @@
 
                 <div class="input-group">
                     <label for="email">
-                        <span class="label-text">Email Address</span>
+                        <span class="label-text">Adresse e-mail</span>
                     </label>
                     <div class="input-wrapper">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" name="email" placeholder="Enter your email" required
+                        <input type="email" id="email" name="email" placeholder="Saisissez votre adresse e-mail" required
                                class="form-input">
                     </div>
-                    <span class="input-hint">We'll never share your email</span>
+                    <span class="input-hint">Nous ne partagerons jamais votre adresse e-mail</span>
                 </div>
 
                 <div class="input-group">
                     <label for="phone">
-                        <span class="label-text">Phone Number</span>
+                        <span class="label-text">Numéro de téléphone</span>
                     </label>
                     <div class="input-wrapper">
                         <i class="fas fa-phone"></i>
-                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number (optional)"
+                        <input type="tel" id="phone" name="phone" placeholder="Saisissez votre numéro de téléphone (facultatif)"
                                class="form-input">
                     </div>
-                    <span class="input-hint">Format: 0XXX XX XX XX</span>
+                    <span class="input-hint">Format : 0XXX XX XX XX</span>
                 </div>
 
                 <div class="input-group">
                     <label for="username">
-                        <span class="label-text">Username</span>
+                        <span class="label-text">Nom d'utilisateur</span>
                     </label>
                     <div class="input-wrapper">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="username" name="username" placeholder="Choose a username" required
+                        <input type="text" id="username" name="username" placeholder="Choisissez un nom d'utilisateur" required
                                class="form-input">
                     </div>
-                    <span class="input-hint">At least 3 characters</span>
+                    <span class="input-hint">Au moins 3 caractères</span>
                 </div>
 
                 <div class="input-group">
                     <label for="password">
-                        <span class="label-text">Password</span>
+                        <span class="label-text">Mot de passe</span>
                     </label>
                     <div class="input-wrapper">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="password" name="password" placeholder="Create a strong password"
+                        <input type="password" id="password" name="password" placeholder="Créez un mot de passe sécurisé"
                                required class="form-input">
                         <button type="button" class="toggle-password"
-                                onclick="togglePassword('password', 'eye-icon-1')">
+                                onclick="toggleMot de passe('password', 'eye-icon-1')">
                             <i class="fas fa-eye" id="eye-icon-1"></i>
                         </button>
                     </div>
@@ -183,20 +183,20 @@
                         <div class="strength-bar">
                             <div class="strength-fill" id="strengthFill"></div>
                         </div>
-                        <span class="strength-text" id="strengthText">Password strength</span>
+                        <span class="strength-text" id="strengthText">Niveau de sécurité du mot de passe</span>
                     </div>
                 </div>
 
                 <div class="input-group">
                     <label for="Confirmation">
-                        <span class="label-text">Confirm Password</span>
+                        <span class="label-text">Confirm Mot de passe</span>
                     </label>
                     <div class="input-wrapper">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="Confirmation" name="confirmation" placeholder="Confirm your password"
+                        <input type="password" id="Confirmation" name="confirmation" placeholder="Confirmez votre mot de passe"
                                required class="form-input">
                         <button type="button" class="toggle-password"
-                                onclick="togglePassword('Confirmation', 'eye-icon-2')">
+                                onclick="toggleMot de passe('Confirmation', 'eye-icon-2')">
                             <i class="fas fa-eye" id="eye-icon-2"></i>
                         </button>
                     </div>
@@ -206,13 +206,13 @@
                 <div class="terms-checkbox">
                     <label class="checkbox-container">
                         <input type="checkbox" id="terms" required>
-                        <span class="checkbox-text">I agree to the <a href="#" class="terms-link">Terms & Conditions</a> and <a
-                                href="#" class="terms-link">Privacy Policy</a></span>
+                        <span class="checkbox-text">J’accepte les <a href="#" class="terms-link">Conditions générales</a> and <a
+                                href="#" class="terms-link">Politique de confidentialité</a></span>
                     </label>
                 </div>
 
                 <button type="submit" class="btn-submit">
-                    <span>Create Account</span>
+                    <span>Créer un compte</span>
                     <i class="fas fa-arrow-right"></i>
                 </button>
 
@@ -221,7 +221,7 @@
                 </div>
 
                 <div class="login-link">
-                    <p>Already have an account? <a href="/log_in">Log in here</a></p>
+                    <p>Vous avez déjà un compte ? <a href="/log_in">Connectez-vous ici</a></p>
                 </div>
             </form>
         </div>
@@ -229,8 +229,8 @@
 </div>
 
 <script>
-    // Toggle password visibility
-    function togglePassword(inputId, iconId) {
+    // Afficher ou masquer le mot de passe
+    function toggleMot de passe(inputId, iconId) {
         const passwordInput = document.getElementById(inputId);
         const eyeIcon = document.getElementById(iconId);
 
@@ -245,7 +245,7 @@
         }
     }
 
-    // Password strength checker
+    // Niveau de sécurité du mot de passe checker
     const passwordInput = document.getElementById('password');
     const strengthFill = document.getElementById('strengthFill');
     const strengthText = document.getElementById('strengthText');
@@ -265,24 +265,24 @@
 
         if (strength <= 2) {
             strengthFill.style.background = '#ef4444';
-            strengthText.textContent = 'Weak password';
+            strengthText.textContent = 'Mot de passe faible';
             strengthText.style.color = '#ef4444';
         } else if (strength <= 3) {
             strengthFill.style.background = '#f59e0b';
-            strengthText.textContent = 'Medium password';
+            strengthText.textContent = 'Mot de passe moyen';
             strengthText.style.color = '#f59e0b';
         } else {
             strengthFill.style.background = '#10b981';
-            strengthText.textContent = 'Strong password';
+            strengthText.textContent = 'Mot de passe fort';
             strengthText.style.color = '#10b981';
         }
     });
 
-    // Password match checker
+    // Mot de passe match checker
     const confirmInput = document.getElementById('Confirmation');
     const matchIndicator = document.getElementById('matchIndicator');
 
-    function checkPasswordMatch() {
+    function checkMot de passeMatch() {
         const password = passwordInput.value;
         const confirm = confirmInput.value;
 
@@ -292,18 +292,18 @@
         }
 
         if (password === confirm) {
-            matchIndicator.innerHTML = '<i class="fas fa-check-circle"></i> Passwords match';
+            matchIndicator.innerHTML = '<i class="fas fa-check-circle"></i> Mot de passes match';
             matchIndicator.style.color = '#10b981';
         } else {
-            matchIndicator.innerHTML = '<i class="fas fa-times-circle"></i> Passwords do not match';
+            matchIndicator.innerHTML = '<i class="fas fa-times-circle"></i> Mot de passes do not match';
             matchIndicator.style.color = '#ef4444';
         }
     }
 
-    passwordInput.addEventListener('input', checkPasswordMatch);
-    confirmInput.addEventListener('input', checkPasswordMatch);
+    passwordInput.addEventListener('input', checkMot de passeMatch);
+    confirmInput.addEventListener('input', checkMot de passeMatch);
 
-    // Add ripple effect to submit button
+    // Ajouter un effet d’ondulation au bouton de validation
     document.querySelector('.btn-submit').addEventListener('click', function(e) {
         const ripple = document.createElement('span');
         ripple.classList.add('ripple');
@@ -321,7 +321,7 @@
         setTimeout(() => ripple.remove(), 600);
     });
 
-    // Input focus animations
+    // Animations lors de la sélection des champs
     document.querySelectorAll('.form-input').forEach(input => {
         input.addEventListener('focus', function() {
             this.closest('.input-wrapper').classList.add('focused');
@@ -332,14 +332,14 @@
         });
     });
 
-    // Form validation
+    // Validation du formulaire
     document.getElementById('signupForm').addEventListener('submit', function(e) {
         const password = passwordInput.value;
         const confirm = confirmInput.value;
 
         if (password !== confirm) {
             e.preventDefault();
-            alert('Passwords do not match!');
+            alert('Mot de passes do not match!');
             return false;
         }
     });

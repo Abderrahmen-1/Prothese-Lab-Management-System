@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Mark Prosthetic Work as Completed - Lab Management System">
-    <meta name="keywords" content="Prosthetics, Lab, Work Completion, Khedma, Finished">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Mark Work as Finished - Khedma</title>
+    <meta name="description" content="Marquer un travail de prothèse comme terminé - Système de gestion du laboratoire">
+    <meta name="keywords" content="Prothèse, Laboratoire, Fin des travaux, Tâches, Terminé">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+    <title>Marquer le travail comme terminé - Tâches</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='FinishedKhedma.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
@@ -17,11 +17,11 @@
 </head>
 
 <body>
-<!-- Animated Background -->
+<!-- Animated Retourground -->
 <div class="animated-bg"></div>
 
 <div class="container">
-    <!-- Header -->
+    <!-- En-tête -->
     <header class="header">
         <div class="header-content">
             <div class="logo-section">
@@ -29,48 +29,48 @@
                     <i class="fas fa-check-circle"></i>
                 </div>
                 <div class="logo-text">
-                    <h1>Complete Work</h1>
-                    <p>Mark Prosthetic Items as Finished</p>
+                    <h1>Terminer le travail</h1>
+                    <p>Marquer les travaux de prothèse comme terminés</p>
                 </div>
             </div>
             <nav class="header-nav">
                 <a href="/Khedma" class="nav-btn back-btn">
-                    <i class="fas fa-arrow-left"></i> Back to Khedma
+                    <i class="fas fa-arrow-left"></i> Retour aux tâches
                 </a>
             </nav>
         </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- Contenu principal -->
     <div class="main-container">
-        <!-- Progress Indicator -->
+        <!-- Indicateur de progression -->
         <div class="progress-container">
             <div class="progress-step active" id="step1">
                 <div class="step-number">1</div>
-                <div class="step-label">Choose Type</div>
+                <div class="step-label">Choisir le type</div>
             </div>
             <div class="progress-line"></div>
             <div class="progress-step" id="step2">
                 <div class="step-number">2</div>
-                <div class="step-label">Enter Details</div>
+                <div class="step-label">Saisir les détails</div>
             </div>
             <div class="progress-line"></div>
             <div class="progress-step" id="step3">
                 <div class="step-number">3</div>
-                <div class="step-label">Complete</div>
+                <div class="step-label">Terminer</div>
             </div>
         </div>
 
-        <!-- Form Section -->
+        <!-- Section du formulaire -->
         <div class="form-wrapper">
             <form action="/Finished" method="POST" class="form-main" id="mainForm">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <!-- Step 1: Choice Selection -->
+                <!-- Étape 1 : sélection du choix -->
                 <div class="form-step active-step" id="formStep1">
                     <div class="step-content">
                         <div class="step-header">
-                            <h2><i class="fas fa-list-check"></i> What type of work did you complete?</h2>
-                            <p>Select whether you finished work for a patient or received work from a dentist</p>
+                            <h2><i class="fas fa-list-check"></i> Quel type de travail avez-vous terminé ?</h2>
+                            <p>Sélectionnez si vous avez terminé un travail pour un patient ou reçu un travail d’un dentiste</p>
                         </div>
 
                         <div class="choice-buttons">
@@ -79,8 +79,8 @@
                                     <i class="fas fa-user"></i>
                                 </div>
                                 <div class="choice-text">
-                                    <h3>Patient Work</h3>
-                                    <p>Work directly for a patient</p>
+                                    <h3>Travail pour un patient</h3>
+                                    <p>Travail effectué directement pour un patient</p>
                                 </div>
                                 <div class="choice-indicator">
                                     <i class="fas fa-chevron-right"></i>
@@ -92,8 +92,8 @@
                                     <i class="fas fa-tooth"></i>
                                 </div>
                                 <div class="choice-text">
-                                    <h3>Dentist Work</h3>
-                                    <p>Work from a dentist referral</p>
+                                    <h3>Travail pour un dentiste</h3>
+                                    <p>Travail reçu sur prescription d’un dentiste</p>
                                 </div>
                                 <div class="choice-indicator">
                                     <i class="fas fa-chevron-right"></i>
@@ -105,84 +105,84 @@
                     </div>
                 </div>
 
-                <!-- Step 2: Patient Details -->
+                <!-- Étape 2 : détails du patient -->
                 <div class="form-step" id="formStep2Patient">
                     <div class="step-content">
                         <div class="step-header">
-                            <h2><i class="fas fa-user-check"></i> Patient Work Details</h2>
-                            <p>Enter the patient information and work details</p>
+                            <h2><i class="fas fa-user-check"></i> Travail pour un patient Details</h2>
+                            <p>Saisissez les informations du patient et les détails du travail</p>
                         </div>
 
                         <div class="form-group">
                             <label for="PatientID">
-                                <i class="fas fa-id-card"></i> Patient ID
+                                <i class="fas fa-id-card"></i> ID du patient
                             </label>
                             <input
                                     type="text"
                                     id="PatientID"
                                     name="PatientID"
-                                    placeholder="Enter patient ID number"
+                                    placeholder="Saisissez le numéro d’identification du patient"
                                     class="form-input"
                             >
-                            <p class="form-hint">Unique identifier for the patient</p>
+                            <p class="form-hint">Identifiant unique du patient</p>
                         </div>
 
                         <div class="form-group">
                             <label for="PatientKhedmaName">
-                                <i class="fas fa-tools"></i> Service ID
+                                <i class="fas fa-tools"></i> ID du service
                             </label>
                             <input
                                     type="text"
                                     id="PatientKhedmaName"
                                     name="ServiceID"
-                                    placeholder="you can find it from the first column in the patient-history table"
+                                    placeholder="Vous pouvez le trouver dans la première colonne du tableau de l’historique du patient"
                                     class="form-input"
                             >
-                            <p class="form-hint">Type of prosthetic service completed</p>
+                            <p class="form-hint">Type de service de prothèse terminé</p>
                         </div>
 
                         <div class="form-actions">
                             <button type="button" class="btn btn-secondary" onclick="resetChoice()">
-                                <i class="fas fa-arrow-left"></i> Back
+                                <i class="fas fa-arrow-left"></i> Retour
                             </button>
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-check"></i> Complete Work
+                                <i class="fas fa-check"></i> Terminer le travail
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 2: Dentist Details -->
+                <!-- Étape 2 : détails du dentiste -->
                 <div class="form-step" id="formStep2Dentist">
                     <div class="step-content">
                         <div class="step-header">
-                            <h2><i class="fas fa-tooth-check"></i> Dentist Work Details</h2>
-                            <p>Enter the dentist and patient information</p>
+                            <h2><i class="fas fa-tooth-check"></i> Travail pour un dentiste Details</h2>
+                            <p>Saisissez les informations du dentiste et du patient</p>
                         </div>
 
                         <div class="form-group">
                             <label for="DPatientID">
-                                <i class="fas fa-id-card"></i> Patient ID
+                                <i class="fas fa-id-card"></i> ID du patient
                             </label>
                             <input
                                     type="text"
                                     id="DPatientID"
                                     name="DPatientID"
-                                    placeholder="Enter unique patient number"
+                                    placeholder="Saisissez le numéro unique du patient"
                                     class="form-input"
                             >
-                            <p class="form-hint">Patient identifier for this case</p>
+                            <p class="form-hint">Identifiant du patient pour ce cas</p>
                         </div>
 
                         <div class="form-group">
                             <label for="DentistName">
-                                <i class="fas fa-user-md"></i> Service ID
+                                <i class="fas fa-user-md"></i> ID du service
                             </label>
                             <input
                                     type="text"
                                     id="DentistName"
                                     name="DServiceID"
-                                    placeholder="you can find it on the first column in the dentist-history table "
+                                    placeholder="Vous pouvez le trouver dans la première colonne du tableau de l’historique du dentiste "
                                     class="form-input"
                             >
                         </div>
@@ -190,48 +190,48 @@
 
                         <!--  <div class="form-group">
                               <label for="DentistKhedmaName">
-                                  <i class="fas fa-tools"></i> Service Name
+                                  <i class="fas fa-tools"></i> Nom du service
                               </label>
                               <input
                                   type="text"
                                   id="DentistKhedmaName"
                                   name="Name"
-                                  placeholder="e.g., Denture, Crown, Bridge"
+                                  placeholder="ex. : Prothèse, Couronne, Bridge"
                                   class="form-input"
                               >
-                              <p class="form-hint">Type of prosthetic service completed</p>
+                              <p class="form-hint">Type de service de prothèse terminé</p>
                           </div> -->
 
                         <div class="form-actions">
                             <button type="button" class="btn btn-secondary" onclick="resetChoice()">
-                                <i class="fas fa-arrow-left"></i> Back
+                                <i class="fas fa-arrow-left"></i> Retour
                             </button>
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-check"></i> Complete Work
+                                <i class="fas fa-check"></i> Terminer le travail
                             </button>
                         </div>
                     </div>
                 </div>
             </form>
 
-            <!-- Info Card -->
+            <!-- Carte d’information -->
             <div class="info-card">
                 <div class="info-icon">
                     <i class="fas fa-lightbulb"></i>
                 </div>
                 <div class="info-content">
-                    <h3>💡 Quick Tips</h3>
+                    <h3>💡 Conseils rapides</h3>
                     <ul>
-                        <li>Ensure all work is thoroughly inspected before marking as finished</li>
-                        <li>Double-check patient/dentist information for accuracy</li>
-                        <li>Include specific service names for better record keeping</li>
-                        <li>Your completion will update the work status automatically</li>
+                        <li>Assurez-vous que tous les travaux sont soigneusement contrôlés avant de les marquer comme terminés</li>
+                        <li>Vérifiez à nouveau les informations du patient et du dentiste pour garantir leur exactitude</li>
+                        <li>Indiquez les noms précis des services pour une meilleure tenue des dossiers</li>
+                        <li>La validation mettra automatiquement à jour le statut du travail</li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!-- Alert Messages -->
+        <!-- Messages d’alerte -->
         {% if message %}
         <div class="alert-container">
             <div class="alert alert-success fade-in">
@@ -239,7 +239,7 @@
                     <i class="fas fa-check-circle"></i>
                 </div>
                 <div class="alert-content">
-                    <h3>Success!</h3>
+                    <h3>Opération réussie !</h3>
                     <p>{{ message }}</p>
                 </div>
                 <button class="alert-close" onclick="this.parentElement.parentElement.style.display='none'">
@@ -256,7 +256,7 @@
                     <i class="fas fa-exclamation-circle"></i>
                 </div>
                 <div class="alert-content">
-                    <h3>Error!</h3>
+                    <h3>Erreur !</h3>
                     <p>{{ error }}</p>
                 </div>
                 <button class="alert-close" onclick="this.parentElement.parentElement.style.display='none'">
@@ -269,24 +269,24 @@
 </div>
 
 <script>
-    // Form state management
+    // Gestion de l’état du formulaire
     let currentChoice = null;
 
-    // Select choice and show relevant form
+    // Sélectionner le choix et afficher le formulaire correspondant
     function selectChoice(choice) {
         currentChoice = choice;
         document.getElementById('Check').value = choice;
 
-        // Hide all steps
+        // Masquer toutes les étapes
         document.getElementById('formStep1').classList.remove('active-step');
         document.getElementById('formStep2Patient').classList.remove('active-step');
         document.getElementById('formStep2Dentist').classList.remove('active-step');
 
-        // Update progress
+        // Mettre à jour la progression
         document.getElementById('step1').classList.remove('active');
         document.getElementById('step2').classList.add('active');
 
-        // Show appropriate form
+        // Afficher le formulaire approprié
         if (choice === 'patient') {
             document.getElementById('formStep2Patient').classList.add('active-step');
             document.querySelector('.patient-choice').classList.add('selected');
@@ -297,36 +297,36 @@
             document.querySelector('.patient-choice').classList.remove('selected');
         }
 
-        // Smooth scroll to form
+        // Défilement fluide vers le formulaire
         setTimeout(() => {
             document.querySelector('.form-wrapper').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
     }
 
-    // Reset choice and go back to selection
+    // Réinitialiser le choix et revenir à la sélection
     function resetChoice() {
         currentChoice = null;
         document.getElementById('Check').value = '';
 
-        // Hide all steps
+        // Masquer toutes les étapes
         document.getElementById('formStep1').classList.add('active-step');
         document.getElementById('formStep2Patient').classList.remove('active-step');
         document.getElementById('formStep2Dentist').classList.remove('active-step');
 
-        // Reset progress
+        // Réinitialiser la progression
         document.getElementById('step1').classList.add('active');
         document.getElementById('step2').classList.remove('active');
         document.getElementById('step3').classList.remove('active');
 
-        // Remove selected states
+        // Supprimer les états sélectionnés
         document.querySelector('.patient-choice').classList.remove('selected');
         document.querySelector('.dentist-choice').classList.remove('selected');
 
-        // Scroll back to top
+        // Revenir en haut
         document.querySelector('.progress-container').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Add ripple effect to buttons
+    // Ajouter un effet d’ondulation aux boutons
     function createRipple(e) {
         const button = e.currentTarget;
         const ripple = document.createElement('span');
@@ -344,18 +344,18 @@
         setTimeout(() => ripple.remove(), 600);
     }
 
-    // Attach ripple to buttons
+    // Ajouter l’effet d’ondulation aux boutons
     document.querySelectorAll('.choice-btn, .btn').forEach(btn => {
         btn.addEventListener('click', createRipple);
     });
 
-    // Form validation
+    // Validation du formulaire
     document.getElementById('mainForm').addEventListener('submit', function(e) {
         const choice = document.getElementById('Check').value;
 
         if (!choice) {
             e.preventDefault();
-            alert('Please select a work type');
+            alert('Veuillez sélectionner un type de travail');
             return;
         }
 
@@ -365,7 +365,7 @@
 
             if (!patientID || !khedmaName) {
                 e.preventDefault();
-                alert('Please fill in all patient fields');
+                alert('Veuillez remplir tous les champs du patient');
                 return;
             }
         } else if (choice === 'dentist') {
@@ -375,13 +375,13 @@
 
             if (!dentistName || !patientID || !khedmaName) {
                 e.preventDefault();
-                alert('Please fill in all dentist fields');
+                alert('Veuillez remplir tous les champs du dentiste');
                 return;
             }
         }
     });
 
-    // Auto-close alert after 5 seconds
+    // Fermer automatiquement l’alerte après 5 secondes
     window.addEventListener('load', () => {
         const alert = document.querySelector('.alert');
         if (alert) {

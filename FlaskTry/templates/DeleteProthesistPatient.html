@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-          content="Professional Delete Prothesist Service Form for Prosthetics Lab Management">
+          content="Formulaire professionnel de suppression d'un service de prothésiste pour la gestion d'un laboratoire de prothèse">
     <meta name="keywords"
-          content="Prothesist, Delete, Service, Khedma, Management, Lab">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Delete Prothesist Service</title>
+          content="Prothésiste, Suppression, Service, Tâche, Gestion, Laboratoire">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+    <title>Supprimer un service de prothésiste</title>
     <link rel="stylesheet"
           href="{{ url_for('static', filename='DeleteProthesistPatient.css') }}">
     <link rel="icon"
@@ -35,7 +35,7 @@
         <div class="header-content">
             <a href="/prothesists/ProAllkhedma" class="back-button">
                 <i class="fas fa-arrow-left"></i>
-                <span>Back</span>
+                <span>Retour</span>
             </a>
             <div class="header-title">
                 <div class="icon-wrapper danger-icon">
@@ -43,8 +43,8 @@
                 </div>
 
                 <div class="title-text">
-                    <h1>Delete Prothesist Service</h1>
-                    <p>Permanently remove a service from the system</p>
+                    <h1>Supprimer un service de prothésiste</h1>
+                    <p>Supprimer définitivement un service du système</p>
                 </div>
             </div>
         </div>
@@ -68,10 +68,10 @@
                     <i class="fas fa-exclamation-triangle"></i>
                 </div>
                 <div class="warning-content">
-                    <h3>Caution: Permanent Action</h3>
+                    <h3>Attention : action définitive</h3>
                     <p>
-                        Deleting this service cannot be undone.
-                        The service record and its associated history will be removed.
+                        La suppression de ce service ne peut pas être annulée.
+                        Le dossier du service et son historique associé seront supprimés.
                     </p>
                 </div>
             </div>
@@ -86,10 +86,10 @@
                             <i class="fas fa-shield-alt"></i>
                         </div>
                     </div>
-                    <h2>Confirm Service Deletion</h2>
+                    <h2>Confirmer la suppression du service</h2>
                     <p>
-                        Enter the prothesist and patient information twice
-                        to confirm deletion
+                        Saisissez deux fois les informations du prothésiste et du patient
+                        pour confirmer la suppression
                     </p>
                 </div>
 
@@ -104,7 +104,7 @@
                         </div>
 
                         <div class="alert-content">
-                            <h3>Success</h3>
+                            <h3>Opération réussie</h3>
                             <p>{{ message }}</p>
                         </div>
 
@@ -126,7 +126,7 @@
                         </div>
 
                         <div class="alert-content">
-                            <h3>Error</h3>
+                            <h3>Erreur</h3>
                             <p>{{ error }}</p>
                         </div>
 
@@ -154,10 +154,10 @@
                     <div class="form-group">
                         <label for="pro-name-1" class="form-label">
                             <span class="label-text">
-                                Prothesist Name
+                                Nom du prothésiste
                             </span>
                             <span class="required-badge">
-                                Required
+                                Obligatoire
                             </span>
                         </label>
 
@@ -170,7 +170,7 @@
                                     id="pro-name-1"
                                     name="ProName"
                                     class="form-input"
-                                    placeholder="Enter the prothesist's name"
+                                    placeholder="Saisissez le nom du prothésiste"
                                     required
                                     autocomplete="off"
                             >
@@ -179,7 +179,7 @@
 
                         <span class="field-hint">
                             <i class="fas fa-info-circle"></i>
-                            Enter the name of the prothesist associated with this service
+                            Saisissez le nom du prothésiste associé à ce service
                         </span>
                     </div>
 
@@ -193,7 +193,7 @@
                         <label for="pro-name-2" class="form-label">
 
                             <span class="label-text">
-                                Confirm Prothesist Name
+                                Confirm Nom du prothésiste
                             </span>
 
                             <span class="required-badge danger">
@@ -214,7 +214,7 @@
                                     id="pro-name-2"
                                     name="CheckProName"
                                     class="form-input"
-                                    placeholder="Re-enter the prothesist's name"
+                                    placeholder="Saisissez à nouveau le nom du prothésiste"
                                     required
                                     autocomplete="off"
                                     oninput="checkMatchingFields()"
@@ -233,7 +233,7 @@
 
                             <i class="fas fa-lock"></i>
 
-                            Must match the prothesist name above exactly
+                            Doit correspondre exactement au nom du prothésiste ci-dessus
 
                         </span>
 
@@ -249,11 +249,11 @@
                         <label for="pro-number-1" class="form-label">
 
                             <span class="label-text">
-                                Prothesist Number
+                                Numéro du prothésiste
                             </span>
 
                             <span class="required-badge">
-                                Required
+                                Obligatoire
                             </span>
 
                         </label>
@@ -270,7 +270,7 @@
                                     id="pro-number-1"
                                     name="ProNumber"
                                     class="form-input"
-                                    placeholder="Enter the prothesist number"
+                                    placeholder="Saisissez le numéro du prothésiste"
                                     required
                                     autocomplete="off"
                             >
@@ -284,7 +284,7 @@
 
                             <i class="fas fa-info-circle"></i>
 
-                            Enter the unique number of the prothesist
+                            Saisissez le numéro unique du prothésiste
 
                         </span>
 
@@ -300,7 +300,7 @@
                         <label for="pro-number-2" class="form-label">
 
                             <span class="label-text">
-                                Confirm Prothesist Number
+                                Confirm Numéro du prothésiste
                             </span>
 
                             <span class="required-badge danger">
@@ -321,7 +321,7 @@
                                     id="pro-number-2"
                                     name="CheckProNumber"
                                     class="form-input"
-                                    placeholder="Re-enter the prothesist number"
+                                    placeholder="Saisissez à nouveau le numéro du prothésiste"
                                     required
                                     autocomplete="off"
                                     oninput="checkMatchingFields()"
@@ -340,7 +340,7 @@
 
                             <i class="fas fa-lock"></i>
 
-                            Must match the prothesist number above exactly
+                            Doit correspondre exactement au numéro du prothésiste ci-dessus
 
                         </span>
 
@@ -353,7 +353,7 @@
 
                     <div class="section-divider">
 
-                        <span>Patient Information</span>
+                        <span>Informations du patient</span>
 
                     </div>
 
@@ -367,11 +367,11 @@
                         <label for="patient-number-1" class="form-label">
 
                             <span class="label-text">
-                                Patient Number
+                                Numéro du patient
                             </span>
 
                             <span class="required-badge">
-                                Required
+                                Obligatoire
                             </span>
 
                         </label>
@@ -388,7 +388,7 @@
                                     id="patient-number-1"
                                     name="PatientNumber"
                                     class="form-input"
-                                    placeholder="Enter the patient's number"
+                                    placeholder="Saisissez le numéro du patient"
                                     required
                                     autocomplete="off"
                             >
@@ -402,7 +402,7 @@
 
                             <i class="fas fa-info-circle"></i>
 
-                            Enter the patient number associated with this service
+                            Saisissez le numéro du patient associé à ce service
 
                         </span>
 
@@ -418,7 +418,7 @@
                         <label for="patient-number-2" class="form-label">
 
                             <span class="label-text">
-                                Confirm Patient Number
+                                Confirm Numéro du patient
                             </span>
 
                             <span class="required-badge danger">
@@ -439,7 +439,7 @@
                                     id="patient-number-2"
                                     name="CheckPatientNumber"
                                     class="form-input"
-                                    placeholder="Re-enter the patient number"
+                                    placeholder="Saisissez à nouveau le numéro du patient"
                                     required
                                     autocomplete="off"
                                     oninput="checkMatchingFields()"
@@ -458,7 +458,7 @@
 
                             <i class="fas fa-lock"></i>
 
-                            Must match the patient number above exactly
+                            Doit correspondre exactement au numéro du patient ci-dessus
 
                         </span>
 
@@ -481,12 +481,12 @@
 
 
                     <!-- =========================
-                         SAFETY CHECKLIST
+                         SAFETY LISTE DE CONTRÔLE
                          ========================= -->
 
                     <div class="safety-checklist">
 
-                        <h3>Safety Checklist</h3>
+                        <h3>Liste de contrôle de sécurité</h3>
 
                         <div class="checklist-items">
 
@@ -499,7 +499,7 @@
                                 >
 
                                 <label for="check-1">
-                                    I have confirmed this is the correct prothesist
+                                    J’ai confirmé qu’il s’agit du bon prothésiste
                                 </label>
 
                             </div>
@@ -514,7 +514,7 @@
                                 >
 
                                 <label for="check-2">
-                                    I have confirmed this is the correct patient
+                                    J’ai confirmé qu’il s’agit du bon patient
                                 </label>
 
                             </div>
@@ -529,7 +529,7 @@
                                 >
 
                                 <label for="check-3">
-                                    I understand this service will be permanently deleted
+                                    Je comprends que ce service sera définitivement supprimé
                                 </label>
 
                             </div>
@@ -555,7 +555,7 @@
                             </span>
 
                             <span class="btn-text">
-                                Cancel
+                                Annuler
                             </span>
                         </button>
 
@@ -571,7 +571,7 @@
                             </span>
 
                             <span class="btn-text">
-                                Delete Service
+                                Supprimer le service
                             </span>
 
                             <span class="btn-loader" style="display: none;">
@@ -592,8 +592,8 @@
                         <i class="fas fa-exclamation-circle"></i>
 
                         <span>
-                            This action will permanently delete the selected service
-                            from the system.
+                            Cette action supprimera définitivement le service sélectionné
+                            du système.
                         </span>
 
                     </div>
@@ -609,7 +609,7 @@
 
             <div class="info-box fade-in">
 
-                <h3>Before You Delete</h3>
+                <h3>Avant de supprimer</h3>
 
                 <ul class="info-list">
 
@@ -617,7 +617,7 @@
                         <i class="fas fa-user-cog"></i>
 
                         <span>
-                            Make sure the prothesist information is correct
+                            Assurez-vous que les informations du prothésiste sont correctes
                         </span>
                     </li>
 
@@ -625,7 +625,7 @@
                         <i class="fas fa-user-injured"></i>
 
                         <span>
-                            Make sure the patient number is correct
+                            Assurez-vous que le numéro du patient est correct
                         </span>
                     </li>
 
@@ -633,7 +633,7 @@
                         <i class="fas fa-clipboard-list"></i>
 
                         <span>
-                            The selected service will be permanently removed
+                            Le service sélectionné sera définitivement supprimé
                         </span>
                     </li>
 
@@ -641,7 +641,7 @@
                         <i class="fas fa-history"></i>
 
                         <span>
-                            The associated service history will be marked as deleted
+                            L’historique associé au service sera marqué comme supprimé
                         </span>
                     </li>
 
@@ -649,7 +649,7 @@
                         <i class="fas fa-undo"></i>
 
                         <span>
-                            This action cannot be reversed
+                            Cette action ne peut pas être annulée
                         </span>
                     </li>
 
@@ -670,7 +670,7 @@
 
         <p>
             &copy; 2024 Prosthetics Lab Management System.
-            All rights reserved.
+            Tous droits réservés.
         </p>
 
     </footer>
@@ -686,7 +686,7 @@
 
     /*
      * ============================================
-     * CHECK ALL MATCHING FIELDS
+     * VÉRIFIER LA CORRESPONDANCE DE TOUS LES CHAMPS
      * ============================================
      */
 
@@ -736,7 +736,7 @@
 
     /*
      * ============================================
-     * MATCH INDICATOR
+     * INDICATEUR DE CORRESPONDANCE
      * ============================================
      */
 
@@ -789,7 +789,7 @@
 
     /*
      * ============================================
-     * OVERALL STATUS
+     * STATUT GLOBAL
      * ============================================
      */
 
@@ -871,7 +871,7 @@
 
             matchStatusContent.innerHTML =
                 '<i class="fas fa-check-circle"></i>' +
-                '<span>All fields match! Deletion is ready.</span>';
+                '<span>Tous les champs correspondent ! La suppression est prête.</span>';
 
             matchStatus.style.display = 'block';
 
@@ -893,7 +893,7 @@
 
             matchStatusContent.innerHTML =
                 '<i class="fas fa-times-circle"></i>' +
-                '<span>Fields do not match. Please check again.</span>';
+                '<span>Les champs ne correspondent pas. Veuillez vérifier à nouveau.</span>';
 
             matchStatus.style.display = 'block';
 
@@ -904,7 +904,7 @@
 
     /*
      * ============================================
-     * FORM SUBMISSION
+     * ENVOI DU FORMULAIRE
      * ============================================
      */
 
@@ -962,7 +962,7 @@
 
             showError(
                 document.getElementById('pro-name-1'),
-                'Please enter the prothesist name'
+                'Veuillez saisir le nom du prothésiste'
             );
 
             return;
@@ -973,7 +973,7 @@
 
             showError(
                 document.getElementById('pro-name-2'),
-                'Prothesist names do not match'
+                'Les noms des prothésistes ne correspondent pas'
             );
 
             return;
@@ -984,7 +984,7 @@
 
             showError(
                 document.getElementById('pro-number-1'),
-                'Please enter the prothesist number'
+                'Veuillez saisir le numéro du prothésiste'
             );
 
             return;
@@ -995,7 +995,7 @@
 
             showError(
                 document.getElementById('pro-number-2'),
-                'Prothesist numbers do not match'
+                'Les numéros des prothésistes ne correspondent pas'
             );
 
             return;
@@ -1006,7 +1006,7 @@
 
             showError(
                 document.getElementById('patient-number-1'),
-                'Please enter the patient number'
+                'Veuillez saisir le numéro du patient'
             );
 
             return;
@@ -1021,7 +1021,7 @@
 
             showError(
                 document.getElementById('patient-number-2'),
-                'Patient numbers do not match'
+                'Les numéros des patients ne correspondent pas'
             );
 
             return;
@@ -1031,7 +1031,7 @@
         if (!check1 || !check2 || !check3) {
 
             showWarning(
-                'Please confirm all safety checks before deleting'
+                'Veuillez confirmer toutes les vérifications de sécurité avant de supprimer'
             );
 
             return;
@@ -1039,7 +1039,7 @@
 
 
         /*
-         * Loading state
+         * État de chargement
          */
 
         submitBtn.disabled = true;
@@ -1050,18 +1050,18 @@
 
 
         /*
-         * Final confirmation
+         * Confirmation finale
          */
 
         if (
             confirm(
-                `Are you absolutely sure you want to delete this service?
+                `Êtes-vous absolument sûr de vouloir supprimer ce service ?
 
-Prothesist: ${proName1}
-Prothesist Number: ${proNumber1}
-Patient Number: ${patientNumber1}
+Prothésiste : ${proName1}
+Numéro du prothésiste: ${proNumber1}
+Numéro du patient: ${patientNumber1}
 
-This action cannot be undone.`
+Cette action ne peut pas être annulée.`
             )
         ) {
 
@@ -1084,7 +1084,7 @@ This action cannot be undone.`
 
     /*
      * ============================================
-     * SHOW ERROR
+     * AFFICHER UNE ERREUR
      * ============================================
      */
 
@@ -1140,7 +1140,7 @@ This action cannot be undone.`
 
     /*
      * ============================================
-     * SHOW WARNING
+     * AFFICHER UN AVERTISSEMENT
      * ============================================
      */
 
@@ -1176,7 +1176,7 @@ This action cannot be undone.`
 
             <div class="alert-content">
 
-                <h3>Attention Required</h3>
+                <h3>Attention Obligatoire</h3>
 
                 <p>${message}</p>
 
@@ -1208,7 +1208,7 @@ This action cannot be undone.`
 
     /*
      * ============================================
-     * INPUT EVENTS
+     * ÉVÉNEMENTS DES CHAMPS
      * ============================================
      */
 
@@ -1283,7 +1283,7 @@ This action cannot be undone.`
 
     /*
      * ============================================
-     * CHECKLIST
+     * LISTE DE CONTRÔLE
      * ============================================
      */
 
@@ -1301,7 +1301,7 @@ This action cannot be undone.`
 
     /*
      * ============================================
-     * ALERT CLOSE
+     * FERMETURE DES ALERTES
      * ============================================
      */
 
@@ -1331,7 +1331,7 @@ This action cannot be undone.`
 
     /*
      * ============================================
-     * RIPPLE EFFECT
+     * EFFET D’ONDE
      * ============================================
      */
 
@@ -1402,7 +1402,7 @@ This action cannot be undone.`
 
     /*
      * ============================================
-     * INITIAL STATE
+     * ÉTAT INITIAL
      * ============================================
      */
 

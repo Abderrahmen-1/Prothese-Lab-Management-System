@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="description"
-          content="DentaFlow Owner Verification - Secure User Management">
+          content="DentaFlow - Vérification du propriétaire et gestion sécurisée des utilisateurs">
 
     <meta name="author" content="DentaFlow">
 
-    <title>DentaFlow - Owner Verification</title>
+    <title>DentaFlow - Vérification du propriétaire</title>
 
     <link rel="icon"
           href="{{ url_for('static', filename='favicon.ico') }}"
@@ -30,7 +30,7 @@
 
 <div class="page-shell">
 
-    <!-- TOP NAV -->
+    <!-- NAVIGATION SUPÉRIEURE -->
     <nav class="top-nav">
 
         <div class="brand">
@@ -40,42 +40,43 @@
 
             <div class="brand-text">
                 <strong>DentaFlow</strong>
-                <span>Prosthetics Lab</span>
+                <span>Laboratoire de prothèse</span>
             </div>
         </div>
+
         <a href="{{ url_for('getHome') }}" class="users-generated">
             <i class="fas fa-user-shield"></i>
-            <span>Back to Home</span>
+            <span>Retour à l'accueil</span>
         </a>
 
         <div class="nav-security">
             <span class="online-dot"></span>
-            Secure Session
+            Session sécurisée
         </div>
 
     </nav>
 
 
-    <!-- MAIN -->
+    <!-- CONTENU PRINCIPAL -->
     <main class="owner-container">
 
-        <!-- HERO -->
+        <!-- SECTION PRINCIPALE -->
         <section class="owner-hero">
 
             <div class="hero-content">
 
                 <div class="security-label">
                     <i class="fas fa-shield-halved"></i>
-                    OWNER VERIFICATION
+                    VÉRIFICATION DU PROPRIÉTAIRE
                 </div>
 
                 <h1>
-                    Confirm <span>Authorization</span>
+                    Confirmer <span>l'autorisation</span>
                 </h1>
 
                 <p>
-                    Verify the owner's credentials before accessing
-                    sensitive user management actions.
+                    Vérifiez les identifiants du propriétaire avant
+                    d'accéder aux actions sensibles de gestion des utilisateurs.
                 </p>
 
             </div>
@@ -94,7 +95,7 @@
         </section>
 
 
-        <!-- SECURITY NOTICE -->
+        <!-- AVIS DE SÉCURITÉ -->
         <div class="security-notice">
 
             <div class="notice-icon">
@@ -102,42 +103,42 @@
             </div>
 
             <div>
-                <strong>Protected operation</strong>
+                <strong>Opération protégée</strong>
                 <p>
-                    Owner credentials are required to continue.
-                    This verification is protected by CSRF validation.
+                    Les identifiants du propriétaire sont nécessaires pour continuer.
+                    Cette vérification est protégée par une validation CSRF.
                 </p>
             </div>
 
         </div>
 
 
-        <!-- FORM HEADER -->
+        <!-- EN-TÊTE DU FORMULAIRE -->
         <div class="section-header">
 
             <div>
                 <span class="section-label">
                     <i class="fas fa-user-shield"></i>
-                    ADMIN SECURITY
+                    SÉCURITÉ ADMINISTRATEUR
                 </span>
 
-                <h2>Verify Owner Data</h2>
+                <h2>Vérifier les informations du propriétaire</h2>
 
                 <p>
-                    Enter the owner's credentials and select the action
-                    you want to perform.
+                    Saisissez les identifiants du propriétaire et sélectionnez
+                    l'action que vous souhaitez effectuer.
                 </p>
             </div>
 
             <div class="protected-badge">
                 <i class="fas fa-shield-halved"></i>
-                Protected
+                Protégé
             </div>
 
         </div>
 
 
-        <!-- FORM CARD -->
+        <!-- CARTE DU FORMULAIRE -->
         <section class="owner-card">
 
             <form
@@ -156,12 +157,12 @@
 
                 <div class="form-grid">
 
-                    <!-- USERNAME -->
+                    <!-- NOM D'UTILISATEUR -->
                     <div class="form-group">
 
                         <label for="userName">
                             <i class="fas fa-user"></i>
-                            Owner Username
+                            Nom d'utilisateur du propriétaire
                         </label>
 
                         <div class="input-wrapper">
@@ -171,7 +172,7 @@
                                     type="text"
                                     id="userName"
                                     name="userName"
-                                    placeholder="Enter owner username"
+                                    placeholder="Saisissez le nom d'utilisateur du propriétaire"
                                     minlength="5"
                                     autocomplete="username"
                                     required
@@ -181,12 +182,12 @@
                     </div>
 
 
-                    <!-- EMAIL -->
+                    <!-- ADRESSE E-MAIL -->
                     <div class="form-group">
 
                         <label for="email">
                             <i class="fas fa-envelope"></i>
-                            Owner Email
+                            Adresse e-mail du propriétaire
                         </label>
 
                         <div class="input-wrapper">
@@ -196,7 +197,7 @@
                                     type="email"
                                     id="email"
                                     name="email"
-                                    placeholder="Enter owner email"
+                                    placeholder="Saisissez l'adresse e-mail du propriétaire"
                                     autocomplete="email"
                                     required
                             >
@@ -205,12 +206,12 @@
                     </div>
 
 
-                    <!-- PHONE -->
+                    <!-- NUMÉRO DE TÉLÉPHONE -->
                     <div class="form-group">
 
                         <label for="phoneNumber">
                             <i class="fas fa-phone"></i>
-                            Phone Number
+                            Numéro de téléphone
                         </label>
 
                         <div class="input-wrapper">
@@ -220,7 +221,7 @@
                                     type="text"
                                     id="phoneNumber"
                                     name="phoneNumber"
-                                    placeholder="Enter phone number"
+                                    placeholder="Saisissez le numéro de téléphone"
                                     maxlength="10"
                                     inputmode="numeric"
                                     autocomplete="tel"
@@ -231,12 +232,12 @@
                     </div>
 
 
-                    <!-- PASSWORD -->
+                    <!-- MOT DE PASSE -->
                     <div class="form-group">
 
                         <label for="password">
                             <i class="fas fa-key"></i>
-                            Owner Password
+                            Mot de passe du propriétaire
                         </label>
 
                         <div class="input-wrapper">
@@ -247,7 +248,7 @@
                                     type="password"
                                     id="password"
                                     name="password"
-                                    placeholder="Enter owner password"
+                                    placeholder="Saisissez le mot de passe du propriétaire"
                                     autocomplete="current-password"
                                     required
                             >
@@ -256,7 +257,7 @@
                                     type="button"
                                     class="password-toggle"
                                     id="passwordToggle"
-                                    aria-label="Show password"
+                                    aria-label="Afficher le mot de passe"
                             >
                                 <i class="fas fa-eye"></i>
                             </button>
@@ -266,12 +267,12 @@
                     </div>
 
 
-                    <!-- FUNCTION -->
+                    <!-- ACTION -->
                     <div class="form-group full-width">
 
                         <label for="function">
                             <i class="fas fa-user-cog"></i>
-                            Management Action
+                            Action de gestion
                         </label>
 
                         <div class="select-wrapper">
@@ -284,19 +285,19 @@
                                     required
                             >
                                 <option value="" selected disabled>
-                                    Select an action
+                                    Sélectionnez une action
                                 </option>
 
                                 <option value="add">
-                                    Add User
+                                    Ajouter un utilisateur
                                 </option>
 
                                 <option value="block">
-                                    Block User
+                                    Bloquer un utilisateur
                                 </option>
 
                                 <option value="delete">
-                                    Delete User
+                                    Supprimer un utilisateur
                                 </option>
 
                             </select>
@@ -309,9 +310,9 @@
                             <i class="fas fa-circle-info"></i>
 
                             <span>
-                                Choose <strong>Block</strong> to disable
-                                an account or <strong>Delete</strong> to
-                                permanently remove it.
+                                Choisissez <strong>Bloquer</strong> pour désactiver
+                                un compte ou <strong>Supprimer</strong> pour le
+                                supprimer définitivement.
                             </span>
                         </div>
 
@@ -320,7 +321,7 @@
                 </div>
 
 
-                <!-- FOOTER -->
+                <!-- PIED DU FORMULAIRE -->
                 <div class="form-footer">
 
                     <div class="security-status">
@@ -330,8 +331,8 @@
                         </div>
 
                         <div>
-                            <strong>Secure verification</strong>
-                            <span>CSRF protected request</span>
+                            <strong>Vérification sécurisée</strong>
+                            <span>Requête protégée par CSRF</span>
                         </div>
 
                     </div>
@@ -342,13 +343,13 @@
                             class="verify-button"
                     >
                         <i class="fas fa-check-double"></i>
-                        Verify & Continue
+                        Vérifier et continuer
                     </button>
 
                 </div>
 
 
-                <!-- ERROR / MESSAGE -->
+                <!-- ERREUR / MESSAGE -->
 
                 {% if message %}
 
@@ -359,7 +360,7 @@
                     </div>
 
                     <div class="alert-content">
-                        <strong>Verification Failed</strong>
+                        <strong>Échec de la vérification</strong>
                         <p>{{ message }}</p>
                     </div>
 
@@ -385,7 +386,7 @@
                     </div>
 
                     <div class="alert-content">
-                        <strong>Error</strong>
+                        <strong>Erreur</strong>
                         <p>{{ error }}</p>
                     </div>
 
@@ -406,14 +407,14 @@
         </section>
 
 
-        <!-- BOTTOM SECURITY INFO -->
+        <!-- INFORMATIONS DE SÉCURITÉ EN BAS DE PAGE -->
         <div class="bottom-security">
 
             <i class="fas fa-lock"></i>
 
             <span>
-                Sensitive owner credentials are transmitted through
-                a protected HTTPS session.
+                Les identifiants sensibles du propriétaire sont transmis
+                via une session HTTPS sécurisée.
             </span>
 
         </div>
@@ -435,12 +436,12 @@
             passwordInput.type = "text";
             icon.classList.remove("fa-eye");
             icon.classList.add("fa-eye-slash");
-            this.setAttribute("aria-label", "Hide password");
+            this.setAttribute("aria-label", "Masquer le mot de passe");
         } else {
             passwordInput.type = "password";
             icon.classList.remove("fa-eye-slash");
             icon.classList.add("fa-eye");
-            this.setAttribute("aria-label", "Show password");
+            this.setAttribute("aria-label", "Afficher le mot de passe");
         }
 
     });
@@ -448,4 +449,3 @@
 
 </body>
 </html>
-

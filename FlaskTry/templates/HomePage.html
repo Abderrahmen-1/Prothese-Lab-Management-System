@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="description" content="Dashboard - Prosthetics Lab Management System">
-    <meta name="keywords" content="Dashboard, Prosthetics Lab, Management">
-    <meta name="author" content="Prosthetics Lab Team">
+    <meta name="description" content="Tableau de bord - Système de gestion du laboratoire de prothèse">
+    <meta name="keywords" content="Tableau de bord, Laboratoire de prothèse, Gestion">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
 
-    <title>DentaFlow - Dashboard</title>
+    <title>DentaFlow - Tableau de bord</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='HomePage.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
@@ -33,19 +33,19 @@
 
         <div class="brand-text">
             <strong>DentaFlow</strong>
-            <span>Prosthetics Lab</span>
+            <span>Laboratoire de prothèse</span>
         </div>
         {% if session['id'] == 1 %}
             <a href="{{ url_for('users.ConfirmOwnerData') }}" class="users-generated">
                 <i class="fas fa-user-shield"></i>
-                <span>Users Generated</span>
+                <span>Gestion des utilisateurs</span>
             </a>
         {% endif %}
     </div>
 
     <div class="nav-status">
         <span class="status-dot"></span>
-        System Online
+        Système en ligne
     </div>
 
     <div class="user-profile">
@@ -63,7 +63,7 @@
             <strong>User</strong>
             {% endif %}
 
-            <span>Lab Admin</span>
+            <span>Administrateuristrateur du laboratoire</span>
         </div>
 
     </div>
@@ -81,21 +81,21 @@
 
                 <span class="hero-label">
                     <i class="fas fa-layer-group"></i>
-                    LAB MANAGEMENT
+                    GESTION DU LABORATOIRE
                 </span>
 
             <h1>
-                Welcome back,
+                Bon retour,
                 {% if username %}
                 <span>{{ username }}</span>
                 {% else %}
-                <span>Admin</span>
+                <span>Administrateur</span>
                 {% endif %}
             </h1>
 
             <p>
-                Manage your prosthetics laboratory from one
-                centralized workspace.
+                Gérez votre laboratoire de prothèse depuis un
+                espace de travail centralisé.
             </p>
 
         </div>
@@ -114,8 +114,8 @@
     <div class="section-header">
 
         <div>
-            <h2>Management Modules</h2>
-            <p>Choose a module to manage your laboratory operations.</p>
+            <h2>Modules de gestion</h2>
+            <p>Choisissez un module pour gérer les activités de votre laboratoire.</p>
         </div>
 
         <div class="module-count">
@@ -146,19 +146,19 @@
 
             <div class="card-content">
 
-                <span class="card-category">Records</span>
+                <span class="card-category">Dossiers</span>
 
                 <h3>Patients</h3>
 
                 <p>
-                    Manage patient profiles, treatment information
-                    and medical records.
+                    Gérez les profils des patients, les informations sur les traitements
+                    et les dossiers médicaux.
                 </p>
 
             </div>
 
             <div class="card-action">
-                <span>Open module</span>
+                <span>Ouvrir le module</span>
                 <i class="fas fa-arrow-right"></i>
             </div>
 
@@ -182,19 +182,19 @@
 
             <div class="card-content">
 
-                <span class="card-category">Orders</span>
+                <span class="card-category">Commandes</span>
 
-                <h3>Dentists</h3>
+                <h3>Dentistes</h3>
 
                 <p>
-                    Track dentist orders, patient referrals,
-                    contacts and history.
+                    Suivez les commandes des dentistes, les orientations des patients,
+                    les contacts et l’historique.
                 </p>
 
             </div>
 
             <div class="card-action">
-                <span>Open module</span>
+                <span>Ouvrir le module</span>
                 <i class="fas fa-arrow-right"></i>
             </div>
 
@@ -218,19 +218,19 @@
 
             <div class="card-content">
 
-                <span class="card-category">Lab Work</span>
+                <span class="card-category">Travaux du laboratoire</span>
 
                 <h3>Services</h3>
 
                 <p>
-                    Manage laboratory work, deadlines and
-                    active treatment services.
+                    Gérez les travaux du laboratoire, les dates limites et les
+                    services de traitement en cours.
                 </p>
 
             </div>
 
             <div class="card-action">
-                <span>Open module</span>
+                <span>Ouvrir le module</span>
                 <i class="fas fa-arrow-right"></i>
             </div>
 
@@ -254,19 +254,19 @@
 
             <div class="card-content">
 
-                <span class="card-category">Inventory</span>
+                <span class="card-category">Stock</span>
 
-                <h3>Products</h3>
+                <h3>Produits</h3>
 
                 <p>
-                    Monitor materials, stock levels and
-                    laboratory inventory.
+                    Surveillez les matériaux, les niveaux de stock et
+                    l’inventaire du laboratoire.
                 </p>
 
             </div>
 
             <div class="card-action">
-                <span>Open module</span>
+                <span>Ouvrir le module</span>
                 <i class="fas fa-arrow-right"></i>
             </div>
 
@@ -292,17 +292,17 @@
 
                 <span class="card-category">Production</span>
 
-                <h3>Prothesist</h3>
+                <h3>Prothésiste</h3>
 
                 <p>
-                    Monitor production workflow, assignments
-                    and service deadlines.
+                    Suivez le flux de production, les attributions
+                    et les dates limites des services.
                 </p>
 
             </div>
 
             <div class="card-action">
-                <span>Open module</span>
+                <span>Ouvrir le module</span>
                 <i class="fas fa-arrow-right"></i>
             </div>
 
@@ -328,17 +328,17 @@
 
                 <span class="card-category">Services</span>
 
-                <h3>Other Services</h3>
+                <h3>Autres services</h3>
 
                 <p>
-                    Manage additional laboratory services
-                    and external requests.
+                    Gérez les services supplémentaires du laboratoire
+                    et les demandes externes.
                 </p>
 
             </div>
 
             <div class="card-action">
-                <span>Open module</span>
+                <span>Ouvrir le module</span>
                 <i class="fas fa-arrow-right"></i>
             </div>
 
@@ -362,19 +362,19 @@
 
             <div class="card-content">
 
-                <span class="card-category">Analytics</span>
+                <span class="card-category">Analyses</span>
 
-                <h3>Statistics & Totals</h3>
+                <h3>Statistiques et totaux</h3>
 
                 <p>
-                    Analyze revenue, production totals, patient
-                    activity and monthly laboratory reports.
+                    Analysez le chiffre d’affaires, les totaux de production, l’activité
+                    des patients et les rapports mensuels du laboratoire.
                 </p>
 
             </div>
 
             <div class="card-action">
-                <span>View analytics</span>
+                <span>Voir les analyses</span>
                 <i class="fas fa-arrow-right"></i>
             </div>
 

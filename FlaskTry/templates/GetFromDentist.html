@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional Khedma Assignment Form for Prosthetics Lab">
-    <meta name="keywords" content="Khedma, Dentist, Prosthetics, Assignment, Lab Management">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Get Khedma - Assignment Form</title>
+    <meta name="description" content="Formulaire professionnel d'attribution de tâches pour un laboratoire de prothèse">
+    <meta name="keywords" content="Tâche, Dentiste, Prothèse, Attribution, Gestion de laboratoire">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+    <title>Obtenir une tâche - Formulaire d'attribution</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='GetFromDentist.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
@@ -20,38 +20,41 @@
 
 <body>
 
-
-<!-- Animated Background -->
+<!-- Arrière-plan animé -->
 <div class="animated-bg"></div>
 
 <div class="page-container">
-    <!-- Header -->
+    <!-- En-tête -->
     <header class="form-header">
         <div class="header-content">
             <a href="/dentists/Dentist" class="back-button">
                 <i class="fas fa-arrow-left"></i>
-                <span>Back to Dentist</span>
+                <span>Retour aux dentistes</span>
             </a>
+
             <div class="header-title">
                 <div class="title-icon">
                     <i class="fas fa-hand-holding-medical"></i>
                 </div>
                 <div>
-                    <h1>Get Khedma</h1>
-                    <p>Assign dental work from dentist</p>
+                    <h1>Obtenir une tâche</h1>
+                    <p>Attribuer un travail dentaire provenant d'un dentiste</p>
                 </div>
             </div>
-            <div class="progress-indicator">
-                <span id="progress-text" class="progress-text">Step 1 of 2</span>
-            </div>
 
-            {% if message %}
+            <div class="progress-indicator">
+                <span id="progress-text" class="progress-text">Étape 1 sur 2</span>
+            </div>
+        </div>
+    </header>
+
+    {% if message %}
             <div class="alert-container">
                 <div class="alert alert-success fade-in-slow">
                     <i class="fas fa-check-circle"></i>
 
                     <div class="alert-content">
-                        <h3>Success</h3>
+                        <h3>Opération réussie</h3>
                         <p>{{ message }}</p>
                     </div>
 
@@ -64,14 +67,13 @@
             </div>
             {% endif %}
 
-
             {% if error %}
             <div class="alert-container">
                 <div class="alert alert-error fade-in-slow">
                     <i class="fas fa-exclamation-circle"></i>
 
                     <div class="alert-content">
-                        <h3>Error</h3>
+                        <h3>Erreur</h3>
                         <p>{{ error }}</p>
                     </div>
 
@@ -83,52 +85,50 @@
                 </div>
             </div>
             {% endif %}
-        </div>
-    </header>
 
-    <!-- Form Container -->
+    <!-- Conteneur du formulaire -->
     <main class="form-container">
         <form action="/dentists/GetFromDentist" method="POST" class="khedma-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-            <!-- Section 1: Basic Dentist & Patient Information -->
+            <!-- Section 1 : Informations de base du dentiste et du patient -->
             <section class="form-section visible" id="section-1" data-section="1">
                 <div class="section-header">
-                    <h2><i class="fas fa-info-circle"></i> Dentist & Patient Details</h2>
-                    <p>Start by selecting the dentist and patient information</p>
+                    <h2><i class="fas fa-info-circle"></i> Informations du dentiste et du patient</h2>
+                    <p>Commencez par sélectionner les informations du dentiste et du patient</p>
                 </div>
 
                 <div class="form-grid">
-                    <!-- Dentist Selection -->
+                    <!-- Sélection du dentiste -->
                     <div class="form-group full-width">
                         <label for="Dentistinput" class="label-with-icon">
                             <i class="fas fa-user-md"></i>
-                            <span>Dentist Name</span>
+                            <span>Nom du dentiste</span>
                             <span class="required">*</span>
                         </label>
                         <input
                                 type="text"
                                 id="Dentistinput"
                                 name="Dentistinput"
-                                placeholder="Which dentist are you getting work from?"
+                                placeholder="De quel dentiste recevez-vous le travail ?"
                                 class="form-input"
                                 required
                         >
-                        <span class="field-hint">Enter the name of the dentist</span>
+                        <span class="field-hint">Saisissez le nom du dentiste</span>
                     </div>
 
-                    <!-- Patient Information Row -->
+                    <!-- Informations du patient -->
                     <div class="form-group">
                         <label for="PatientFirstName" class="label-with-icon">
                             <i class="fas fa-user"></i>
-                            <span>Patient First Name</span>
+                            <span>Prénom du patient</span>
                             <span class="required">*</span>
                         </label>
                         <input
                                 type="text"
                                 id="PatientFirstName"
                                 name="PatientFirstName"
-                                placeholder="First name"
+                                placeholder="Prénom"
                                 class="form-input"
                                 required
                         >
@@ -137,77 +137,77 @@
                     <div class="form-group">
                         <label for="PatientLastName" class="label-with-icon">
                             <i class="fas fa-user"></i>
-                            <span>Patient Last Name</span>
+                            <span>Nom du patient</span>
                             <span class="required">*</span>
                         </label>
                         <input
                                 type="text"
                                 id="PatientLastName"
                                 name="PatientLastName"
-                                placeholder="Last name"
+                                placeholder="Nom"
                                 class="form-input"
                                 required
                         >
                     </div>
 
-                    <!-- Patient Unique Number -->
+                    <!-- Numéro unique du patient -->
                     <div class="form-group full-width">
                         <label for="PatientUnique" class="label-with-icon">
                             <i class="fas fa-hashtag"></i>
-                            <span>Patient Unique Number</span>
+                            <span>Numéro unique du patient</span>
                             <span class="required">*</span>
                         </label>
                         <input
                                 type="text"
                                 id="PatientUnique"
                                 name="PatientUnique"
-                                placeholder="Patient ID or unique number"
+                                placeholder="ID ou numéro unique du patient"
                                 class="form-input"
                                 required
                         >
-                        <span class="field-hint">This helps identify the patient record</span>
+                        <span class="field-hint">Ce numéro permet d'identifier le dossier du patient</span>
                     </div>
                 </div>
 
                 <div class="section-nav">
                     <button type="button" class="btn btn-next" onclick="scrollToSection(2)">
-                        <span>Continue to Work Details</span>
+                        <span>Continuer vers les détails du travail</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
             </section>
 
-            <!-- Section 2: Work Details -->
+            <!-- Section 2 : Détails du travail -->
             <section class="form-section" id="section-2" data-section="2">
                 <div class="section-header">
-                    <h2><i class="fas fa-wrench"></i> Work Details</h2>
-                    <p>Specify the type of work and its details</p>
+                    <h2><i class="fas fa-wrench"></i> Détails du travail</h2>
+                    <p>Précisez le type de travail et ses détails</p>
                 </div>
 
                 <div class="form-grid">
-                    <!-- Work Choice -->
+                    <!-- Choix du travail -->
                     <div class="form-group full-width">
                         <label for="KhedmaChoice" class="label-with-icon">
                             <i class="fas fa-tasks"></i>
-                            <span>Type of Work</span>
+                            <span>Type de travail</span>
                             <span class="required">*</span>
                         </label>
                         <input
                                 type="text"
                                 id="KhedmaChoice"
                                 name="KhedmaChoice"
-                                placeholder="e.g., Crown, Bridge, Implant, etc."
+                                placeholder="ex. : Couronne, Bridge, Implant, etc."
                                 class="form-input"
                                 required
                         >
-                        <span class="field-hint">Describe the work to be done</span>
+                        <span class="field-hint">Décrivez le travail à effectuer</span>
                     </div>
 
-                    <!-- Price -->
+                    <!-- Prix -->
                     <div class="form-group">
                         <label for="KhedmaPrice" class="label-with-icon">
                             <i class="fas fa-dollar-sign"></i>
-                            <span>Price (DA)</span>
+                            <span>Prix (DA)</span>
                             <span class="required">*</span>
                         </label>
                         <div class="input-with-unit">
@@ -215,7 +215,7 @@
                                     type="number"
                                     id="KhedmaPrice"
                                     name="KhedmaPrice"
-                                    placeholder="Amount"
+                                    placeholder="Montant"
                                     class="form-input"
                                     required
                                     min="0"
@@ -225,11 +225,11 @@
                         </div>
                     </div>
 
-                    <!-- Khalsa Status -->
+                    <!-- Statut du paiement -->
                     <div class="form-group">
                         <label for="Khalsa" class="label-with-icon">
                             <i class="fas fa-check-square"></i>
-                            <span>Payment Status</span>
+                            <span>Statut du paiement</span>
                             <span class="required">*</span>
                         </label>
                         <select
@@ -238,17 +238,17 @@
                                 class="form-input"
                                 required
                         >
-                            <option value="">Select status</option>
-                            <option value="yes">Paid (Khalsa)</option>
-                            <option value="no">Pending (Not Paid)</option>
+                            <option value="">Sélectionnez le statut</option>
+                            <option value="yes">Payé (Khalsa)</option>
+                            <option value="no">En attente (Non payé)</option>
                         </select>
                     </div>
 
-                    <!-- Dates Row -->
+                    <!-- Dates -->
                     <div class="form-group">
                         <label for="date" class="label-with-icon">
                             <i class="fas fa-calendar"></i>
-                            <span>Start Date</span>
+                            <span>Date de début</span>
                             <span class="required">*</span>
                         </label>
                         <input
@@ -263,7 +263,7 @@
                     <div class="form-group">
                         <label for="DeadLine" class="label-with-icon">
                             <i class="fas fa-hourglass-end"></i>
-                            <span>Deadline</span>
+                            <span>Date limite</span>
                             <span class="required">*</span>
                         </label>
                         <input
@@ -276,45 +276,45 @@
                     </div>
                 </div>
 
-                <!-- Other Prothesist Section -->
+                <!-- Section Autre prothésiste -->
                 <div class="conditional-section">
                     <div class="section-divider"></div>
 
                     <div class="form-group full-width">
                         <label for="ProCheck" class="label-with-icon toggle-label">
                             <i class="fas fa-handshake"></i>
-                            <span>Will another prothesist do this work?</span>
+                            <span>Un autre prothésiste effectuera-t-il ce travail ?</span>
                         </label>
                         <input
                                 type="text"
                                 id="ProCheck"
                                 name="OtherPro"
-                                placeholder="Type 'yes' or 'no'"
+                                placeholder="Saisissez « oui » ou « non »"
                                 class="form-input"
                                 oninput="OtherProthesists()"
                         >
-                        <span class="field-hint">If yes, fill in prothesist details below</span>
+                        <span class="field-hint">Si oui, renseignez les informations du prothésiste ci-dessous</span>
                     </div>
                 </div>
 
-                <!-- Other Prothesist Details (Conditional) -->
+                <!-- Informations de l'autre prothésiste (conditionnel) -->
                 <div id="OtherProInformations" class="conditional-subsection" style="display:none">
                     <div class="subsection-header">
                         <i class="fas fa-user-tie"></i>
-                        <h3>Other Prothesist Information</h3>
+                        <h3>Informations de l'autre prothésiste</h3>
                     </div>
 
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="ProName" class="label-with-icon">
                                 <i class="fas fa-user"></i>
-                                <span>Prothesist Name</span>
+                                <span>Nom du prothésiste</span>
                             </label>
                             <input
                                     type="text"
                                     id="ProName"
                                     name="ProName"
-                                    placeholder="Full name"
+                                    placeholder="Nom complet"
                                     class="form-input"
                             >
                         </div>
@@ -322,13 +322,13 @@
                         <div class="form-group">
                             <label for="ProNumber" class="label-with-icon">
                                 <i class="fas fa-phone"></i>
-                                <span>Prothesist Number</span>
+                                <span>Numéro du prothésiste</span>
                             </label>
                             <input
                                     type="text"
                                     id="ProNumber"
                                     name="ProNumber"
-                                    placeholder="Contact number"
+                                    placeholder="Numéro de contact"
                                     class="form-input"
                             >
                         </div>
@@ -336,14 +336,14 @@
                         <div class="form-group">
                             <label for="ProPrice" class="label-with-icon">
                                 <i class="fas fa-dollar-sign"></i>
-                                <span>Prothesist Price (DA)</span>
+                                <span>Prix du prothésiste (DA)</span>
                             </label>
                             <div class="input-with-unit">
                                 <input
                                         type="number"
                                         id="ProPrice"
                                         name="ProPrice"
-                                        placeholder="Amount"
+                                        placeholder="Montant"
                                         class="form-input"
                                         min="0"
                                         step="0.01"
@@ -355,7 +355,7 @@
                         <div class="form-group">
                             <label for="ProDate" class="label-with-icon">
                                 <i class="fas fa-calendar"></i>
-                                <span>Start Date</span>
+                                <span>Date de début</span>
                             </label>
                             <input
                                     type="date"
@@ -368,7 +368,7 @@
                         <div class="form-group">
                             <label for="ProDeadLine" class="label-with-icon">
                                 <i class="fas fa-hourglass-end"></i>
-                                <span>Deadline</span>
+                                <span>Date limite</span>
                             </label>
                             <input
                                     type="date"
@@ -381,7 +381,7 @@
                         <div class="form-group">
                             <label for="ProPayed" class="label-with-icon">
                                 <i class="fas fa-check-square"></i>
-                                <span>Payment Status</span>
+                                <span>Statut du paiement</span>
                             </label>
                             <select
                                     id="ProPayed"
@@ -389,19 +389,19 @@
                                     class="form-input"
                                     onchange="ProPayedFunction()"
                             >
-                                <option value="">Select status</option>
-                                <option value="yes">Paid (Khalsa)</option>
-                                <option value="no">Pending (Not Paid)</option>
+                                <option value="">Sélectionnez le statut</option>
+                                <option value="yes">Payé (Khalsa)</option>
+                                <option value="no">En attente (Non payé)</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Prothesist Versa Section -->
+                    <!-- Section Versement du prothésiste -->
                     <div id="ProversaCheck" class="conditional-subsubsection" style="display:none">
                         <div class="form-group full-width">
                             <label for="ProVersement" class="label-with-icon">
                                 <i class="fas fa-coins"></i>
-                                <span>Is there a deposit payment (Versa)?</span>
+                                <span>Y a-t-il un paiement d'avance (Versement) ?</span>
                             </label>
                             <select
                                     id="ProVersement"
@@ -409,9 +409,9 @@
                                     class="form-input"
                                     onchange="showProVersaAmount()"
                             >
-                                <option value="" disabled selected>Select Yes or No</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
+                                <option value="" disabled selected>Sélectionnez Oui ou Non</option>
+                                <option value="yes">Oui</option>
+                                <option value="no">Non</option>
                             </select>
                         </div>
 
@@ -419,14 +419,14 @@
                             <div class="form-group full-width">
                                 <label for="ProVersa" class="label-with-icon">
                                     <i class="fas fa-money-bill-wave"></i>
-                                    <span>Deposit Amount (DA)</span>
+                                    <span>Montant du versement (DA)</span>
                                 </label>
                                 <div class="input-with-unit">
                                     <input
                                             type="number"
                                             id="ProVersa"
                                             name="ProVersaAmount"
-                                            placeholder="Amount"
+                                            placeholder="Montant"
                                             class="form-input"
                                             min="0"
                                             step="0.01"
@@ -441,11 +441,12 @@
                 <div class="section-nav">
                     <button type="button" class="btn btn-back" onclick="scrollToSection(1)">
                         <i class="fas fa-arrow-left"></i>
-                        <span>Back</span>
+                        <span>Retour</span>
                     </button>
+
                     <button type="submit" class="btn btn-submit">
                         <i class="fas fa-check"></i>
-                        <span>Submit Khedma</span>
+                        <span>Enregistrer la tâche</span>
                     </button>
                 </div>
             </section>
@@ -457,7 +458,7 @@
 
 <!-- Scripts -->
 <script>
-    // Smooth scroll to section
+    // Défilement fluide vers une section
     function scrollToSection(sectionNum) {
         const section = document.getElementById(`section-${sectionNum}`);
         if (section) {
@@ -467,13 +468,13 @@
         }
     }
 
-    // Update progress indicator
+    // Mise à jour de l'indicateur de progression
     function updateProgressIndicator(step) {
         const progressText = document.getElementById('progress-text');
-        progressText.textContent = `Step ${step} of 2`;
+        progressText.textContent = `Étape ${step} sur 2`;
     }
 
-    // Other Prothesists Toggle
+    // Affichage des informations d'un autre prothésiste
     function OtherProthesists() {
         const choice = document.getElementById("ProCheck").value.toLowerCase();
         const section = document.getElementById("OtherProInformations");
@@ -487,7 +488,7 @@
         }
     }
 
-    // Prothesist Payment Function
+    // Fonction de gestion du paiement du prothésiste
     function ProPayedFunction() {
         const checkValue = document.getElementById("ProPayed").value.toLowerCase();
         const section = document.getElementById("ProversaCheck");
@@ -500,7 +501,7 @@
         }
     }
 
-    // Show Prothesist Versa Amount
+    // Affichage du montant du versement du prothésiste
     function showProVersaAmount() {
         const checkValue = document.getElementById("ProVersement").value.toLowerCase();
         const section = document.getElementById("ProversaAmountSection");
@@ -514,13 +515,13 @@
         }
     }
 
-    // Form validation on submit
+    // Validation du formulaire lors de l'envoi
     document.querySelector('.khedma-form').addEventListener('submit', function(e) {
-        // Let Flask handle validation on backend
-        // But we can add client-side checks here if needed
+        // Laisser Flask gérer la validation côté serveur
+        // Des vérifications côté client peuvent être ajoutées ici si nécessaire
     });
 
-    // Input focus animations
+    // Animations lors du focus sur les champs
     document.querySelectorAll('.form-input, select').forEach(input => {
         input.addEventListener('focus', function() {
             this.closest('.form-group').classList.add('focused');
@@ -531,7 +532,7 @@
         });
     });
 
-    // Add filled state when input has value
+    // Ajouter l'état "rempli" lorsque le champ contient une valeur
     document.querySelectorAll('.form-input, select').forEach(input => {
         input.addEventListener('input', function() {
             if (this.value) {
@@ -541,13 +542,13 @@
             }
         });
 
-        // Check on load
+        // Vérification au chargement
         if (input.value) {
             input.closest('.form-group').classList.add('filled');
         }
     });
 
-    // Ripple effect on buttons
+    // Effet d'ondulation sur les boutons
     document.querySelectorAll('.btn').forEach(button => {
         button.addEventListener('click', function(e) {
             const ripple = document.createElement('span');

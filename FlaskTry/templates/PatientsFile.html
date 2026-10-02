@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional Patients Management System for Prosthetics Lab">
-    <meta name="keywords" content="Patients, Prosthetics, Lab Management, Healthcare">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Patients Management System</title>
+    <meta name="description" content="Système professionnel de gestion des patients pour laboratoire de prothèse">
+    <meta name="keywords" content="Patients, Prothèse, Gestion de laboratoire, Soins de santé">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+    <title>Système de gestion des patients</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='PatientFile.css') }}">
 
@@ -38,7 +38,7 @@
 
                 <div class="logo-text">
                     <h1>PatientHub</h1>
-                    <p>Prosthetics Lab Patient Management</p>
+                    <p>Gestion des patients du laboratoire de prothèse</p>
                 </div>
 
             </div>
@@ -47,12 +47,12 @@
 
                 <a href="/HomePage" class="nav-btn back-btn">
                     <i class="fas fa-arrow-left"></i>
-                    Back to Menu
+                    Retour au menu
                 </a>
 
                 <a href="/patients/AllPatientsHistory" class="nav-btn history-btn">
                     <i class="fas fa-history"></i>
-                    History
+                    Historique
                 </a>
 
             </nav>
@@ -66,8 +66,8 @@
 
     <div id="search-bar-container">
 
-        {% if (data and not stat and not dataASC and not datDESC and not dataDeadLine and not dataPrice)
-        or (not data and not stat and not dataASC and not datDESC and not dataDeadLine and not dataPrice) %}
+        {% if (data and not stat and not dataASC and not datDESC and not dataDeadLine and not dataPrix)
+        or (not data and not stat and not dataASC and not datDESC and not dataDeadLine and not dataPrix) %}
 
         <div class="search-section">
 
@@ -87,7 +87,7 @@
                     <input
                             type="text"
                             name="SearchBar"
-                            placeholder="Search patient by name... or by number..."
+                            placeholder="Rechercher un patient par nom... ou par numéro..."
                             class="search-input"
                     >
 
@@ -120,7 +120,7 @@
 
                 <h2>
                     <i class="fas fa-users"></i>
-                    Patient Actions
+                    Actions des patients
                 </h2>
 
                 <div class="header-accent"></div>
@@ -136,7 +136,7 @@
                 <div class="menu-group">
 
                     <h3 class="group-title">
-                        Management
+                        Gestion
                     </h3>
 
                     <a href="/patients/AddPatient"
@@ -144,7 +144,7 @@
 
                         <i class="fas fa-user-plus"></i>
 
-                        <span>Add Patient</span>
+                        <span>Ajouter un patient</span>
 
                         <span class="badge badge-add">
                             +
@@ -158,7 +158,7 @@
 
                         <i class="fas fa-user-minus"></i>
 
-                        <span>Delete Patient</span>
+                        <span>Supprimer un patient</span>
 
                         <span class="badge badge-delete">
                             −
@@ -172,7 +172,7 @@
 
                         <i class="fas fa-user-edit"></i>
 
-                        <span>Modify Versa</span>
+                        <span>Modifier le versement</span>
 
                         <span class="badge badge-delete">
                             ✎
@@ -186,7 +186,7 @@
 
                         <i class="fas fa-table"></i>
 
-                        <span>All Patients</span>
+                        <span>Tous les patients</span>
 
                         <span class="badge">
                             All
@@ -202,7 +202,7 @@
                 <div class="menu-group">
 
                     <h3 class="group-title">
-                        Sort & Filter
+                        Tri et filtres
                     </h3>
 
 
@@ -212,7 +212,7 @@
                         <i class="fas fa-arrow-up-short-wide"></i>
 
                         <span>
-                            Date (Old → New)
+                            Date (Ancienne → Récente)
                         </span>
 
                         <span class="badge">
@@ -228,7 +228,7 @@
                         <i class="fas fa-arrow-down-wide-short"></i>
 
                         <span>
-                            Date (New → Old)
+                            Date (Récente → Ancienne)
                         </span>
 
                         <span class="badge">
@@ -244,7 +244,7 @@
                         <i class="fas fa-calendar-check"></i>
 
                         <span>
-                            By Deadline
+                            Par date limite
                         </span>
 
                         <span class="badge">
@@ -260,7 +260,7 @@
                         <i class="fas fa-tag"></i>
 
                         <span>
-                            By Cost (B9aw)
+                            Par coût (B9aw)
                         </span>
 
                         <span class="badge">
@@ -277,7 +277,7 @@
                 <div class="menu-group">
 
                     <h3 class="group-title">
-                        Analytics
+                        Analyses
                     </h3>
 
                     <a href="/patients/PatientStat"
@@ -286,7 +286,7 @@
                         <i class="fas fa-chart-line"></i>
 
                         <span>
-                            Statistics
+                            Statistiques
                         </span>
 
                         <span class="badge badge-stats">
@@ -335,7 +335,7 @@
                     <div class="alert-content">
 
                         <h3>
-                            Success
+                            Opération réussie
                         </h3>
 
                         <p>
@@ -371,7 +371,7 @@
 
                 <!-- ================= ALL PATIENTS ================= -->
 
-                {% if data and not (dataASC or dataDESC or dataDeadLine or dataPrice or stat or History) %}
+                {% if data and not (dataASC or dataDESC or dataDeadLine or dataPrix or stat or Historique) %}
 
                 <div class="table-card fade-in">
 
@@ -381,7 +381,7 @@
 
                             <h2>
                                 <i class="fas fa-list-ul"></i>
-                                All Patients
+                                Tous les patients
                             </h2>
 
                             <span class="result-count">
@@ -404,63 +404,63 @@
                                 <th>
                                     <span class="th-content">
                                         <i class="fas fa-id-card"></i>
-                                        Service ID
+                                        ID du service
                                     </span>
                                 </th>
 
                                 <th>
                                     <span class="th-content">
                                         <i class="fas fa-user"></i>
-                                        First Name
+                                        Prénom
                                     </span>
                                 </th>
 
                                 <th>
                                     <span class="th-content">
                                         <i class="fas fa-user-tag"></i>
-                                        Last Name
+                                        Nom
                                     </span>
                                 </th>
 
                                 <th>
                                     <span class="th-content">
                                         <i class="fas fa-phone"></i>
-                                        Patient Number
+                                        Numéro du patient
                                     </span>
                                 </th>
 
                                 <th>
                                     <span class="th-content">
                                         <i class="fas fa-teeth"></i>
-                                        Service Type
+                                        Type de service
                                     </span>
                                 </th>
 
                                 <th>
                                     <span class="th-content">
                                         <i class="fas fa-calendar-alt"></i>
-                                        Enter Date
+                                        Date d'entrée
                                     </span>
                                 </th>
 
                                 <th>
                                     <span class="th-content">
                                         <i class="fas fa-check-circle"></i>
-                                        Finished?
+                                        Terminé ?
                                     </span>
                                 </th>
 
                                 <th>
                                     <span class="th-content">
                                         <i class="fas fa-money-bill-wave"></i>
-                                        Price
+                                        Prix
                                     </span>
                                 </th>
 
                                 <th>
                                     <span class="th-content">
                                         <i class="fas fa-credit-card"></i>
-                                        Payed?
+                                        Payé ?
                                     </span>
                                 </th>
 
@@ -474,21 +474,21 @@
                                 <th>
                                     <span class="th-content">
                                         <i class="fas fa-coins"></i>
-                                        Rest
+                                        Reste
                                     </span>
                                 </th>
 
                                 <th>
                                     <span class="th-content">
                                         <i class="fas fa-calendar-check"></i>
-                                        Deadline
+                                        Date limite
                                     </span>
                                 </th>
 
                                 <th>
                                     <span class="th-content">
                                         <i class="fas fa-tasks"></i>
-                                        Status
+                                        Statut
                                     </span>
                                 </th>
 
@@ -527,15 +527,15 @@
                                     >
 
                                         {% if row[13] == 'in process' %}
-                                        <option value="in process" selected>In Process</option>
+                                        <option value="in process" selected>En cours</option>
                                         {% else %}
-                                        <option value="in process">In Process</option>
+                                        <option value="in process">En cours</option>
                                         {% endif %}
 
                                         {% if row[13] == 'prothesist' %}
-                                        <option value="prothesist" selected>Prothesist</option>
+                                        <option value="prothesist" selected>Prothésiste</option>
                                         {% else %}
-                                        <option value="prothesist">Prothesist</option>
+                                        <option value="prothesist">Prothésiste</option>
                                         {% endif %}
 
                                         {% if row[13] == 'montage' %}
@@ -545,9 +545,9 @@
                                         {% endif %}
 
                                         {% if row[13] == 'esseyage' %}
-                                        <option value="esseyage" selected>Esseyage</option>
+                                        <option value="esseyage" selected>Essayage</option>
                                         {% else %}
-                                        <option value="esseyage">Esseyage</option>
+                                        <option value="esseyage">Essayage</option>
                                         {% endif %}
 
                                     </select>
@@ -589,7 +589,7 @@
 
                             <h2>
                                 <i class="fas fa-arrow-up-short-wide"></i>
-                                Patients by Date (Old → New)
+                                Patients by Date (Ancienne → Récente)
                             </h2>
 
                             <span class="result-count">
@@ -609,19 +609,19 @@
 
                             <tr>
 
-                                <th>khedma ID</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Number</th>
-                                <th>khedma Type</th>
-                                <th>Enter Date</th>
-                                <th>Finished?</th>
-                                <th>Price</th>
-                                <th>Payed?</th>
+                                <th>ID de la khedma</th>
+                                <th>Prénom</th>
+                                <th>Nom</th>
+                                <th>Numéro</th>
+                                <th>Type de khedma</th>
+                                <th>Date d'entrée</th>
+                                <th>Terminé ?</th>
+                                <th>Prix</th>
+                                <th>Payé ?</th>
                                 <th>Versement</th>
-                                <th>Rest</th>
-                                <th>Deadline</th>
-                                <th>Status</th>
+                                <th>Reste</th>
+                                <th>Date limite</th>
+                                <th>Statut</th>
 
                             </tr>
 
@@ -675,7 +675,7 @@
 
                             <h2>
                                 <i class="fas fa-arrow-down-wide-short"></i>
-                                Patients by Date (New → Old)
+                                Patients by Date (Récente → Ancienne)
                             </h2>
 
                             <span class="result-count">
@@ -695,19 +695,19 @@
 
                             <tr>
 
-                                <th>khedma ID</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Number</th>
-                                <th>khedma Type</th>
-                                <th>Enter Date</th>
-                                <th>Finished?</th>
-                                <th>Price</th>
-                                <th>Payed?</th>
+                                <th>ID de la khedma</th>
+                                <th>Prénom</th>
+                                <th>Nom</th>
+                                <th>Numéro</th>
+                                <th>Type de khedma</th>
+                                <th>Date d'entrée</th>
+                                <th>Terminé ?</th>
+                                <th>Prix</th>
+                                <th>Payé ?</th>
                                 <th>Versement</th>
-                                <th>Rest</th>
-                                <th>Deadline</th>
-                                <th>Status</th>
+                                <th>Reste</th>
+                                <th>Date limite</th>
+                                <th>Statut</th>
 
                             </tr>
 
@@ -761,7 +761,7 @@
 
                             <h2>
                                 <i class="fas fa-calendar-alert"></i>
-                                Patients by Deadline
+                                Patients by Date limite
                             </h2>
 
                             <span class="result-count">
@@ -781,19 +781,19 @@
 
                             <tr>
 
-                                <th>khedma ID</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Number</th>
-                                <th>khedma Type</th>
-                                <th>Enter Date</th>
-                                <th>Finished?</th>
-                                <th>Price</th>
-                                <th>Payed?</th>
+                                <th>ID de la khedma</th>
+                                <th>Prénom</th>
+                                <th>Nom</th>
+                                <th>Numéro</th>
+                                <th>Type de khedma</th>
+                                <th>Date d'entrée</th>
+                                <th>Terminé ?</th>
+                                <th>Prix</th>
+                                <th>Payé ?</th>
                                 <th>Versement</th>
-                                <th>Rest</th>
-                                <th>Deadline</th>
-                                <th>Status</th>
+                                <th>Reste</th>
+                                <th>Date limite</th>
+                                <th>Statut</th>
 
                             </tr>
 
@@ -837,7 +837,7 @@
 
                 <!-- ================= PRICE ================= -->
 
-                {% if dataPrice %}
+                {% if dataPrix %}
 
                 <div class="table-card fade-in">
 
@@ -847,11 +847,11 @@
 
                             <h2>
                                 <i class="fas fa-tag"></i>
-                                Patients by Cost
+                                Patients par coût
                             </h2>
 
                             <span class="result-count">
-                                {{ dataPrice|length }} patients
+                                {{ dataPrix|length }} patients
                             </span>
 
                         </div>
@@ -867,19 +867,19 @@
 
                             <tr>
 
-                                <th>khedma ID</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Number</th>
-                                <th>khedma Type</th>
-                                <th>Enter Date</th>
-                                <th>Finished?</th>
-                                <th>Price</th>
-                                <th>Payed?</th>
+                                <th>ID de la khedma</th>
+                                <th>Prénom</th>
+                                <th>Nom</th>
+                                <th>Numéro</th>
+                                <th>Type de khedma</th>
+                                <th>Date d'entrée</th>
+                                <th>Terminé ?</th>
+                                <th>Prix</th>
+                                <th>Payé ?</th>
                                 <th>Versement</th>
-                                <th>Rest</th>
-                                <th>Deadline</th>
-                                <th>Status</th>
+                                <th>Reste</th>
+                                <th>Date limite</th>
+                                <th>Statut</th>
 
                             </tr>
 
@@ -888,7 +888,7 @@
 
                             <tbody>
 
-                            {% for row in dataPrice %}
+                            {% for row in dataPrix %}
 
                             <tr class="table-row-animate">
 
@@ -933,11 +933,11 @@
 
                             <h2>
                                 <i class="fas fa-chart-pie"></i>
-                                Patient Statistics
+                                Patient Statistiques
                             </h2>
 
                             <span class="result-count">
-                                Statistical Analysis
+                                Analyse statistique
                             </span>
 
                         </div>
@@ -953,13 +953,13 @@
 
                             <tr>
 
-                                <th>Stat ID</th>
-                                <th>Patient Count</th>
-                                <th>Khalsin (Sum)</th>
-                                <th>Not Khalsin (Sum)</th>
-                                <th>Month</th>
-                                <th>Year</th>
-                                <th>User ID</th>
+                                <th>ID statistique</th>
+                                <th>Nombre de patients</th>
+                                <th>Khalsin (Total)</th>
+                                <th>Not Khalsin (Total)</th>
+                                <th>Mois</th>
+                                <th>Année</th>
+                                <th>ID utilisateur</th>
 
                             </tr>
 
@@ -997,7 +997,7 @@
 
                 <!-- ================= HISTORY ================= -->
 
-                {% if History %}
+                {% if Historique %}
 
                 <div class="table-card fade-in">
 
@@ -1007,11 +1007,11 @@
 
                             <h2>
                                 <i class="fas fa-history"></i>
-                                Patient History
+                                Patient Historique
                             </h2>
 
                             <span class="result-count">
-                                {{ History|length }} records
+                                {{ Historique|length }} enregistrements
                             </span>
 
                         </div>
@@ -1027,12 +1027,12 @@
 
                             <tr>
 
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Number</th>
+                                <th>Prénom</th>
+                                <th>Nom</th>
+                                <th>Numéro</th>
                                 <th>Date</th>
                                 <th>Service</th>
-                                <th>User ID</th>
+                                <th>ID utilisateur</th>
 
                             </tr>
 
@@ -1041,7 +1041,7 @@
 
                             <tbody>
 
-                            {% for row in History %}
+                            {% for row in Historique %}
 
                             <tr class="table-row-animate">
 
@@ -1077,9 +1077,9 @@
             and not dataASC
             and not dataDESC
             and not dataDeadLine
-            and not dataPrice
+            and not dataPrix
             and not stat
-            and not History %}
+            and not Historique %}
 
             <div class="empty-state">
 
@@ -1088,19 +1088,19 @@
                 </div>
 
                 <h2>
-                    No Patients Yet
+                    Aucun patient pour le moment
                 </h2>
 
                 <p>
-                    Use the menu on the left to add patients
-                    or view existing patient records
+                    Utilisez le menu à gauche pour ajouter des patients
+                    or view existing patient enregistrements
                 </p>
 
                 <a href="/patients/AddPatient"
                    class="empty-action">
 
                     <i class="fas fa-plus"></i>
-                    Add Your First Patient
+                    Ajouter votre premier patient
 
                 </a>
 
@@ -1124,7 +1124,7 @@
 
 
     /* =========================================================
-       RIPPLE EFFECT
+       EFFET RIPPLE
        ========================================================= */
 
     function createRipple(e) {
@@ -1171,7 +1171,7 @@
 
 
     /* =========================================================
-       RIPPLE FOR MENU BUTTONS
+       EFFET RIPPLE POUR LES BOUTONS DU MENU
        ========================================================= */
 
     document
@@ -1191,7 +1191,7 @@
 
 
     /* =========================================================
-       CHANGE PATIENT STATUS
+       MODIFICATION DU STATUT DU PATIENT
        ========================================================= */
 
     document.addEventListener(
@@ -1204,26 +1204,26 @@
 
             const select = e.target;
 
-            const patientNumber =
-                select.dataset.patientNumber;
+            const patientNuméro =
+                select.dataset.patientNuméro;
 
-            const newStatus =
+            const newStatut =
                 select.value;
 
 
             console.log(
-                "Patient:",
-                patientNumber
+                "Patient :",
+                patientNuméro
             );
 
             console.log(
-                "New status:",
-                newStatus
+                "Nouveau statut :",
+                newStatut
             );
 
 
             fetch(
-                '/patients/UpdatePatientStatus',
+                '/patients/UpdatePatientStatut',
                 {
                     method: 'POST',
 
@@ -1235,10 +1235,10 @@
                     body: JSON.stringify({
 
                         patient_number:
-                            patientNumber,
+                            patientNuméro,
 
                         status:
-                            newStatus
+                            newStatut
 
                     })
                 }
@@ -1253,7 +1253,7 @@
             .then(data => {
 
                 console.log(
-                    "Flask response:",
+                    "Réponse Flask :",
                     data
                 );
 
@@ -1262,7 +1262,7 @@
             .catch(error => {
 
                 console.error(
-                    "Error:",
+                    "Erreur :",
                     error
                 );
 
@@ -1272,7 +1272,7 @@
                     );
 
                 message.textContent =
-                    "✗ Error updating status";
+                    "✗ Erreur lors de la mise à jour du statut";
 
                 message.className =
                     "status-message error";
@@ -1284,9 +1284,9 @@
 
 
     /* =========================================================
-       AJAX LINKS
-       IMPORTANT:
-       THERE IS ONLY ONE AJAX EVENT LISTENER NOW
+       LIENS AJAX
+       IMPORTANT :
+       IL N'Y A MAINTENANT QU'UN SEUL ÉCOUTEUR D'ÉVÉNEMENT AJAX
        ========================================================= */
 
     document
@@ -1318,13 +1318,13 @@
                         );
 
 
-                    /* Loading effect */
+                    /* Effet de chargement */
 
                     contentContainer.style.opacity =
                         '0.4';
 
 
-                    /* AJAX request */
+                    /* Requête AJAX */
 
                     fetch(targetUrl)
 
@@ -1356,7 +1356,7 @@
                                 );
 
 
-                            /* Replace tables */
+                            /* Remplacer les tableaux */
 
                             const newTables =
                                 doc.getElementById(
@@ -1372,7 +1372,7 @@
                             }
 
 
-                            /* Replace search bar */
+                            /* Remplacer la barre de recherche */
 
                             const newSearch =
                                 doc.getElementById(
@@ -1388,13 +1388,13 @@
                             }
 
 
-                            /* Restore opacity */
+                            /* Resteore opacity */
 
                             contentContainer.style.opacity =
                                 '1';
 
 
-                            /* Change browser URL */
+                            /* Modifier l'URL du navigateur */
 
                             window.history.pushState(
                                 null,
@@ -1408,7 +1408,7 @@
                         .catch(err => {
 
                             console.error(
-                                'AJAX Load Error:',
+                                'AJAX Load Erreur :',
                                 err
                             );
 
@@ -1424,7 +1424,7 @@
 
 
     /* =========================================================
-       AUTO SCROLL TO TABLE
+       DÉFILEMENT AUTOMATIQUE VERS LE TABLEAU
        ========================================================= */
 
     document.addEventListener(
@@ -1458,7 +1458,7 @@
 
 
     /* =========================================================
-       CLOSE ALERT
+       FERMER L'ALERTE
        ========================================================= */
 
     document
@@ -1476,8 +1476,6 @@
             );
 
         });
-
-
 </script>
 
 </body>

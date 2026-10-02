@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional Modify Versa for Prosthetics Lab Patients">
-    <meta name="keywords" content="Modify, Versa, Patients, Prosthetics, Lab Management">
-    <meta name="author" content="Prosthetics Lab Team">
-    <title>Modify Versa for Patients</title>
+
+    <meta name="description" content="Système professionnel de modification des versements des patients du laboratoire de prothèse">
+    <meta name="keywords" content="Modifier, Versement, Patients, Prothèse, Gestion de laboratoire">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+
+    <title>Modifier le versement du patient</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='ModifyPatientVersa.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Sora:wght@400;500;600&display=swap"
@@ -22,7 +24,7 @@
     <div class="alert alert-success fade-in">
         <i class="fas fa-check-circle"></i>
         <div class="alert-content">
-            <h3>Success</h3>
+            <h3>Opération réussie</h3>
             <p>{{ message }}</p>
         </div>
         <button class="alert-close" onclick="this.parentElement.style.display='none'">
@@ -38,7 +40,7 @@
         <i class="fas fa-exclamation-circle"></i>
 
         <div class="alert-content">
-            <h3>Error</h3>
+            <h3>Erreur</h3>
             <p>{{ error }}</p>
         </div>
 
@@ -51,196 +53,390 @@
 </div>
 {% endif %}
 
-<!-- Animated Background -->
+
+<!-- Arrière-plan animé -->
 <div class="animated-bg"></div>
 
+
 <div class="container">
-    <!-- Header Section -->
+
+    <!-- Section d'en-tête -->
     <header class="header">
+
         <div class="header-content">
+
             <a href="/patients/Patient" class="back-btn">
-                <i class="fas fa-arrow-left"></i> Back to Patients
+
+                <i class="fas fa-arrow-left"></i>
+                Retour aux patients
+
             </a>
+
             <div class="header-title">
+
                 <h1>
-                    <i class="fas fa-edit"></i> Modify Versa
+                    <i class="fas fa-edit"></i>
+                    Modifier le versement
                 </h1>
-                <p>Update patient versement (payment) amount</p>
+
+                <p>
+                    Mettre à jour le montant du versement (paiement) du patient
+                </p>
+
             </div>
+
         </div>
+
     </header>
 
-    <!-- Main Content -->
+
+    <!-- Contenu principal -->
     <main class="main-content">
+
         <div class="form-container fade-in">
+
             <div class="form-card">
-                <!-- Form Header -->
+
+                <!-- En-tête du formulaire -->
                 <div class="form-header">
+
                     <div class="form-icon">
                         <i class="fas fa-credit-card"></i>
                     </div>
+
                     <div>
-                        <h2>Update Patient Payment</h2>
-                        <p>Modify the versement amount for your patient records</p>
+
+                        <h2>
+                            Mettre à jour le paiement du patient
+                        </h2>
+
+                        <p>
+                            Modifier le montant du versement dans le dossier du patient
+                        </p>
+
                     </div>
+
                 </div>
 
-                <!-- Form Content -->
-                <form action="/patients/ModifyVersaPatient" method="POST" class="form-group">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                    <!-- Step 1: Patient Identification -->
+
+                <!-- Contenu du formulaire -->
+                <form action="/patients/ModifyVersaPatient"
+                      method="POST"
+                      class="form-group">
+
+                    <input type="hidden"
+                           name="csrf_token"
+                           value="{{ csrf_token }}">
+
+
+                    <!-- Étape 1 : Identification du patient -->
                     <div class="form-section">
+
                         <h3 class="section-title">
+
                             <span class="step-number">1</span>
-                            Patient Information
+
+                            Informations du patient
+
                         </h3>
-                        <p class="section-description">Enter the patient details to identify their record</p>
+
+                        <p class="section-description">
+                            Saisissez les informations du patient afin d'identifier son dossier
+                        </p>
+
 
                         <div class="form-row">
+
                             <div class="form-field">
+
                                 <label for="PatientId">
-                                    <i class="fas fa-id-card"></i> Patient ID
+
+                                    <i class="fas fa-id-card"></i>
+                                    ID du patient
+
                                 </label>
+
                                 <input
                                         type="text"
                                         id="PatientId"
                                         name="PatientId"
-                                        placeholder="e.g., P12345"
+                                        placeholder="ex. : P12345"
                                         required
                                         class="input-field"
                                 >
-                                <span class="field-hint">Unique identifier for the patient</span>
+
+                                <span class="field-hint">
+                                    Identifiant unique du patient
+                                </span>
+
                             </div>
+
                         </div>
 
-                        <!-- Divider -->
+
+                        <!-- Séparateur -->
                         <div class="form-divider"></div>
 
-                        <!-- Step 2: Versa Amount -->
+
+                        <!-- Étape 2 : Montant du versement -->
                         <div class="form-section">
+
                             <h3 class="section-title">
+
                                 <span class="step-number">2</span>
-                                Update Versement Amount
+
+                                Mettre à jour le montant du versement
+
                             </h3>
-                            <p class="section-description">Enter and confirm the new payment amount</p>
+
+                            <p class="section-description">
+                                Saisissez et confirmez le nouveau montant du paiement
+                            </p>
+
 
                             <div class="form-row">
+
                                 <div class="form-field">
+
                                     <label for="VersaValue">
-                                        <i class="fas fa-money-bill-wave"></i> New Versa Amount
+
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        Nouveau montant du versement
+
                                     </label>
+
                                     <div class="input-wrapper">
+
                                         <input
                                                 type="number"
                                                 id="VersaValue"
                                                 name="VersaValue"
-                                                placeholder="Enter the new amount"
+                                                placeholder="Saisissez le nouveau montant"
                                                 step="0.01"
                                                 required
                                                 class="input-field"
                                         >
-                                        <span class="currency">DA</span>
+
+                                        <span class="currency">
+                                            DA
+                                        </span>
+
                                     </div>
-                                    <span class="field-hint">The amount to be paid for this service</span>
+
+                                    <span class="field-hint">
+                                        Montant à payer pour ce service
+                                    </span>
+
                                 </div>
+
                             </div>
 
+
                             <div class="form-row">
+
                                 <div class="form-field">
+
                                     <label for="ConfirmVersaValue">
-                                        <i class="fas fa-check-double"></i> Confirm Amount
+
+                                        <i class="fas fa-check-double"></i>
+                                        Confirmer le montant
+
                                     </label>
+
                                     <div class="input-wrapper">
+
                                         <input
                                                 type="number"
                                                 id="ConfirmVersaValue"
                                                 name="ConfirmVersaValue"
-                                                placeholder="Confirm the amount"
+                                                placeholder="Confirmez le montant"
                                                 step="0.01"
                                                 required
                                                 class="input-field"
                                         >
-                                        <span class="currency">DA</span>
+
+                                        <span class="currency">
+                                            DA
+                                        </span>
+
                                     </div>
-                                    <span class="field-hint">Please re-enter the amount to confirm</span>
+
+                                    <span class="field-hint">
+                                        Saisissez à nouveau le montant pour le confirmer
+                                    </span>
+
                                 </div>
+
                             </div>
 
-                            <!-- Amount Match Alert -->
+
+                            <!-- Alerte de correspondance des montants -->
                             <div class="amount-match-info">
+
                                 <i class="fas fa-info-circle"></i>
-                                <span>Both amounts must match for the update to be processed</span>
+
+                                <span>
+                                    Les deux montants doivent correspondre pour que
+                                    la modification soit effectuée
+                                </span>
+
                             </div>
+
                         </div>
+
                     </div>
 
-                    <!-- Form Actions -->
+
+                    <!-- Actions du formulaire -->
                     <div class="form-actions">
-                        <button type="reset" class="btn btn-secondary">
-                            <i class="fas fa-undo"></i> Reset Form
+
+                        <button type="reset"
+                                class="btn btn-secondary">
+
+                            <i class="fas fa-undo"></i>
+                            Réinitialiser le formulaire
+
                         </button>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Update Versa
+
+                        <button type="submit"
+                                class="btn btn-primary">
+
+                            <i class="fas fa-save"></i>
+                            Mettre à jour le versement
+
                         </button>
+
                     </div>
 
-                    <!-- Help Text -->
+
+                    <!-- Texte d'aide -->
                     <div class="form-help">
+
                         <i class="fas fa-lightbulb"></i>
+
                         <div>
-                            <strong>Tip:</strong> Make sure all information is correct before submitting. You can always
-                            modify it again if needed.
+
+                            <strong>Conseil :</strong>
+
+                            Assurez-vous que toutes les informations sont correctes
+                            avant de valider. Vous pourrez toujours les modifier
+                            à nouveau si nécessaire.
+
                         </div>
+
                     </div>
+
                 </form>
+
             </div>
 
-            <!-- Info Card -->
+
+            <!-- Carte d'information -->
             <div class="info-card">
+
                 <div class="info-header">
+
                     <i class="fas fa-circle-info"></i>
-                    <h3>Important Information</h3>
+
+                    <h3>
+                        Informations importantes
+                    </h3>
+
                 </div>
+
+
                 <ul class="info-list">
+
                     <li>
+
                         <span class="info-icon">✓</span>
-                        <span><strong>Versa</strong> refers to the versement (payment) amount for patient services</span>
+
+                        <span>
+                            <strong>Versement</strong> désigne le montant du paiement
+                            pour les services du patient
+                        </span>
+
                     </li>
+
+
                     <li>
+
                         <span class="info-icon">✓</span>
-                        <span>Enter the <strong>exact amount</strong> in both fields to confirm</span>
+
+                        <span>
+                            Saisissez le <strong>montant exact</strong> dans les deux
+                            champs pour confirmer
+                        </span>
+
                     </li>
+
+
                     <li>
+
                         <span class="info-icon">✓</span>
-                        <span>Use <strong>decimal notation</strong> for amounts (e.g., 5000.50)</span>
+
+                        <span>
+                            Utilisez la <strong>notation décimale</strong> pour les
+                            montants (ex. : 5000.50)
+                        </span>
+
                     </li>
+
+
                     <li>
+
                         <span class="info-icon">✓</span>
-                        <span>Changes are recorded immediately in the system</span>
+
+                        <span>
+                            Les modifications sont enregistrées immédiatement
+                            dans le système
+                        </span>
+
                     </li>
+
                 </ul>
+
             </div>
+
         </div>
+
     </main>
 
-    <!-- Footer -->
+
+    <!-- Pied de page -->
     <footer class="footer">
-        <p>&copy; 2024 PatientHub - Prosthetics Lab Management System. All rights reserved.</p>
+
+        <p>
+            &copy; 2024 PatientHub - Système de gestion du laboratoire de prothèse.
+            Tous droits réservés.
+        </p>
+
     </footer>
+
 </div>
 
-<!-- JavaScript for Form Validation -->
+
+<!-- JavaScript pour la validation du formulaire -->
 <script>
-    // Get form elements
+
+    // Récupération des éléments du formulaire
     const form = document.querySelector('form');
-    const patientIdInput = document.getElementById('PatientId');
-    const versaInput = document.getElementById('VersaValue');
-    const confirmInput = document.getElementById('ConfirmVersaValue');
-    const matchInfo = document.querySelector('.amount-match-info');
+
+    const patientIdInput =
+        document.getElementById('PatientId');
+
+    const versaInput =
+        document.getElementById('VersaValue');
+
+    const confirmInput =
+        document.getElementById('ConfirmVersaValue');
+
+    const matchInfo =
+        document.querySelector('.amount-match-info');
 
 
     // ============================
-    // Real-time validation
+    // Validation en temps réel
     // ============================
 
     function validateAmounts() {
@@ -250,96 +446,113 @@
             if (parseFloat(versaInput.value) === parseFloat(confirmInput.value)) {
 
                 matchInfo.classList.add('match-success');
+
                 matchInfo.classList.remove('match-error');
 
                 matchInfo.innerHTML =
                     '<i class="fas fa-check-circle"></i>' +
-                    '<span>Amounts match ✓</span>';
+                    '<span>Les montants correspondent ✓</span>';
 
             } else {
 
                 matchInfo.classList.add('match-error');
+
                 matchInfo.classList.remove('match-success');
 
                 matchInfo.innerHTML =
                     '<i class="fas fa-times-circle"></i>' +
-                    '<span>Amounts do not match</span>';
+                    '<span>Les montants ne correspondent pas</span>';
             }
 
         } else {
 
             matchInfo.classList.remove('match-success');
+
             matchInfo.classList.remove('match-error');
 
             matchInfo.innerHTML =
                 '<i class="fas fa-info-circle"></i>' +
-                '<span>Both amounts must match for the update to be processed</span>';
+                '<span>Les deux montants doivent correspondre pour que la modification soit effectuée</span>';
         }
     }
 
 
-    // Check amounts while typing
+    // Vérifier les montants pendant la saisie
     versaInput.addEventListener('input', validateAmounts);
+
     confirmInput.addEventListener('input', validateAmounts);
 
 
     // ============================
-    // Form submission validation
+    // Validation lors de la soumission
     // ============================
 
     form.addEventListener('submit', function(e) {
 
-        const patientId = patientIdInput.value.trim();
-        const versaValue = versaInput.value.trim();
-        const confirmValue = confirmInput.value.trim();
+        const patientId =
+            patientIdInput.value.trim();
+
+        const versaValue =
+            versaInput.value.trim();
+
+        const confirmValue =
+            confirmInput.value.trim();
 
 
-        // Check required fields
+        // Vérifier les champs obligatoires
         if (!patientId || !versaValue || !confirmValue) {
 
             e.preventDefault();
 
-            alert('Please fill in all fields');
+            alert('Veuillez remplir tous les champs');
 
             return;
         }
 
 
-        // Check if amounts match
+        // Vérifier si les montants correspondent
         if (parseFloat(versaValue) !== parseFloat(confirmValue)) {
 
             e.preventDefault();
 
-            alert('The versa amounts do not match. Please check your entries.');
+            alert('Les montants du versement ne correspondent pas. Veuillez vérifier vos saisies.');
 
             return;
         }
 
 
-        console.log('Form submitted successfully');
+        console.log('Formulaire envoyé avec succès');
+
     });
 
 
     // ============================
-    // Focus animation
+    // Animation lors du focus
     // ============================
 
     document.querySelectorAll('.input-field').forEach(input => {
 
         input.addEventListener('focus', function() {
+
             this.parentElement.classList.add('focused');
+
         });
+
 
         input.addEventListener('blur', function() {
 
             if (!this.value) {
+
                 this.parentElement.classList.remove('focused');
+
             }
 
         });
 
     });
+
 </script>
+
 </body>
 
 </html>
