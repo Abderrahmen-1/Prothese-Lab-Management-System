@@ -130,21 +130,35 @@ def home():
                   AND is_paid = %s 
             """, (False, False))
 
-            cursor.execute(""" 
-                UPDATE users 
-                SET status = 'out of limits' 
-                WHERE date_inscription <= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) 
-                  AND status != 'block' 
-                  AND id != %s 
-                  AND is_paid = %s 
-            """, (1, False))
+            cursor.execute("""
+                            SELECT is_paid, status, date_inscription, paid_at
+                            FROM users 
+                            WHERE id = %s """,(session['id'],))
+            result = cursor.fetchone()
 
+            if result[3] == None:
+                cursor.execute(""" 
+                            UPDATE users 
+                            SET status = 'out of limits' , is_paid = %s
+                            WHERE date_inscription <= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) 
+                              AND status != 'block' 
+                              AND id != %s 
+                        """, (False, 1))
+
+            else :
+                cursor.execute(""" 
+                                UPDATE users 
+                                SET status = 'out of limits' , is_paid = %s 
+                                WHERE paid_at <= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) 
+                                    AND status != 'block' 
+                                    AND id != %s  
+                                """, (False, 1))
             conn.commit()
 
             if not row[2]:
                 return render_template(
                     "Log-in.html",
-                    error="Veuillez d'abord vérifier votre adresse e-mail.",
+                    error="Veuillez d'abord vérifier votre adresse e-mail Va dans la creation du nouveau compte et insere exactement votre informations",
                     csrf_token=new_token
                 )
 
@@ -299,25 +313,22 @@ def Create():
             password = generate_password_hash(password)
 
             cursor.execute(""" 
-                           SELECT id FROM users  
+                           SELECT id, email_confirmed, user_name, user_email, user_phoneNomber
+                           FROM users  
                            WHERE user_name = %s AND user_phoneNumber = %s AND user_email = %s  
                            """, (username, phone, email))
             result = cursor.fetchone()
 
             if not result:
+                session['user_name'] = username
+                session['email'] = email
+                session['phoneNumber'] = phone
+
                 code = str(random.randint(10000, 99999))
 
                 cursor.execute(""" 
                     INSERT INTO users 
-                    ( 
-                        user_name, 
-                        user_password, 
-                        user_email, 
-                        user_phoneNumber, 
-                        date_inscription, 
-                        email_confirmed, 
-                        verification_code 
-                    ) 
+                    ( user_name, user_password,  user_email, user_phoneNumber, date_inscription, email_confirmed, verification_code) 
                     VALUES (%s, %s, %s, %s, NOW(), FALSE, %s) 
                 """, (username, password, email, phone, code))
 
@@ -344,6 +355,29 @@ def Create():
                     "verify_email",
                     email=email
                 ))
+
+            elif result and not result[1]:
+                session['user_name'] = result[2]
+                session['email'] = result[3]
+                session['phoneNumber'] = result[4]
+
+                code = str(random.randint(10000,99999))
+                msg = Message(
+                    subject="Code de vérification de l'adresse e-mail",
+                    sender=app.config["MAIL_USERNAME"],
+                    recipients=[email]
+                )
+
+                msg.body = f""" 
+                                Bonjour {username}, 
+                                Votre code de vérification de l'adresse e-mail est : 
+                                {code} 
+                                Saisissez ce code dans la page de vérification pour activer votre compte. 
+                                Ne partagez ce code avec personne. 
+                                """
+                mail.send(msg)
+
+                return redirect(url_for("verify_email", email=email))
 
             else:
                 return render_template("Log-in.html", message="Ce compte existe déjà", csrf_token=new_token)
@@ -388,8 +422,8 @@ def verify_email(email):
             cursor.execute(""" 
                 SELECT id, verification_code, email_confirmed 
                 FROM users 
-                WHERE user_email = %s 
-            """, (email,))
+                WHERE user_email = %s AND user_name = %s AND user_phoneNumber = %s 
+            """, (session['email'], session['user_name'], session['user_phoneNumber']))
 
             user = cursor.fetchone()
 
