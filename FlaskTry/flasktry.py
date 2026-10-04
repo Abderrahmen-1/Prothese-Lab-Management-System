@@ -319,10 +319,10 @@ def Create():
             email_found = cursor.fetchone()
 
             if email_found:
-                return render_template("Log-in.html", message="Email deja utiliser", csrf_token=new_token)
+                return render_template("Log-in.html", error="Email deja utiliser", csrf_token=new_token)
 
             cursor.execute(""" 
-                           SELECT id, email_confirmed, user_name, user_email, user_phoneNomber
+                           SELECT id, email_confirmed, user_name, user_email, user_phoneNumber
                            FROM users  
                            WHERE user_name = %s AND user_phoneNumber = %s AND user_email = %s  
                            """, (username, phone, email))
