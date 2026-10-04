@@ -4,7 +4,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from dotenv import load_dotenv
 from flask import Flask
 from flask_mail import Mail
-from FlaskTry.email_service import send_deadline_emails, send_quantity_email, send_prothesists_email
+from FlaskTry.email_service import send_deadline_emails, send_quantity_email, send_prothesists_email, send_abonnement_email
 from FlaskTry.flasktry import app, mail
 from FlaskTry.FunctionFile import get_connection
 
@@ -166,6 +166,33 @@ def check_prothesist_deadline():
         cursor.close()
         conn.close()
 
+def check_abonnement_deadline():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try :
+        cursor.execute("""
+                        SELECT user_name, user_email
+                        FROM users 
+                        WHERE 
+                        (CASE 
+                         WHEN paid_at IS NOT NULL THEN DATE_ADD(paid_at, INTERVAL 30 DAYS) = DATE_ADD(CURDATE() , INTERVAL 4 DAYS) 
+                         ELSE DATE_ADD(date_inscription, INTERVAL 30 DAYS) = DATE_ADD(CURDATE() , INTERVAL 4 DAYS) END) """)
+        results = cursor.fetchall()
+
+        for result in results :
+            with app.app_context():
+                send_abonnement_email(mail, result[1], result[0])
+                print(f"Email sent for the user {result[1]}")
+
+    except Exception as e :
+        conn.rollback()
+        return f"error {str(e)}"
+
+    finally :
+        cursor.close()
+        conn.close()
+
 
 
 
@@ -173,16 +200,16 @@ def check_prothesist_deadline():
 scheduler = BlockingScheduler()
 
 scheduler.add_job(
-    check_deadlines,
-    trigger="cron",
-    hour=9,
-    minute=0
+    check_abonnement_deadline(),
+    trigger='corn',
+    hour=8,
+    minut=0
 )
 
 scheduler.add_job(
-    check_quantity,
+    check_deadlines,
     trigger="cron",
-    hour=11,
+    hour=9,
     minute=0
 )
 
@@ -193,7 +220,16 @@ scheduler.add_job(
     minute=0
 )
 
+scheduler.add_job(
+    check_quantity,
+    trigger="cron",
+    hour=11,
+    minute=0
+)
+
+
 print("Scheduler started.")
+print("Abonnements DeadLine check schuled every day at 8:00.")
 print("Deadline check scheduled every day at 09:00.")
 print("Quantities check scheduled every day at 11:00.")
 print("Prothesists DeadLine check schuled every day at 10:00.")

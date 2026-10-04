@@ -1,12 +1,15 @@
+from datetime import datetime, timedelta, date
 from flask import Flask, request, render_template, redirect, url_for, session
 from flask_mail import Message, Mail
+from FlaskTry.flasktry import app
 
+Gmail = app.config['email_account']
 
 def send_deadline_emails(user_email, deadline_diff, deadline, mail, patient_number, patient_firstname, patient_lastname, type=None, dentistName=None, prothesist=None, ProFinished=None):
 
     msg = Message(
         subject="DentaFlow - Rappel de date limite",
-        sender=mail.username,
+        sender=Gmail,
         recipients=[user_email]
     )
 
@@ -118,7 +121,7 @@ def send_quantity_email(user_email, mail, sel3a_name, quantity, max_quantity, un
 
     msg = Message(
         subject="Quantity Email",
-        sender=mail.username,
+        sender=Gmail,
         recipients=[user_email]
     )
 
@@ -202,7 +205,7 @@ def send_quantity_email(user_email, mail, sel3a_name, quantity, max_quantity, un
 def send_prothesists_email(user_email, mail, user_name, service_name, prothesist_name, patient_number, remain, deadline):
     msg = Message(
         subject="Prothesists DeadLine Services Remaining",
-        sender=mail.username,
+        sender=Gmail,
         recipients=[user_email]
     )
 
@@ -264,3 +267,29 @@ def send_prothesists_email(user_email, mail, user_name, service_name, prothesist
 
     if msg.body :
         mail.send(msg)
+
+def send_abonnement_email(mail, user_mail, user_name):
+    msg = Message(
+        subject='Votre abonnement DentaFlow expire dans 4 jours',
+        sender=Gmail,
+        recipients=[user_mail]
+    )
+    expiration_date = date.today() + timedelta(days=4)
+
+    msg.body = f"""
+                Bonjour { user_name },  
+                Nous souhaitons vous informer que votre abonnement DentaFlow arrivera à expiration dans 4 jours, soit le { expiration_date }.
+                Afin de continuer à utiliser DentaFlow et de conserver l’accès à vos fonctionnalités sans interruption, nous vous invitons à renouveler votre abonnement avant cette date.
+                Date d’expiration : { expiration_date }
+                Jours restants : 4 jours
+                Vous pouvez effectuer le renouvellement directement depuis votre espace DentaFlow.
+                Renouveler mon abonnement
+                Nous vous remercions pour votre confiance et pour votre utilisation de DentaFlow.
+                Cordialement,
+                L’équipe DentaFlow
+                Solution de gestion pour laboratoires de prothèse dentaire
+                """
+
+    mail.send(msg)
+
+

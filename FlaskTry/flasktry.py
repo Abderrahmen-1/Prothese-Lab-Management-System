@@ -312,6 +312,15 @@ def Create():
         try:
             password = generate_password_hash(password)
 
+            cursor.execute("""
+                            SELECT user_email 
+                            FROM users 
+                            WHERE user_email = %s """,(email,))
+            email_found = cursor.fetchone()
+
+            if email_found:
+                return render_template("Log-in.html", message="Email deja utiliser", csrf_token=new_token)
+
             cursor.execute(""" 
                            SELECT id, email_confirmed, user_name, user_email, user_phoneNomber
                            FROM users  
