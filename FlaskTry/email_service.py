@@ -8,7 +8,7 @@ Gmail = app.config['email_account']
 def send_deadline_emails(user_email, deadline_diff, deadline, mail, patient_number, patient_firstname, patient_lastname, type=None, dentistName=None, prothesist=None, ProFinished=None):
 
     msg = Message(
-        subject="DentaFlow - Rappel de date limite",
+        subject="ManageMyLab - Rappel de date limite",
         sender=Gmail,
         recipients=[user_email]
     )
@@ -33,7 +33,7 @@ def send_deadline_emails(user_email, deadline_diff, deadline, mail, patient_numb
             Nous vous invitons à vérifier le dossier et à vous assurer que le travail nécessaire sera terminé dans les délais prévus.
             
             Cordialement,
-            DentaFlow
+            ManageMyLab
             """
 
         elif deadline_diff == 1:
@@ -48,7 +48,7 @@ def send_deadline_emails(user_email, deadline_diff, deadline, mail, patient_numb
             Veuillez vérifier le dossier et vous assurer que le travail nécessaire sera terminé à temps.
             
             Cordialement,
-            DentaFlow
+            ManageMyLab
             """
 
         elif deadline_diff == 0:
@@ -62,7 +62,7 @@ def send_deadline_emails(user_email, deadline_diff, deadline, mail, patient_numb
             Nous vous recommandons de vérifier le dossier et de prendre les mesures nécessaires afin de finaliser le travail dans les meilleurs délais.
             
             Cordialement,
-            DentaFlow
+            ManageMyLab
             """
 
     elif type == "dentist":
@@ -79,7 +79,7 @@ def send_deadline_emails(user_email, deadline_diff, deadline, mail, patient_numb
             Nous vous invitons à vérifier le dossier et à vous assurer que le travail nécessaire sera terminé dans les délais prévus.
             
             Cordialement,
-            DentaFlow
+            ManageMyLab
             """
 
         elif deadline_diff == 1:
@@ -95,7 +95,7 @@ def send_deadline_emails(user_email, deadline_diff, deadline, mail, patient_numb
             Veuillez vérifier le dossier et vous assurer que le travail nécessaire sera terminé à temps.
             
             Cordialement,
-            DentaFlow
+            ManageMyLab
             """
 
         elif deadline_diff == 0:
@@ -110,7 +110,7 @@ def send_deadline_emails(user_email, deadline_diff, deadline, mail, patient_numb
             Nous vous recommandons de vérifier le dossier et de prendre les mesures nécessaires afin de finaliser le travail dans les meilleurs délais.
             
             Cordialement,
-            DentaFlow
+            ManageMyLab
             """
 
     if msg.body:
@@ -162,10 +162,10 @@ def send_quantity_email(user_email, mail, sel3a_name, quantity, max_quantity, un
                 Ce produit n'est actuellement plus disponible en stock.
                 Nous vous invitons à vérifier votre inventaire et à procéder à son réapprovisionnement afin d'éviter toute interruption de votre activité.
                 
-                Cette notification a été générée automatiquement par DentaFlow.
+                Cette notification a été générée automatiquement par ManageMyLab.
                 
                 Cordialement,
-                DentaFlow
+                ManageMyLab
                 Gestion des stocks — Laboratoire de prothèse
                 """
 
@@ -179,7 +179,7 @@ def send_quantity_email(user_email, mail, sel3a_name, quantity, max_quantity, un
         msg.body = f"""
                     Bonjour,
                     
-                    Ceci est une notification automatique de votre système de gestion DentaFlow.
+                    Ceci est une notification automatique de votre système de gestion ManageMyLab.
                     
                     Le produit suivant a atteint un niveau de stock faible et pourrait nécessiter un réapprovisionnement :
                     
@@ -189,10 +189,10 @@ def send_quantity_email(user_email, mail, sel3a_name, quantity, max_quantity, un
                     
                     Nous vous recommandons de vérifier votre stock et de prévoir un réapprovisionnement si nécessaire afin d'éviter toute rupture.
                     
-                    Cette notification a été générée automatiquement par DentaFlow.
+                    Cette notification a été générée automatiquement par ManageMyLab.
                     
                     Cordialement,
-                    DentaFlow
+                    ManageMyLab
                     Gestion des stocks — Laboratoire de prothèse
                     """
 
@@ -224,7 +224,7 @@ def send_prothesists_email(user_email, mail, user_name, service_name, prothesist
                     Nous vous invitons à vérifier l'avancement de ce travail afin de vous assurer qu'il sera finalisé dans les délais prévus.
                     
                     Cordialement,
-                    **DentaFlow**
+                    **ManageMyLab**
                     Système de gestion de laboratoire prothétique
                     """
 
@@ -243,7 +243,7 @@ def send_prothesists_email(user_email, mail, user_name, service_name, prothesist
                     Nous vous recommandons de vérifier l'avancement du travail et de vous assurer qu'il pourra être finalisé dans le délai prévu.
                     
                     Cordialement,
-                    **DentaFlow**
+                    **ManageMyLab**
                     Système de gestion de laboratoire prothétique """
 
     if remain == 0 :
@@ -261,7 +261,7 @@ def send_prothesists_email(user_email, mail, user_name, service_name, prothesist
                     Nous vous invitons à vérifier immédiatement l'état de ce travail et à prendre les mesures nécessaires afin de respecter le délai prévu.
                     
                     Cordialement,
-                    **DentaFlow**
+                    **ManageMyLab**
                     Système de gestion de laboratoire prothétique
                     """
 
@@ -270,7 +270,7 @@ def send_prothesists_email(user_email, mail, user_name, service_name, prothesist
 
 def send_abonnement_email(mail, user_mail, user_name):
     msg = Message(
-        subject='Votre abonnement DentaFlow expire dans 4 jours',
+        subject='Votre abonnement ManageMyLab expire dans 4 jours',
         sender=Gmail,
         recipients=[user_mail]
     )
@@ -278,15 +278,15 @@ def send_abonnement_email(mail, user_mail, user_name):
 
     msg.body = f"""
                 Bonjour { user_name },  
-                Nous souhaitons vous informer que votre abonnement DentaFlow arrivera à expiration dans 4 jours, soit le { expiration_date }.
-                Afin de continuer à utiliser DentaFlow et de conserver l’accès à vos fonctionnalités sans interruption, nous vous invitons à renouveler votre abonnement avant cette date.
+                Nous souhaitons vous informer que votre abonnement ManageMyLab arrivera à expiration dans 4 jours, soit le { expiration_date }.
+                Afin de continuer à utiliser ManageMyLab et de conserver l’accès à vos fonctionnalités sans interruption, nous vous invitons à renouveler votre abonnement avant cette date.
                 Date d’expiration : { expiration_date }
                 Jours restants : 4 jours
-                Vous pouvez effectuer le renouvellement directement depuis votre espace DentaFlow.
+                Vous pouvez effectuer le renouvellement directement depuis votre espace ManageMyLab.
                 Renouveler mon abonnement
-                Nous vous remercions pour votre confiance et pour votre utilisation de DentaFlow.
+                Nous vous remercions pour votre confiance et pour votre utilisation de ManageMyLab.
                 Cordialement,
-                L’équipe DentaFlow
+                L’équipe ManageMyLab
                 Solution de gestion pour laboratoires de prothèse dentaire
                 """
 

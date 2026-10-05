@@ -4,11 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Gestion des services - Centre professionnel">
-    <meta name="keywords" content="Services, Gestion, Professionnel">
+
+    <meta name="description"
+          content="Gestion des services - Centre professionnel">
+
     <title>Gestion des services - Centre professionnel</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='OtherServices.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='OtherServices.css') }}">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
           rel="stylesheet">
@@ -17,16 +20,16 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+
         .context-menu {
             position: absolute;
             z-index: 10000;
-            background: #ffffff;
+            background: white;
             border-radius: 8px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
             border: 1px solid rgba(0, 0, 0, 0.08);
             overflow: hidden;
-            min-width: 190px;
-            animation: fadeInMenu 0.15s ease-out;
+            min-width: 210px;
         }
 
         .context-menu-item {
@@ -38,62 +41,66 @@
             font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
+
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: background 0.2s ease, color 0.2s ease;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
         }
 
-        .context-menu-item.paid-action {
+        .paid-action {
             color: #198754;
         }
 
-        .context-menu-item.paid-action:hover {
+        .paid-action:hover {
             background: #e8f7ee;
             color: #146c43;
         }
 
-        .context-menu-item.versement-action {
+        .versement-action {
             color: #0d6efd;
         }
 
-        .context-menu-item.versement-action:hover {
+        .versement-action:hover {
             background: #e7f1ff;
             color: #084298;
         }
 
-        .context-menu-item.delete-action {
-            color: #e63946;
+        .delete-action {
+            color: #dc3545;
         }
 
-        .context-menu-item.delete-action:hover {
+        .delete-action:hover {
             background: #ffebe9;
-            color: #c01927;
+            color: #b02a37;
         }
 
-        tr.row-selected {
-            background-color: rgba(13, 110, 253, 0.12) !important;
+        .row-selected {
+            background-color: rgba(13, 110, 253, 0.10) !important;
         }
 
-        @keyframes fadeInMenu {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+        .action-loading {
+            opacity: 0.6;
+            pointer-events: none;
         }
+
     </style>
 </head>
+
 
 <body>
 
 <div class="animated-bg"></div>
 
+
 <div class="container">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
     <header class="header">
 
@@ -109,17 +116,22 @@
 
                     <h1>Centre des services</h1>
 
-                    <p>Gestion professionnelle des services</p>
+                    <p>
+                        Gestion professionnelle des services
+                    </p>
 
                 </div>
 
             </div>
 
+
             <nav class="header-nav">
 
-                <a href="/HomePage" class="nav-btn back-btn">
+                <a href="/HomePage"
+                   class="nav-btn back-btn">
 
                     <i class="fas fa-arrow-left"></i>
+
                     Retour au menu
 
                 </a>
@@ -131,29 +143,58 @@
     </header>
 
 
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+
     <div class="SearchBar">
+
         {% if not stats %}
 
-        <form action="/services/OtherServices" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-            <input type="search" name="SearchBar" placeholder="Rechercher ici le nom de la personne">
+        <form action="/services/OtherServices"
+              method="POST">
+
+            <input type="hidden"
+                   name="csrf_token"
+                   value="{{ csrf_token }}">
+
+            <input type="search"
+                   name="SearchBar"
+                   placeholder="Rechercher ici le nom de la personne">
+
             <button type="submit">
+
                 <i class="fas fa-search"></i>
+
                 Confirmer
+
             </button>
+
         </form>
+
         {% endif %}
 
     </div>
 
 
+    <!-- =====================================================
+         MAIN LAYOUT
+    ====================================================== -->
+
     <div class="main-layout">
+
+
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
 
         <aside class="sidebar">
 
             <div class="sidebar-header">
 
-                <h2>Actions des services</h2>
+                <h2>
+                    Actions des services
+                </h2>
 
                 <div class="header-accent"></div>
 
@@ -161,6 +202,9 @@
 
 
             <nav class="sidebar-menu">
+
+
+                <!-- SERVICE MANAGEMENT -->
 
                 <div class="menu-group">
 
@@ -174,7 +218,9 @@
 
                         <i class="fas fa-table"></i>
 
-                        <span>Afficher les services</span>
+                        <span>
+                            Afficher les services
+                        </span>
 
                         <span class="badge badge-primary">
                             Afficher
@@ -188,7 +234,9 @@
 
                         <i class="fas fa-plus-circle"></i>
 
-                        <span>Ajouter un service</span>
+                        <span>
+                            Ajouter un service
+                        </span>
 
                         <span class="badge badge-success">
                             +
@@ -202,7 +250,9 @@
 
                         <i class="fas fa-chart-bar"></i>
 
-                        <span>Statistiques</span>
+                        <span>
+                            Statistiques
+                        </span>
 
                         <span class="badge badge-info">
                             📊
@@ -212,6 +262,8 @@
 
                 </div>
 
+
+                <!-- QUICK STATISTICS -->
 
                 <div class="menu-group">
 
@@ -227,6 +279,7 @@
                             <i class="fas fa-briefcase"></i>
 
                         </div>
+
 
                         <div class="stat-content">
 
@@ -246,6 +299,8 @@
                 </div>
 
 
+                <!-- NAVIGATION -->
+
                 <div class="menu-group">
 
                     <h3 class="group-title">
@@ -258,7 +313,9 @@
 
                         <i class="fas fa-house"></i>
 
-                        <span>Menu principal</span>
+                        <span>
+                            Menu principal
+                        </span>
 
                     </a>
 
@@ -269,7 +326,14 @@
         </aside>
 
 
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
         <main class="content">
+
+
+            <!-- ERROR -->
 
             {% if error %}
 
@@ -279,16 +343,22 @@
 
                     <i class="fas fa-exclamation-triangle"></i>
 
+
                     <div class="alert-content">
 
-                        <h3>Erreur / Introuvable</h3>
+                        <h3>
+                            Erreur / Introuvable
+                        </h3>
 
-                        <p>{{ error }}</p>
+                        <p>
+                            {{ error }}
+                        </p>
 
                     </div>
 
+
                     <button class="alert-close"
-                            onclick="this.parentElement.style.display='none'">
+                            onclick="this.parentElement.remove()">
 
                         <i class="fas fa-times"></i>
 
@@ -300,6 +370,8 @@
 
             {% endif %}
 
+
+            <!-- SUCCESS -->
 
             {% if message %}
 
@@ -309,16 +381,22 @@
 
                     <i class="fas fa-check-circle"></i>
 
+
                     <div class="alert-content">
 
-                        <h3>Opération réussie</h3>
+                        <h3>
+                            Opération réussie
+                        </h3>
 
-                        <p>{{ message }}</p>
+                        <p>
+                            {{ message }}
+                        </p>
 
                     </div>
 
+
                     <button class="alert-close"
-                            onclick="this.parentElement.style.display='none'">
+                            onclick="this.parentElement.remove()">
 
                         <i class="fas fa-times"></i>
 
@@ -331,9 +409,14 @@
             {% endif %}
 
 
+            <!-- =================================================
+                 HERO
+            ================================================== -->
+
             <div class="hero-section">
 
                 <div class="hero-content">
+
 
                     <div class="hero-text">
 
@@ -355,16 +438,16 @@
 
                             Gérez tous vos services professionnels
                             depuis un seul endroit.
-                            Suivez les détails des services, surveillez
-                            les paiements et analysez facilement
-                            les indicateurs de performance.
+                            Suivez les détails des services,
+                            surveillez les paiements et analysez
+                            facilement les indicateurs de performance.
 
                         </p>
 
 
                         <div class="hero-actions">
 
-                            <a href="/AddService"
+                            <a href="/services/AddService"
                                class="hero-btn">
 
                                 <i class="fas fa-plus-circle"></i>
@@ -395,11 +478,21 @@
             </div>
 
 
+            <!-- =================================================
+                 DATA SECTION
+            ================================================== -->
+
             <div class="data-section">
+
+
+                <!-- =================================================
+                     SERVICES TABLE
+                ================================================== -->
 
                 <div class="table-card"
                      id="MainTable"
                      style="display: {% if result %}block{% else %}none{% endif %};">
+
 
                     <div class="table-header">
 
@@ -418,7 +511,11 @@
 
                             <span class="record-badge">
 
-                                {{ result|length }} enregistrements trouvés
+                                <span id="recordCount">
+                                    {{ result|length }}
+                                </span>
+
+                                enregistrements trouvés
 
                             </span>
 
@@ -431,68 +528,54 @@
 
                     {% if result %}
 
+
                     <div class="table-wrapper">
 
                         <table class="data-table">
+
 
                             <thead>
 
                             <tr>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-hashtag"></i>
-                                        ID du service
-                                    </span>
+                                    <i class="fas fa-hashtag"></i>
+                                    ID du service
                                 </th>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-user"></i>
-                                        Nom
-                                    </span>
+                                    <i class="fas fa-user"></i>
+                                    Nom
                                 </th>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-phone"></i>
-                                        Numéro
-                                    </span>
+                                    <i class="fas fa-phone"></i>
+                                    Numéro
                                 </th>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-calendar"></i>
-                                        Date
-                                    </span>
+                                    <i class="fas fa-calendar"></i>
+                                    Date
                                 </th>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-dollar-sign"></i>
-                                        Prix
-                                    </span>
+                                    <i class="fas fa-dollar-sign"></i>
+                                    Prix
                                 </th>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-money-bill"></i>
-                                        Khalsa
-                                    </span>
+                                    <i class="fas fa-money-bill"></i>
+                                    Khalsa
                                 </th>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-coins"></i>
-                                        Versement
-                                    </span>
+                                    <i class="fas fa-coins"></i>
+                                    Versement
                                 </th>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-wallet"></i>
-                                        Reste
-                                    </span>
+                                    <i class="fas fa-wallet"></i>
+                                    Reste
                                 </th>
 
                             </tr>
@@ -500,67 +583,96 @@
                             </thead>
 
 
-                            <tbody>
+                            <tbody id="servicesTableBody">
+
 
                             {% for row in result %}
 
                             <tr class="table-row"
+
                                 data-id="{{ row[0] }}"
+
                                 data-name="{{ row[1] }}"
+
                                 data-number="{{ row[2] }}"
-                                style="animation-delay: {{ loop.index * 0.05 }}s;">
+
+                                data-price="{{ row[4] }}">
 
                                 <td>
+
                                     <span class="cell-content">
                                         {{ row[0] }}
                                     </span>
+
                                 </td>
 
+
                                 <td>
+
                                     <span class="cell-content">
                                         {{ row[1] }}
                                     </span>
+
                                 </td>
 
+
                                 <td>
+
                                     <span class="cell-content">
                                         {{ row[2] }}
                                     </span>
+
                                 </td>
 
+
                                 <td>
+
                                     <span class="cell-content">
                                         {{ row[3] }}
                                     </span>
+
                                 </td>
 
+
                                 <td>
-                                    <span class="cell-content">
+
+                                    <span class="cell-content price-cell">
                                         {{ row[4] }}
                                     </span>
+
                                 </td>
 
+
                                 <td>
-                                    <span class="cell-content">
+
+                                    <span class="cell-content khalsa-cell">
                                         {{ row[5] }}
                                     </span>
+
                                 </td>
 
+
                                 <td>
-                                    <span class="cell-content">
+
+                                    <span class="cell-content versement-cell">
                                         {{ row[6] }}
                                     </span>
+
                                 </td>
 
+
                                 <td>
-                                    <span class="cell-content">
+
+                                    <span class="cell-content reste-cell">
                                         {{ row[7] }}
                                     </span>
+
                                 </td>
 
                             </tr>
 
                             {% endfor %}
+
 
                             </tbody>
 
@@ -568,13 +680,16 @@
 
                     </div>
 
+
                     {% else %}
 
                     <div class="empty-table">
 
                         <i class="fas fa-inbox"></i>
 
-                        <p>Aucun service trouvé</p>
+                        <p>
+                            Aucun service trouvé
+                        </p>
 
                     </div>
 
@@ -583,8 +698,17 @@
                 </div>
 
 
-                <div class="table-card" id="StatTable" style="display: {% if stats %}block{% else %}none{% endif %};">
+                <!-- =================================================
+                     STATISTICS TABLE
+                ================================================== -->
+
+                <div class="table-card"
+                     id="StatTable"
+                     style="display: {% if stats %}block{% else %}none{% endif %};">
+
+
                     <div class="table-header">
+
                         <div class="header-left">
 
                             <h2>
@@ -595,21 +719,13 @@
 
                             </h2>
 
-
-                            {% if stats %}
-
-                            <span class="record-badge">
-                                Tableau de bord analytique
-                            </span>
-
-                            {% endif %}
-
                         </div>
 
                     </div>
 
 
                     {% if stats %}
+
 
                     <div class="table-wrapper">
 
@@ -620,52 +736,31 @@
                             <tr>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-user"></i>
-                                        Nom
-                                    </span>
+                                    Nom
                                 </th>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-phone"></i>
-                                        Numéro
-                                    </span>
+                                    Numéro
                                 </th>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-briefcase"></i>
-                                        Total des Khedma
-                                    </span>
+                                    Total des Khedma
                                 </th>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-check-circle"></i>
-                                        Khalsin
-                                    </span>
+                                    Khalsin
                                 </th>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-times-circle"></i>
-                                        Non Khalsin
-                                    </span>
+                                    Non Khalsin
                                 </th>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-calendar-alt"></i>
-                                        Mois
-                                    </span>
+                                    Mois
                                 </th>
 
                                 <th>
-                                    <span>
-                                        <i class="fas fa-calendar"></i>
-                                        Année
-                                    </span>
+                                    Année
                                 </th>
 
                             </tr>
@@ -677,49 +772,34 @@
 
                             {% for row in stats %}
 
-                            <tr class="table-row"
-                                style="animation-delay: {{ loop.index * 0.05 }}s;">
+                            <tr class="table-row">
 
                                 <td>
-                                    <span class="cell-content">
-                                        {{ row[1] }}
-                                    </span>
+                                    {{ row[1] }}
                                 </td>
 
                                 <td>
-                                    <span class="cell-content">
-                                        {{ row[2] }}
-                                    </span>
+                                    {{ row[2] }}
                                 </td>
 
                                 <td>
-                                    <span class="cell-content">
-                                        {{ row[3] }}
-                                    </span>
+                                    {{ row[3] }}
                                 </td>
 
                                 <td>
-                                    <span class="cell-content">
-                                        {{ row[4] }}
-                                    </span>
+                                    {{ row[4] }}
                                 </td>
 
                                 <td>
-                                    <span class="cell-content">
-                                        {{ row[5] }}
-                                    </span>
+                                    {{ row[5] }}
                                 </td>
 
                                 <td>
-                                    <span class="cell-content">
-                                        {{ row[6] }}
-                                    </span>
+                                    {{ row[6] }}
                                 </td>
 
                                 <td>
-                                    <span class="cell-content">
-                                        {{ row[7] }}
-                                    </span>
+                                    {{ row[7] }}
                                 </td>
 
                             </tr>
@@ -732,13 +812,16 @@
 
                     </div>
 
+
                     {% else %}
 
                     <div class="empty-table">
 
                         <i class="fas fa-chart-line"></i>
 
-                        <p>Aucune statistique disponible</p>
+                        <p>
+                            Aucune statistique disponible
+                        </p>
 
                     </div>
 
@@ -746,6 +829,8 @@
 
                 </div>
 
+
+                <!-- EMPTY STATE -->
 
                 {% if not result and not stats %}
 
@@ -757,16 +842,23 @@
 
                     </div>
 
-                    <h2>Aucune information disponible</h2>
+
+                    <h2>
+                        Aucune information disponible
+                    </h2>
+
 
                     <p>
-                        Utilisez le menu latéral pour afficher les services
-                        ou en ajouter de nouveaux
+
+                        Utilisez le menu latéral pour afficher
+                        les services ou en ajouter de nouveaux
+
                     </p>
 
                 </div>
 
                 {% endif %}
+
 
             </div>
 
@@ -777,9 +869,14 @@
 </div>
 
 
+<!-- =========================================================
+     CONTEXT MENU
+========================================================= -->
+
 <div id="custom-context-menu"
      class="context-menu"
-     style="display: none;">
+     style="display:none;">
+
 
     <button id="paid-row-btn"
             class="context-menu-item paid-action">
@@ -815,662 +912,1090 @@
 
 <script>
 
-    // ==========================================
-    // METTRE À JOUR LE NOMBRE TOTAL DE SERVICES
-    // ==========================================
-
-    function updateTotalServices() {
-
-        let total = 0;
-
-        const mainTable =
-            document.querySelector('#MainTable tbody');
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
 
 
-        if (mainTable) {
+    // =====================================================
+    // ELEMENTS
+    // =====================================================
 
-            total =
-                mainTable.querySelectorAll('tr').length;
+    const contextMenu =
+        document.getElementById(
+            'custom-context-menu'
+        );
 
+    const paidBtn =
+        document.getElementById(
+            'paid-row-btn'
+        );
+
+    const modifyBtn =
+        document.getElementById(
+            'modify-versement-btn'
+        );
+
+    const deleteBtn =
+        document.getElementById(
+            'delete-row-btn'
+        );
+
+
+    let selectedRow = null;
+
+    let longPressTimer = null;
+
+
+    // =====================================================
+    // CSRF
+    // =====================================================
+
+    function getCSRFToken() {
+
+        const csrfInput =
+            document.querySelector(
+                'input[name="csrf_token"]'
+            );
+
+
+        return csrfInput
+            ? csrfInput.value
+            : null;
+    }
+
+
+    // =====================================================
+    // FETCH REQUEST
+    // =====================================================
+
+    async function sendRequest(
+        url,
+        data = {}
+    ) {
+
+        const csrfToken =
+            getCSRFToken();
+
+
+        const headers = {
+
+            'Content-Type':
+                'application/json',
+
+            'Accept':
+                'application/json'
+
+        };
+
+
+        if (csrfToken) {
+
+            headers['X-CSRFToken'] =
+                csrfToken;
         }
 
 
+        const response =
+            await fetch(
+                url,
+                {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(data)
+                }
+            );
+
+
+        let result = {};
+
+
+        try {
+
+            result =
+                await response.json();
+
+        } catch (error) {
+
+            console.error(
+                'Le serveur n\'a pas renvoyé du JSON.',
+                error
+            );
+        }
+
+
+        return {
+            response: response,
+            data: result
+        };
+    }
+
+
+    // =====================================================
+    // TOTAL
+    // =====================================================
+
+    function updateTotal() {
+
+        const tbody =
+            document.getElementById(
+                'servicesTableBody'
+            );
+
+
         const totalElement =
-            document.getElementById('totalServices');
+            document.getElementById(
+                'totalServices'
+            );
+
+
+        const recordCount =
+            document.getElementById(
+                'recordCount'
+            );
+
+
+        if (!tbody) {
+
+            if (totalElement) {
+                totalElement.textContent = '--';
+            }
+
+            return;
+        }
+
+
+        const rows =
+            tbody.querySelectorAll(
+                'tr.table-row'
+            );
+
+
+        const total =
+            rows.length;
 
 
         if (totalElement) {
 
             totalElement.textContent =
-                total || '--';
-
+                total;
         }
 
+
+        if (recordCount) {
+
+            recordCount.textContent =
+                total;
+        }
     }
 
 
-    // ==========================================
-    // EFFET D'ONDULATION
-    // ==========================================
-
-    function createRipple(e) {
-
-        const button =
-            e.currentTarget;
-
-        const ripple =
-            document.createElement('span');
-
-        const rect =
-            button.getBoundingClientRect();
-
-        const size =
-            Math.max(rect.width, rect.height);
-
-        const x =
-            e.clientX - rect.left - size / 2;
-
-        const y =
-            e.clientY - rect.top - size / 2;
+    updateTotal();
 
 
-        ripple.style.width =
-            ripple.style.height =
-            size + 'px';
+    // =====================================================
+    // OPEN CONTEXT MENU
+    // =====================================================
 
-        ripple.style.left =
-            x + 'px';
+    function openContextMenu(
+        x,
+        y,
+        row
+    ) {
 
-        ripple.style.top =
-            y + 'px';
+        if (selectedRow) {
 
-        ripple.classList.add('ripple');
+            selectedRow.classList.remove(
+                'row-selected'
+            );
+        }
 
 
-        button.appendChild(ripple);
+        selectedRow = row;
 
-        setTimeout(() => ripple.remove(), 600);
 
+        selectedRow.classList.add(
+            'row-selected'
+        );
+
+
+        contextMenu.style.display =
+            'block';
+
+
+        /*
+         * Empêcher le menu de sortir de l'écran.
+         */
+
+        const menuWidth =
+            contextMenu.offsetWidth;
+
+        const menuHeight =
+            contextMenu.offsetHeight;
+
+
+        let finalX = x;
+
+        let finalY = y;
+
+
+        if (
+            x + menuWidth >
+            window.scrollX +
+            window.innerWidth
+        ) {
+
+            finalX =
+                window.scrollX +
+                window.innerWidth -
+                menuWidth -
+                10;
+        }
+
+
+        if (
+            y + menuHeight >
+            window.scrollY +
+            window.innerHeight
+        ) {
+
+            finalY =
+                window.scrollY +
+                window.innerHeight -
+                menuHeight -
+                10;
+        }
+
+
+        contextMenu.style.left =
+            `${Math.max(5, finalX)}px`;
+
+        contextMenu.style.top =
+            `${Math.max(5, finalY)}px`;
     }
 
 
-    // ==========================================
-    // INITIALISATION DE LA PAGE
-    // ==========================================
+    // =====================================================
+    // CLOSE CONTEXT MENU
+    // =====================================================
 
-    document.addEventListener('DOMContentLoaded', function() {
+    function closeContextMenu() {
 
-
-        // Effet d'ondulation
-        document.querySelectorAll('.menu-item, .nav-btn').forEach(item => {
-
-            item.addEventListener('click', createRipple);
-
-        });
+        contextMenu.style.display =
+            'none';
 
 
-        // Mettre à jour le nombre total de services
-        updateTotalServices();
+        if (selectedRow) {
+
+            selectedRow.classList.remove(
+                'row-selected'
+            );
+
+            selectedRow = null;
+        }
+    }
 
 
-        // Fermeture automatique des alertes
-        document.querySelectorAll('.alert').forEach(alert => {
+    // =====================================================
+    // RIGHT CLICK
+    // =====================================================
 
-            setTimeout(() => {
-
-                alert.style.animation =
-                    'fadeOut 0.5s ease forwards';
-
-
-                setTimeout(() => {
-
-                    alert.remove();
-
-                }, 500);
-
-            }, 5000);
-
-        });
-
-
-        // ==========================================
-        // MENU CONTEXTUEL
-        // ==========================================
-
-        const contextMenu =
-            document.getElementById('custom-context-menu');
-
-        const paidBtn =
-            document.getElementById('paid-row-btn');
-
-        const modifyVersementBtn =
-            document.getElementById('modify-versement-btn');
-
-        const deleteBtn =
-            document.getElementById('delete-row-btn');
-
-
-        let targetRow = null;
-
-        let longPressTimer = null;
-
-        const LONG_PRESS_DURATION = 500;
-
-
-        // ==========================================
-        // CLIC DROIT
-        // ==========================================
-
-        document.addEventListener('contextmenu', (e) => {
+    document.addEventListener(
+        'contextmenu',
+        function (event) {
 
             const row =
-                e.target.closest('.table-row');
-
-
-            if (row && row.hasAttribute('data-id')) {
-
-                e.preventDefault();
-
-                openContextMenu(
-                    e.pageX,
-                    e.pageY,
-                    row
+                event.target.closest(
+                    'tr.table-row'
                 );
 
+
+            if (!row) {
+                return;
             }
 
-        });
+
+            if (
+                !row.hasAttribute(
+                    'data-id'
+                )
+            ) {
+                return;
+            }
 
 
-        // ==========================================
-        // APPUI LONG SUR MOBILE
-        // ==========================================
+            event.preventDefault();
 
-        document.addEventListener('touchstart', (e) => {
+
+            openContextMenu(
+                event.pageX,
+                event.pageY,
+                row
+            );
+        }
+    );
+
+
+    // =====================================================
+    // MOBILE LONG PRESS
+    // =====================================================
+
+    document.addEventListener(
+        'touchstart',
+        function (event) {
 
             const row =
-                e.target.closest('.table-row');
+                event.target.closest(
+                    'tr.table-row'
+                );
 
 
-            if (!row || !row.hasAttribute('data-id')) {
-
+            if (!row) {
                 return;
-
             }
 
 
             const touch =
-                e.touches[0];
+                event.touches[0];
 
 
-            longPressTimer = setTimeout(() => {
+            longPressTimer =
+                setTimeout(
+                    function () {
 
-                openContextMenu(
-                    touch.pageX,
-                    touch.pageY,
-                    row
+                        openContextMenu(
+                            touch.pageX,
+                            touch.pageY,
+                            row
+                        );
+
+                    },
+                    500
                 );
-
-            }, LONG_PRESS_DURATION);
-
-        }, { passive: true });
-
-
-        document.addEventListener(
-            'touchend',
-            cancelLongPress
-        );
-
-        document.addEventListener(
-            'touchmove',
-            cancelLongPress
-        );
-
-
-        function cancelLongPress() {
-
-            if (longPressTimer) {
-
-                clearTimeout(longPressTimer);
-
-                longPressTimer = null;
-
-            }
-
+        },
+        {
+            passive: true
         }
+    );
 
 
-        // ==========================================
-        // OUVRIR LE MENU CONTEXTUEL
-        // ==========================================
+    document.addEventListener(
+        'touchend',
+        function () {
 
-        function openContextMenu(x, y, row) {
+            clearTimeout(
+                longPressTimer
+            );
+        }
+    );
 
-            if (targetRow) {
 
-                targetRow.classList.remove(
-                    'row-selected'
-                );
+    document.addEventListener(
+        'touchmove',
+        function () {
 
+            clearTimeout(
+                longPressTimer
+            );
+        }
+    );
+
+
+    // =====================================================
+    // CLOSE MENU
+    // =====================================================
+
+    document.addEventListener(
+        'click',
+        function (event) {
+
+            if (
+                !contextMenu.contains(
+                    event.target
+                )
+            ) {
+
+                closeContextMenu();
             }
+        }
+    );
 
 
-            targetRow = row;
+    // =====================================================
+    // SHOW SUCCESS MESSAGE
+    // =====================================================
 
-            targetRow.classList.add(
-                'row-selected'
+    function showSuccess(message) {
+
+        const content =
+            document.querySelector(
+                '.content'
             );
 
 
-            contextMenu.style.left =
-                `${x}px`;
-
-            contextMenu.style.top =
-                `${y}px`;
-
-            contextMenu.style.display =
-                'block';
-
+        if (!content) {
+            return;
         }
 
 
-        // ==========================================
-        // MASQUER LE MENU CONTEXTUEL
-        // ==========================================
-
-        function hideContextMenu() {
-
-            contextMenu.style.display =
-                'none';
+        const container =
+            document.createElement(
+                'div'
+            );
 
 
-            if (targetRow) {
+        container.className =
+            'alert-container';
 
-                targetRow.classList.remove(
-                    'row-selected'
-                );
 
-                targetRow = null;
+        const alertBox =
+            document.createElement(
+                'div'
+            );
 
+
+        alertBox.className =
+            'alert alert-success';
+
+
+        alertBox.innerHTML = `
+
+            <i class="fas fa-check-circle"></i>
+
+            <div class="alert-content">
+
+                <h3>
+                    Opération réussie
+                </h3>
+
+                <p></p>
+
+            </div>
+
+            <button class="alert-close">
+
+                <i class="fas fa-times"></i>
+
+            </button>
+
+        `;
+
+
+        alertBox
+            .querySelector('p')
+            .textContent = message;
+
+
+        alertBox
+            .querySelector('.alert-close')
+            .addEventListener(
+                'click',
+                function () {
+
+                    container.remove();
+
+                }
+            );
+
+
+        container.appendChild(
+            alertBox
+        );
+
+
+        content.prepend(
+            container
+        );
+
+
+        setTimeout(
+            function () {
+
+                if (
+                    container.parentElement
+                ) {
+
+                    container.remove();
+                }
+
+            },
+            4000
+        );
+    }
+
+
+    // =====================================================
+    // MARQUER COMME PAYÉ
+    // =====================================================
+
+    paidBtn.addEventListener(
+        'click',
+        async function () {
+
+            if (!selectedRow) {
+                return;
             }
 
-        }
+
+            const row =
+                selectedRow;
 
 
-        // ==========================================
-        // CLIC EN DEHORS DU MENU
-        // ==========================================
-
-        document.addEventListener('click', (e) => {
-
-            if (!contextMenu.contains(e.target)) {
-
-                hideContextMenu();
-
-            }
-
-        });
-
-
-        // ==========================================
-        // MARQUER LE SERVICE COMME PAYÉ
-        // ==========================================
-
-        paidBtn.addEventListener('click', async () => {
-
-            if (!targetRow) return;
-
-
-            const recordId =
-                targetRow.getAttribute('data-id');
+            const id =
+                row.dataset.id;
 
             const name =
-                targetRow.getAttribute('data-name');
+                row.dataset.name;
 
             const number =
-                targetRow.getAttribute('data-number');
+                row.dataset.number;
 
 
-            if (!confirm(
-                `Marquer le service #${recordId} comme entièrement payé ?`
-            )) {
+            if (
+                !confirm(
+                    `Marquer le service #${id} comme payé ?`
+                )
+            ) {
 
-                hideContextMenu();
+                closeContextMenu();
 
                 return;
-
             }
+
+
+            paidBtn.classList.add(
+                'action-loading'
+            );
 
 
             try {
 
-                const response =
-                    await fetch(
-                        `/services/ServicePaid/${recordId}`,
+                const {
+                    response,
+                    data
+                } =
+                    await sendRequest(
+                        `/services/ServicePaid/${id}`,
                         {
-                            method: 'POST',
-
-                            headers: {
-                                'Content-Type':
-                                    'application/json'
-                            },
-
-                            body: JSON.stringify({
-                                name: name,
-                                number: number
-                            })
+                            name: name,
+                            number: number
                         }
                     );
 
 
-                const data =
-                    await response.json();
+                if (
+                    response.ok &&
+                    data.success
+                ) {
 
 
-                console.log(
-                    "Statut :",
-                    response.status
-                );
+                    // =====================================
+                    // UPDATE KHalsa
+                    // =====================================
 
-                console.log(
-                    "Réponse :",
-                    data
-                );
+                    const khalsa =
+                        row.querySelector(
+                            '.khalsa-cell'
+                        );
 
 
-                if (response.ok && data.success) {
+                    if (khalsa) {
 
-                    location.reload();
+                        khalsa.textContent =
+                            data.khalsa !== undefined
+                                ? data.khalsa
+                                : 'Oui';
+                    }
+
+
+                    // =====================================
+                    // UPDATE VERSEMENT
+                    // =====================================
+
+                    const versement =
+                        row.querySelector(
+                            '.versement-cell'
+                        );
+
+
+                    if (
+                        versement &&
+                        data.versement !== undefined
+                    ) {
+
+                        versement.textContent =
+                            data.versement;
+                    }
+
+
+                    // =====================================
+                    // UPDATE RESTE
+                    // =====================================
+
+                    const reste =
+                        row.querySelector(
+                            '.reste-cell'
+                        );
+
+
+                    if (reste) {
+
+                        reste.textContent =
+                            data.reste !== undefined
+                                ? data.reste
+                                : '0';
+                    }
+
+
+                    // =====================================
+                    // VISUAL EFFECT
+                    // =====================================
+
+                    row.style.transition =
+                        'background-color 0.3s ease';
+
+
+                    row.style.backgroundColor =
+                        'rgba(25, 135, 84, 0.15)';
+
+
+                    setTimeout(
+                        function () {
+
+                            row.style.backgroundColor =
+                                '';
+
+                        },
+                        1000
+                    );
+
+
+                    showSuccess(
+                        'Le service a été marqué comme payé.'
+                    );
+
 
                 } else {
 
                     alert(
                         data.error ||
                         data.message ||
-                        'Impossible de marquer le service comme payé.'
+                        'Erreur lors du paiement.'
                     );
-
                 }
 
 
-            } catch (err) {
+            } catch (error) {
 
                 console.error(
-                    'Erreur de paiement :',
-                    err
+                    error
                 );
+
 
                 alert(
-                    'Une erreur est survenue lors de la communication avec le serveur.'
+                    'Erreur de communication avec le serveur.'
                 );
 
+            } finally {
+
+                paidBtn.classList.remove(
+                    'action-loading'
+                );
+
+                closeContextMenu();
+            }
+
+        }
+    );
+
+
+    // =====================================================
+    // MODIFIER VERSEMENT
+    // =====================================================
+
+    modifyBtn.addEventListener(
+        'click',
+        async function () {
+
+            if (!selectedRow) {
+                return;
             }
 
 
-            hideContextMenu();
-
-        });
-
-
-        // ==========================================
-        // MODIFIER LE VERSEMENT
-        // ==========================================
-
-        modifyVersementBtn.addEventListener(
-            'click',
-            async () => {
-
-                if (!targetRow) return;
+            const row =
+                selectedRow;
 
 
-                const recordId =
-                    targetRow.getAttribute('data-id');
+            const id =
+                row.dataset.id;
 
-                const name =
-                    targetRow.getAttribute('data-name');
+            const name =
+                row.dataset.name;
 
-                const number =
-                    targetRow.getAttribute('data-number');
+            const number =
+                row.dataset.number;
 
 
-                const newVersement =
-                    prompt(
-                        `Saisissez le nouveau montant du versement pour le service #${recordId} :`
+            const versementCell =
+                row.querySelector(
+                    '.versement-cell'
+                );
+
+
+            const currentVersement =
+                versementCell
+                    ? versementCell.textContent.trim()
+                    : '0';
+
+
+            const newVersement =
+                prompt(
+                    `Nouveau versement pour le service #${id} :`,
+                    currentVersement
+                );
+
+
+            if (
+                newVersement === null
+            ) {
+
+                closeContextMenu();
+
+                return;
+            }
+
+
+            const amount =
+                parseFloat(
+                    newVersement
+                        .replace(',', '.')
+                        .trim()
+                );
+
+
+            if (
+                isNaN(amount) ||
+                amount < 0
+            ) {
+
+                alert(
+                    'Veuillez entrer un montant valide.'
+                );
+
+                closeContextMenu();
+
+                return;
+            }
+
+
+            modifyBtn.classList.add(
+                'action-loading'
+            );
+
+
+            try {
+
+                const {
+                    response,
+                    data
+                } =
+                    await sendRequest(
+                        `/services/ModifyServiceVersement/${id}`,
+                        {
+                            name: name,
+                            number: number,
+                            newVersement: amount
+                        }
                     );
-
-
-                if (newVersement === null) {
-
-                    hideContextMenu();
-
-                    return;
-
-                }
 
 
                 if (
-                    newVersement.trim() === '' ||
-                    isNaN(newVersement)
+                    response.ok &&
+                    data.success
                 ) {
 
-                    alert(
-                        'Veuillez saisir un montant valide.'
-                    );
 
-                    hideContextMenu();
+                    // =====================================
+                    // UPDATE VERSEMENT
+                    // =====================================
 
-                    return;
+                    if (versementCell) {
 
-                }
-
-
-                try {
-
-                    const response =
-                        await fetch(
-                            `/services/ModifyServiceVersement/${recordId}`,
-                            {
-                                method: 'POST',
-
-                                headers: {
-                                    'Content-Type':
-                                        'application/json'
-                                },
-
-                                body: JSON.stringify({
-                                    name: name,
-                                    number: number,
-                                    newVersement:
-                                        parseFloat(
-                                            newVersement
-                                        )
-                                })
-                            }
-                        );
-
-
-                    const data =
-                        await response.json();
-
-
-                    console.log(
-                        "Statut :",
-                        response.status
-                    );
-
-                    console.log(
-                        "Réponse :",
-                        data
-                    );
-
-
-                    if (response.ok && data.success) {
-
-                        location.reload();
-
-                    } else {
-
-                        alert(
-                            data.error ||
-                            data.message ||
-                            'Impossible de modifier le versement.'
-                        );
-
+                        versementCell.textContent =
+                            data.versement !== undefined
+                                ? data.versement
+                                : amount;
                     }
 
 
-                } catch (err) {
+                    // =====================================
+                    // UPDATE RESTE
+                    // =====================================
 
-                    console.error(
-                        'Erreur de versement :',
-                        err
-                    );
-
-                    alert(
-                        'Une erreur est survenue lors de la communication avec le serveur.'
-                    );
-
-                }
-
-
-                hideContextMenu();
-
-            }
-        );
-
-
-        // ==========================================
-        // SUPPRIMER LE SERVICE
-        // ==========================================
-
-        deleteBtn.addEventListener(
-            'click',
-            async () => {
-
-                if (!targetRow) return;
-
-
-                const recordId =
-                    targetRow.getAttribute('data-id');
-
-                const name =
-                    targetRow.getAttribute('data-name');
-
-                const number =
-                    targetRow.getAttribute('data-number');
-
-
-                if (!confirm(
-                    `Êtes-vous sûr de vouloir supprimer le service #${recordId} ?`
-                )) {
-
-                    hideContextMenu();
-
-                    return;
-
-                }
-
-
-                try {
-
-                    const response =
-                        await fetch(
-                            `/services/DeleteService/${recordId}`,
-                            {
-                                method: 'POST',
-
-                                headers: {
-                                    'Content-Type':
-                                        'application/json'
-                                },
-
-                                body: JSON.stringify({
-                                    name: name,
-                                    number: number
-                                })
-                            }
+                    const resteCell =
+                        row.querySelector(
+                            '.reste-cell'
                         );
 
 
-                    const data =
-                        await response.json();
+                    if (resteCell) {
+
+                        if (
+                            data.reste !== undefined
+                        ) {
+
+                            resteCell.textContent =
+                                data.reste;
+
+                        } else {
+
+                            const price =
+                                parseFloat(
+                                    row.dataset.price
+                                ) || 0;
 
 
-                    console.log(
-                        "Statut :",
-                        response.status
-                    );
-
-                    console.log(
-                        "Réponse :",
-                        data
-                    );
-
-
-                    if (response.ok && data.success) {
-
-                        const matchingRows =
-                            document.querySelectorAll(
-                                `tr[data-id="${recordId}"]`
-                            );
-
-
-                        matchingRows.forEach(row => {
-
-                            row.style.transition =
-                                'all 0.3s ease';
-
-                            row.style.opacity =
-                                '0';
-
-                            row.style.transform =
-                                'translateX(20px)';
-
-
-                            setTimeout(() => {
-
-                                row.remove();
-
-                                updateTotalServices();
-
-                            }, 300);
-
-                        });
-
-
-                    } else {
-
-                        alert(
-                            data.error ||
-                            data.message ||
-                            'Impossible de supprimer le service.'
-                        );
-
+                            resteCell.textContent =
+                                Math.max(
+                                    0,
+                                    price - amount
+                                );
+                        }
                     }
 
 
-                } catch (err) {
-
-                    console.error(
-                        'Erreur de suppression :',
-                        err
+                    showSuccess(
+                        'Le versement a été modifié avec succès.'
                     );
+
+
+                } else {
 
                     alert(
-                        'Une erreur est survenue lors de la communication avec le serveur.'
+                        data.error ||
+                        data.message ||
+                        'Erreur lors de la modification.'
                     );
-
                 }
 
 
-                hideContextMenu();
+            } catch (error) {
 
+                console.error(
+                    error
+                );
+
+
+                alert(
+                    'Erreur de communication avec le serveur.'
+                );
+
+            } finally {
+
+                modifyBtn.classList.remove(
+                    'action-loading'
+                );
+
+                closeContextMenu();
             }
-        );
 
-    });
+        }
+    );
+
+
+    // =====================================================
+    // SUPPRIMER
+    // =====================================================
+
+    deleteBtn.addEventListener(
+        'click',
+        async function () {
+
+            if (!selectedRow) {
+                return;
+            }
+
+
+            const row =
+                selectedRow;
+
+
+            const id =
+                row.dataset.id;
+
+            const name =
+                row.dataset.name;
+
+            const number =
+                row.dataset.number;
+
+
+            if (
+                !confirm(
+                    `Supprimer le service #${id} ?`
+                )
+            ) {
+
+                closeContextMenu();
+
+                return;
+            }
+
+
+            deleteBtn.classList.add(
+                'action-loading'
+            );
+
+
+            try {
+
+                const {
+                    response,
+                    data
+                } =
+                    await sendRequest(
+                        `/services/DeleteService/${id}`,
+                        {
+                            name: name,
+                            number: number
+                        }
+                    );
+
+
+                if (
+                    response.ok &&
+                    data.success
+                ) {
+
+
+                    // =====================================
+                    // REMOVE ROW WITHOUT RELOAD
+                    // =====================================
+
+                    row.style.transition =
+                        'opacity 0.3s ease, transform 0.3s ease';
+
+
+                    row.style.opacity =
+                        '0';
+
+
+                    row.style.transform =
+                        'translateX(30px)';
+
+
+                    setTimeout(
+                        function () {
+
+                            row.remove();
+
+
+                            updateTotal();
+
+
+                            const tbody =
+                                document.getElementById(
+                                    'servicesTableBody'
+                                );
+
+
+                            if (
+                                tbody &&
+                                tbody.querySelectorAll(
+                                    'tr.table-row'
+                                ).length === 0
+                            ) {
+
+                                const tableWrapper =
+                                    document.querySelector(
+                                        '#MainTable .table-wrapper'
+                                    );
+
+
+                                if (tableWrapper) {
+
+                                    tableWrapper.style.display =
+                                        'none';
+                                }
+
+
+                                const empty =
+                                    document.createElement(
+                                        'div'
+                                    );
+
+
+                                empty.className =
+                                    'empty-table';
+
+
+                                empty.innerHTML = `
+
+                                    <i class="fas fa-inbox"></i>
+
+                                    <p>
+                                        Aucun service trouvé
+                                    </p>
+
+                                `;
+
+
+                                document
+                                    .getElementById(
+                                        'MainTable'
+                                    )
+                                    .appendChild(
+                                        empty
+                                    );
+                            }
+
+                        },
+                        300
+                    );
+
+
+                    showSuccess(
+                        'Le service a été supprimé avec succès.'
+                    );
+
+
+                } else {
+
+                    alert(
+                        data.error ||
+                        data.message ||
+                        'Erreur lors de la suppression.'
+                    );
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+
+                alert(
+                    'Erreur de communication avec le serveur.'
+                );
+
+            } finally {
+
+                deleteBtn.classList.remove(
+                    'action-loading'
+                );
+
+                closeContextMenu();
+            }
+
+        }
+    );
+
+});
 
 </script>
 
 </body>
+
 </html>

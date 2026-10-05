@@ -39,6 +39,10 @@ def PatientPage():
         token = request.form.get('csrf_token')
         check = session.get('csrf_token')
 
+        print('toke ->',token)
+        print('check ->',check)
+        print( token == check)
+
         if not token or token != check:
             return "Erreur : attaque CSRF détectée", 403
 
