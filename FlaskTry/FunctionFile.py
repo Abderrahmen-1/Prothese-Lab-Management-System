@@ -45,7 +45,10 @@ def CheckData(email=None, username=None, password=None, phoneNumber=None):
         if not username.strip() or len(username) < 4 or username.isdigit():
             raise InvalideNameException
     if email :
-        if not email.strip() or email.isdigit() or "@" not in email or ".com" not in email:
+        if (
+                not email.strip() or email.isdigit() or "@" not in email or "." not in email
+                or email.count("@") != 1 or email.startswith("@") or email.endswith(".")
+        ):
             raise InvalideEmailException
     if password :
         if not password.strip() or len(password) < 8:
