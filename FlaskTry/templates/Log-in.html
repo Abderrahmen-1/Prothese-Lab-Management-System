@@ -60,7 +60,7 @@
                 <p>Sign in to access your lab management dashboard</p>
             </div>
 
-            <form action="/log_in" method="POST" class="login-form">
+            <form action="/" method="POST" class="login-form">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
                 {% if error %}
