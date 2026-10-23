@@ -1,3 +1,5 @@
+import time
+
 from flask import Flask, request, render_template, session, redirect, url_for, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from FlaskTry.FunctionFile import *
@@ -1225,6 +1227,7 @@ def ShowKhedmaByDateDESC():
 
 # =================================== ALL TOTAL ===============================
 
+cach = {}
 @app.route("/AllTotalAccount")
 def AllTotal():
     if not is_logged_in():
@@ -1234,342 +1237,406 @@ def AllTotal():
     cursor = conn.cursor(buffered=True)
 
     try:
-        cursor.execute(""" 
-        SELECT  
-            month, 
-            year, 
 
-            SUM(CASE WHEN source='patients' THEN khalsin ELSE 0 END) AS patient_khalsin, 
-            SUM(CASE WHEN source='patients' THEN b9aw ELSE 0 END) AS patient_b9aw, 
-
-            SUM(CASE WHEN source='dentists' THEN khalsin ELSE 0 END) AS dentist_khalsin, 
-            SUM(CASE WHEN source='dentists' THEN b9aw ELSE 0 END) AS dentist_b9aw, 
-
-            SUM(CASE WHEN source='prothesists' THEN khalsin ELSE 0 END) AS pro_khalsin, 
-            SUM(CASE WHEN source='prothesists' THEN b9aw ELSE 0 END) AS pro_b9aw, 
-
-            SUM(CASE WHEN source='sel3a' THEN khalsin ELSE 0 END) AS sel3a_khalsa, 
-            SUM(CASE WHEN source='sel3a' THEN b9aw ELSE 0 END) AS sel3a_b9aw, 
-
-            SUM(CASE WHEN source='others' THEN khalsin ELSE 0 END) AS other_khalsin, 
-            SUM(CASE WHEN source='others' THEN b9aw ELSE 0 END) AS other_b9aw,  
-
-            SUM(CASE  
-                    WHEN source='patients' THEN khalsin - b9aw   
-                    WHEN source='dentists' THEN khalsin - b9aw  
-                    WHEN source='prothesists' THEN -(khalsin + b9aw)  
-                    WHEN source='sel3a' THEN -(khalsin + b9aw)  
-                    WHEN source='others' THEN -(khalsin + b9aw)  
-                    ELSE 0 END) AS Net_Profets  
-        FROM ( 
-
-            SELECT month, year, 
-                   SUM(khalsin) AS khalsin, 
-                   SUM(machi_khalsin) AS b9aw, 
-                   'patients' AS source 
-            FROM patient_stat 
-            WHERE user_id = %s 
-            GROUP BY month, year 
-
-            UNION ALL 
-
-            SELECT month, year, 
-                   SUM(khalsin), 
-                   SUM(machi_khalsin), 
-                   'dentists' 
-            FROM dentist_stat 
-            WHERE user_id = %s 
-            GROUP BY month, year 
-
-            UNION ALL 
-
-            SELECT month, year, 
-                   SUM(khalsin), 
-                   SUM(machi_khalsin), 
-                   'prothesists' 
-            FROM prothesist_stat 
-            WHERE user_id = %s 
-            GROUP BY month, year 
-
-            UNION ALL 
-
+        if 'result' not in cach or time.time() - cach['result']['time'] > 60:
+            cursor.execute(""" 
             SELECT  
-                MONTH(buy_date), 
-                YEAR(buy_date), 
-                SUM(versement) AS khalsa, 
-                SUM(b9aw) AS b9aw, 
-                'sel3a' 
-            FROM sel3a 
-            WHERE user_id = %s 
-            GROUP BY MONTH(buy_date), YEAR(buy_date) 
-
-            UNION ALL  
-
-            SELECT  
-                 month , year , 
-                 SUM(khalsin) AS khalsin ,  
-                 SUM(machi_khalsin) AS b9aw , 
-                 'others' AS source  
-                 FROM other_services_stats  
-                 WHERE user_id = %s  
-                 GROUP BY month , year  
-
-        ) AS combined 
-
-        GROUP BY month, year 
-        ORDER BY year, month 
-        LIMIT 13 
-        """, (session['id'], session['id'], session['id'], session['id'], session['id']))
-        result = cursor.fetchall()
-
-        cursor.execute(""" 
-                SELECT  
-                    month, 
-                    year, 
-
-                    SUM(CASE WHEN source='patients' THEN khalsin ELSE 0 END) AS patient_khalsin, 
-                    SUM(CASE WHEN source='patients' THEN b9aw ELSE 0 END) AS patient_b9aw, 
-
-                    SUM(CASE WHEN source='dentists' THEN khalsin ELSE 0 END) AS dentist_khalsin, 
-                    SUM(CASE WHEN source='dentists' THEN b9aw ELSE 0 END) AS dentist_b9aw, 
-
-                    SUM(CASE WHEN source='prothesists' THEN khalsin ELSE 0 END) AS pro_khalsin, 
-                    SUM(CASE WHEN source='prothesists' THEN b9aw ELSE 0 END) AS pro_b9aw, 
-
-                    SUM(CASE WHEN source='sel3a' THEN khalsin ELSE 0 END) AS sel3a_khalsa, 
-                    SUM(CASE WHEN source='sel3a' THEN b9aw ELSE 0 END) AS sel3a_b9aw, 
-
-                    SUM(CASE WHEN source='others' THEN khalsin ELSE 0 END) AS other_khalsin, 
-                    SUM(CASE WHEN source='others' THEN b9aw ELSE 0 END) AS other_b9aw,  
-
-                    SUM(CASE  
-                            WHEN source='patients' THEN khalsin - b9aw   
-                            WHEN source='dentists' THEN khalsin - b9aw  
-                            WHEN source='prothesists' THEN -(khalsin + b9aw)  
-                            WHEN source='sel3a' THEN -(khalsin + b9aw)  
-                            WHEN source='others' THEN -(khalsin + b9aw)  
-                            ELSE 0 END) AS Net_Profets  
-                FROM ( 
-
-                    SELECT month, year, 
-                           SUM(khalsin) AS khalsin, 
-                           SUM(machi_khalsin) AS b9aw, 
-                           'patients' AS source 
-                    FROM patient_stat 
-                    WHERE user_id = %s 
-                    GROUP BY month, year 
-
-                    UNION ALL 
-
-                    SELECT month, year, 
-                           SUM(khalsin), 
-                           SUM(machi_khalsin), 
-                           'dentists' 
-                    FROM dentist_stat 
-                    WHERE user_id = %s 
-                    GROUP BY month, year 
-
-                    UNION ALL 
-
-                    SELECT month, year, 
-                           SUM(khalsin), 
-                           SUM(machi_khalsin), 
-                           'prothesists' 
-                    FROM prothesist_stat 
-                    WHERE user_id = %s 
-                    GROUP BY month, year 
-
-                    UNION ALL 
-
-                    SELECT  
-                        MONTH(buy_date), 
-                        YEAR(buy_date), 
-                        SUM(versement) AS khalsa, 
-                        SUM(b9aw) AS b9aw, 
-                        'sel3a' 
-                    FROM sel3a 
-                    WHERE user_id = %s 
-                    GROUP BY MONTH(buy_date), YEAR(buy_date) 
-
-                    UNION ALL  
-
-                    SELECT  
-                         month , year , 
-                         SUM(khalsin) AS khalsin ,  
-                         SUM(machi_khalsin) AS b9aw , 
-                         'others' AS source  
-                         FROM other_services_stats  
-                         WHERE user_id = %s  
-                         GROUP BY month , year  
-
-                ) AS combined 
-
+                month, 
+                year, 
+    
+                SUM(CASE WHEN source='patients' THEN khalsin ELSE 0 END) AS patient_khalsin, 
+                SUM(CASE WHEN source='patients' THEN b9aw ELSE 0 END) AS patient_b9aw, 
+    
+                SUM(CASE WHEN source='dentists' THEN khalsin ELSE 0 END) AS dentist_khalsin, 
+                SUM(CASE WHEN source='dentists' THEN b9aw ELSE 0 END) AS dentist_b9aw, 
+    
+                SUM(CASE WHEN source='prothesists' THEN khalsin ELSE 0 END) AS pro_khalsin, 
+                SUM(CASE WHEN source='prothesists' THEN b9aw ELSE 0 END) AS pro_b9aw, 
+    
+                SUM(CASE WHEN source='sel3a' THEN khalsin ELSE 0 END) AS sel3a_khalsa, 
+                SUM(CASE WHEN source='sel3a' THEN b9aw ELSE 0 END) AS sel3a_b9aw, 
+    
+                SUM(CASE WHEN source='others' THEN khalsin ELSE 0 END) AS other_khalsin, 
+                SUM(CASE WHEN source='others' THEN b9aw ELSE 0 END) AS other_b9aw,  
+    
+                SUM(CASE  
+                        WHEN source='patients' THEN khalsin - b9aw   
+                        WHEN source='dentists' THEN khalsin - b9aw  
+                        WHEN source='prothesists' THEN -(khalsin + b9aw)  
+                        WHEN source='sel3a' THEN -(khalsin + b9aw)  
+                        WHEN source='others' THEN -(khalsin + b9aw)  
+                        ELSE 0 END) AS Net_Profets  
+            FROM ( 
+    
+                SELECT month, year, 
+                       SUM(khalsin) AS khalsin, 
+                       SUM(machi_khalsin) AS b9aw, 
+                       'patients' AS source 
+                FROM patient_stat 
+                WHERE user_id = %s 
                 GROUP BY month, year 
-                ORDER BY year, month 
-                """, (session['id'], session['id'], session['id'], session['id'], session['id']))
-        result_table = cursor.fetchall()
+    
+                UNION ALL 
+    
+                SELECT month, year, 
+                       SUM(khalsin), 
+                       SUM(machi_khalsin), 
+                       'dentists' 
+                FROM dentist_stat 
+                WHERE user_id = %s 
+                GROUP BY month, year 
+    
+                UNION ALL 
+    
+                SELECT month, year, 
+                       SUM(khalsin), 
+                       SUM(machi_khalsin), 
+                       'prothesists' 
+                FROM prothesist_stat 
+                WHERE user_id = %s 
+                GROUP BY month, year 
+    
+                UNION ALL 
+    
+                SELECT  
+                    MONTH(buy_date), 
+                    YEAR(buy_date), 
+                    SUM(versement) AS khalsa, 
+                    SUM(b9aw) AS b9aw, 
+                    'sel3a' 
+                FROM sel3a 
+                WHERE user_id = %s 
+                GROUP BY MONTH(buy_date), YEAR(buy_date) 
+    
+                UNION ALL  
+    
+                SELECT  
+                     month , year , 
+                     SUM(khalsin) AS khalsin ,  
+                     SUM(machi_khalsin) AS b9aw , 
+                     'others' AS source  
+                     FROM other_services_stats  
+                     WHERE user_id = %s  
+                     GROUP BY month , year  
+    
+            ) AS combined 
+    
+            GROUP BY month, year 
+            ORDER BY year, month 
+            LIMIT 13 
+            """, (session['id'], session['id'], session['id'], session['id'], session['id']))
 
-        cursor.execute(""" 
-                        SELECT SUM(patients_number) AS total_patients, month, year  
+            result = cursor.fetchall()
+            cach['result'] = {
+                'value': result,
+                'time': time.time()
+            }
+
+        else :
+            result = cach['result']['value']
+            if time.time() - cach['result']['time'] > 60 :
+                cach.pop('result')
+
+
+        if 'result_table' not in cach or time.time() - cach['result_table']['time'] > 60:
+            cursor.execute(""" 
+                    SELECT  
+                        month, 
+                        year, 
+    
+                        SUM(CASE WHEN source='patients' THEN khalsin ELSE 0 END) AS patient_khalsin, 
+                        SUM(CASE WHEN source='patients' THEN b9aw ELSE 0 END) AS patient_b9aw, 
+    
+                        SUM(CASE WHEN source='dentists' THEN khalsin ELSE 0 END) AS dentist_khalsin, 
+                        SUM(CASE WHEN source='dentists' THEN b9aw ELSE 0 END) AS dentist_b9aw, 
+    
+                        SUM(CASE WHEN source='prothesists' THEN khalsin ELSE 0 END) AS pro_khalsin, 
+                        SUM(CASE WHEN source='prothesists' THEN b9aw ELSE 0 END) AS pro_b9aw, 
+    
+                        SUM(CASE WHEN source='sel3a' THEN khalsin ELSE 0 END) AS sel3a_khalsa, 
+                        SUM(CASE WHEN source='sel3a' THEN b9aw ELSE 0 END) AS sel3a_b9aw, 
+    
+                        SUM(CASE WHEN source='others' THEN khalsin ELSE 0 END) AS other_khalsin, 
+                        SUM(CASE WHEN source='others' THEN b9aw ELSE 0 END) AS other_b9aw,  
+    
+                        SUM(CASE  
+                                WHEN source='patients' THEN khalsin - b9aw   
+                                WHEN source='dentists' THEN khalsin - b9aw  
+                                WHEN source='prothesists' THEN -(khalsin + b9aw)  
+                                WHEN source='sel3a' THEN -(khalsin + b9aw)  
+                                WHEN source='others' THEN -(khalsin + b9aw)  
+                                ELSE 0 END) AS Net_Profets  
+                    FROM ( 
+    
+                        SELECT month, year, 
+                               SUM(khalsin) AS khalsin, 
+                               SUM(machi_khalsin) AS b9aw, 
+                               'patients' AS source 
                         FROM patient_stat 
-                        WHERE  
-                         user_id = %s AND (  
-                                        year > YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
-                                            OR ( year = YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
-                                                AND month >= MONTH(DATE_SUB(CURDATE() , INTERVAL 13 MONTH)) 
-                                                ) 
-                                            ) 
+                        WHERE user_id = %s 
                         GROUP BY month, year 
-                        ORDER BY month, year  
-                        """, (session['id'],))
-        total_patients = cursor.fetchall()
-
-        cursor.execute(""" 
-                        SELECT SUM(total_khedma) AS total_khedma, month, year  
+    
+                        UNION ALL 
+    
+                        SELECT month, year, 
+                               SUM(khalsin), 
+                               SUM(machi_khalsin), 
+                               'dentists' 
                         FROM dentist_stat 
-                        WHERE  
-                         user_id = %s AND (  
-                                        year >= YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
-                                            OR ( year = YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
-                                                AND month >= MONTH(DATE_SUB(CURDATE() , INTERVAL 13 MONTH)) 
-                                                )   
-                                            ) 
-                        GROUP BY month, year  
-                        ORDER BY month, year  
-                        """, (session['id'],))
-        total_dentists = cursor.fetchall()
+                        WHERE user_id = %s 
+                        GROUP BY month, year 
+    
+                        UNION ALL 
+    
+                        SELECT month, year, 
+                               SUM(khalsin), 
+                               SUM(machi_khalsin), 
+                               'prothesists' 
+                        FROM prothesist_stat 
+                        WHERE user_id = %s 
+                        GROUP BY month, year 
+    
+                        UNION ALL 
+    
+                        SELECT  
+                            MONTH(buy_date), 
+                            YEAR(buy_date), 
+                            SUM(versement) AS khalsa, 
+                            SUM(b9aw) AS b9aw, 
+                            'sel3a' 
+                        FROM sel3a 
+                        WHERE user_id = %s 
+                        GROUP BY MONTH(buy_date), YEAR(buy_date) 
+    
+                        UNION ALL  
+    
+                        SELECT  
+                             month , year , 
+                             SUM(khalsin) AS khalsin ,  
+                             SUM(machi_khalsin) AS b9aw , 
+                             'others' AS source  
+                             FROM other_services_stats  
+                             WHERE user_id = %s  
+                             GROUP BY month , year  
+    
+                    ) AS combined 
+    
+                    GROUP BY month, year 
+                    ORDER BY year, month 
+                    """, (session['id'], session['id'], session['id'], session['id'], session['id']))
+            result_table = cursor.fetchall()
+            cach['result_table'] = {
+                'value': result,
+                'time': time.time()
+            }
 
-        cursor.execute(""" 
-                        SELECT MONTH, YEAR ,  
-                        SUM(CASE WHEN k_source = 'patient' THEN total_khedma ELSE 0 END) + 
-                        SUM(CASE WHEN k_source = 'dentist' THEN total_khedma ELSE 0 END) AS TOTAL 
+        else :
+            result_table = cach['result_table']['value']
+            if time.time() - cach['result_table']['time'] > 60:
+                cach.pop('result_table')
 
-                        FROM ( 
-                                SELECT MONTH, YEAR , SUM(patients_number) AS total_khedma , 'patient' AS k_source 
-                                FROM patient_stat  
-                                WHERE user_id = %s AND (  
-                                        year > YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
-                                            OR ( year = YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
-                                                AND month >= MONTH(DATE_SUB(CURDATE() , INTERVAL 13 MONTH)) 
-                                                ) ) 
-                                GROUP BY MONTH, YEAR  
 
-                                UNION ALL  
+        if 'total-patients' not in cach or time.time() - cach['total_patients']['time'] > 60:
+            cursor.execute(""" 
+                            SELECT SUM(patients_number) AS total_patients, month, year  
+                            FROM patient_stat 
+                            WHERE  
+                             user_id = %s AND (  
+                                            year > YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
+                                                OR ( year = YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
+                                                    AND month >= MONTH(DATE_SUB(CURDATE() , INTERVAL 13 MONTH)) 
+                                                    ) 
+                                                ) 
+                            GROUP BY month, year 
+                            ORDER BY month, year  
+                            """, (session['id'],))
+            total_patients = cursor.fetchall()
+            cach['total_patients'] = {
+                'value': result,
+                'time': time.time()
+            }
 
-                                SELECT MONTH, YEAR , SUM(total_khedma) AS total_khedma , 'dentist' AS k_source  
-                                FROM dentist_stat  
-                                WHERE user_id = %s AND (  
-                                        year > YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
-                                            OR ( year = YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
-                                                AND month >= MONTH(DATE_SUB(CURDATE() , INTERVAL 13 MONTH)) 
-                                                ) ) 
-                                GROUP BY MONTH, YEAR  
-                        ) AS stats  
-                        GROUP BY MONTH, YEAR  
-                        ORDER BY MONTH, YEAR   
-                      """, (session['id'], session['id']))
-        total_khedma = cursor.fetchall()
+        else :
+            total_patients = cach['total_patients']['value']
+            if time.time() - cach['total_patients']['time'] > 60 :
+                cach.pop('total_patients')
 
-        cursor.execute(""" 
-                        SELECT 
-                        months.month, 
-                        months.year, 
+        if 'total_dentists' not in cach or time.time() - cach['total_dentists']['time'] > 60:
+            cursor.execute(""" 
+                            SELECT SUM(total_khedma) AS total_khedma, month, year  
+                            FROM dentist_stat 
+                            WHERE  
+                             user_id = %s AND (  
+                                            year >= YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
+                                                OR ( year = YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
+                                                    AND month >= MONTH(DATE_SUB(CURDATE() , INTERVAL 13 MONTH)) 
+                                                    )   
+                                                ) 
+                            GROUP BY month, year  
+                            ORDER BY month, year  
+                            """, (session['id'],))
+            total_dentists = cursor.fetchall()
+            cach['total_dentists'] = {
+                'value': result,
+                'time': time.time()
+            }
 
-                        COALESCE(p.total_finished, 0) AS total_patient_finished, 
-                        COALESCE(p.total_notFinished, 0) AS total_patient_notFinished, 
+        else :
+            total_dentists = cach['total_dentists']['value']
+            if time.time() - cach['total_dentists']['time'] > 60:
+                cach.pop('total_dentists')
 
-                        COALESCE(d.total_finished, 0) AS total_dentists_finished, 
-                        COALESCE(d.total_notFinished, 0) AS total_dentists_notFinished, 
+        if 'total_khedma' not in cach or time.time() - cach['total_khedma']['time'] > 60:
+            cursor.execute(""" 
+                            SELECT MONTH, YEAR ,  
+                            SUM(CASE WHEN k_source = 'patient' THEN total_khedma ELSE 0 END) + 
+                            SUM(CASE WHEN k_source = 'dentist' THEN total_khedma ELSE 0 END) AS TOTAL 
+    
+                            FROM ( 
+                                    SELECT MONTH, YEAR , SUM(patients_number) AS total_khedma , 'patient' AS k_source 
+                                    FROM patient_stat  
+                                    WHERE user_id = %s AND (  
+                                            year > YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
+                                                OR ( year = YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
+                                                    AND month >= MONTH(DATE_SUB(CURDATE() , INTERVAL 13 MONTH)) 
+                                                    ) ) 
+                                    GROUP BY MONTH, YEAR  
+    
+                                    UNION ALL  
+    
+                                    SELECT MONTH, YEAR , SUM(total_khedma) AS total_khedma , 'dentist' AS k_source  
+                                    FROM dentist_stat  
+                                    WHERE user_id = %s AND (  
+                                            year > YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
+                                                OR ( year = YEAR(DATE_SUB(CURDATE() , INTERVAL 13 MONTH))  
+                                                    AND month >= MONTH(DATE_SUB(CURDATE() , INTERVAL 13 MONTH)) 
+                                                    ) ) 
+                                    GROUP BY MONTH, YEAR  
+                            ) AS stats  
+                            GROUP BY MONTH, YEAR  
+                            ORDER BY MONTH, YEAR   
+                          """, (session['id'], session['id']))
+            total_khedma = cursor.fetchall()
+            cach['total_khedma'] = {
+                'value': result,
+                'time': time.time()
+            }
 
-                        COALESCE(p.total_finished, 0) 
-                        + COALESCE(d.total_finished, 0) AS total_finished, 
+        else :
+            total_khedma = cach['total_khedma']['value']
+            if time.time() - cach['total_khedma']['time'] > 60 :
+                cach.pop('total_khedma')
 
-                        COALESCE(p.total_notFinished, 0) 
-                        + COALESCE(d.total_notFinished, 0) AS total_notFinished, 
-
-                        ( 
+        if 'total_finished' not in cach or time.time() - cach['total_finished']['time'] > 60:
+            cursor.execute(""" 
+                            SELECT 
+                            months.month, 
+                            months.year, 
+    
+                            COALESCE(p.total_finished, 0) AS total_patient_finished, 
+                            COALESCE(p.total_notFinished, 0) AS total_patient_notFinished, 
+    
+                            COALESCE(d.total_finished, 0) AS total_dentists_finished, 
+                            COALESCE(d.total_notFinished, 0) AS total_dentists_notFinished, 
+    
+                            COALESCE(p.total_finished, 0) 
+                            + COALESCE(d.total_finished, 0) AS total_finished, 
+    
+                            COALESCE(p.total_notFinished, 0) 
+                            + COALESCE(d.total_notFinished, 0) AS total_notFinished, 
+    
                             ( 
+                                ( 
+                                    COALESCE(p.total_finished, 0) 
+                                    + COALESCE(d.total_finished, 0) 
+                                ) * 100 
+                            ) 
+                            / 
+                            NULLIF( 
                                 COALESCE(p.total_finished, 0) 
                                 + COALESCE(d.total_finished, 0) 
-                            ) * 100 
-                        ) 
-                        / 
-                        NULLIF( 
-                            COALESCE(p.total_finished, 0) 
-                            + COALESCE(d.total_finished, 0) 
-                            + COALESCE(p.total_notFinished, 0) 
-                            + COALESCE(d.total_notFinished, 0), 
-                            0 
-                        ) AS Finished_Percentage_per100 
+                                + COALESCE(p.total_notFinished, 0) 
+                                + COALESCE(d.total_notFinished, 0), 
+                                0 
+                            ) AS Finished_Percentage_per100 
+    
+                        FROM 
+                        ( 
+                            SELECT DISTINCT MONTH(pDate) AS month, YEAR(pDate) AS year 
+                            FROM patient_history 
+                            WHERE user_id = %s 
+    
+                            UNION 
+    
+                            SELECT DISTINCT MONTH(pDate) AS month, YEAR(pDate) AS year 
+                            FROM dentist_history 
+                            WHERE user_id = %s 
+                        ) AS months 
+    
+                        LEFT JOIN 
+                        ( 
+                            SELECT 
+                                MONTH(pDate) AS month, 
+                                YEAR(pDate) AS year, 
+    
+                                SUM(CASE 
+                                    WHEN STATUS = 'finished' THEN 1 
+                                    ELSE 0 
+                                END) AS total_finished, 
+    
+                                SUM(CASE 
+                                    WHEN STATUS NOT IN ('finished', 'deleted') THEN 1 
+                                    ELSE 0 
+                                END) AS total_notFinished 
+    
+                            FROM patient_history 
+    
+                            WHERE user_id = %s 
+    
+                            GROUP BY MONTH(pDate), YEAR(pDate) 
+    
+                        ) AS p 
+                            ON p.month = months.month 
+                            AND p.year = months.year 
+    
+                        LEFT JOIN 
+                        ( 
+                            SELECT 
+                                MONTH(pDate) AS month, 
+                                YEAR(pDate) AS year, 
+    
+                                SUM(CASE 
+                                    WHEN STATUS = 'finished' THEN 1 
+                                    ELSE 0 
+                                END) AS total_finished, 
+    
+                                SUM(CASE 
+                                    WHEN STATUS NOT IN ('finished', 'deleted') THEN 1 
+                                    ELSE 0 
+                                END) AS total_notFinished 
+    
+                            FROM dentist_history 
+    
+                            WHERE user_id = %s 
+    
+                            GROUP BY MONTH(pDate), YEAR(pDate) 
+    
+                        ) AS d 
+                            ON d.month = months.month 
+                            AND d.year = months.year 
+    
+                        ORDER BY months.year, months.month  
+        """, (session['id'], session['id'], session['id'], session['id']))
+            total_finished = cursor.fetchall()
+            cach['total_finished'] = {
+                'value': result,
+                'time': time.time()
+            }
 
-                    FROM 
-                    ( 
-                        SELECT DISTINCT MONTH(pDate) AS month, YEAR(pDate) AS year 
-                        FROM patient_history 
-                        WHERE user_id = %s 
-
-                        UNION 
-
-                        SELECT DISTINCT MONTH(pDate) AS month, YEAR(pDate) AS year 
-                        FROM dentist_history 
-                        WHERE user_id = %s 
-                    ) AS months 
-
-                    LEFT JOIN 
-                    ( 
-                        SELECT 
-                            MONTH(pDate) AS month, 
-                            YEAR(pDate) AS year, 
-
-                            SUM(CASE 
-                                WHEN STATUS = 'finished' THEN 1 
-                                ELSE 0 
-                            END) AS total_finished, 
-
-                            SUM(CASE 
-                                WHEN STATUS NOT IN ('finished', 'deleted') THEN 1 
-                                ELSE 0 
-                            END) AS total_notFinished 
-
-                        FROM patient_history 
-
-                        WHERE user_id = %s 
-
-                        GROUP BY MONTH(pDate), YEAR(pDate) 
-
-                    ) AS p 
-                        ON p.month = months.month 
-                        AND p.year = months.year 
-
-                    LEFT JOIN 
-                    ( 
-                        SELECT 
-                            MONTH(pDate) AS month, 
-                            YEAR(pDate) AS year, 
-
-                            SUM(CASE 
-                                WHEN STATUS = 'finished' THEN 1 
-                                ELSE 0 
-                            END) AS total_finished, 
-
-                            SUM(CASE 
-                                WHEN STATUS NOT IN ('finished', 'deleted') THEN 1 
-                                ELSE 0 
-                            END) AS total_notFinished 
-
-                        FROM dentist_history 
-
-                        WHERE user_id = %s 
-
-                        GROUP BY MONTH(pDate), YEAR(pDate) 
-
-                    ) AS d 
-                        ON d.month = months.month 
-                        AND d.year = months.year 
-
-                    ORDER BY months.year, months.month  
-    """, (session['id'], session['id'], session['id'], session['id']))
-        total_finished = cursor.fetchall()
+        else :
+            total_finished = cach['total_finished']['value']
+            if time.time() - cach['total_finished']['time'] > 60:
+                cach.pop('total_finished')
 
         return render_template("AllTotalStats.html", result=result, result_table=result_table, patients=total_patients,
                                dentists=total_dentists, Total_khedma=total_khedma, total_finished=total_finished)
