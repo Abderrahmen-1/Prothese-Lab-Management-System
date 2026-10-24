@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="DentaFlow - Verify Your Email">
+    <meta name="author" content="Abderrahmen">
+
+    <title>DentaFlow - Vérification de l'e-mail</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='VerifyEmail.css') }}">
+
+    <link rel="icon"
+          href="{{ url_for('static', filename='favicon.ico') }}"
+          type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+</div>
+
+
+<div class="verification-container">
+
+    <!-- ================= LEFT SIDE ================= -->
+
+    <div class="branding-side">
+
+        <div class="branding-content">
+
+            <div class="logo-wrapper">
+                <i class="fas fa-tooth"></i>
+                <div class="logo-ring"></div>
+            </div>
+
+            <h1 class="brand-title">DentaFlow</h1>
+
+            <p class="brand-subtitle">
+                Vérification sécurisée de l'e-mail
+            </p>
+
+
+            <div class="benefits-list">
+
+                <div class="benefit-item">
+
+                    <div class="benefit-icon">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+
+                    <div class="benefit-text">
+                        <h3>Vérification sécurisée</h3>
+                        <p>Protégez votre compte grâce à la vérification de votre e-mail</p>
+                    </div>
+
+                </div>
+
+
+                <div class="benefit-item">
+
+                    <div class="benefit-icon">
+                        <i class="fas fa-envelope-circle-check"></i>
+                    </div>
+
+                    <div class="benefit-text">
+                        <h3>Consultez votre e-mail</h3>
+                        <p>Nous avons envoyé un code de vérification dans votre boîte de réception</p>
+                    </div>
+
+                </div>
+
+
+                <div class="benefit-item">
+
+                    <div class="benefit-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+
+                    <div class="benefit-text">
+                        <h3>Activez votre compte</h3>
+                        <p>Vérifiez votre e-mail pour continuer sur DentaFlow</p>
+                    </div>
+
+                </div>
+
+
+                <a href="{{ url_for('Create') }}" class="users-generated">
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    <span>Retour à l'inscription</span>
+
+                </a>
+
+            </div>
+
+
+            <div class="testimonial">
+
+                <i class="fas fa-quote-left quote-icon"></i>
+
+                <p>
+                    "Votre sécurité est importante. Vérifiez votre e-mail
+                    pour garder votre compte DentaFlow protégé."
+                </p>
+
+                <div class="testimonial-author">
+
+                    <strong>Sécurité DentaFlow</strong>
+
+                    <span>Système de gestion de laboratoire de prothèses</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= RIGHT SIDE ================= -->
+
+    <div class="form-side">
+
+        <div class="form-wrapper">
+
+            <div class="form-header">
+
+                <div class="verification-icon">
+
+                    <i class="fas fa-envelope-circle-check"></i>
+
+                </div>
+
+                <h2>Vérifiez votre e-mail</h2>
+
+                <p>
+                    Entrez le code de vérification à 5 chiffres
+                    que nous avons envoyé à votre adresse e-mail.
+                </p>
+
+            </div>
+
+
+            <form
+                action="{{ url_for('verify_email', email=email) }}"
+                method="POST"
+                class="verification-form"
+                id="verificationForm"
+            >
+
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token }}"
+                >
+
+                {% if error %}
+                  <div class="alert alert-error fade-in-slow">
+                      <i class="fas fa-exclamation-triangle"></i>
+
+                      <div class="alert-content">
+                          <h3>Échec de la vérification</h3>
+                          <p>{{ error }}</p>
+                      </div>
+
+                      <button
+                          type="button"
+                          class="alert-close"
+                          onclick="this.parentElement.style.display='none'"
+                      >
+                          <i class="fas fa-times"></i>
+                      </button>
+                  </div>
+                {% endif %}
+
+
+                {% if success %}
+                  <div class="alert alert-success fade-in-slow">
+                      <i class="fas fa-check-circle"></i>
+
+                      <div class="alert-content">
+                          <h3>Succès</h3>
+                          <p>{{ success }}</p>
+                      </div>
+
+                      <button
+                          type="button"
+                          class="alert-close"
+                          onclick="this.parentElement.style.display='none'"
+                      >
+                          <i class="fas fa-times"></i>
+                      </button>
+                  </div>
+                {% endif %}
+
+
+                <div class="email-display">
+
+                    <i class="fas fa-envelope"></i>
+
+                    <div>
+
+                        <span>E-mail de vérification envoyé à</span>
+
+                        <strong>{{ email }}</strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="code">
+
+                        <span class="label-text">
+                            Code de vérification
+                        </span>
+
+                    </label>
+
+
+                    <div class="code-input-wrapper">
+
+                        <i class="fas fa-key"></i>
+
+                        <input
+                            type="text"
+                            id="code"
+                            name="code"
+                            class="code-input"
+                            placeholder="00000"
+                            maxlength="5"
+                            minlength="5"
+                            pattern="[0-9]{5}"
+                            inputmode="numeric"
+                            autocomplete="one-time-code"
+                            required
+                            autofocus
+                        >
+
+                    </div>
+
+                    <span class="input-hint">
+                        Entrez le code à 5 chiffres reçu par e-mail
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn-submit"
+                    id="verifyButton"
+                >
+
+                    <span>Vérifier l'e-mail</span>
+
+                    <i class="fas fa-check"></i>
+
+                </button>
+
+
+                <div class="security-note">
+
+                    <i class="fas fa-lock"></i>
+
+                    <span>
+                        Ne partagez jamais votre code de vérification avec qui que ce soit.
+                    </span>
+
+                </div>
+
+
+                <div class="divider">
+
+                    <span>Besoin d'aide ?</span>
+
+                </div>
+
+
+                <div class="login-link">
+
+                    <p>
+                        Vous avez saisi une mauvaise adresse e-mail ?
+
+                        <a href="{{ url_for('Create') }}">
+                            Créez à nouveau votre compte
+                        </a>
+                    </p>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const codeInput = document.getElementById('code');
+    const verificationForm = document.getElementById('verificationForm');
+
+
+    // Only allow numbers
+    codeInput.addEventListener('input', function () {
+
+        this.value = this.value.replace(/\D/g, '');
+
+        if (this.value.length === 5) {
+
+            this.classList.add('code-complete');
+
+        } else {
+
+            this.classList.remove('code-complete');
+
+        }
+
+    });
+
+
+    // Submit validation
+    verificationForm.addEventListener('submit', function (e) {
+
+        const code = codeInput.value.trim();
+
+        if (!/^\d{5}$/.test(code)) {
+
+            e.preventDefault();
+
+            codeInput.classList.add('input-error');
+
+            codeInput.focus();
+
+            return false;
+
+        }
+
+    });
+
+
+    // Remove error when typing
+    codeInput.addEventListener('input', function () {
+
+        this.classList.remove('input-error');
+
+    });
+
+
+    // Ripple effect
+    document
+        .getElementById('verifyButton')
+        .addEventListener('click', function (e) {
+
+            const ripple = document.createElement('span');
+
+            ripple.classList.add('ripple');
+
+            this.appendChild(ripple);
+
+            const rect = this.getBoundingClientRect();
+
+            const size = Math.max(
+                rect.width,
+                rect.height
+            );
+
+            const x =
+                e.clientX -
+                rect.left -
+                size / 2;
+
+            const y =
+                e.clientY -
+                rect.top -
+                size / 2;
+
+            ripple.style.width = size + 'px';
+            ripple.style.height = size + 'px';
+
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+
+        });
+
+
+    // Focus animation
+    codeInput.addEventListener('focus', function () {
+
+        this.closest('.code-input-wrapper')
+            .classList.add('focused');
+
+    });
+
+
+    codeInput.addEventListener('blur', function () {
+
+        this.closest('.code-input-wrapper')
+            .classList.remove('focused');
+
+    });
+
+</script>
+
+</body>
+</html>

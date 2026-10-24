@@ -531,24 +531,64 @@ def ChangePassword():
 
         try:
             cursor.execute(""" 
-                            SELECT id FROM users  
+                            SELECT id 
+                            FROM users  
                             WHERE user_name = %s AND user_email = %s AND user_phoneNumber = %s """,
                            (name, email, phone))
             result = cursor.fetchone()
             if not result:
                 return render_template("ForgotPassword.html", error="Utilisateur introuvable", csrf_token=new_token)
 
+            code = random.randint(10000, 99999)
+            msg = Message(
+                subject="Le Code de verification pour le changement du mode de passe",
+                sender=app.config['MAIL_USERNAME'],
+                recipients=[email]
+            )
+
+            msg.body = f""" 
+                            Bonjour {name}, 
+                            Votre code de vérification de l'adresse e-mail est : 
+                            {code} 
+                            Saisissez ce code dans la page de vérification pour activer votre compte. 
+                            Ne partagez ce code avec personne. 
+                        """
+            mail.send(msg)
+
             session['user_infos'] = {
                 'username': name,
                 'email': email,
-                'phoneNumber': phone
+                'phoneNumber': phone,
+                'email_code': code
             }
 
-            return redirect(url_for('NewPassword'))
+            return redirect(url_for('VerifyEmail'))
 
         finally:
             cursor.close()
             conn.close()
+
+
+@app.route("/VerifyEmail", methods=["POST", "GET"])
+def VerifyEmail():
+    if request.method == "GET":
+        token = secrets.token_hex(16)
+        session['csrf_token'] = token
+        return render_template("NewPassEmailCode.html", csrf_token=token)
+
+    if request.method == "POST":
+        form_token = request.form.get('csrf_token')
+        session_token = session.get('csrf_token')
+
+        if not form_token or form_token != session_token :
+            return "erreur CSRF attack!",403
+
+        user_code = request.form.get('code')
+
+        if user_code == session['email_code']:
+            return redirect(url_for('NewPassword'))
+        else :
+            return render_template("NewPassEmailCode.html", csrf_token=session_token, message="Incorret email code Check ur email")
 
 
 @app.route("/NewPassword", methods=["POST", "GET"])
@@ -609,8 +649,9 @@ def NewPassword():
                                 SET  
                                 user_password = %s 
                                 WHERE id = %s 
-                                """, (found[0],))
+                                """, (NewPassword, found[0]))
                 conn.commit()
+                session['user_infos'].pop('email_code')
                 return render_template("Log-in.html", message="Informations mises à jour", csrf_token=new_token)
 
             else:
@@ -623,6 +664,7 @@ def NewPassword():
         finally:
             cursor.close()
             conn.close()
+
 
         # ============================== KHEDMA =======================================
 
