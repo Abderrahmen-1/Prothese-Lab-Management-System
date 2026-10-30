@@ -846,13 +846,27 @@ def GetProthesistKhedma():
                                 versaValue, b9aw, khalsa, "no", date, deadLine))
 
                 Prothesist_History(cursor, conn, ProthesistName, ProthesistNumber,
-                                   patientNumber)
+                                   patientNumber, result[4], result[5])
 
                 cursor.execute("""
                                 UPDATE patient 
                                 SET status = 'prothesist' 
                                 WHERE patient_number = %s AND user_id = %s """
                                ,(patientNumber, session['id']))
+
+                cursor.execute("""
+                                SELECT ph.id 
+                                FROM patient_history ph
+                                JOIN patient p ON p.user_id = ph.user_id AND DATE(p.la_date) = DATE(ph.pDate) = 0 AND p.patient_number = ph.pNumber
+                                WHERE ph.user_id = %s AND ph.pNumber = %s
+                                """,(session['id'], patientNumber))
+                ph_id = cursor.fetchone()
+
+                cursor.execute("""
+                                UPDATE patient_history
+                                SET status = 'prothesist' 
+                                WHERE id = %s AND user_id = %s """
+                               , (ph_id[0], session['id']))
 
                 # Update statistics
                 month = date.month
@@ -986,13 +1000,27 @@ def GetProthesistKhedma():
                                 versaValue, b9aw, khalsa, "no", date, deadLine))
 
                 Prothesist_History(cursor, conn, ProthesistName, ProthesistNumber,
-                                   patientNumber)
+                                   patientNumber, result[4], result[5])
 
                 cursor.execute("""
                                 UPDATE dentists 
                                 SET status = 'prothesist' 
                                 WHERE dentist_name = %s AND patient_number = %s AND user_id = %s """,
                                (dentistName, patientNumber, session['id']))
+
+                cursor.execute("""
+                                SELECT ph.id 
+                                FROM dentist_history dh
+                                JOIN dentists d ON d.user_id = dh.user_id AND DATE(d.date) = DATE(dh.pDate) = 0 AND d.patient_number = dh.pNumber AND d.dentist_name = dh.dentistname
+                                WHERE dh.user_id = %s AND dh.pNumber = %s AND dh.dentistname = %s
+                                """, (session['id'], patientNumber, dentistName))
+                ph_id = cursor.fetchone()
+
+                cursor.execute("""
+                                UPDATE dentist_history
+                                SET status = 'prothesist' 
+                                WHERE id = %s AND user_id = %s """
+                               , (ph_id[0], session['id']))
 
                 # Update statistics
                 month = date.month

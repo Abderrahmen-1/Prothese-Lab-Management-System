@@ -803,7 +803,7 @@ def khedmaMkemla():
                         if find[0] == result[1]:
                             if find[1] == 'no':
                                 return render_template("FinishedKhedma.html",
-                                                       message=f"Le service est toujours chez le prothésiste {find[0]}",
+                                                       message=f"Le service est toujours chez le prothésiste {found[0]}",
                                                        csrf_token=new_token)
 
                 cursor.execute(""" 
@@ -835,8 +835,8 @@ def khedmaMkemla():
                 # Clean up khedma
                 cursor.execute(""" 
                     DELETE FROM khedma  
-                    WHERE id = %s AND khedma_patient = %s 
-                """, (result[1], patientId))
+                    WHERE id = %s AND khedma_patient = %s  AND user_id = %s
+                """, (result[1], patientId, session['id']))
 
                 # Clean up finished & paid patients
                 cursor.execute(""" 
@@ -903,7 +903,7 @@ def khedmaMkemla():
                         if find[0] == result[1]:
                             if find[1] == 'no':
                                 return render_template("FinishedKhedma.html",
-                                                       message=f"Le service est toujours chez le prothésiste {find[0]}",
+                                                       message=f"Le service est toujours chez le prothésiste {found[0]}",
                                                        csrf_token=new_token)
 
                 cursor.execute(""" 
@@ -935,8 +935,8 @@ def khedmaMkemla():
                 # Clean up khedma queue
                 cursor.execute(""" 
                     DELETE FROM khedma  
-                    WHERE id = %s AND khedma_patient = %s 
-                """, (result[1], patientId))
+                    WHERE id = %s AND khedma_patient = %s AND user_id = %s
+                """, (result[1], patientId, session['id']))
 
                 # Clean up finished & paid dentist records
                 cursor.execute(""" 
@@ -1097,6 +1097,7 @@ def KhedmaKhalsa():
                 name = request.form.get('Dentist')
                 patientId = request.form.get('DPatientID')
                 khedmaID = request.form.get('DServiceID')
+
                 if not patientId or not patientId.isdigit() or len(patientId) > 10:
                     return render_template("KhedmaKhalsa.html", error="ID patient invalide", csrf_token=new_token)
 
@@ -1277,6 +1278,8 @@ def AllTotal():
 
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
+
+    print("cach1", cach)
 
     try:
 
@@ -1679,6 +1682,8 @@ def AllTotal():
             total_finished = cach['total_finished']['value']
             if time.time() - cach['total_finished']['time'] > 60:
                 cach.pop('total_finished')
+
+        print("cach2", cach)
 
         return render_template("AllTotalStats.html", result=result, result_table=result_table, patients=total_patients,
                                dentists=total_dentists, Total_khedma=total_khedma, total_finished=total_finished)

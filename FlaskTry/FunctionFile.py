@@ -118,7 +118,7 @@ def DentistsDics(cursor):
 def getdentist(cursor, dentist_name):
     cursor.execute("""
         SELECT dentist_name, patient_firstname, patient_lastname, patient_number,
-               date, Dkhedma, user_id, price, versement, b9aw
+               date, Dkhedma, user_id, price, versement, b9aw, status
         FROM dentists
         WHERE dentist_name = %s AND user_id = %s
     """, (dentist_name, session['id']))
@@ -142,12 +142,12 @@ def Dentist_History(cursor, conn, dentist_name):
                     INSERT INTO dentist_history
                         (dentistname, pNumber, pFirstname, pLastname, pKhedma, pPrice, versement, b9aw, pDate, user_id, status)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """, (data[0], data[3], data[1], data[2], data[5], data[7], data[8], data[9], data[4], data[6], 'active'))
+                """, (data[0], data[3], data[1], data[2], data[5], data[7], data[8], data[9], data[4], data[6], data[10]))
                 conn.commit()
 
             cursor.execute("""
                 DELETE FROM dentist_history
-                WHERE pDate < DATE_SUB(NOW(), INTERVAL 6 MONTH)
+                WHERE pDate < DATE_SUB(NOW(), INTERVAL 6 MONTH) AND ( ( STATUS = 'finished' AND b9aw = 0 ) OR STATUS = 'deleted' )
             """)
             conn.commit()
 
@@ -201,7 +201,7 @@ def getpatient(cursor, unique):
     cursor.execute("""
         SELECT patient_firstname, patient_lastname, patient_number,
                la_date, T_ype, user_id, COALESCE(versa,0) + COALESCE(b9aw,0) AS price,
-               versa, b9aw
+               versa, b9aw, status
         FROM patient
         WHERE patient_number = %s AND user_id = %s
     """, (unique, session['id']))
@@ -224,11 +224,11 @@ def Patient_History(cursor, conn, unique):
                 INSERT INTO patient_history
                     (user_id, firstname, lastname, pNumber, pDate, pKhedma, pPrice, versement, b9aw, status)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """, (data[5], data[0], data[1], data[2], data[3], data[4], data[6], data[7], data[8], 'active'))
+            """, (data[5], data[0], data[1], data[2], data[3], data[4], data[6], data[7], data[8], data[9]))
 
         cursor.execute("""
             DELETE FROM patient_history
-            WHERE pDate < DATE_SUB(NOW(), INTERVAL 6 MONTH)
+            WHERE pDate < DATE_SUB(NOW(), INTERVAL 6 MONTH) AND ( ( STATUS = 'finished' AND b9aw = 0 ) OR STATUS = 'deleted' )
         """)
         conn.commit()
 
@@ -406,7 +406,7 @@ def Prothesist_History(cursor, conn, prothesistname, prothesist_number, unique, 
 
         cursor.execute("""
             DELETE FROM other_prothesists_history
-            WHERE pDate < DATE_SUB(NOW(), INTERVAL 25 MONTH)
+            WHERE pDate < DATE_SUB(NOW(), INTERVAL 25 MONTH) AND ( ( STATUS = 'finished' AND b9aw = 0 ) OR STATUS = 'deleted' )
         """)
         conn.commit()
 
