@@ -147,7 +147,7 @@ def Dentist_History(cursor, conn, dentist_name):
 
             cursor.execute("""
                 DELETE FROM dentist_history
-                WHERE pDate < DATE_SUB(NOW(), INTERVAL 6 MONTH) AND ( ( STATUS = 'finished' AND b9aw = 0 ) OR STATUS = 'deleted' )
+                WHERE pDate < DATE_SUB(NOW(), INTERVAL 10 MONTH) AND ( ( STATUS = 'finished' AND b9aw = 0 ) OR STATUS = 'deleted' )
             """)
             conn.commit()
 
@@ -228,7 +228,7 @@ def Patient_History(cursor, conn, unique):
 
         cursor.execute("""
             DELETE FROM patient_history
-            WHERE pDate < DATE_SUB(NOW(), INTERVAL 6 MONTH) AND ( ( STATUS = 'finished' AND b9aw = 0 ) OR STATUS = 'deleted' )
+            WHERE pDate < DATE_SUB(NOW(), INTERVAL 10 MONTH) AND ( ( STATUS = 'finished' AND b9aw = 0 ) OR STATUS = 'deleted' )
         """)
         conn.commit()
 
@@ -406,7 +406,7 @@ def Prothesist_History(cursor, conn, prothesistname, prothesist_number, unique, 
 
         cursor.execute("""
             DELETE FROM other_prothesists_history
-            WHERE pDate < DATE_SUB(NOW(), INTERVAL 25 MONTH) AND ( ( STATUS = 'finished' AND b9aw = 0 ) OR STATUS = 'deleted' )
+            WHERE pDate < DATE_SUB(NOW(), INTERVAL 18 MONTH) AND ( ( STATUS = 'finished' AND b9aw = 0 ) OR STATUS = 'deleted' )
         """)
         conn.commit()
 
