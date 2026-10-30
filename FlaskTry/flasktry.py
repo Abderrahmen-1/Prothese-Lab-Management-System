@@ -256,6 +256,7 @@ def getHome():
     name = session.get("username") if session['username'] else None
     letter = name[0].upper() if name else None
 
+
     return render_template(
         "HomePage.html",
         message=f"BIENVENUE {name}",
@@ -1279,6 +1280,11 @@ def AllTotal():
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
 
+    timestamp = time.time()
+
+    print(timestamp)
+    print(time.ctime(timestamp))
+
     print("cach1", cach)
 
     try:
@@ -1380,7 +1386,7 @@ def AllTotal():
         else :
             result = cach['result']['value']
             if time.time() - cach['result']['time'] > 60 :
-                cach.pop('result')
+                cach.pop('result', None)
 
 
         if 'result_table' not in cach or time.time() - cach['result_table']['time'] > 60:
@@ -1478,7 +1484,7 @@ def AllTotal():
         else :
             result_table = cach['result_table']['value']
             if time.time() - cach['result_table']['time'] > 60:
-                cach.pop('result_table')
+                cach.pop('result_table' , None)
 
 
         if 'total-patients' not in cach or time.time() - cach['total_patients']['time'] > 60:
@@ -1504,7 +1510,7 @@ def AllTotal():
         else :
             total_patients = cach['total_patients']['value']
             if time.time() - cach['total_patients']['time'] > 60 :
-                cach.pop('total_patients')
+                cach.pop('total_patients' , None)
 
         if 'total_dentists' not in cach or time.time() - cach['total_dentists']['time'] > 60:
             cursor.execute(""" 
@@ -1529,7 +1535,7 @@ def AllTotal():
         else :
             total_dentists = cach['total_dentists']['value']
             if time.time() - cach['total_dentists']['time'] > 60:
-                cach.pop('total_dentists')
+                cach.pop('total_dentists' , None)
 
         if 'total_khedma' not in cach or time.time() - cach['total_khedma']['time'] > 60:
             cursor.execute(""" 
@@ -1681,7 +1687,7 @@ def AllTotal():
         else :
             total_finished = cach['total_finished']['value']
             if time.time() - cach['total_finished']['time'] > 60:
-                cach.pop('total_finished')
+                cach.pop('total_finished' , None)
 
         print("cach2", cach)
 

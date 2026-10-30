@@ -75,6 +75,92 @@ body {
     color: var(--text);
 }
 
+/* =========================================================
+   CLOCK
+   ========================================================= */
+
+/* =========================================================
+   CLOCK - DENTAFLOW LIGHT CLINICAL STYLE
+   ========================================================= */
+
+.clock-card {
+    width: 25%;
+    padding: 1.5% 2%;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    font-family: 'Inter', sans-serif;
+    transition: var(--transition);
+}
+
+.clock-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.clock-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+
+    margin-bottom: 12px;
+}
+
+.clock-dot {
+    width: 8px;
+    height: 8px;
+
+    background: #22c55e;
+    border-radius: 50%;
+
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.10);
+}
+
+.clock-time {
+    color: var(--navy);
+
+    font-size: clamp(22px, 2.3vw, 35px);
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    font-family: 'Inter', sans-serif;
+    font-variant-numeric: tabular-nums;
+
+    white-space: nowrap;
+}
+
+.clock-date {
+    color: var(--text-secondary);
+
+    font-size: 11px;
+    font-weight: 500;
+
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .clock-card {
+        width: 70%;
+        padding: 4%;
+    }
+
+    .clock-time {
+        font-size: 6vw;
+    }
+
+    .clock-date {
+        font-size: 2.5vw;
+    }
+}
 
 /* =========================================================
    TOP NAVIGATION

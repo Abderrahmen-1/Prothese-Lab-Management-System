@@ -77,7 +77,7 @@
                     </div>
                 </div>
 
-                {% if session %}
+                {% if session['id'] %}
                     <a href="{{ url_for('users.ConfirmOwnerData') }}"
                        class="users-generated">
 
@@ -445,7 +445,7 @@
 
                     <p>
                         Vous avez déjà un compte ?
-                        <a href="/log_in">
+                        <a href="/">
                             Connectez-vous ici
                         </a>
                     </p>

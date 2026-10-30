@@ -36,10 +36,10 @@
             <span>Laboratoire de prothèse</span>
         </div>
         {% if session['id'] == 1 %}
-            <a href="{{ url_for('users.ConfirmOwnerData') }}" class="users-generated">
-                <i class="fas fa-user-shield"></i>
-                <span>Gestion des utilisateurs</span>
-            </a>
+        <a href="{{ url_for('users.ConfirmOwnerData') }}" class="users-generated">
+            <i class="fas fa-user-shield"></i>
+            <span>Gestion des utilisateurs</span>
+        </a>
         {% endif %}
     </div>
 
@@ -70,6 +70,17 @@
 
 </nav>
 
+
+<div class="clock-card">
+    <div class="clock-header">
+        <span class="clock-dot"></span>
+        LOCAL TIME
+    </div>
+
+    <div id="clock" class="clock-time">00:00:00</div>
+
+    <div id="clock-date" class="clock-date"></div>
+</div>
 
 <!-- MAIN CONTENT -->
 <main class="dashboard">
@@ -400,6 +411,24 @@
         });
 
     });
+
+    function updateClock() {
+        const now = new Date();
+
+        document.getElementById("clock").textContent =
+            now.toLocaleTimeString("fr-FR");
+
+        document.getElementById("clock-date").textContent =
+            now.toLocaleDateString("fr-FR", {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            });
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
 
 </script>
 
