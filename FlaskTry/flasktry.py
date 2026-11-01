@@ -1277,8 +1277,8 @@ def AllTotal():
     if not is_logged_in():
         return redirect(url_for('home'))
 
-    conn = get_connection()
-    cursor = conn.cursor(buffered=True)
+    #conn = get_connection()
+    #cursor = conn.cursor(buffered=True)
 
     timestamp = time.time()
 
@@ -1287,9 +1287,18 @@ def AllTotal():
 
     print("cach1", cach)
 
+    conn = None
+    cursor = None
+
     try:
 
-        if 'result' not in cach or time.time() - cach['result']['time'] > 60:
+        conn = get_connection()
+        cursor = conn.cursor(buffered=True)
+
+        if session['id'] not in cach:
+            cach[session['id']] = {}
+
+        if 'result' not in cach[session['id']] or time.time() - cach[session['id']]['result']['time'] < 60:
             cursor.execute(""" 
             SELECT  
                 month, 
@@ -1378,18 +1387,18 @@ def AllTotal():
             """, (session['id'], session['id'], session['id'], session['id'], session['id']))
 
             result = cursor.fetchall()
-            cach['result'] = {
+            cach[session['id']]['result'] = {
                 'value': result,
                 'time': time.time()
             }
 
         else :
-            result = cach['result']['value']
-            if time.time() - cach['result']['time'] > 60 :
-                cach.pop('result', None)
+            result = cach[session['id']]['result']['value']
+            if time.time() - cach[session['id']]['result']['time'] > 60 :
+                cach[session['id']].pop('result', None)
 
 
-        if 'result_table' not in cach or time.time() - cach['result_table']['time'] > 60:
+        if 'result_table' not in cach[session['id']] or time.time() - cach[session['id']]['result_table']['time'] < 60:
             cursor.execute(""" 
                     SELECT  
                         month, 
@@ -1476,18 +1485,18 @@ def AllTotal():
                     ORDER BY year, month 
                     """, (session['id'], session['id'], session['id'], session['id'], session['id']))
             result_table = cursor.fetchall()
-            cach['result_table'] = {
-                'value': result,
-                'time': time.time()
+            cach[session['id']]['result_table'] = {
+                    'value': result_table,
+                    'time': time.time()
             }
 
         else :
-            result_table = cach['result_table']['value']
-            if time.time() - cach['result_table']['time'] > 60:
-                cach.pop('result_table' , None)
+            result_table = cach[session['id']]['result_table']['value']
+            if time.time() - cach[session['id']]['result_table']['time'] > 60:
+                cach[session['id']].pop('result_table' , None)
 
 
-        if 'total-patients' not in cach or time.time() - cach['total_patients']['time'] > 60:
+        if 'total_patients' not in cach[session['id']] or time.time() - cach[session['id']]['total_patients']['time'] < 60:
             cursor.execute(""" 
                             SELECT SUM(patients_number) AS total_patients, month, year  
                             FROM patient_stat 
@@ -1502,17 +1511,17 @@ def AllTotal():
                             ORDER BY month, year  
                             """, (session['id'],))
             total_patients = cursor.fetchall()
-            cach['total_patients'] = {
-                'value': result,
-                'time': time.time()
+            cach[session['id']]['total_patients'] = {
+                    'value': total_patients,
+                    'time': time.time()
             }
 
         else :
-            total_patients = cach['total_patients']['value']
-            if time.time() - cach['total_patients']['time'] > 60 :
-                cach.pop('total_patients' , None)
+            total_patients = cach[session['id']]['total_patients']['value']
+            if time.time() - cach[session['id']]['total_patients']['time'] > 60 :
+                cach[session['id']].pop('total_patients' , None)
 
-        if 'total_dentists' not in cach or time.time() - cach['total_dentists']['time'] > 60:
+        if 'total_dentists' not in cach[session['id']] or time.time() - cach[session['id']]['total_dentists']['time'] < 60:
             cursor.execute(""" 
                             SELECT SUM(total_khedma) AS total_khedma, month, year  
                             FROM dentist_stat 
@@ -1527,17 +1536,17 @@ def AllTotal():
                             ORDER BY month, year  
                             """, (session['id'],))
             total_dentists = cursor.fetchall()
-            cach['total_dentists'] = {
-                'value': result,
-                'time': time.time()
+            cach[session['id']]['total_dentists'] = {
+                    'value': total_dentists,
+                    'time': time.time()
             }
 
         else :
-            total_dentists = cach['total_dentists']['value']
-            if time.time() - cach['total_dentists']['time'] > 60:
-                cach.pop('total_dentists' , None)
+            total_dentists = cach[session['id']]['total_dentists']['value']
+            if time.time() - cach[session['id']]['total_dentists']['time'] > 60:
+                cach[session['id']].pop('total_dentists' , None)
 
-        if 'total_khedma' not in cach or time.time() - cach['total_khedma']['time'] > 60:
+        if 'total_khedma' not in cach[session['id']] or time.time() - cach[session['id']]['total_khedma']['time'] < 60:
             cursor.execute(""" 
                             SELECT MONTH, YEAR ,  
                             SUM(CASE WHEN k_source = 'patient' THEN total_khedma ELSE 0 END) + 
@@ -1568,17 +1577,17 @@ def AllTotal():
                             ORDER BY MONTH, YEAR   
                           """, (session['id'], session['id']))
             total_khedma = cursor.fetchall()
-            cach['total_khedma'] = {
-                'value': result,
-                'time': time.time()
+            cach[session['id']]['total_khedma'] = {
+                    'value': total_khedma,
+                    'time': time.time()
             }
 
         else :
-            total_khedma = cach['total_khedma']['value']
-            if time.time() - cach['total_khedma']['time'] > 60 :
-                cach.pop('total_khedma')
+            total_khedma = cach[session['id']]['total_khedma']['value']
+            if time.time() - cach[session['id']]['total_khedma']['time'] > 60 :
+                cach[session['id']].pop('total_khedma', None)
 
-        if 'total_finished' not in cach or time.time() - cach['total_finished']['time'] > 60:
+        if 'total_finished' not in cach[session['id']] or time.time() - cach[session['id']]['total_finished']['time'] < 60:
             cursor.execute(""" 
                             SELECT 
                             months.month, 
@@ -1679,20 +1688,23 @@ def AllTotal():
                         ORDER BY months.year, months.month  
         """, (session['id'], session['id'], session['id'], session['id']))
             total_finished = cursor.fetchall()
-            cach['total_finished'] = {
-                'value': result,
-                'time': time.time()
+            cach[session['id']]['total_finished'] = {
+                    'value': total_finished,
+                    'time': time.time()
             }
 
         else :
-            total_finished = cach['total_finished']['value']
-            if time.time() - cach['total_finished']['time'] > 60:
-                cach.pop('total_finished' , None)
-
-        print("cach2", cach)
+            total_finished = cach[session['id']]['total_finished']['value']
+            if time.time() - cach[session['id']]['total_finished']['time'] > 60:
+                cach[session['id']].pop('total_finished' , None)
 
         return render_template("AllTotalStats.html", result=result, result_table=result_table, patients=total_patients,
                                dentists=total_dentists, Total_khedma=total_khedma, total_finished=total_finished)
+
+
+    except Exception as e:
+        app.logger.exception("AllTotalAccount failed")
+        raise
 
     finally:
         cursor.close()
