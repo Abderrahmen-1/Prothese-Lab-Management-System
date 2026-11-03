@@ -253,8 +253,8 @@ def getHome():
         cursor.close()
         conn.close()
 
-    name = session.get("username") if session['username'] else None
-    letter = name[0].upper() if name else None
+    name = session.get("username") if session['username'] else "User"
+    letter = name[0].upper() if name else "U"
 
 
     return render_template(
@@ -556,12 +556,20 @@ def ChangePassword():
                         """
             mail.send(msg)
 
-            session['user_infos'] = {
-                'username': name,
-                'email': email,
-                'phoneNumber': phone,
-                'email_code': code
-            }
+            session['user_infos'] = {}
+
+            if 'username' not in session['user_infos']:
+                session['user_infos'] = { 'username': name }
+
+            if 'email' not in session['user_infos']:
+                session['user_infos']['email'] = email
+
+            if 'phoneNumber' not in session['user_infos']:
+                session['user_infos']['phoneNumber'] = phone
+
+            if 'email_code' not in session['user_infos']:
+                session['user_infos']['email_code'] = code
+
 
             return redirect(url_for('VerifyEmail'))
 
@@ -584,9 +592,16 @@ def VerifyEmail():
         if not form_token or form_token != session_token :
             return "erreur CSRF attack!",403
 
-        user_code = request.form.get('code')
+        user_code = int(request.form.get('code'))
 
-        if user_code == session['email_code']:
+        print(session['user_infos']['username'])
+
+        print(f"user code = {user_code} with type : {type(user_code)}")
+        print(f"session_code = {session['user_infos']['email_code']} with type : {type(session['user_infos']['email_code'])}")
+        print(user_code == session['user_infos']['email_code'])
+
+
+        if user_code == session['user_infos']['email_code']:
             return redirect(url_for('NewPassword'))
         else :
             return render_template("NewPassEmailCode.html", csrf_token=session_token, message="Incorret email code Check ur email")
@@ -620,7 +635,7 @@ def NewPassword():
 
         username = data['username']
         email = data['email']
-        phoneNumber = data['phone']
+        phoneNumber = data['phoneNumber']
 
         if password != confirmP:
             return render_template("NewPassword.html", error="Confirmation incorrecte", csrf_token=new_token)
@@ -640,8 +655,8 @@ def NewPassword():
             cursor.execute(""" 
                             SELECT id  
                             FROM users 
-                            WHERE user_name = %s AND user_email = %s AND user_phoneNumber = %s AND id = %s  
-                            """, (username, email, phoneNumber, session['id']))
+                            WHERE user_name = %s AND user_email = %s AND user_phoneNumber = %s   
+                            """, (username, email, phoneNumber))
             found = cursor.fetchone()
 
             if found:

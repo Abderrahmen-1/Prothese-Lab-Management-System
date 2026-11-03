@@ -35,6 +35,9 @@
 
 <div class="verification-container">
 
+    {% if message %}
+    <p>{{ message }}</p>
+{%endif %}
     <!-- ================= LEFT SIDE ================= -->
 
     <div class="branding-side">
@@ -157,7 +160,7 @@
 
 
             <form
-                action="{{ url_for('verify_email', email=email) }}"
+                action="{{ url_for('VerifyEmail') }}"
                 method="POST"
                 class="verification-form"
                 id="verificationForm"
