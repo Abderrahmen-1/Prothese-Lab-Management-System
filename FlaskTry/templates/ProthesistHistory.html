@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Visualisation professionnelle de l'historique des prothésistes pour la gestion d'un laboratoire de prothèse">
+    <meta name="description"
+          content="Visualisation professionnelle de l'historique des prothésistes pour la gestion d'un laboratoire de prothèse">
     <meta name="keywords" content="Prothésiste, Historique, Dossiers, Laboratoire, Prothèse, Khedma">
     <meta name="author" content="Équipe du laboratoire de prothèse">
     <title>Historique du prothésiste</title>
@@ -48,28 +49,30 @@
     </header>
 
     <!-- Section de recherche -->
+    <!-- Section de recherche dynamique -->
     <div class="search-container">
         <div class="search-card">
-            <form action="/prothesists/ProthesistHistory" method="POST" class="search-form">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
+            <div class="search-form">
                 <div class="search-wrapper">
                     <div class="search-icon">
                         <i class="fas fa-search"></i>
                     </div>
+
                     <input
                             type="text"
-                            name="SearchName"
-                            placeholder="Rechercher un prothésiste par nom... ou par numéro..."
+                            id="searchInput"
+                            placeholder="Rechercher par dentiste, prothésiste, patient ou service..."
                             class="search-input"
                             autocomplete="off"
                     >
-                    <button type="submit" class="search-btn">
-                        <i class="fas fa-magnifying-glass"></i>
-                        <span>Rechercher</span>
+
+                    <button type="button" class="search-btn" id="clearSearch">
+                        <i class="fas fa-times"></i>
+                        <span>Effacer</span>
                     </button>
                 </div>
-            </form>
+            </div>
 
             <div class="search-hints">
                 <span class="hint-label">Accès rapide :</span>
@@ -77,6 +80,9 @@
                     <i class="fas fa-layer-group"></i> Afficher tout l'historique
                 </a>
             </div>
+
+            <p id="searchCounter" style="display:none; margin-top:12px;"></p>
+
         </div>
     </div>
 
@@ -239,7 +245,8 @@
                 <i class="fas fa-history"></i>
             </div>
             <h2>Aucune donnée disponible</h2>
-            <p>Utilisez la barre de recherche pour trouver l'historique d'un prothésiste ou cliquez sur « Tout l'historique » pour afficher tous les dossiers</p>
+            <p>Utilisez la barre de recherche pour trouver l'historique d'un prothésiste ou cliquez sur « Tout
+                l'historique » pour afficher tous les dossiers</p>
             <div class="empty-actions">
                 <a href="/prothesists/AllProthesistHistory" class="empty-action-btn">
                     <i class="fas fa-layer-group"></i>
@@ -377,6 +384,158 @@
             searchInput?.focus();
         }
     });
+
+    // ==========================================
+    // RECHERCHE DYNAMIQUE DE L'HISTORIQUE
+    // ==========================================
+
+    const clearSearch = document.getElementById('clearSearch');
+    const searchCounter = document.getElementById('searchCounter');
+
+    function dynamicSearch() {
+
+        if (!searchInput) return;
+
+        const searchValue = searchInput.value
+            .toLowerCase()
+            .trim();
+
+        // Déterminer le tableau actuellement affiché
+        const allHistory = document.getElementById('AllHistory');
+        const prothesistHistory = document.getElementById('ProthesistHistory');
+
+        let activeSection = null;
+
+        if (prothesistHistory &&
+            prothesistHistory.style.display !== 'none') {
+
+            activeSection = prothesistHistory;
+
+        } else if (allHistory &&
+                   allHistory.style.display !== 'none') {
+
+            activeSection = allHistory;
+        }
+
+        if (!activeSection) return;
+
+        const rows = activeSection.querySelectorAll(
+            '.data-table tbody tr.table-row-animate'
+        );
+
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+
+            // Colonnes recherchables
+            // 0 = ID historique : EXCLU
+            // 1 = Nom dentiste
+            // 2 = Nom prothésiste
+            // 3 = Numéro prothésiste
+            // 4 = Prénom patient
+            // 5 = Nom patient
+            // 6 = Numéro patient
+            // 7 = Type de service
+
+            const dentist = row.cells[1]?.textContent.toLowerCase().trim() || '';
+            const prothesist = row.cells[2]?.textContent.toLowerCase().trim() || '';
+            const prothesistNumber = row.cells[3]?.textContent.toLowerCase().trim() || '';
+            const patientFirstName = row.cells[4]?.textContent.toLowerCase().trim() || '';
+            const patientLastName = row.cells[5]?.textContent.toLowerCase().trim() || '';
+            const patientNumber = row.cells[6]?.textContent.toLowerCase().trim() || '';
+            const service = row.cells[7]?.textContent.toLowerCase().trim() || '';
+
+            const searchableData = [
+                dentist,
+                prothesist,
+                prothesistNumber,
+                patientFirstName,
+                patientLastName,
+                patientNumber,
+                service
+            ].join(' ');
+
+            const matches = searchableData.includes(searchValue);
+
+            row.style.display = matches ? '' : 'none';
+
+            if (matches) {
+                visibleCount++;
+            }
+        });
+
+        // Supprimer l'ancien message de recherche vide
+        const tbody = activeSection.querySelector('.data-table tbody');
+
+        if (tbody) {
+
+            const oldMessage = tbody.querySelector('.search-empty-row');
+
+            if (oldMessage) {
+                oldMessage.remove();
+            }
+
+            // Ajouter un message si aucun résultat
+            if (searchValue !== '' && visibleCount === 0) {
+
+                const emptyRow = document.createElement('tr');
+
+                emptyRow.className = 'search-empty-row';
+
+                emptyRow.innerHTML = `
+                    <td colspan="13" class="table-empty-row">
+                        <i class="fas fa-search"></i>
+                        Aucun résultat correspondant à "${escapeSearchText(searchValue)}"
+                    </td>
+                `;
+
+                tbody.appendChild(emptyRow);
+            }
+        }
+
+        // Actualiser le compteur
+        if (searchCounter) {
+
+            searchCounter.style.display = 'block';
+
+            searchCounter.textContent =
+                searchValue === ''
+                    ? ''
+                    : `${visibleCount} résultat(s) trouvé(s)`;
+        }
+    }
+
+
+    // Échapper le texte affiché dans le message vide
+    function escapeSearchText(value) {
+
+        const div = document.createElement('div');
+
+        div.textContent = value;
+
+        return div.innerHTML;
+    }
+
+
+    // Événement de recherche en temps réel
+    if (searchInput) {
+
+        searchInput.addEventListener('input', dynamicSearch);
+    }
+
+
+    // Bouton Effacer
+    if (clearSearch) {
+
+        clearSearch.addEventListener('click', function() {
+
+            searchInput.value = '';
+
+            dynamicSearch();
+
+            searchInput.focus();
+        });
+    }
 </script>
 
 </body>

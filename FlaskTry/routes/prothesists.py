@@ -1442,68 +1442,37 @@ def ProModifyVersement():
             conn.close()
 
 
-@prothesists.route("/ProAllkhedma", methods=["POST" , "GET"])
+@prothesists.route("/ProAllkhedma", methods=["GET"])
 def Proallkhedma():
+
     if not is_logged_in():
         return redirect(url_for('home'))
 
-    if request.method == "GET" :
-        token = secrets.token_hex(16)
-        session['csrf_token'] = token
+    token = secrets.token_hex(16)
+    session['csrf_token'] = token
 
-        conn = get_connection()
-        cursor = conn.cursor(buffered=True)
-        try:
-            cursor.execute("SELECT * FROM other_prothesists_khedma WHERE user_id = %s", (session['id'],))
-            rows = cursor.fetchall()
-            return render_template("ALLProKhedma.html", result=rows, csrf_token=token)
-        finally:
-            cursor.close()
-            conn.close()
+    conn = get_connection()
+    cursor = conn.cursor(buffered=True)
 
-    if request.method == "POST" :
-        token = request.form.get('csrf_token')
-        check = session.get('csrf_token')
+    try:
 
-        if not token or token != check :
-            return "Erreur : attaque CSRF détectée ",403
+        cursor.execute("""
+            SELECT *
+            FROM other_prothesists_khedma
+            WHERE user_id = %s
+        """, (session['id'],))
 
-        new_token = secrets.token_hex(16)
-        session['csrf_token'] = new_token
+        rows = cursor.fetchall()
 
-        prothesist = request.form.get('SearchBar')
+        return render_template(
+            "ALLProKhedma.html",
+            result=rows,
+            csrf_token=token
+        )
 
-        conn = get_connection()
-        cursor = conn.cursor(buffered=True)
-
-        try :
-
-            if prothesist.isdigit():
-                cursor.execute("""
-                                SELECT * FROM other_prothesists_khedma
-                                WHERE user_id = %s AND pNumber = %s """,(session['id'], prothesist))
-                result = cursor.fetchall()
-
-                if result :
-                    return render_template("ALLProKhedma.html", result=result, csrf_token=new_token)
-                else :
-                    return render_template("ALLProKhedma.html", message="Prothésiste introuvable", csrf_token=new_token)
-
-            else :
-                cursor.execute("""
-                                SELECT * FROM other_prothesists_khedma
-                                WHERE user_id = %s AND pName = %s """, (session['id'], prothesist.lower()))
-                result = cursor.fetchall()
-
-                if result:
-                    return render_template("ALLProKhedma.html", result=result, csrf_token=new_token)
-                else:
-                    return render_template("ALLProKhedma.html", message="Prothésiste introuvable", csrf_token=new_token)
-
-        finally :
-            cursor.close()
-            conn.close()
-
+    finally:
+        cursor.close()
+        conn.close()
 
 
 @prothesists.route("/ProKhedmaByDateASC")

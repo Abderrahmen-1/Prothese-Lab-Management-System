@@ -87,8 +87,10 @@
                     <input
                             type="text"
                             name="SearchBar"
-                            placeholder="Rechercher un patient par nom... ou par numéro..."
+                            id="searchInput"
+                            placeholder="Rechercher par nom, prénom ou numéro..."
                             class="search-input"
+                            autocomplete="off"
                     >
 
                     <button type="submit" class="search-btn">
@@ -501,7 +503,9 @@
 
                             {% for row in data %}
 
-                            <tr class="table-row-animate">
+                            <tr class="table-row-animate"
+                                data-search="{{ (row[2] ~ ' ' ~ row[3] ~ ' ' ~ row[4])|lower }}">
+
 
                                 <td>{{ row[0] }}</td>
                                 <td>{{ row[2] }}</td>
@@ -1121,6 +1125,54 @@
 <!-- ========================================================= -->
 
 <script>
+
+
+    /* ==========================================
+   DYNAMIC PATIENT SEARCH
+   ========================================== */
+
+    document.addEventListener('input', function(e) {
+
+        if (e.target.id !== 'searchInput') {
+            return;
+        }
+
+        const searchValue = e.target.value
+            .toLowerCase()
+            .trim();
+
+        const rows = document.querySelectorAll(
+            '#tables-container .data-table tbody tr[data-search]'
+        );
+
+        rows.forEach(row => {
+
+            const patientData = row.dataset.search;
+
+            if (patientData.includes(searchValue)) {
+
+                row.style.display = '';
+
+            } else {
+
+                row.style.display = 'none';
+
+            }
+
+        });
+
+    });
+
+
+    /* Prevent the form from reloading the page */
+
+    document.addEventListener('submit', function(e) {
+
+        if (e.target.id === 'search-form') {
+            e.preventDefault();
+        }
+
+    });
 
 
     /* =========================================================

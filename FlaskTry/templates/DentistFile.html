@@ -89,8 +89,10 @@
                     <input
                             type="text"
                             name="SearchBar"
+                            id="searchInput"
                             placeholder="Rechercher un dentiste par nom... ou un patient par numéro..."
                             class="search-input"
+                            autocomplete="off"
                     >
 
                     <button type="submit" class="search-btn">
@@ -1000,261 +1002,342 @@
 
 <script>
 
-    /* =====================================================
-       RIPPLE EFFECT
-    ===================================================== */
-
-    function createRipple(e) {
-
-        const button = e.currentTarget;
-
-        const ripple = document.createElement('span');
-
-        const rect = button.getBoundingClientRect();
-
-        const size = Math.max(rect.width, rect.height);
-
-        const x = e.clientX - rect.left - size / 2;
-
-        const y = e.clientY - rect.top - size / 2;
-
-        ripple.style.width = size + 'px';
-        ripple.style.height = size + 'px';
-
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
-
-        ripple.classList.add('ripple');
-
-        button.appendChild(ripple);
-
-        setTimeout(() => ripple.remove(), 600);
-    }
-
-
-    document.querySelectorAll('.menu-item, .nav-btn').forEach(item => {
-
-        item.addEventListener('click', createRipple);
-
-    });
-
 
     /* =====================================================
-       UPDATE DENTIST STATUS
+       DYNAMIC DENTIST SEARCH
     ===================================================== */
 
-    document.addEventListener('change', function (e) {
+    document.addEventListener('input', function (e) {
 
-        if (!e.target.classList.contains('status-select')) {
+        if (e.target.id !== 'searchInput') {
             return;
         }
 
-        const select = e.target;
+        const searchValue = e.target.value
+            .toLowerCase()
+            .trim();
 
-        const patientNumber = select.dataset.patientNumber;
-        const newStatus = select.value;
-        const dentistName = select.dataset.dentistName;
+        // Search only inside the main table
+        const table = document.querySelector('#MainTable .data-table');
 
-        const message = document.getElementById('statusMessage');
+        if (!table) return;
 
-        fetch('/dentists/UpdateDentistStatus', {
+        const rows = table.querySelectorAll('tbody tr');
 
-            method: 'POST',
+        let visibleCount = 0;
 
-            headers: {
-                'Content-Type': 'application/json'
-            },
+        rows.forEach(row => {
 
-            body: JSON.stringify({
+            // Ignore the service ID (cells[0])
+            const dentistName = row.cells[1]?.textContent
+                .toLowerCase().trim() || '';
 
-                patient_number: patientNumber,
-                status: newStatus,
-                dentist_name: dentistName
+            const patientFirstName = row.cells[2]?.textContent
+                .toLowerCase().trim() || '';
+
+            const patientLastName = row.cells[3]?.textContent
+                .toLowerCase().trim() || '';
+
+            const patientNumber = row.cells[4]?.textContent
+                .toLowerCase().trim() || '';
+
+            // Search by dentist name, patient first/last name or phone
+            const searchableData = [
+                dentistName,
+                patientFirstName,
+                patientLastName,
+                patientNumber
+            ].join(' ');
+
+            const matches = searchableData.includes(searchValue);
+
+            row.style.display = matches ? '' : 'none';
+
+            if (matches) {
+                visibleCount++;
+            }
+
+        });
+
+        // Update result counter
+        const counter = document.querySelector('#MainTable .result-count');
+
+        if (counter) {
+            counter.textContent = visibleCount + ' enregistrements';
+        }
+
+    });
+
+
+    /* =====================================================
+       PREVENT FORM RELOAD
+    ===================================================== */
+
+    document.addEventListener('submit', function (e) {
+
+        if (e.target.id === 'search-form') {
+            e.preventDefault();
+        }
+
+    });
+
+
+
+        /* =====================================================
+           RIPPLE EFFECT
+        ===================================================== */
+
+        function createRipple(e) {
+
+            const button = e.currentTarget;
+
+            const ripple = document.createElement('span');
+
+            const rect = button.getBoundingClientRect();
+
+            const size = Math.max(rect.width, rect.height);
+
+            const x = e.clientX - rect.left - size / 2;
+
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.width = size + 'px';
+            ripple.style.height = size + 'px';
+
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+
+            ripple.classList.add('ripple');
+
+            button.appendChild(ripple);
+
+            setTimeout(() => ripple.remove(), 600);
+        }
+
+
+        document.querySelectorAll('.menu-item, .nav-btn').forEach(item => {
+
+            item.addEventListener('click', createRipple);
+
+        });
+
+
+        /* =====================================================
+           UPDATE DENTIST STATUS
+        ===================================================== */
+
+        document.addEventListener('change', function (e) {
+
+            if (!e.target.classList.contains('status-select')) {
+                return;
+            }
+
+            const select = e.target;
+
+            const patientNumber = select.dataset.patientNumber;
+            const newStatus = select.value;
+            const dentistName = select.dataset.dentistName;
+
+            const message = document.getElementById('statusMessage');
+
+            fetch('/dentists/UpdateDentistStatus', {
+
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+
+                    patient_number: patientNumber,
+                    status: newStatus,
+                    dentist_name: dentistName
+
+                })
 
             })
 
-        })
+            .then(response => {
 
-        .then(response => {
+                if (!response.ok) {
+                    throw new Error('Server error');
+                }
 
-            if (!response.ok) {
-                throw new Error('Server error');
-            }
+                return response.json();
 
-            return response.json();
+            })
 
-        })
+            .then(data => {
 
-        .then(data => {
+                console.log("Flask response:", data);
 
-            console.log("Flask response:", data);
+                if (message) {
 
-            if (message) {
-
-                message.textContent =
-                    data.message || "✓ Statut mis à jour avec succès";
-
-                message.className =
-                    "status-message success";
-
-                setTimeout(() => {
+                    message.textContent =
+                        data.message || "✓ Statut mis à jour avec succès";
 
                     message.className =
-                        "status-message";
+                        "status-message success";
 
-                    message.textContent = '';
+                    setTimeout(() => {
 
-                }, 2500);
+                        message.className =
+                            "status-message";
 
-            }
+                        message.textContent = '';
 
-        })
+                    }, 2500);
 
-        .catch(error => {
+                }
 
-            console.error("Error:", error);
+            })
 
-            if (message) {
+            .catch(error => {
 
-                message.textContent =
-                    "✗ Erreur lors de la mise à jour du statut";
+                console.error("Error:", error);
 
-                message.className =
-                    "status-message error";
+                if (message) {
 
-            }
+                    message.textContent =
+                        "✗ Erreur lors de la mise à jour du statut";
+
+                    message.className =
+                        "status-message error";
+
+                }
+
+            });
 
         });
 
-    });
+
+        /* =====================================================
+           AJAX MENU NAVIGATION
+        ===================================================== */
+
+        document.querySelectorAll('.ajax-link').forEach(item => {
+
+            item.addEventListener('click', function (e) {
+
+                e.preventDefault();
+
+                createRipple(e);
+
+                const targetUrl =
+                    this.getAttribute('href');
+
+                const contentContainer =
+                    document.getElementById('tables-container');
+
+                const searchContainer =
+                    document.getElementById('search-bar-container');
+
+                contentContainer.classList.add('loading');
 
 
-    /* =====================================================
-       AJAX MENU NAVIGATION
-    ===================================================== */
+                fetch(targetUrl)
 
-    document.querySelectorAll('.ajax-link').forEach(item => {
+                    .then(response => {
 
-        item.addEventListener('click', function (e) {
+                        if (!response.ok) {
+                            throw new Error('Failed to load page');
+                        }
 
-            e.preventDefault();
+                        return response.text();
 
-            createRipple(e);
+                    })
 
-            const targetUrl =
-                this.getAttribute('href');
+                    .then(html => {
 
-            const contentContainer =
-                document.getElementById('tables-container');
+                        const parser =
+                            new DOMParser();
 
-            const searchContainer =
-                document.getElementById('search-bar-container');
+                        const doc =
+                            parser.parseFromString(
+                                html,
+                                'text/html'
+                            );
 
-            contentContainer.classList.add('loading');
+
+                        /* Replace tables */
+
+                        const newTables =
+                            doc.getElementById(
+                                'tables-container'
+                            );
+
+                        if (newTables) {
+
+                            contentContainer.innerHTML =
+                                newTables.innerHTML;
+
+                        }
 
 
-            fetch(targetUrl)
+                        /* Replace search */
 
-                .then(response => {
+                        const newSearch =
+                            doc.getElementById(
+                                'search-bar-container'
+                            );
 
-                    if (!response.ok) {
-                        throw new Error('Failed to load page');
-                    }
+                        if (newSearch) {
 
-                    return response.text();
+                            searchContainer.innerHTML =
+                                newSearch.innerHTML;
 
-                })
+                        }
 
-                .then(html => {
 
-                    const parser =
-                        new DOMParser();
-
-                    const doc =
-                        parser.parseFromString(
-                            html,
-                            'text/html'
+                        contentContainer.classList.remove(
+                            'loading'
                         );
 
 
-                    /* Replace tables */
-
-                    const newTables =
-                        doc.getElementById(
-                            'tables-container'
+                        window.history.pushState(
+                            null,
+                            '',
+                            targetUrl
                         );
 
-                    if (newTables) {
 
-                        contentContainer.innerHTML =
-                            newTables.innerHTML;
+                        /* Scroll to content */
 
-                    }
+                        contentContainer.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
 
+                    })
 
-                    /* Replace search */
+                    .catch(error => {
 
-                    const newSearch =
-                        doc.getElementById(
-                            'search-bar-container'
+                        console.error(
+                            'AJAX Load Error:',
+                            error
                         );
 
-                    if (newSearch) {
+                        contentContainer.classList.remove(
+                            'loading'
+                        );
 
-                        searchContainer.innerHTML =
-                            newSearch.innerHTML;
-
-                    }
-
-
-                    contentContainer.classList.remove(
-                        'loading'
-                    );
-
-
-                    window.history.pushState(
-                        null,
-                        '',
-                        targetUrl
-                    );
-
-
-                    /* Scroll to content */
-
-                    contentContainer.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
                     });
 
-                })
-
-                .catch(error => {
-
-                    console.error(
-                        'AJAX Load Error:',
-                        error
-                    );
-
-                    contentContainer.classList.remove(
-                        'loading'
-                    );
-
-                });
+            });
 
         });
 
-    });
 
+        /* =====================================================
+           HANDLE BROWSER BACK / FORWARD
+        ===================================================== */
 
-    /* =====================================================
-       HANDLE BROWSER BACK / FORWARD
-    ===================================================== */
+        window.addEventListener('popstate', function () {
 
-    window.addEventListener('popstate', function () {
+            window.location.reload();
 
-        window.location.reload();
-
-    });
+        });
 
 </script>
 

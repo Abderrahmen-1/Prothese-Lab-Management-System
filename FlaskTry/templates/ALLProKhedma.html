@@ -81,17 +81,9 @@
     <div id="search-bar-container">
 
         {% if not asc and not desc and not most and not less %}
-
         <div class="search-section">
 
-            <form action="{{ url_for('prothesists.Proallkhedma') }}"
-                  method="POST"
-                  class="search-form"
-                  id="search-form">
-
-                <input type="hidden"
-                       name="csrf_token"
-                       value="{{ csrf_token }}">
+            <div class="search-form" id="search-form">
 
                 <div class="search-wrapper">
 
@@ -99,25 +91,27 @@
 
                     <input
                             type="text"
+                            id="searchInput"
                             name="SearchBar"
-                            placeholder="Rechercher un prothésiste par nom ou par numéro..."
+                            placeholder="Rechercher par numéro patient, dentiste, prothésiste ou tâche..."
                             class="search-input"
+                            autocomplete="off"
                     >
 
-                    <button type="submit"
-                            class="search-btn">
+                    <button type="button"
+                            class="search-btn"
+                            id="clearSearch">
 
-                        <i class="fas fa-magnifying-glass"></i>
-                        <span>Rechercher</span>
+                        <i class="fas fa-times"></i>
+                        <span>Effacer</span>
 
                     </button>
 
                 </div>
 
-            </form>
+            </div>
 
         </div>
-
         {% endif %}
 
     </div>
@@ -978,6 +972,157 @@
 
 <script>
 
+
+    /* =========================================================
+       RECHERCHE DYNAMIQUE - CENTRE DES TACHES
+    ========================================================= */
+
+    function dynamicSearch() {
+
+        const searchInput = document.getElementById('searchInput');
+
+        if (!searchInput) return;
+
+        const searchValue = searchInput.value
+            .toLowerCase()
+            .trim();
+
+        // Identifier le tableau actuellement visible
+        const containers = document.querySelectorAll('.TableContainer');
+
+        let activeContainer = null;
+
+        containers.forEach(container => {
+
+            if (getComputedStyle(container).display !== 'none') {
+                activeContainer = container;
+            }
+
+        });
+
+        if (!activeContainer) return;
+
+        const rows = activeContainer.querySelectorAll(
+            'tbody tr.data-row'
+        );
+
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+
+            // Colonnes du tableau
+            const patientNumber = row.cells[1]?.textContent.toLowerCase().trim() || '';
+
+            const dentistName = row.cells[2]?.textContent.toLowerCase().trim() || '';
+
+            const prothesistName = row.cells[3]?.textContent.toLowerCase().trim() || '';
+
+            const prothesistID = row.cells[4]?.textContent.toLowerCase().trim() || '';
+
+            const serviceName = row.cells[5]?.textContent.toLowerCase().trim() || '';
+
+            // Données recherchables
+            const searchableData = [
+                patientNumber,
+                dentistName,
+                prothesistName,
+                prothesistID,
+                serviceName
+            ].join(' ');
+
+            const matches = searchableData.includes(searchValue);
+
+            row.style.display = matches ? '' : 'none';
+
+            if (matches) {
+                visibleCount++;
+            }
+
+        });
+
+        // Gestion du message "Aucun résultat"
+        const tbody = activeContainer.querySelector('tbody');
+
+        if (!tbody) return;
+
+        const oldMessage = tbody.querySelector('.search-empty-row');
+
+        if (oldMessage) {
+            oldMessage.remove();
+        }
+
+        if (searchValue !== '' && visibleCount === 0) {
+
+            const emptyRow = document.createElement('tr');
+
+            emptyRow.className = 'search-empty-row';
+
+            emptyRow.innerHTML = `
+                <td colspan="13" class="table-empty-row">
+                    <i class="fas fa-search"></i>
+                    Aucun résultat correspondant à "${escapeSearchText(searchValue)}"
+                </td>
+            `;
+
+            tbody.appendChild(emptyRow);
+        }
+
+        // Actualiser le compteur
+        const counter = activeContainer.querySelector(
+            '.record-count strong'
+        );
+
+        if (counter) {
+            counter.textContent = visibleCount;
+        }
+
+    }
+
+
+    /* Protection du texte affiché dans le message */
+    function escapeSearchText(value) {
+
+        const div = document.createElement('div');
+
+        div.textContent = value;
+
+        return div.innerHTML;
+    }
+
+
+    /* =========================================================
+       INITIALISATION DE LA RECHERCHE
+    ========================================================= */
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const searchInput = document.getElementById('searchInput');
+
+        const clearButton = document.getElementById('clearSearch');
+
+        if (searchInput) {
+
+            searchInput.addEventListener('input', dynamicSearch);
+
+        }
+
+        if (clearButton) {
+
+            clearButton.addEventListener('click', function () {
+
+                searchInput.value = '';
+
+                dynamicSearch();
+
+                searchInput.focus();
+
+            });
+
+        }
+
+    });
+
+
     /* =========================================================
        Effet d'ondulation
     ========================================================== */
@@ -1159,6 +1304,9 @@
                                     newSection.innerHTML;
 
                                 applyRowAnimations();
+
+                                // Réappliquer la recherche après le changement de tableau
+                                dynamicSearch();
 
                             }
 

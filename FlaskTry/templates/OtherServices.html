@@ -151,26 +151,23 @@
 
         {% if not stats %}
 
-        <form action="/services/OtherServices"
-              method="POST">
+        <div class="search-form">
 
-            <input type="hidden"
-                   name="csrf_token"
-                   value="{{ csrf_token }}">
+            <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Rechercher par nom ou numéro de téléphone..."
+                    autocomplete="off"
+            >
 
-            <input type="search"
-                   name="SearchBar"
-                   placeholder="Rechercher ici le nom de la personne">
-
-            <button type="submit">
-
-                <i class="fas fa-search"></i>
-
-                Confirmer
-
+            <button type="button" id="clearSearch">
+                <i class="fas fa-times"></i>
+                Effacer
             </button>
 
-        </form>
+        </div>
+
+        <p id="searchCounter" style="display:none; margin-top:10px;"></p>
 
         {% endif %}
 
@@ -912,1087 +909,1203 @@
 
 <script>
 
-document.addEventListener(
-    'DOMContentLoaded',
-    function () {
-
-
-    // =====================================================
-    // ELEMENTS
-    // =====================================================
-
-    const contextMenu =
-        document.getElementById(
-            'custom-context-menu'
-        );
-
-    const paidBtn =
-        document.getElementById(
-            'paid-row-btn'
-        );
-
-    const modifyBtn =
-        document.getElementById(
-            'modify-versement-btn'
-        );
-
-    const deleteBtn =
-        document.getElementById(
-            'delete-row-btn'
-        );
-
-
-    let selectedRow = null;
-
-    let longPressTimer = null;
-
-
-    // =====================================================
-    // CSRF
-    // =====================================================
-
-    function getCSRFToken() {
-
-        const csrfInput =
-            document.querySelector(
-                'input[name="csrf_token"]'
-            );
-
-
-        return csrfInput
-            ? csrfInput.value
-            : null;
-    }
-
-
-    // =====================================================
-    // FETCH REQUEST
-    // =====================================================
-
-    async function sendRequest(
-        url,
-        data = {}
-    ) {
-
-        const csrfToken =
-            getCSRFToken();
-
-
-        const headers = {
-
-            'Content-Type':
-                'application/json',
-
-            'Accept':
-                'application/json'
-
-        };
-
-
-        if (csrfToken) {
-
-            headers['X-CSRFToken'] =
-                csrfToken;
-        }
-
-
-        const response =
-            await fetch(
-                url,
-                {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify(data)
-                }
-            );
-
-
-        let result = {};
-
-
-        try {
-
-            result =
-                await response.json();
-
-        } catch (error) {
-
-            console.error(
-                'Le serveur n\'a pas renvoyé du JSON.',
-                error
-            );
-        }
-
-
-        return {
-            response: response,
-            data: result
-        };
-    }
-
-
-    // =====================================================
-    // TOTAL
-    // =====================================================
-
-    function updateTotal() {
-
-        const tbody =
-            document.getElementById(
-                'servicesTableBody'
-            );
-
-
-        const totalElement =
-            document.getElementById(
-                'totalServices'
-            );
-
-
-        const recordCount =
-            document.getElementById(
-                'recordCount'
-            );
-
-
-        if (!tbody) {
-
-            if (totalElement) {
-                totalElement.textContent = '--';
-            }
-
-            return;
-        }
-
-
-        const rows =
-            tbody.querySelectorAll(
-                'tr.table-row'
-            );
-
-
-        const total =
-            rows.length;
-
-
-        if (totalElement) {
-
-            totalElement.textContent =
-                total;
-        }
-
-
-        if (recordCount) {
-
-            recordCount.textContent =
-                total;
-        }
-    }
-
-
-    updateTotal();
-
-
-    // =====================================================
-    // OPEN CONTEXT MENU
-    // =====================================================
-
-    function openContextMenu(
-        x,
-        y,
-        row
-    ) {
-
-        if (selectedRow) {
-
-            selectedRow.classList.remove(
-                'row-selected'
-            );
-        }
-
-
-        selectedRow = row;
-
-
-        selectedRow.classList.add(
-            'row-selected'
-        );
-
-
-        contextMenu.style.display =
-            'block';
-
-
-        /*
-         * Empêcher le menu de sortir de l'écran.
-         */
-
-        const menuWidth =
-            contextMenu.offsetWidth;
-
-        const menuHeight =
-            contextMenu.offsetHeight;
-
-
-        let finalX = x;
-
-        let finalY = y;
-
-
-        if (
-            x + menuWidth >
-            window.scrollX +
-            window.innerWidth
-        ) {
-
-            finalX =
-                window.scrollX +
-                window.innerWidth -
-                menuWidth -
-                10;
-        }
-
-
-        if (
-            y + menuHeight >
-            window.scrollY +
-            window.innerHeight
-        ) {
-
-            finalY =
-                window.scrollY +
-                window.innerHeight -
-                menuHeight -
-                10;
-        }
-
-
-        contextMenu.style.left =
-            `${Math.max(5, finalX)}px`;
-
-        contextMenu.style.top =
-            `${Math.max(5, finalY)}px`;
-    }
-
-
-    // =====================================================
-    // CLOSE CONTEXT MENU
-    // =====================================================
-
-    function closeContextMenu() {
-
-        contextMenu.style.display =
-            'none';
-
-
-        if (selectedRow) {
-
-            selectedRow.classList.remove(
-                'row-selected'
-            );
-
-            selectedRow = null;
-        }
-    }
-
-
-    // =====================================================
-    // RIGHT CLICK
-    // =====================================================
-
     document.addEventListener(
-        'contextmenu',
-        function (event) {
-
-            const row =
-                event.target.closest(
-                    'tr.table-row'
-                );
-
-
-            if (!row) {
-                return;
-            }
-
-
-            if (
-                !row.hasAttribute(
-                    'data-id'
-                )
-            ) {
-                return;
-            }
-
-
-            event.preventDefault();
-
-
-            openContextMenu(
-                event.pageX,
-                event.pageY,
-                row
-            );
-        }
-    );
-
-
-    // =====================================================
-    // MOBILE LONG PRESS
-    // =====================================================
-
-    document.addEventListener(
-        'touchstart',
-        function (event) {
-
-            const row =
-                event.target.closest(
-                    'tr.table-row'
-                );
-
-
-            if (!row) {
-                return;
-            }
-
-
-            const touch =
-                event.touches[0];
-
-
-            longPressTimer =
-                setTimeout(
-                    function () {
-
-                        openContextMenu(
-                            touch.pageX,
-                            touch.pageY,
-                            row
-                        );
-
-                    },
-                    500
-                );
-        },
-        {
-            passive: true
-        }
-    );
-
-
-    document.addEventListener(
-        'touchend',
+        'DOMContentLoaded',
         function () {
 
-            clearTimeout(
-                longPressTimer
-            );
-        }
-    );
+            // =====================================================
+        // RECHERCHE DYNAMIQUE DES SERVICES
+        // =====================================================
 
+        const searchInput = document.getElementById('searchInput');
+        const clearSearch = document.getElementById('clearSearch');
+        const searchCounter = document.getElementById('searchCounter');
 
-    document.addEventListener(
-        'touchmove',
-        function () {
+        function dynamicSearch() {
 
-            clearTimeout(
-                longPressTimer
-            );
-        }
-    );
+            if (!searchInput) return;
 
+            const searchValue = searchInput.value
+                .toLowerCase()
+                .trim();
 
-    // =====================================================
-    // CLOSE MENU
-    // =====================================================
+            const mainTable = document.getElementById('MainTable');
 
-    document.addEventListener(
-        'click',
-        function (event) {
+            if (!mainTable) return;
 
-            if (
-                !contextMenu.contains(
-                    event.target
-                )
-            ) {
-
-                closeContextMenu();
-            }
-        }
-    );
-
-
-    // =====================================================
-    // SHOW SUCCESS MESSAGE
-    // =====================================================
-
-    function showSuccess(message) {
-
-        const content =
-            document.querySelector(
-                '.content'
+            const rows = mainTable.querySelectorAll(
+                '#servicesTableBody tr.table-row'
             );
 
+            let visibleCount = 0;
 
-        if (!content) {
-            return;
-        }
+            rows.forEach(row => {
 
+                // data-id est volontairement exclu
+                const name = (
+                    row.dataset.name || ''
+                ).toLowerCase().trim();
 
-        const container =
-            document.createElement(
-                'div'
-            );
+                const number = (
+                    row.dataset.number || ''
+                ).toLowerCase().trim();
 
+                const searchableData = name + ' ' + number;
 
-        container.className =
-            'alert-container';
+                const matches = searchableData.includes(searchValue);
 
+                row.style.display = matches ? '' : 'none';
 
-        const alertBox =
-            document.createElement(
-                'div'
-            );
-
-
-        alertBox.className =
-            'alert alert-success';
-
-
-        alertBox.innerHTML = `
-
-            <i class="fas fa-check-circle"></i>
-
-            <div class="alert-content">
-
-                <h3>
-                    Opération réussie
-                </h3>
-
-                <p></p>
-
-            </div>
-
-            <button class="alert-close">
-
-                <i class="fas fa-times"></i>
-
-            </button>
-
-        `;
-
-
-        alertBox
-            .querySelector('p')
-            .textContent = message;
-
-
-        alertBox
-            .querySelector('.alert-close')
-            .addEventListener(
-                'click',
-                function () {
-
-                    container.remove();
-
+                if (matches) {
+                    visibleCount++;
                 }
-            );
+            });
 
+            // Message lorsqu'aucun résultat n'est trouvé
+            const tbody = document.getElementById('servicesTableBody');
 
-        container.appendChild(
-            alertBox
-        );
+            if (tbody) {
 
+                const oldMessage = tbody.querySelector('.search-empty-row');
 
-        content.prepend(
-            container
-        );
-
-
-        setTimeout(
-            function () {
-
-                if (
-                    container.parentElement
-                ) {
-
-                    container.remove();
+                if (oldMessage) {
+                    oldMessage.remove();
                 }
 
-            },
-            4000
-        );
-    }
+                if (searchValue !== '' && visibleCount === 0) {
 
+                    const emptyRow = document.createElement('tr');
 
-    // =====================================================
-    // MARQUER COMME PAYÉ
-    // =====================================================
+                    emptyRow.className = 'search-empty-row';
 
-    paidBtn.addEventListener(
-        'click',
-        async function () {
+                    emptyRow.innerHTML = `
+                        <td colspan="8" style="text-align:center; padding:25px;">
+                            <i class="fas fa-search"></i>
+                            Aucun service correspondant à "${escapeSearchText(searchValue)}"
+                        </td>
+                    `;
 
-            if (!selectedRow) {
-                return;
+                    tbody.appendChild(emptyRow);
+                }
             }
 
+            // Mise à jour du compteur des résultats
+            if (searchCounter) {
 
-            const row =
-                selectedRow;
+                searchCounter.style.display = 'block';
 
-
-            const id =
-                row.dataset.id;
-
-            const name =
-                row.dataset.name;
-
-            const number =
-                row.dataset.number;
-
-
-            if (
-                !confirm(
-                    `Marquer le service #${id} comme payé ?`
-                )
-            ) {
-
-                closeContextMenu();
-
-                return;
+                searchCounter.textContent = searchValue === ''
+                    ? ''
+                    : `${visibleCount} résultat(s) trouvé(s)`;
             }
+        }
+
+        // Échapper le texte affiché dans le message
+        function escapeSearchText(value) {
+
+            const div = document.createElement('div');
+
+            div.textContent = value;
+
+            return div.innerHTML;
+        }
+
+        // Recherche pendant la saisie
+        if (searchInput) {
+            searchInput.addEventListener('input', dynamicSearch);
+        }
+
+        // Effacer la recherche
+        if (clearSearch) {
+
+            clearSearch.addEventListener('click', function() {
+
+                searchInput.value = '';
+
+                dynamicSearch();
+
+                searchInput.focus();
+            });
+        }
 
 
-            paidBtn.classList.add(
-                'action-loading'
+        // =====================================================
+        // ELEMENTS
+        // =====================================================
+
+        const contextMenu =
+            document.getElementById(
+                'custom-context-menu'
             );
+
+        const paidBtn =
+            document.getElementById(
+                'paid-row-btn'
+            );
+
+        const modifyBtn =
+            document.getElementById(
+                'modify-versement-btn'
+            );
+
+        const deleteBtn =
+            document.getElementById(
+                'delete-row-btn'
+            );
+
+
+        let selectedRow = null;
+
+        let longPressTimer = null;
+
+
+        // =====================================================
+        // CSRF
+        // =====================================================
+
+        function getCSRFToken() {
+
+            const csrfInput =
+                document.querySelector(
+                    'input[name="csrf_token"]'
+                );
+
+
+            return csrfInput
+                ? csrfInput.value
+                : null;
+        }
+
+
+        // =====================================================
+        // FETCH REQUEST
+        // =====================================================
+
+        async function sendRequest(
+            url,
+            data = {}
+        ) {
+
+            const csrfToken =
+                getCSRFToken();
+
+
+            const headers = {
+
+                'Content-Type':
+                    'application/json',
+
+                'Accept':
+                    'application/json'
+
+            };
+
+
+            if (csrfToken) {
+
+                headers['X-CSRFToken'] =
+                    csrfToken;
+            }
+
+
+            const response =
+                await fetch(
+                    url,
+                    {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify(data)
+                    }
+                );
+
+
+            let result = {};
 
 
             try {
 
-                const {
-                    response,
-                    data
-                } =
-                    await sendRequest(
-                        `/services/ServicePaid/${id}`,
-                        {
-                            name: name,
-                            number: number
-                        }
+                result =
+                    await response.json();
+
+            } catch (error) {
+
+                console.error(
+                    'Le serveur n\'a pas renvoyé du JSON.',
+                    error
+                );
+            }
+
+
+            return {
+                response: response,
+                data: result
+            };
+        }
+
+
+        // =====================================================
+        // TOTAL
+        // =====================================================
+
+        function updateTotal() {
+
+            const tbody =
+                document.getElementById(
+                    'servicesTableBody'
+                );
+
+
+            const totalElement =
+                document.getElementById(
+                    'totalServices'
+                );
+
+
+            const recordCount =
+                document.getElementById(
+                    'recordCount'
+                );
+
+
+            if (!tbody) {
+
+                if (totalElement) {
+                    totalElement.textContent = '--';
+                }
+
+                return;
+            }
+
+
+            const rows =
+                tbody.querySelectorAll(
+                    'tr.table-row'
+                );
+
+
+            const total = Array.from(rows).filter(
+                row => row.style.display !== 'none'
+            ).length;
+
+
+            if (totalElement) {
+
+                totalElement.textContent =
+                    total;
+            }
+
+
+            if (recordCount) {
+
+                recordCount.textContent =
+                    total;
+            }
+        }
+
+
+        updateTotal();
+
+
+        // =====================================================
+        // OPEN CONTEXT MENU
+        // =====================================================
+
+        function openContextMenu(
+            x,
+            y,
+            row
+        ) {
+
+            if (selectedRow) {
+
+                selectedRow.classList.remove(
+                    'row-selected'
+                );
+            }
+
+
+            selectedRow = row;
+
+
+            selectedRow.classList.add(
+                'row-selected'
+            );
+
+
+            contextMenu.style.display =
+                'block';
+
+
+            /*
+             * Empêcher le menu de sortir de l'écran.
+             */
+
+            const menuWidth =
+                contextMenu.offsetWidth;
+
+            const menuHeight =
+                contextMenu.offsetHeight;
+
+
+            let finalX = x;
+
+            let finalY = y;
+
+
+            if (
+                x + menuWidth >
+                window.scrollX +
+                window.innerWidth
+            ) {
+
+                finalX =
+                    window.scrollX +
+                    window.innerWidth -
+                    menuWidth -
+                    10;
+            }
+
+
+            if (
+                y + menuHeight >
+                window.scrollY +
+                window.innerHeight
+            ) {
+
+                finalY =
+                    window.scrollY +
+                    window.innerHeight -
+                    menuHeight -
+                    10;
+            }
+
+
+            contextMenu.style.left =
+                `${Math.max(5, finalX)}px`;
+
+            contextMenu.style.top =
+                `${Math.max(5, finalY)}px`;
+        }
+
+
+        // =====================================================
+        // CLOSE CONTEXT MENU
+        // =====================================================
+
+        function closeContextMenu() {
+
+            contextMenu.style.display =
+                'none';
+
+
+            if (selectedRow) {
+
+                selectedRow.classList.remove(
+                    'row-selected'
+                );
+
+                selectedRow = null;
+            }
+        }
+
+
+        // =====================================================
+        // RIGHT CLICK
+        // =====================================================
+
+        document.addEventListener(
+            'contextmenu',
+            function (event) {
+
+                const row =
+                    event.target.closest(
+                        'tr.table-row'
                     );
 
 
+                if (!row) {
+                    return;
+                }
+
+
                 if (
-                    response.ok &&
-                    data.success
+                    !row.hasAttribute(
+                        'data-id'
+                    )
+                ) {
+                    return;
+                }
+
+
+                event.preventDefault();
+
+
+                openContextMenu(
+                    event.pageX,
+                    event.pageY,
+                    row
+                );
+            }
+        );
+
+
+        // =====================================================
+        // MOBILE LONG PRESS
+        // =====================================================
+
+        document.addEventListener(
+            'touchstart',
+            function (event) {
+
+                const row =
+                    event.target.closest(
+                        'tr.table-row'
+                    );
+
+
+                if (!row) {
+                    return;
+                }
+
+
+                const touch =
+                    event.touches[0];
+
+
+                longPressTimer =
+                    setTimeout(
+                        function () {
+
+                            openContextMenu(
+                                touch.pageX,
+                                touch.pageY,
+                                row
+                            );
+
+                        },
+                        500
+                    );
+            },
+            {
+                passive: true
+            }
+        );
+
+
+        document.addEventListener(
+            'touchend',
+            function () {
+
+                clearTimeout(
+                    longPressTimer
+                );
+            }
+        );
+
+
+        document.addEventListener(
+            'touchmove',
+            function () {
+
+                clearTimeout(
+                    longPressTimer
+                );
+            }
+        );
+
+
+        // =====================================================
+        // CLOSE MENU
+        // =====================================================
+
+        document.addEventListener(
+            'click',
+            function (event) {
+
+                if (
+                    !contextMenu.contains(
+                        event.target
+                    )
                 ) {
 
-
-                    // =====================================
-                    // UPDATE KHalsa
-                    // =====================================
-
-                    const khalsa =
-                        row.querySelector(
-                            '.khalsa-cell'
-                        );
+                    closeContextMenu();
+                }
+            }
+        );
 
 
-                    if (khalsa) {
+        // =====================================================
+        // SHOW SUCCESS MESSAGE
+        // =====================================================
 
-                        khalsa.textContent =
-                            data.khalsa !== undefined
-                                ? data.khalsa
-                                : 'Oui';
+        function showSuccess(message) {
+
+            const content =
+                document.querySelector(
+                    '.content'
+                );
+
+
+            if (!content) {
+                return;
+            }
+
+
+            const container =
+                document.createElement(
+                    'div'
+                );
+
+
+            container.className =
+                'alert-container';
+
+
+            const alertBox =
+                document.createElement(
+                    'div'
+                );
+
+
+            alertBox.className =
+                'alert alert-success';
+
+
+            alertBox.innerHTML = `
+
+                <i class="fas fa-check-circle"></i>
+
+                <div class="alert-content">
+
+                    <h3>
+                        Opération réussie
+                    </h3>
+
+                    <p></p>
+
+                </div>
+
+                <button class="alert-close">
+
+                    <i class="fas fa-times"></i>
+
+                </button>
+
+            `;
+
+
+            alertBox
+                .querySelector('p')
+                .textContent = message;
+
+
+            alertBox
+                .querySelector('.alert-close')
+                .addEventListener(
+                    'click',
+                    function () {
+
+                        container.remove();
+
+                    }
+                );
+
+
+            container.appendChild(
+                alertBox
+            );
+
+
+            content.prepend(
+                container
+            );
+
+
+            setTimeout(
+                function () {
+
+                    if (
+                        container.parentElement
+                    ) {
+
+                        container.remove();
                     }
 
+                },
+                4000
+            );
+        }
 
-                    // =====================================
-                    // UPDATE VERSEMENT
-                    // =====================================
 
-                    const versement =
-                        row.querySelector(
-                            '.versement-cell'
+        // =====================================================
+        // MARQUER COMME PAYÉ
+        // =====================================================
+
+        paidBtn.addEventListener(
+            'click',
+            async function () {
+
+                if (!selectedRow) {
+                    return;
+                }
+
+
+                const row =
+                    selectedRow;
+
+
+                const id =
+                    row.dataset.id;
+
+                const name =
+                    row.dataset.name;
+
+                const number =
+                    row.dataset.number;
+
+
+                if (
+                    !confirm(
+                        `Marquer le service #${id} comme payé ?`
+                    )
+                ) {
+
+                    closeContextMenu();
+
+                    return;
+                }
+
+
+                paidBtn.classList.add(
+                    'action-loading'
+                );
+
+
+                try {
+
+                    const {
+                        response,
+                        data
+                    } =
+                        await sendRequest(
+                            `/services/ServicePaid/${id}`,
+                            {
+                                name: name,
+                                number: number
+                            }
                         );
 
 
                     if (
-                        versement &&
-                        data.versement !== undefined
+                        response.ok &&
+                        data.success
                     ) {
 
-                        versement.textContent =
-                            data.versement;
-                    }
+
+                        // =====================================
+                        // UPDATE KHalsa
+                        // =====================================
+
+                        const khalsa =
+                            row.querySelector(
+                                '.khalsa-cell'
+                            );
 
 
-                    // =====================================
-                    // UPDATE RESTE
-                    // =====================================
+                        if (khalsa) {
 
-                    const reste =
-                        row.querySelector(
-                            '.reste-cell'
-                        );
-
-
-                    if (reste) {
-
-                        reste.textContent =
-                            data.reste !== undefined
-                                ? data.reste
-                                : '0';
-                    }
-
-
-                    // =====================================
-                    // VISUAL EFFECT
-                    // =====================================
-
-                    row.style.transition =
-                        'background-color 0.3s ease';
-
-
-                    row.style.backgroundColor =
-                        'rgba(25, 135, 84, 0.15)';
-
-
-                    setTimeout(
-                        function () {
-
-                            row.style.backgroundColor =
-                                '';
-
-                        },
-                        1000
-                    );
-
-
-                    showSuccess(
-                        'Le service a été marqué comme payé.'
-                    );
-
-
-                } else {
-
-                    alert(
-                        data.error ||
-                        data.message ||
-                        'Erreur lors du paiement.'
-                    );
-                }
-
-
-            } catch (error) {
-
-                console.error(
-                    error
-                );
-
-
-                alert(
-                    'Erreur de communication avec le serveur.'
-                );
-
-            } finally {
-
-                paidBtn.classList.remove(
-                    'action-loading'
-                );
-
-                closeContextMenu();
-            }
-
-        }
-    );
-
-
-    // =====================================================
-    // MODIFIER VERSEMENT
-    // =====================================================
-
-    modifyBtn.addEventListener(
-        'click',
-        async function () {
-
-            if (!selectedRow) {
-                return;
-            }
-
-
-            const row =
-                selectedRow;
-
-
-            const id =
-                row.dataset.id;
-
-            const name =
-                row.dataset.name;
-
-            const number =
-                row.dataset.number;
-
-
-            const versementCell =
-                row.querySelector(
-                    '.versement-cell'
-                );
-
-
-            const currentVersement =
-                versementCell
-                    ? versementCell.textContent.trim()
-                    : '0';
-
-
-            const newVersement =
-                prompt(
-                    `Nouveau versement pour le service #${id} :`,
-                    currentVersement
-                );
-
-
-            if (
-                newVersement === null
-            ) {
-
-                closeContextMenu();
-
-                return;
-            }
-
-
-            const amount =
-                parseFloat(
-                    newVersement
-                        .replace(',', '.')
-                        .trim()
-                );
-
-
-            if (
-                isNaN(amount) ||
-                amount < 0
-            ) {
-
-                alert(
-                    'Veuillez entrer un montant valide.'
-                );
-
-                closeContextMenu();
-
-                return;
-            }
-
-
-            modifyBtn.classList.add(
-                'action-loading'
-            );
-
-
-            try {
-
-                const {
-                    response,
-                    data
-                } =
-                    await sendRequest(
-                        `/services/ModifyServiceVersement/${id}`,
-                        {
-                            name: name,
-                            number: number,
-                            newVersement: amount
+                            khalsa.textContent =
+                                data.khalsa !== undefined
+                                    ? data.khalsa
+                                    : 'Oui';
                         }
-                    );
 
 
-                if (
-                    response.ok &&
-                    data.success
-                ) {
+                        // =====================================
+                        // UPDATE VERSEMENT
+                        // =====================================
 
+                        const versement =
+                            row.querySelector(
+                                '.versement-cell'
+                            );
 
-                    // =====================================
-                    // UPDATE VERSEMENT
-                    // =====================================
-
-                    if (versementCell) {
-
-                        versementCell.textContent =
-                            data.versement !== undefined
-                                ? data.versement
-                                : amount;
-                    }
-
-
-                    // =====================================
-                    // UPDATE RESTE
-                    // =====================================
-
-                    const resteCell =
-                        row.querySelector(
-                            '.reste-cell'
-                        );
-
-
-                    if (resteCell) {
 
                         if (
-                            data.reste !== undefined
+                            versement &&
+                            data.versement !== undefined
                         ) {
 
-                            resteCell.textContent =
-                                data.reste;
-
-                        } else {
-
-                            const price =
-                                parseFloat(
-                                    row.dataset.price
-                                ) || 0;
-
-
-                            resteCell.textContent =
-                                Math.max(
-                                    0,
-                                    price - amount
-                                );
+                            versement.textContent =
+                                data.versement;
                         }
+
+
+                        // =====================================
+                        // UPDATE RESTE
+                        // =====================================
+
+                        const reste =
+                            row.querySelector(
+                                '.reste-cell'
+                            );
+
+
+                        if (reste) {
+
+                            reste.textContent =
+                                data.reste !== undefined
+                                    ? data.reste
+                                    : '0';
+                        }
+
+
+                        // =====================================
+                        // VISUAL EFFECT
+                        // =====================================
+
+                        row.style.transition =
+                            'background-color 0.3s ease';
+
+
+                        row.style.backgroundColor =
+                            'rgba(25, 135, 84, 0.15)';
+
+
+                        setTimeout(
+                            function () {
+
+                                row.style.backgroundColor =
+                                    '';
+
+                            },
+                            1000
+                        );
+
+
+                        showSuccess(
+                            'Le service a été marqué comme payé.'
+                        );
+
+
+                    } else {
+
+                        alert(
+                            data.error ||
+                            data.message ||
+                            'Erreur lors du paiement.'
+                        );
                     }
 
 
-                    showSuccess(
-                        'Le versement a été modifié avec succès.'
+                } catch (error) {
+
+                    console.error(
+                        error
                     );
 
-
-                } else {
 
                     alert(
-                        data.error ||
-                        data.message ||
-                        'Erreur lors de la modification.'
+                        'Erreur de communication avec le serveur.'
                     );
+
+                } finally {
+
+                    paidBtn.classList.remove(
+                        'action-loading'
+                    );
+
+                    closeContextMenu();
+                }
+
+            }
+        );
+
+
+        // =====================================================
+        // MODIFIER VERSEMENT
+        // =====================================================
+
+        modifyBtn.addEventListener(
+            'click',
+            async function () {
+
+                if (!selectedRow) {
+                    return;
                 }
 
 
-            } catch (error) {
-
-                console.error(
-                    error
-                );
+                const row =
+                    selectedRow;
 
 
-                alert(
-                    'Erreur de communication avec le serveur.'
-                );
+                const id =
+                    row.dataset.id;
 
-            } finally {
+                const name =
+                    row.dataset.name;
 
-                modifyBtn.classList.remove(
-                    'action-loading'
-                );
-
-                closeContextMenu();
-            }
-
-        }
-    );
+                const number =
+                    row.dataset.number;
 
 
-    // =====================================================
-    // SUPPRIMER
-    // =====================================================
-
-    deleteBtn.addEventListener(
-        'click',
-        async function () {
-
-            if (!selectedRow) {
-                return;
-            }
+                const versementCell =
+                    row.querySelector(
+                        '.versement-cell'
+                    );
 
 
-            const row =
-                selectedRow;
+                const currentVersement =
+                    versementCell
+                        ? versementCell.textContent.trim()
+                        : '0';
 
 
-            const id =
-                row.dataset.id;
-
-            const name =
-                row.dataset.name;
-
-            const number =
-                row.dataset.number;
-
-
-            if (
-                !confirm(
-                    `Supprimer le service #${id} ?`
-                )
-            ) {
-
-                closeContextMenu();
-
-                return;
-            }
-
-
-            deleteBtn.classList.add(
-                'action-loading'
-            );
-
-
-            try {
-
-                const {
-                    response,
-                    data
-                } =
-                    await sendRequest(
-                        `/services/DeleteService/${id}`,
-                        {
-                            name: name,
-                            number: number
-                        }
+                const newVersement =
+                    prompt(
+                        `Nouveau versement pour le service #${id} :`,
+                        currentVersement
                     );
 
 
                 if (
-                    response.ok &&
-                    data.success
+                    newVersement === null
                 ) {
 
+                    closeContextMenu();
 
-                    // =====================================
-                    // REMOVE ROW WITHOUT RELOAD
-                    // =====================================
-
-                    row.style.transition =
-                        'opacity 0.3s ease, transform 0.3s ease';
-
-
-                    row.style.opacity =
-                        '0';
-
-
-                    row.style.transform =
-                        'translateX(30px)';
-
-
-                    setTimeout(
-                        function () {
-
-                            row.remove();
-
-
-                            updateTotal();
-
-
-                            const tbody =
-                                document.getElementById(
-                                    'servicesTableBody'
-                                );
-
-
-                            if (
-                                tbody &&
-                                tbody.querySelectorAll(
-                                    'tr.table-row'
-                                ).length === 0
-                            ) {
-
-                                const tableWrapper =
-                                    document.querySelector(
-                                        '#MainTable .table-wrapper'
-                                    );
-
-
-                                if (tableWrapper) {
-
-                                    tableWrapper.style.display =
-                                        'none';
-                                }
-
-
-                                const empty =
-                                    document.createElement(
-                                        'div'
-                                    );
-
-
-                                empty.className =
-                                    'empty-table';
-
-
-                                empty.innerHTML = `
-
-                                    <i class="fas fa-inbox"></i>
-
-                                    <p>
-                                        Aucun service trouvé
-                                    </p>
-
-                                `;
-
-
-                                document
-                                    .getElementById(
-                                        'MainTable'
-                                    )
-                                    .appendChild(
-                                        empty
-                                    );
-                            }
-
-                        },
-                        300
-                    );
-
-
-                    showSuccess(
-                        'Le service a été supprimé avec succès.'
-                    );
-
-
-                } else {
-
-                    alert(
-                        data.error ||
-                        data.message ||
-                        'Erreur lors de la suppression.'
-                    );
+                    return;
                 }
 
 
-            } catch (error) {
+                const amount =
+                    parseFloat(
+                        newVersement
+                            .replace(',', '.')
+                            .trim()
+                    );
 
-                console.error(
-                    error
-                );
+
+                if (
+                    isNaN(amount) ||
+                    amount < 0
+                ) {
+
+                    alert(
+                        'Veuillez entrer un montant valide.'
+                    );
+
+                    closeContextMenu();
+
+                    return;
+                }
 
 
-                alert(
-                    'Erreur de communication avec le serveur.'
-                );
-
-            } finally {
-
-                deleteBtn.classList.remove(
+                modifyBtn.classList.add(
                     'action-loading'
                 );
 
-                closeContextMenu();
+
+                try {
+
+                    const {
+                        response,
+                        data
+                    } =
+                        await sendRequest(
+                            `/services/ModifyServiceVersement/${id}`,
+                            {
+                                name: name,
+                                number: number,
+                                newVersement: amount
+                            }
+                        );
+
+
+                    if (
+                        response.ok &&
+                        data.success
+                    ) {
+
+
+                        // =====================================
+                        // UPDATE VERSEMENT
+                        // =====================================
+
+                        if (versementCell) {
+
+                            versementCell.textContent =
+                                data.versement !== undefined
+                                    ? data.versement
+                                    : amount;
+                        }
+
+
+                        // =====================================
+                        // UPDATE RESTE
+                        // =====================================
+
+                        const resteCell =
+                            row.querySelector(
+                                '.reste-cell'
+                            );
+
+
+                        if (resteCell) {
+
+                            if (
+                                data.reste !== undefined
+                            ) {
+
+                                resteCell.textContent =
+                                    data.reste;
+
+                            } else {
+
+                                const price =
+                                    parseFloat(
+                                        row.dataset.price
+                                    ) || 0;
+
+
+                                resteCell.textContent =
+                                    Math.max(
+                                        0,
+                                        price - amount
+                                    );
+                            }
+                        }
+
+
+                        showSuccess(
+                            'Le versement a été modifié avec succès.'
+                        );
+
+
+                    } else {
+
+                        alert(
+                            data.error ||
+                            data.message ||
+                            'Erreur lors de la modification.'
+                        );
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+
+                    alert(
+                        'Erreur de communication avec le serveur.'
+                    );
+
+                } finally {
+
+                    modifyBtn.classList.remove(
+                        'action-loading'
+                    );
+
+                    closeContextMenu();
+                }
+
             }
+        );
 
-        }
-    );
 
-});
+        // =====================================================
+        // SUPPRIMER
+        // =====================================================
+
+        deleteBtn.addEventListener(
+            'click',
+            async function () {
+
+                if (!selectedRow) {
+                    return;
+                }
+
+
+                const row =
+                    selectedRow;
+
+
+                const id =
+                    row.dataset.id;
+
+                const name =
+                    row.dataset.name;
+
+                const number =
+                    row.dataset.number;
+
+
+                if (
+                    !confirm(
+                        `Supprimer le service #${id} ?`
+                    )
+                ) {
+
+                    closeContextMenu();
+
+                    return;
+                }
+
+
+                deleteBtn.classList.add(
+                    'action-loading'
+                );
+
+
+                try {
+
+                    const {
+                        response,
+                        data
+                    } =
+                        await sendRequest(
+                            `/services/DeleteService/${id}`,
+                            {
+                                name: name,
+                                number: number
+                            }
+                        );
+
+
+                    if (
+                        response.ok &&
+                        data.success
+                    ) {
+
+
+                        // =====================================
+                        // REMOVE ROW WITHOUT RELOAD
+                        // =====================================
+
+                        row.style.transition =
+                            'opacity 0.3s ease, transform 0.3s ease';
+
+
+                        row.style.opacity =
+                            '0';
+
+
+                        row.style.transform =
+                            'translateX(30px)';
+
+
+                        setTimeout(
+                            function () {
+
+                                row.remove();
+
+
+                                updateTotal();
+
+
+                                const tbody =
+                                    document.getElementById(
+                                        'servicesTableBody'
+                                    );
+
+
+                                if (
+                                    tbody &&
+                                    tbody.querySelectorAll(
+                                        'tr.table-row'
+                                    ).length === 0
+                                ) {
+
+                                    const tableWrapper =
+                                        document.querySelector(
+                                            '#MainTable .table-wrapper'
+                                        );
+
+
+                                    if (tableWrapper) {
+
+                                        tableWrapper.style.display =
+                                            'none';
+                                    }
+
+
+                                    const empty =
+                                        document.createElement(
+                                            'div'
+                                        );
+
+
+                                    empty.className =
+                                        'empty-table';
+
+
+                                    empty.innerHTML = `
+
+                                        <i class="fas fa-inbox"></i>
+
+                                        <p>
+                                            Aucun service trouvé
+                                        </p>
+
+                                    `;
+
+
+                                    document
+                                        .getElementById(
+                                            'MainTable'
+                                        )
+                                        .appendChild(
+                                            empty
+                                        );
+                                }
+
+                            },
+                            300
+                        );
+
+
+                        showSuccess(
+                            'Le service a été supprimé avec succès.'
+                        );
+
+
+                    } else {
+
+                        alert(
+                            data.error ||
+                            data.message ||
+                            'Erreur lors de la suppression.'
+                        );
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+
+                    alert(
+                        'Erreur de communication avec le serveur.'
+                    );
+
+                } finally {
+
+                    deleteBtn.classList.remove(
+                        'action-loading'
+                    );
+
+                    closeContextMenu();
+                }
+
+            }
+        );
+        updateTotal();
+    });
 
 </script>
 

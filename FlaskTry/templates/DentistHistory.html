@@ -4,14 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Visualiseur professionnel de l’historique des dentistes pour la gestion d’un laboratoire de prothèse">
+    <meta name="description"
+          content="Visualiseur professionnel de l’historique des dentistes pour la gestion d’un laboratoire de prothèse">
     <meta name="keywords" content="Dentiste, Historique, Dossiers, Laboratoire, Prothèse, Tâches">
     <meta name="author" content="Équipe du laboratoire de prothèse">
     <title>Historique des dentistes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='DentistHistory.css') }}">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -55,33 +57,39 @@
     <!-- Search Section -->
     <div class="search-container">
         <div class="search-card">
-            <form action="/dentists/DentistHistory" method="POST" class="search-form">
-                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            <div class="search-form">
 
                 <div class="search-wrapper">
                     <div class="search-icon">
                         <i class="fas fa-search"></i>
                     </div>
+
                     <input
-                        type="text"
-                        name="SearchName"
-                        placeholder="Rechercher un dentiste par nom... ou un patient par numéro..."
-                        class="search-input"
-                        autocomplete="off"
+                            type="text"
+                            id="searchInput"
+                            name="SearchName"
+                            placeholder="Rechercher par nom du dentiste, patient ou numéro..."
+                            class="search-input"
+                            autocomplete="off"
                     >
-                    <button type="submit" class="search-btn">
-                        <i class="fas fa-magnifying-glass"></i>
-                        <span>Rechercher</span>
+
+                    <button type="button" class="search-btn" id="clearSearch">
+                        <i class="fas fa-times"></i>
+                        <span>Effacer</span>
                     </button>
                 </div>
-            </form>
+
+            </div>
 
             <div class="search-hints">
-                <span class="hint-label">Accès rapide :</span>
-                <a href="/dentists/AllDentistHistory" class="hint-link">
-                    <i class="fas fa-layer-group"></i> View Tout l’historique
-                </a>
+                <span class="hint-label">Recherche instantanée :</span>
+                <span class="hint-link">
+                <i class="fas fa-bolt"></i>
+                Nom, prénom ou numéro du patient
+            </span>
             </div>
+
         </div>
     </div>
 
@@ -100,7 +108,8 @@
         {% endif %}
 
         <!-- Tout l’historique Table -->
-        <div id="AllHistory" class="table-section" style="display: {% if HistoryDentist %}none{% else %}block{% endif %}">
+        <div id="AllHistory" class="table-section"
+             style="display: {% if HistoryDentist %}none{% else %}block{% endif %}">
             {% if History %}
             <div class="table-card fade-in">
                 <div class="table-header">
@@ -116,36 +125,36 @@
                 <div class="table-wrapper">
                     <table class="data-table">
                         <thead>
-                            <tr>
-                                <th><span class="th-content"><i class="fas fa-id-card"></i> ID du service</span></th>
-                                <th><span class="th-content"><i class="fas fa-user-md"></i> Nom du dentiste</span></th>
-                                <th><span class="th-content"><i class="fas fa-hashtag"></i> Numéro du patient</span></th>
-                                <th><span class="th-content"><i class="fas fa-user"></i> Prénom du patient</span></th>
-                                <th><span class="th-content"><i class="fas fa-user"></i> Nom du patient</span></th>
-                                <th><span class="th-content"><i class="fas fa-wrench"></i> Type de service</span></th>
-                                <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Price</span></th>
-                                <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Versement</span></th>
-                                <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Reste</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar"></i> Date d’entrée</span></th>
-                                <th><span class="th-content"> Statut</span></th>
-                            </tr>
+                        <tr>
+                            <th><span class="th-content"><i class="fas fa-id-card"></i> ID du service</span></th>
+                            <th><span class="th-content"><i class="fas fa-user-md"></i> Nom du dentiste</span></th>
+                            <th><span class="th-content"><i class="fas fa-hashtag"></i> Numéro du patient</span></th>
+                            <th><span class="th-content"><i class="fas fa-user"></i> Prénom du patient</span></th>
+                            <th><span class="th-content"><i class="fas fa-user"></i> Nom du patient</span></th>
+                            <th><span class="th-content"><i class="fas fa-wrench"></i> Type de service</span></th>
+                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Price</span></th>
+                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Versement</span></th>
+                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Reste</span></th>
+                            <th><span class="th-content"><i class="fas fa-calendar"></i> Date d’entrée</span></th>
+                            <th><span class="th-content"> Statut</span></th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {% for row in History %}
-                            <tr class="table-row-animate">
-                                <td>{{ row[0] }}</td>
-                                <td>{{ row[1] }}</td>
-                                <td>{{ row[2] }}</td>
-                                <td>{{ row[3] }}</td>
-                                <td>{{ row[4] }}</td>
-                                <td>{{ row[5] }}</td>
-                                <td>{{ row[6] }}</td>
-                                <td>{{ row[7] }}</td>
-                                <td>{{ row[8] }}</td>
-                                <td>{{ row[9] }}</td>
-                                <td>{{ row[11] }}</td>
-                            </tr>
-                            {% endfor %}
+                        {% for row in History %}
+                        <tr class="table-row-animate">
+                            <td>{{ row[0] }}</td>
+                            <td>{{ row[1] }}</td>
+                            <td>{{ row[2] }}</td>
+                            <td>{{ row[3] }}</td>
+                            <td>{{ row[4] }}</td>
+                            <td>{{ row[5] }}</td>
+                            <td>{{ row[6] }}</td>
+                            <td>{{ row[7] }}</td>
+                            <td>{{ row[8] }}</td>
+                            <td>{{ row[9] }}</td>
+                            <td>{{ row[11] }}</td>
+                        </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -168,7 +177,8 @@
         </div>
 
         <!-- Specific Dentist History Table -->
-        <div id="DentistHistory" class="table-section" style="display: {% if HistoryDentist %}block{% else %}none{% endif %}">
+        <div id="DentistHistory" class="table-section"
+             style="display: {% if HistoryDentist %}block{% else %}none{% endif %}">
             {% if HistoryDentist %}
             <div class="table-card fade-in search-result-card">
                 <div class="table-header highlight-search">
@@ -184,36 +194,36 @@
                 <div class="table-wrapper">
                     <table class="data-table">
                         <thead>
-                            <tr>
-                                <th><span class="th-content"><i class="fas fa-id-card"></i> ID du service</span></th>
-                                <th><span class="th-content"><i class="fas fa-user-md"></i> Nom du dentiste</span></th>
-                                <th><span class="th-content"><i class="fas fa-hashtag"></i> Numéro du patient</span></th>
-                                <th><span class="th-content"><i class="fas fa-user"></i> Prénom du patient</span></th>
-                                <th><span class="th-content"><i class="fas fa-user"></i> Nom du patient</span></th>
-                                <th><span class="th-content"><i class="fas fa-wrench"></i> Type de service</span></th>
-                                <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Price</span></th>
-                                <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Versement</span></th>
-                                <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Reste</span></th>
-                                <th><span class="th-content"><i class="fas fa-calendar"></i> Date d’entrée</span></th>
-                                <th><span class="th-content"> Statut</span></th>
-                            </tr>
+                        <tr>
+                            <th><span class="th-content"><i class="fas fa-id-card"></i> ID du service</span></th>
+                            <th><span class="th-content"><i class="fas fa-user-md"></i> Nom du dentiste</span></th>
+                            <th><span class="th-content"><i class="fas fa-hashtag"></i> Numéro du patient</span></th>
+                            <th><span class="th-content"><i class="fas fa-user"></i> Prénom du patient</span></th>
+                            <th><span class="th-content"><i class="fas fa-user"></i> Nom du patient</span></th>
+                            <th><span class="th-content"><i class="fas fa-wrench"></i> Type de service</span></th>
+                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Price</span></th>
+                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Versement</span></th>
+                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Reste</span></th>
+                            <th><span class="th-content"><i class="fas fa-calendar"></i> Date d’entrée</span></th>
+                            <th><span class="th-content"> Statut</span></th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {% for row in HistoryDentist %}
-                            <tr class="table-row-animate">
-                                <td>{{ row[0] }}</td>
-                                <td>{{ row[1] }}</td>
-                                <td>{{ row[2] }}</td>
-                                <td>{{ row[3] }}</td>
-                                <td>{{ row[4] }}</td>
-                                <td>{{ row[5] }}</td>
-                                <td>{{ row[6] }}</td>
-                                <td>{{ row[7] }}</td>
-                                <td>{{ row[8] }}</td>
-                                <td>{{ row[9] }}</td>
-                                <td>{{ row[11] }}</td>
-                            </tr>
-                            {% endfor %}
+                        {% for row in HistoryDentist %}
+                        <tr class="table-row-animate">
+                            <td>{{ row[0] }}</td>
+                            <td>{{ row[1] }}</td>
+                            <td>{{ row[2] }}</td>
+                            <td>{{ row[3] }}</td>
+                            <td>{{ row[4] }}</td>
+                            <td>{{ row[5] }}</td>
+                            <td>{{ row[6] }}</td>
+                            <td>{{ row[7] }}</td>
+                            <td>{{ row[8] }}</td>
+                            <td>{{ row[9] }}</td>
+                            <td>{{ row[11] }}</td>
+                        </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -249,129 +259,265 @@
     <footer class="page-footer">
         <div class="footer-content">
             <p>&copy; 2024 Prosthetics Lab Management System. All rights reserved.</p>
-            <p class="footer-note">Les enregistrements historiques sont conservés même si la tâche d’origine est supprimée</p>
+            <p class="footer-note">Les enregistrements historiques sont conservés même si la tâche d’origine est
+                supprimée</p>
         </div>
     </footer>
 </div>
 
 <!-- Scripts -->
 <script>
-    // Animations fluides des lignes du tableau au chargement
-    window.addEventListener('load', function() {
-        const rows = document.querySelectorAll('.table-row-animate');
-        rows.forEach((row, index) => {
-            row.style.animationDelay = `${index * 0.05}s`;
+
+
+    /* =====================================================
+       RECHERCHE DYNAMIQUE - HISTORIQUE DES DENTISTES
+    ===================================================== */
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const searchInput = document.getElementById('searchInput');
+            const clearButton = document.getElementById('clearSearch');
+
+            const allHistory = document.getElementById('AllHistory');
+            const dentistHistory = document.getElementById('DentistHistory');
+
+            if (!searchInput) return;
+
+            // Recherche dans tous les tableaux présents
+            function dynamicSearch() {
+
+                const searchValue = searchInput.value
+                    .toLowerCase()
+                    .trim();
+
+                const tables = document.querySelectorAll('.data-table');
+
+                tables.forEach(table => {
+
+                    const rows = table.querySelectorAll('tbody tr');
+
+                    let visibleCount = 0;
+
+                    rows.forEach(row => {
+
+                        // Colonnes :
+                        // 1 = Dentist name
+                        // 2 = Patient number
+                        // 3 = Patient first name
+                        // 4 = Patient last name
+
+                        const dentistName = row.cells[1]?.textContent.toLowerCase().trim() || '';
+
+                        const patientNumber = row.cells[2]?.textContent.toLowerCase().trim() || '';
+
+                        const patientFirstName = row.cells[3]?.textContent.toLowerCase().trim() || '';
+
+                        const patientLastName = row.cells[4]?.textContent.toLowerCase().trim() || '';
+
+                        const searchableData = [
+                            dentistName,
+                            patientNumber,
+                            patientFirstName,
+                            patientLastName
+                        ].join(' ');
+
+                        const matches = searchableData.includes(searchValue);
+
+                        row.style.display = matches ? '' : 'none';
+
+                        if (matches) {
+                            visibleCount++;
+                        }
+
+                    });
+
+                    // Actualiser le compteur
+                    const section = table.closest('.table-section');
+
+                    const counter = section?.querySelector('.stat-badge');
+
+                    if (counter) {
+                        counter.textContent = visibleCount + ' Enregistrements';
+                    }
+
+                    // Actualiser le footer
+                    const footer = section?.querySelector('.footer-text');
+
+                    if (footer) {
+                        footer.innerHTML =
+                            '<i class="fas fa-check-circle"></i> Affichage de ' +
+                            visibleCount + ' enregistrements';
+                    }
+
+                });
+
+                // Afficher automatiquement le bon tableau
+                if (searchValue !== '') {
+
+                    if (allHistory) {
+                        allHistory.style.display = 'block';
+                    }
+
+                    if (dentistHistory) {
+                        dentistHistory.style.display = 'none';
+                    }
+
+                }
+
+            }
+
+            // Recherche pendant la saisie
+            searchInput.addEventListener('input', dynamicSearch);
+
+            // Effacer la recherche
+            clearButton?.addEventListener('click', function () {
+
+                searchInput.value = '';
+
+                dynamicSearch();
+
+                searchInput.focus();
+
+            });
+
+            // Raccourci Ctrl + K
+            document.addEventListener('keydown', function (e) {
+
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+
+                    e.preventDefault();
+
+                    searchInput.focus();
+
+                }
+
+            });
+
         });
+
+
+
+
+        // Animations fluides des lignes du tableau au chargement
+        window.addEventListener('load', function() {
+            const rows = document.querySelectorAll('.table-row-animate');
+            rows.forEach((row, index) => {
+                row.style.animationDelay = `${index * 0.05}s`;
+            });
+        });
+
+        // Amélioration du formulaire de recherche
+        const searchForm = document.querySelector('.search-form');
+        const searchInput = document.querySelector('.search-input');
+
+        if (searchForm) {
+    searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        if (!searchInput.value.trim()) {
+            searchInput.classList.add('shake');
+
+            setTimeout(() => {
+                searchInput.classList.remove('shake');
+            }, 500);
+        }
     });
+}
 
-    // Amélioration du formulaire de recherche
-    const searchForm = document.querySelector('.search-form');
-    const searchInput = document.querySelector('.search-input');
+        // Ajout des effets de focus
+        if (searchInput) {
+            searchInput.addEventListener('focus', function() {
+                this.closest('.search-wrapper').classList.add('focused');
+            });
 
-    if (searchForm) {
-        searchForm.addEventListener('submit', function(e) {
-            if (!searchInput.value.trim()) {
+            searchInput.addEventListener('blur', function() {
+                this.closest('.search-wrapper').classList.remove('focused');
+            });
+
+            searchInput.addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    this.closest('.search-form').classList.add('has-input');
+                } else {
+                    this.closest('.search-form').classList.remove('has-input');
+                }
+            });
+        }
+
+        // Effet d’ondulation sur les boutons
+        document.querySelectorAll('.search-btn, .empty-action-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Faire défiler jusqu’au tableau après une recherche
+        const AllHistoryDiv = document.getElementById('AllHistory');
+        const DentistHistoryDiv = document.getElementById('DentistHistory');
+
+        if (DentistHistoryDiv && DentistHistoryDiv.style.display !== 'none') {
+            setTimeout(() => {
+                DentistHistoryDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+        }
+
+        // Trier le tableau par colonne (amélioration facultative)
+        document.querySelectorAll('.data-table th').forEach(th => {
+            th.style.cursor = 'pointer';
+            th.addEventListener('click', function() {
+                // You can implement sorting here if needed
+                console.log('Column clicked:', this.textContent);
+            });
+        });
+
+        // Exporter le tableau au format CSV (amélioration facultative)
+        function exportTableToCSV(filename, tableId) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                let row = [], cols = rows[i].querySelectorAll('td, th');
+                for (let j = 0; j < cols.length; j++) {
+                    let text = cols[j].innerText.replace(/"/g, '""');
+                    row.push('"' + text + '"');
+                }
+                csv.push(row.join(','));
+            }
+
+            downloadCSV(csv.join('\n'), filename);
+        }
+
+        function downloadCSV(csv, filename) {
+            const csvFile = new Blob([csv], { type: 'text/csv' });
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(csvFile);
+            downloadLink.download = filename;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+
+        // Raccourci clavier pour la recherche (Ctrl/Cmd + K)
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault();
-                searchInput.classList.add('shake');
-                setTimeout(() => searchInput.classList.remove('shake'), 500);
+                searchInput?.focus();
             }
         });
-    }
-
-    // Ajout des effets de focus
-    if (searchInput) {
-        searchInput.addEventListener('focus', function() {
-            this.closest('.search-wrapper').classList.add('focused');
-        });
-
-        searchInput.addEventListener('blur', function() {
-            this.closest('.search-wrapper').classList.remove('focused');
-        });
-
-        searchInput.addEventListener('input', function() {
-            if (this.value.length > 0) {
-                this.closest('.search-form').classList.add('has-input');
-            } else {
-                this.closest('.search-form').classList.remove('has-input');
-            }
-        });
-    }
-
-    // Effet d’ondulation sur les boutons
-    document.querySelectorAll('.search-btn, .empty-action-btn').forEach(button => {
-        button.addEventListener('click', function(e) {
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            ripple.classList.add('ripple');
-
-            this.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 600);
-        });
-    });
-
-    // Faire défiler jusqu’au tableau après une recherche
-    const AllHistoryDiv = document.getElementById('AllHistory');
-    const DentistHistoryDiv = document.getElementById('DentistHistory');
-
-    if (DentistHistoryDiv && DentistHistoryDiv.style.display !== 'none') {
-        setTimeout(() => {
-            DentistHistoryDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 300);
-    }
-
-    // Trier le tableau par colonne (amélioration facultative)
-    document.querySelectorAll('.data-table th').forEach(th => {
-        th.style.cursor = 'pointer';
-        th.addEventListener('click', function() {
-            // You can implement sorting here if needed
-            console.log('Column clicked:', this.textContent);
-        });
-    });
-
-    // Exporter le tableau au format CSV (amélioration facultative)
-    function exportTableToCSV(filename, tableId) {
-        const table = document.getElementById(tableId);
-        if (!table) return;
-
-        let csv = [];
-        const rows = table.querySelectorAll('tr');
-
-        for (let i = 0; i < rows.length; i++) {
-            let row = [], cols = rows[i].querySelectorAll('td, th');
-            for (let j = 0; j < cols.length; j++) {
-                let text = cols[j].innerText.replace(/"/g, '""');
-                row.push('"' + text + '"');
-            }
-            csv.push(row.join(','));
-        }
-
-        downloadCSV(csv.join('\n'), filename);
-    }
-
-    function downloadCSV(csv, filename) {
-        const csvFile = new Blob([csv], { type: 'text/csv' });
-        const downloadLink = document.createElement('a');
-        downloadLink.href = URL.createObjectURL(csvFile);
-        downloadLink.download = filename;
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-    }
-
-    // Raccourci clavier pour la recherche (Ctrl/Cmd + K)
-    document.addEventListener('keydown', function(e) {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-            e.preventDefault();
-            searchInput?.focus();
-        }
-    });
 </script>
 
 </body>
