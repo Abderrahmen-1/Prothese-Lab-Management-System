@@ -1,3 +1,4 @@
+```
 /* =========================================================
    DENTAFLOW - MODERN DASHBOARD
    No Sidebar / SaaS Clinical Design
@@ -1251,5 +1252,374 @@ body {
         animation-iteration-count: 1 !important;
 
         transition-duration: 0.01ms !important;
+    }
+}
+```
+
+
+
+/* =========================================================
+   RESPONSIVE REFINEMENT
+   Additive overrides: preserves the existing desktop design.
+   ========================================================= */
+
+/* Prevent flex/grid children from forcing horizontal overflow. */
+.top-nav,
+.brand,
+.user-profile,
+.dashboard,
+.dashboard-hero,
+.hero-content,
+.section-header,
+.cards-grid,
+.module-card {
+    min-width: 0;
+}
+
+img,
+svg,
+video {
+    max-width: 100%;
+}
+
+/* The clock should size to its content, not to a percentage
+   of the entire viewport. */
+.clock-card {
+    width: fit-content;
+    max-width: calc(100% - 32px);
+    padding: 16px 22px;
+    margin: 18px auto 0;
+}
+
+.clock-time {
+    font-size: clamp(22px, 3vw, 35px);
+}
+
+.clock-date {
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* Better keyboard/focus accessibility. */
+.module-card:focus-visible,
+.users-generated:focus-visible {
+    outline: 3px solid #2563eb;
+    outline-offset: 4px;
+}
+
+/* Tablet and compact laptop layouts. */
+@media (max-width: 900px) {
+    .top-nav {
+        gap: 12px;
+        padding-inline: 3%;
+    }
+
+    .brand {
+        gap: 9px;
+        flex-wrap: wrap;
+    }
+
+    .users-generated {
+        margin-left: 4px;
+        white-space: nowrap;
+    }
+
+    .nav-status {
+        margin-left: auto;
+        margin-right: 8px;
+        white-space: nowrap;
+    }
+
+    .user-profile {
+        flex-shrink: 0;
+    }
+
+    .dashboard {
+        width: min(94%, 760px);
+    }
+
+    .dashboard-hero {
+        padding: 32px;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .statistics-card {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Phones and narrow tablets. */
+@media (max-width: 600px) {
+    .top-nav {
+        height: auto;
+        min-height: 64px;
+        padding: 10px 14px;
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 8px;
+    }
+
+    .brand {
+        flex: 1 1 auto;
+        min-width: 0;
+        gap: 9px;
+    }
+
+    .brand-icon {
+        width: 36px;
+        height: 36px;
+        flex: 0 0 36px;
+    }
+
+    .brand-text strong {
+        font-size: 14px;
+    }
+
+    .brand-text span {
+        display: none;
+    }
+
+    /* Keep the owner link available without letting its long
+       label push the logo or profile off-screen. */
+    .users-generated {
+        margin: 0 0 0 4px;
+        padding: 8px 9px;
+        flex: 0 0 auto;
+        font-size: 0;
+    }
+
+    .users-generated i {
+        font-size: 14px;
+    }
+
+    .nav-status {
+        display: none;
+    }
+
+    .user-profile {
+        margin-left: auto;
+        gap: 0;
+    }
+
+    .avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 11px;
+    }
+
+    .user-meta {
+        display: none;
+    }
+
+    .dashboard {
+        width: calc(100% - 28px);
+        padding: 18px 0 36px;
+    }
+
+    .clock-card {
+        width: auto;
+        max-width: calc(100% - 28px);
+        margin-top: 14px;
+        padding: 12px 18px;
+        text-align: center;
+    }
+
+    .clock-header {
+        justify-content: center;
+        margin-bottom: 7px;
+    }
+
+    .clock-time {
+        font-size: clamp(24px, 7vw, 32px);
+    }
+
+    .clock-date {
+        margin-top: 5px;
+        font-size: 11px;
+    }
+
+    .dashboard-hero {
+        min-height: 0;
+        padding: 25px 22px;
+        margin-bottom: 28px;
+        border-radius: 18px;
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    .hero-content h1 {
+        margin-top: 13px;
+        font-size: clamp(1.5rem, 6vw, 1.9rem);
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+    }
+
+    .hero-content p {
+        max-width: 100%;
+        font-size: 12px;
+    }
+
+    /* Hide decoration on small screens so it never competes
+       with or sits behind the welcome text. */
+    .hero-decoration {
+        display: none;
+    }
+
+    .section-header {
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .section-header > div:first-child {
+        min-width: 0;
+    }
+
+    .section-header h2 {
+        font-size: 17px;
+    }
+
+    .section-header p {
+        max-width: 100%;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .module-count {
+        display: flex;
+        flex: 0 0 auto;
+        padding: 7px 9px;
+    }
+
+    .cards-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .module-card,
+    .statistics-card {
+        grid-column: auto;
+        min-height: 0;
+        padding: 18px;
+        border-radius: 15px;
+    }
+
+    .card-content {
+        margin-top: 14px;
+    }
+
+    .card-content p {
+        max-width: 100%;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .card-action {
+        padding-top: 12px;
+        margin-top: 14px;
+        font-size: 11px;
+    }
+
+    .card-action i {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* Hover effects are not useful on touch screens. */
+    .module-card:hover {
+        transform: none;
+    }
+
+    .module-card:hover .module-icon {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .module-card::before {
+        transform: scaleX(1);
+        opacity: .7;
+    }
+}
+
+/* Very small phones. */
+@media (max-width: 380px) {
+    .top-nav {
+        padding-inline: 10px;
+    }
+
+    .brand {
+        gap: 7px;
+    }
+
+    .brand-icon {
+        width: 33px;
+        height: 33px;
+        flex-basis: 33px;
+        font-size: 14px;
+    }
+
+    .brand-text strong {
+        font-size: 13px;
+    }
+
+    .users-generated {
+        padding: 7px;
+    }
+
+    .dashboard {
+        width: calc(100% - 22px);
+    }
+
+    .dashboard-hero {
+        padding: 21px 18px;
+    }
+
+    .hero-label {
+        font-size: 8px;
+        letter-spacing: .6px;
+    }
+
+    .hero-content h1 {
+        font-size: 1.45rem;
+        letter-spacing: -.5px;
+    }
+
+    .module-count {
+        gap: 5px;
+        padding: 6px 7px;
+    }
+
+    .module-count span {
+        font-size: 9px;
+    }
+}
+
+/* Landscape phones: use the available width without making
+   cards excessively tall. */
+@media (max-width: 900px) and (orientation: landscape) {
+    .dashboard {
+        padding-top: 16px;
+    }
+
+    .dashboard-hero {
+        min-height: 150px;
+        padding-block: 22px;
+    }
+}
+
+/* Respect devices that request reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+    .module-card,
+    .module-card::before,
+    .module-card::after,
+    .module-icon,
+    .card-action i {
+        transition: none !important;
+        animation: none !important;
     }
 }
