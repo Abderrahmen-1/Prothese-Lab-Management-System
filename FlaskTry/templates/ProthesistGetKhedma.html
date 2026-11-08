@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Système de gestion du laboratoire de prothèse - Attribution et suivi des travaux de prothèse">
+    <meta name="description"
+          content="Système de gestion du laboratoire de prothèse - Attribution et suivi des travaux de prothèse">
     <meta name="keywords" content="Prothèse, Gestion de laboratoire, Dentaire, Travaux, Soins des patients">
     <meta name="author" content="Équipe du laboratoire de prothèse">
     <title>Obtenir une tâche - ProLab Hub</title>
@@ -100,7 +101,7 @@
         </div>
 
         <div class="form-container">
-            <form action="/prothesists/ProGetKhedma" method="POST" id="khedmaForm" class="form-layout">
+            <form action="/prothesists/ProGetKhedma" method="POST" id="khedmaForm" class="form-layout" novalidate>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
                 <!-- Informations du prothésiste -->
@@ -443,14 +444,13 @@
 <script>
     function GetSourceFunction() {
         const source = document.getElementById("Source").value.toLowerCase();
+
         const patientSection = document.getElementById("PatientSource");
         const dentistSection = document.getElementById("DentistSource");
 
-        // Masquer les deux sections
         patientSection.style.display = "none";
         dentistSection.style.display = "none";
 
-        // Afficher la section appropriée avec une animation
         if (source === "patient") {
             patientSection.style.display = "block";
             patientSection.style.animation = "slideDown 0.4s ease";
@@ -462,30 +462,42 @@
 
     function KhalsaCheckFunction() {
         const khalsa = document.getElementById("khalsaCheck").value.toLowerCase();
+
         const versaSection = document.getElementById("GetVersaChoice");
         const valueSection = document.getElementById("GetValue");
 
         if (khalsa === "yes") {
             versaSection.style.display = "none";
             valueSection.style.display = "none";
+
+            document.getElementById("versaChoice").value = "";
+            document.getElementById("VersementValue").value = "";
+
         } else if (khalsa === "no") {
             versaSection.style.display = "block";
             versaSection.style.animation = "slideDown 0.4s ease";
+
         } else {
             versaSection.style.display = "none";
             valueSection.style.display = "none";
+
+            document.getElementById("versaChoice").value = "";
+            document.getElementById("VersementValue").value = "";
         }
     }
 
     function GetVersaChoiceFunction() {
         const versa = document.getElementById("versaChoice").value.toLowerCase();
+
         const valueSection = document.getElementById("GetValue");
+        const valueInput = document.getElementById("VersementValue");
 
         if (versa === "yes") {
             valueSection.style.display = "block";
             valueSection.style.animation = "slideDown 0.4s ease";
         } else {
             valueSection.style.display = "none";
+            valueInput.value = "";
         }
     }
 
@@ -538,6 +550,18 @@
             alert.style.animation = 'fadeOut 0.4s ease';
             setTimeout(() => alert.remove(), 400);
         }, 6000);
+    });
+
+    // Improve mobile keyboard behavior
+    document.querySelectorAll('input, select, textarea').forEach(field => {
+        field.addEventListener('focus', function () {
+            setTimeout(() => {
+                this.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }, 300);
+        });
     });
 </script>
 

@@ -4,17 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Système professionnel de gestion des prothésistes - Page des statistiques">
-    <meta name="keywords" content="Statistiques, Analyses, Prothésiste, Prothèse, Gestion de laboratoire, Flask">
-    <meta name="author" content="Équipe du laboratoire de prothèse">
-    <title>Statistiques - Gestion des prothésistes</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaProFile.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='ProStats.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+    <meta name="description"
+          content="Système professionnel de gestion des prothésistes - Page des statistiques">
+    <meta name="keywords"
+          content="Statistiques, Analyses, Prothésiste, Prothèse, Gestion de laboratoire, Flask">
+    <meta name="author" content="Équipe du laboratoire de prothèse">
+
+    <title>Statistiques - Gestion des prothésistes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='KhedmaProFile.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='ProStats.css') }}">
+
+    <link rel="icon"
+          href="{{ url_for('static', filename='favicon.ico') }}"
+          type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -22,137 +35,248 @@
 <div class="animated-bg"></div>
 
 <div class="container">
+
+    <!-- ================= HEADER ================= -->
+
     <header class="header">
+
         <div class="header-content">
+
             <div class="logo-section">
+
                 <div class="logo-icon">
                     <i class="fas fa-tooth"></i>
                 </div>
+
                 <div class="logo-text">
                     <h1>ProLab Hub</h1>
                     <p>Système de gestion du laboratoire de prothèse</p>
                 </div>
+
             </div>
+
             <nav class="header-nav">
-                <a href="/prothesists/ProKhedma" class="nav-btn back-btn">
-                    <i class="fas fa-arrow-left"></i> Retour au prothésiste
+
+                <a href="/prothesists/ProKhedma"
+                   class="nav-btn back-btn">
+
+                    <i class="fas fa-arrow-left"></i>
+                    Retour au prothésiste
+
                 </a>
+
             </nav>
+
         </div>
+
     </header>
 
+
+    <!-- ================= MAIN LAYOUT ================= -->
+
     <div class="main-layout">
+
+        <!-- ================= SIDEBAR ================= -->
+
         <aside class="sidebar">
+            <button type="button" id="toggleSidebar" class="toggle-sidebar-btn">
+                <i class="fas fa-eye-slash"></i>
+                <span>Masquer le menu</span>
+            </button>
+
             <div class="sidebar-header">
+
                 <h2>Statistiques</h2>
+
                 <div class="header-accent"></div>
+
             </div>
 
+
             <nav class="sidebar-menu">
+
                 <div class="menu-group">
+
                     <h3 class="group-title">Vues</h3>
-                    <!-- BUG FIX #16 : Utiliser des attributs data appropriés pour la sélection JavaScript -->
-                    <a href="/prothesists/ProAllkhedma" class="menu-item all-item" data-table="SearchTable">
+
+                    <a href="/prothesists/ProAllkhedma"
+                       class="menu-item all-item"
+                       data-table="SearchTable">
+
                         <i class="fas fa-search"></i>
+
                         <span>Résultats de recherche</span>
+
                     </a>
 
-                    <a href="/prothesists/ProTotal" class="menu-item finish-item" data-table="TotalTable">
-                        <i class="fas fa-sum"></i>
+
+                    <a href="/prothesists/ProTotal"
+                       class="menu-item finish-item"
+                       data-table="TotalTable">
+
+                        <i class="fas fa-calculator"></i>
+
                         <span>Résumé total</span>
+
                     </a>
-                    <a href="/prothesists/ProStat" class="menu-item get-item" data-table="StatTable">
+
+
+                    <a href="/prothesists/ProStat"
+                       class="menu-item get-item"
+                       data-table="StatTable">
+
                         <i class="fas fa-chart-bar"></i>
+
                         <span>Tableau des statistiques</span>
+
                     </a>
+
                 </div>
+
 
                 <div class="menu-group">
-                    <h3 class="group-title">Exportation</h3>
-                    <a class="menu-item pdf-item"
-                            id="printBtn">
 
-                        <i class="fa-solid fa-print"></i>
+                    <h3 class="group-title">Exportation</h3>
+
+                    <a href="#"
+                       class="menu-item pdf-item"
+                       id="printBtn">
+
+                        <i class="fas fa-print"></i>
+
                         <span>Imprimer</span>
+
                     </a>
+
                 </div>
+
             </nav>
+
         </aside>
 
+
+        <!-- ================= CONTENT ================= -->
+
         <main class="content">
+
+            <!-- Statistics heading -->
+
             <div class="stats-header">
+
                 <div class="stats-header-icon">
                     <i class="fas fa-chart-pie"></i>
                 </div>
+
                 <div class="stats-header-content">
+
                     <h1>Statistiques des prothésistes</h1>
-                    <p>Analyses complètes et indicateurs de performance pour tous les prothésistes</p>
+
+                    <p>
+                        Analyses complètes et indicateurs de performance
+                        pour tous les prothésistes
+                    </p>
+
                 </div>
+
             </div>
 
-            <!-- <div class="search-section">
-                 <form action="{{ url_for('prothesists.ProSearchPage') }}" method="POST" class="search-form">
-                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                     <div class="search-input-wrapper">
-                         <i class="fas fa-search"></i>
-                         <input
-                             type="text"
-                             name="SearchBar"
-                             placeholder="Rechercher un prothésiste par nom..."
-                             class="search-input"
-                             required
-                         >
-                     </div>
-                     <button type="submit" class="search-btn">
-                         <i class="fas fa-search"></i> Rechercher
-                     </button>
-                 </form>
-             </div> -->
+
+            <!-- ================= MESSAGES ================= -->
 
             <div class="messages-section">
+
                 {% if message %}
+
                 <div class="alert alert-success fade-in-slow">
+
                     <i class="fas fa-check-circle"></i>
+
                     <div class="alert-content">
                         <h3>{{ message }}</h3>
                     </div>
-                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+
+                    <button type="button"
+                            class="alert-close"
+                            aria-label="Fermer"
+                            onclick="this.parentElement.remove()">
+
                         <i class="fas fa-times"></i>
+
                     </button>
+
                 </div>
+
                 {% endif %}
 
+
                 {% if error %}
+
                 <div class="alert alert-error fade-in-slow">
+
                     <i class="fas fa-exclamation-circle"></i>
+
                     <div class="alert-content">
                         <h3>{{ error }}</h3>
                     </div>
-                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+
+                    <button type="button"
+                            class="alert-close"
+                            aria-label="Fermer"
+                            onclick="this.parentElement.remove()">
+
                         <i class="fas fa-times"></i>
+
                     </button>
+
                 </div>
+
                 {% endif %}
+
             </div>
+
+
+            <!-- ================= TABLE AREA ================= -->
 
             <div class="table-area">
 
-                <!-- SearchTable -->
-                <div id="SearchTable" class="table-container active" data-table="SearchTable">
+
+                <!-- ================= SEARCH TABLE ================= -->
+
+                <div id="SearchTable"
+                     class="table-container active"
+                     data-table="SearchTable">
+
                     <div class="table-header">
+
                         <h2>
-                            <i class="fas fa-search"></i> Résultats de recherche
+                            <i class="fas fa-search"></i>
+                            Résultats de recherche
                         </h2>
+
                         <div class="table-actions">
-                            <button class="btn-icon" title="Actualiser" type="button">
+
+                            <button class="btn-icon"
+                                    title="Actualiser"
+                                    type="button"
+                                    onclick="window.location.reload()">
+
                                 <i class="fas fa-sync"></i>
+
                             </button>
+
                         </div>
+
                     </div>
-                    {% if result %} <!--and not result is mapping %} -->
+
+
+                    {% if result and not result is mapping %}
+
                     <div class="table-wrapper">
+
                         <table class="data-table">
+
                             <thead>
+
                             <tr>
                                 <th>ID</th>
                                 <th>Numéro du patient</th>
@@ -169,104 +293,219 @@
                                 <th>ID utilisateur</th>
                                 <th>Date limite</th>
                             </tr>
+
                             </thead>
+
+
                             <tbody>
+
                             {% if result|length > 0 %}
+
                             {% for row in result %}
+
                             <tr>
+
                                 {% for item in row %}
-                                <td>{{ item }}</td>
+
+                                <td>{{ item if item is not none else '-' }}</td>
+
                                 {% endfor %}
+
                             </tr>
+
                             {% endfor %}
+
                             {% else %}
+
                             <tr>
-                                <td colspan="14" class="empty-state">Aucun résultat trouvé</td>
+                                <td colspan="14" class="empty-state">
+                                    Aucun résultat trouvé
+                                </td>
                             </tr>
+
                             {% endif %}
+
                             </tbody>
+
                         </table>
+
                     </div>
+
+
                     <div class="table-footer">
-                        <p>Total des enregistrements : <strong>{{ result|length if result else 0 }}</strong></p>
+
+                        <p>
+                            Total des enregistrements :
+                            <strong>{{ result|length if result else 0 }}</strong>
+                        </p>
+
                     </div>
+
                     {% else %}
+
                     <div class="empty-message">
+
                         <i class="fas fa-inbox"></i>
+
                         <p>Effectuez une recherche pour afficher les résultats</p>
+
                     </div>
+
                     {% endif %}
+
                 </div>
 
-                <!-- TotalTable -->
-                <div id="TotalTable" class="table-container hidden" data-table="TotalTable">
+
+                <!-- ================= TOTAL TABLE ================= -->
+
+                <div id="TotalTable"
+                     class="table-container hidden"
+                     data-table="TotalTable">
+
                     <div class="table-header">
+
                         <h2>
-                            <i class="fas fa-sum"></i> Résumé total
+                            <i class="fas fa-calculator"></i>
+                            Résumé total
                         </h2>
+
                     </div>
+
+
                     {% if total %}
+
                     <div class="table-wrapper">
+
                         <table class="data-table">
+
                             <thead>
+
                             <tr>
                                 <th>Nom du prothésiste</th>
                                 <th>Numéro du prothésiste</th>
                                 <th>Versement (Payé)</th>
                                 <th>Reste (B9aw)</th>
                             </tr>
+
                             </thead>
+
+
                             <tbody>
+
                             {% if total|length > 0 %}
+
                             {% for pro, value in total.items() %}
+
                             <tr>
+
                                 <td>
+
                                     <div class="cell-content">
+
                                         <i class="fas fa-user"></i>
+
                                         {{ value[0] if value[0] else pro }}
+
                                     </div>
+
                                 </td>
+
+
                                 <td>
-                                    <code>{{ value[1] if value[1] else '-' }}</code>
+
+                                    <code>
+                                        {{ value[1] if value[1] else '-' }}
+                                    </code>
+
                                 </td>
+
+
                                 <td>
-                                    <span class="badge-value">{{ value[2]|int }}</span>
+
+                                        <span class="badge-value">
+                                            {{ value[2]|int }}
+                                        </span>
+
                                 </td>
+
+
                                 <td>
-                                    <span class="badge-value secondary">{{ value[3]|int }}</span>
+
+                                        <span class="badge-value secondary">
+                                            {{ value[3]|int }}
+                                        </span>
+
                                 </td>
+
                             </tr>
+
                             {% endfor %}
+
                             {% else %}
+
                             <tr>
-                                <td colspan="4" class="empty-state">Aucune donnée disponible</td>
+                                <td colspan="4" class="empty-state">
+                                    Aucune donnée disponible
+                                </td>
                             </tr>
+
                             {% endif %}
+
                             </tbody>
+
                         </table>
+
                     </div>
+
+
                     <div class="table-footer">
-                        <p>Total des prothésistes : <strong>{{ total|length if total else 0 }}</strong></p>
+
+                        <p>
+                            Total des prothésistes :
+                            <strong>{{ total|length if total else 0 }}</strong>
+                        </p>
+
                     </div>
+
                     {% else %}
+
                     <div class="empty-message">
+
                         <i class="fas fa-inbox"></i>
+
                         <p>Aucune donnée disponible pour le résumé total</p>
+
                     </div>
+
                     {% endif %}
+
                 </div>
 
-                <!-- StatTable -->
-                <div id="StatTable" class="table-container hidden" data-table="StatTable">
+
+                <!-- ================= STATISTICS TABLE ================= -->
+
+                <div id="StatTable"
+                     class="table-container hidden"
+                     data-table="StatTable">
+
                     <div class="table-header">
+
                         <h2>
-                            <i class="fas fa-chart-bar"></i> Tableau des statistiques
+                            <i class="fas fa-chart-bar"></i>
+                            Tableau des statistiques
                         </h2>
+
                     </div>
+
+
                     {% if result and result is mapping %}
+
                     <div class="table-wrapper">
+
                         <table class="data-table">
+
                             <thead>
+
                             <tr>
                                 <th>Nom du prothésiste</th>
                                 <th>Numéro du prothésiste</th>
@@ -278,135 +517,103 @@
                                 <th>Mois</th>
                                 <th>Année</th>
                             </tr>
+
                             </thead>
+
+
                             <tbody>
+
                             {% if result|length > 0 %}
+
                             {% for dentist, values in result.items() %}
+
                             {% for item in values %}
+
                             <tr>
+
                                 {% for v in item %}
-                                <td>{{ v }}</td>
+
+                                <td>{{ v if v is not none else '-' }}</td>
+
                                 {% endfor %}
+
                             </tr>
+
                             {% endfor %}
+
                             {% endfor %}
+
                             {% else %}
+
                             <tr>
-                                <td colspan="8" class="empty-state">Aucune donnée disponible</td>
+                                <td colspan="9" class="empty-state">
+                                    Aucune donnée disponible
+                                </td>
                             </tr>
+
                             {% endif %}
+
                             </tbody>
+
                         </table>
+
                     </div>
+
+
                     <div class="table-footer">
-                        <p>Points de données : <strong>{{ result|length if result else 0 }}</strong></p>
+
+                        <p>
+                            Points de données :
+                            <strong>{{ result|length if result else 0 }}</strong>
+                        </p>
+
                     </div>
+
                     {% else %}
+
                     <div class="empty-message">
+
                         <i class="fas fa-inbox"></i>
+
                         <p>Aucune donnée statistique disponible</p>
+
                     </div>
+
                     {% endif %}
+
                 </div>
 
             </div>
+
         </main>
+
     </div>
+
 </div>
 
+
+<!-- ================= JAVASCRIPT ================= -->
+
 <script>
-    const printBtn = document.getElementById("printBtn");
 
-    /* =========================================================
-       CHANGEMENT DE TABLEAU
-    ========================================================== */
+    document.addEventListener('DOMContentLoaded', function () {
 
-    function handleTableSwitch(tableId, element) {
+        const printBtn = document.getElementById('printBtn');
 
-        document.querySelectorAll('.table-container').forEach(t => {
-            t.classList.add('hidden');
-            t.classList.remove('active');
-        });
+        const toggleSidebar = document.getElementById('toggleSidebar');
+        const sidebar = document.querySelector('.sidebar');
 
-        const selectedTable = document.getElementById(tableId);
+        if (toggleSidebar && sidebar) {
 
-        if (selectedTable) {
-            selectedTable.classList.remove('hidden');
-            selectedTable.classList.add('active');
-        }
+            toggleSidebar.addEventListener('click', function () {
 
-        document.querySelectorAll('.sidebar-menu a').forEach(a => {
-            a.classList.remove('active');
-        });
+                sidebar.classList.toggle('menu-hidden');
 
-        if (element) {
-            element.classList.add('active');
-        }
-    }
+                const isHidden = sidebar.classList.contains('menu-hidden');
 
-
-    /* =========================================================
-       INITIALISATION DE LA PAGE
-    ========================================================== */
-
-    document.addEventListener('DOMContentLoaded', () => {
-
-        let activated = false;
-
-        function tryActivate(id) {
-
-            const table = document.getElementById(id);
-
-            if (table && table.querySelector('tbody tr')) {
-
-                handleTableSwitch(
-                    id,
-                    document.querySelector(`[data-table="${id}"]`)
-                );
-
-                activated = true;
-                return true;
-            }
-
-            return false;
-        }
-
-        tryActivate('StatTable') ||
-        tryActivate('SearchTable') ||
-        tryActivate('MostTable') ||
-        tryActivate('LessTable') ||
-        tryActivate('TotalTable');
-
-
-        if (!activated) {
-
-            handleTableSwitch(
-                'SearchTable',
-                document.querySelector('[data-table="SearchTable"]')
-            );
-
-        }
-
-
-        /* =====================================================
-           VALIDATION DE LA RECHERCHE
-        ====================================================== */
-
-        const searchForm = document.querySelector('.search-form');
-
-        if (searchForm) {
-
-            searchForm.addEventListener('submit', e => {
-
-                const input = searchForm.querySelector('.search-input');
-
-                if (!input.value.trim()) {
-
-                    e.preventDefault();
-
-                    alert('Veuillez saisir un nom');
-
-                }
+                toggleSidebar.innerHTML = isHidden
+                    ? '<i class="fas fa-eye"></i><span>Afficher le menu</span>'
+                    : '<i class="fas fa-eye-slash"></i><span>Masquer le menu</span>';
 
             });
 
@@ -414,65 +621,158 @@
 
 
         /* =====================================================
-           MASQUAGE AUTOMATIQUE DES ALERTES
-        ====================================================== */
+           TABLE SWITCHING
+        ===================================================== */
+
+        function handleTableSwitch(tableId, element) {
+
+            document.querySelectorAll('.table-container').forEach(table => {
+
+                table.classList.add('hidden');
+                table.classList.remove('active');
+
+            });
+
+
+            const selectedTable = document.getElementById(tableId);
+
+            if (selectedTable) {
+
+                selectedTable.classList.remove('hidden');
+                selectedTable.classList.add('active');
+
+            }
+
+
+            document.querySelectorAll('.sidebar-menu a[data-table]').forEach(link => {
+
+                link.classList.remove('active');
+
+            });
+
+
+            if (element) {
+
+                element.classList.add('active');
+
+            }
+
+        }
+
+
+        /* =====================================================
+           INITIAL TABLE SELECTION
+        ===================================================== */
+
+        const searchTable = document.getElementById('SearchTable');
+        const totalTable = document.getElementById('TotalTable');
+        const statTable = document.getElementById('StatTable');
+
+
+        const hasSearchData = searchTable &&
+            searchTable.querySelector('.data-table tbody tr:not(.empty-state)');
+
+        const hasTotalData = totalTable &&
+            totalTable.querySelector('.data-table tbody tr:not(.empty-state)');
+
+        const hasStatData = statTable &&
+            statTable.querySelector('.data-table tbody tr:not(.empty-state)');
+
+
+        let initialTable = 'SearchTable';
+
+
+        if (hasStatData) {
+
+            initialTable = 'StatTable';
+
+        } else if (hasSearchData) {
+
+            initialTable = 'SearchTable';
+
+        } else if (hasTotalData) {
+
+            initialTable = 'TotalTable';
+
+        }
+
+
+        const initialLink = document.querySelector(
+            `.sidebar-menu a[data-table="${initialTable}"]`
+        );
+
+        handleTableSwitch(initialTable, initialLink);
+
+
+        /* =====================================================
+           ALERT AUTO DISMISS
+        ===================================================== */
 
         document.querySelectorAll('.alert').forEach(alert => {
 
             setTimeout(() => {
 
                 alert.style.opacity = '0';
+                alert.style.transform = 'translateY(-8px)';
 
                 setTimeout(() => {
-                    alert.style.display = 'none';
+
+                    alert.remove();
+
                 }, 500);
 
             }, 8000);
 
         });
 
+
+        /* =====================================================
+           PRINT CURRENTLY VISIBLE TABLE
+        ===================================================== */
+
+        if (printBtn) {
+
+            printBtn.addEventListener('click', function (event) {
+
+                event.preventDefault();
+
+                const activeTable = document.querySelector(
+                    '.table-container.active:not(.hidden)'
+                );
+
+
+                if (!activeTable) {
+
+                    alert("Aucun tableau disponible pour l'impression.");
+
+                    return;
+
+                }
+
+
+                activeTable.classList.add('print-target');
+
+                window.print();
+
+                setTimeout(() => {
+
+                    activeTable.classList.remove('print-target');
+
+                }, 500);
+
+            });
+
+        }
+
+
+        /* =====================================================
+           SIDEBAR LINKS
+           Keep their original Flask navigation routes.
+        ===================================================== */
+
     });
 
-
-    /* =========================================================
-       IMPRESSION
-    ========================================================== */
-
-    if (printBtn) {
-
-        printBtn.addEventListener("click", function () {
-
-            // Trouver le tableau actuellement visible
-            const activeTable = document.querySelector(
-                '.table-container.active:not(.hidden)'
-            );
-
-            if (!activeTable) {
-
-                alert("Aucun tableau disponible pour l'impression.");
-
-                return;
-
-            }
-
-            // Ajouter la classe d'impression
-            activeTable.classList.add("print-target");
-
-            // Imprimer
-            window.print();
-
-            // Supprimer la classe après la fermeture de la boîte de dialogue d'impression
-            setTimeout(() => {
-
-                activeTable.classList.remove("print-target");
-
-            }, 500);
-
-        });
-
-    }
 </script>
 
 </body>
-
 </html>

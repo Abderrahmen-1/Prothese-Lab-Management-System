@@ -7,14 +7,18 @@
     <meta name="description" content="Système professionnel de gestion des prothésistes - Page des tâches terminées">
     <meta name="keywords" content="Terminé, Achevé, Tâche, Prothésiste, Prothèse, Gestion de laboratoire, Flask">
     <meta name="author" content="Équipe du laboratoire de prothèse">
+
     <title>Tâche terminée - Gestion des prothésistes</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaProFile.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='FinishedProKhedma.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -22,114 +26,184 @@
 <div class="animated-bg"></div>
 
 <div class="container">
-    <!-- En-tête -->
+
+    <!-- HEADER -->
     <header class="header">
         <div class="header-content">
+
             <div class="logo-section">
                 <div class="logo-icon">
                     <i class="fas fa-tooth"></i>
                 </div>
+
                 <div class="logo-text">
                     <h1>ProLab Hub</h1>
                     <p>Système de gestion du laboratoire de prothèse</p>
                 </div>
             </div>
+
             <nav class="header-nav">
                 <a href="/prothesists/ProKhedma" class="nav-btn back-btn">
-                    <i class="fas fa-arrow-left"></i> Retour au prothésiste
+                    <i class="fas fa-arrow-left"></i>
+                    Retour au prothésiste
                 </a>
             </nav>
+
         </div>
     </header>
 
-    <!-- Mise en page principale -->
-    <div class="main-layout">
-        <!-- Barre latérale -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Tâche terminée</h2>
-                <div class="header-accent"></div>
-            </div>
 
-            <nav class="sidebar-menu">
-                <div class="menu-group">
-                    <h3 class="group-title">Navigation</h3>
-                    <a href="/ProAllkhedma" class="menu-item all-item">
-                        <i class="fas fa-list-alt"></i>
-                        <span>Toutes les tâches</span>
-                    </a>
-                    <a href="/prothesists/ProKhedma" class="menu-item get-item">
-                        <i class="fas fa-arrow-left"></i>
-                        <span>Retour à l'accueil</span>
-                    </a>
+    <!-- MAIN LAYOUT -->
+    <div class="main-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="pageSidebar">
+
+            <button type="button"
+                    class="sidebar-toggle"
+                    id="sidebarToggle"
+                    aria-expanded="true"
+                    aria-controls="sidebarContent">
+
+                <i class="fas fa-eye-slash" id="sidebarToggleIcon"></i>
+                <span id="sidebarToggleText">Masquer la navigation</span>
+            </button>
+
+            <div class="sidebar-content" id="sidebarContent">
+
+                <div class="sidebar-header">
+                    <h2>Tâche terminée</h2>
+                    <div class="header-accent"></div>
                 </div>
 
-                <div class="menu-group">
-                    <h3 class="group-title">Informations</h3>
-                    <div class="info-box">
-                        <i class="fas fa-check-double"></i>
-                        <div class="info-content">
-                            <p><strong>Marquer comme terminé :</strong> Enregistrer les travaux terminés</p>
-                            <p><strong>Suivre la progression :</strong> Surveiller l'état d'avancement</p>
+                <nav class="sidebar-menu">
+
+                    <div class="menu-group">
+                        <h3 class="group-title">Navigation</h3>
+
+                        <a href="/ProAllkhedma" class="menu-item all-item">
+                            <i class="fas fa-list-alt"></i>
+                            <span>Toutes les tâches</span>
+                        </a>
+
+                        <a href="/prothesists/ProKhedma" class="menu-item get-item">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Retour à l'accueil</span>
+                        </a>
+                    </div>
+
+                    <div class="menu-group">
+                        <h3 class="group-title">Informations</h3>
+
+                        <div class="info-box">
+                            <i class="fas fa-check-double"></i>
+
+                            <div class="info-content">
+                                <p>
+                                    <strong>Marquer comme terminé :</strong>
+                                    Enregistrer les travaux terminés
+                                </p>
+
+                                <p>
+                                    <strong>Suivre la progression :</strong>
+                                    Surveiller l'état d'avancement
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </nav>
+
+                </nav>
+            </div>
+
         </aside>
 
-        <!-- Contenu principal -->
+
+        <!-- MAIN CONTENT -->
         <main class="content">
-            <!-- Section de bienvenue -->
+
+            <!-- PAGE HEADER -->
             <div class="form-header finished-header">
+
                 <div class="form-header-icon">
                     <i class="fas fa-check-circle"></i>
                 </div>
+
                 <div class="form-header-content">
                     <h1>Marquer la tâche comme terminée</h1>
-                    <p>Enregistrez les travaux de prothèse terminés et suivez leur état d'achèvement</p>
+                    <p>
+                        Enregistrez les travaux de prothèse terminés
+                        et suivez leur état d'achèvement.
+                    </p>
                 </div>
+
             </div>
 
-            <!-- Messages de succès/erreur -->
+
+            <!-- SUCCESS MESSAGE -->
             {% if message %}
             <div class="alert-container">
                 <div class="alert alert-success fade-in-slow">
+
                     <i class="fas fa-check-circle"></i>
+
                     <div class="alert-content">
                         <h3>Opération réussie</h3>
                         <p>{{ message }}</p>
                     </div>
-                    <button class="alert-close" onclick="this.parentElement.style.display='none'">
+
+                    <button type="button"
+                            class="alert-close"
+                            aria-label="Fermer"
+                            onclick="this.closest('.alert-container').remove()">
                         <i class="fas fa-times"></i>
                     </button>
+
                 </div>
             </div>
             {% endif %}
 
+
+            <!-- ERROR MESSAGE -->
             {% if error %}
             <div class="alert-container">
                 <div class="alert alert-error fade-in-slow">
+
                     <i class="fas fa-exclamation-circle"></i>
+
                     <div class="alert-content">
                         <h3>Erreur</h3>
                         <p>{{ error }}</p>
                     </div>
-                    <button class="alert-close"
-                            type="button"
-                            onclick="this.parentElement.style.display='none'">
+
+                    <button type="button"
+                            class="alert-close"
+                            aria-label="Fermer"
+                            onclick="this.closest('.alert-container').remove()">
                         <i class="fas fa-times"></i>
                     </button>
+
                 </div>
             </div>
             {% endif %}
 
-            <!-- Section du formulaire -->
-            <div class="form-container">
-                <form action="/prothesists/ProFinished" method="POST" class="finished-form" id="finished-form">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
-                    <!-- Section des informations du prothésiste -->
-                    <div class="form-section">
+            <!-- FORM -->
+            <div class="form-container">
+
+                <form action="/prothesists/ProFinished"
+                      method="POST"
+                      class="finished-form"
+                      id="finished-form"
+                      autocomplete="on">
+
+                    <input type="hidden"
+                           name="csrf_token"
+                           value="{{ csrf_token }}">
+
+
+                    <!-- PROTHESIST INFORMATION -->
+                    <section class="form-section">
+
                         <div class="section-header">
                             <i class="fas fa-user-circle"></i>
                             <h2>Informations du prothésiste</h2>
@@ -137,67 +211,83 @@
 
                         <div class="form-group">
                             <label for="ProthesistName">
-                                <i class="fas fa-user"></i> Nom du prothésiste
+                                <i class="fas fa-user"></i>
+                                Nom du prothésiste
                                 <span class="required">*</span>
                             </label>
+
                             <input
-                                    type="text"
-                                    id="ProthesistName"
-                                    name="ProthesistName"
-                                    placeholder="Saisissez le nom du prothésiste"
-                                    required
-                                    class="form-input"
-                            >
+                                type="text"
+                                id="ProthesistName"
+                                name="ProthesistName"
+                                placeholder="Saisissez le nom du prothésiste"
+                                required
+                                class="form-input"
+                                autocomplete="name">
                         </div>
 
                         <div class="form-group">
                             <label for="ProthesistNumber">
-                                <i class="fas fa-id-card"></i> Numéro du prothésiste
+                                <i class="fas fa-id-card"></i>
+                                Numéro du prothésiste
                                 <span class="required">*</span>
                             </label>
-                            <input
-                                    type="text"
-                                    id="ProthesistNumber"
-                                    name="ProthesistNumber"
-                                    placeholder="Saisissez le numéro du prothésiste"
-                                    required
-                                    class="form-input"
-                            >
-                        </div>
-                    </div>
 
-                    <!-- Section de la source du travail -->
-                    <div class="form-section">
+                            <input
+                                type="text"
+                                id="ProthesistNumber"
+                                name="ProthesistNumber"
+                                placeholder="Saisissez le numéro du prothésiste"
+                                required
+                                class="form-input">
+                        </div>
+
+                    </section>
+
+
+                    <!-- WORK SOURCE -->
+                    <section class="form-section">
+
                         <div class="section-header">
                             <i class="fas fa-layer-group"></i>
                             <h2>Source du travail</h2>
                         </div>
 
                         <div class="form-group">
+
                             <label for="Choice">
-                                <i class="fas fa-code-branch"></i> Type de source
+                                <i class="fas fa-code-branch"></i>
+                                Type de source
                                 <span class="required">*</span>
                             </label>
+
                             <div class="select-wrapper">
                                 <select
-                                        id="Choice"
-                                        name="Choice"
-                                        onchange="handleSourceChange()"
-                                        required
-                                        class="form-input"
-                                >
-                                    <option value="" disabled selected>Sélectionnez le type de source</option>
+                                    id="Choice"
+                                    name="Choice"
+                                    required
+                                    class="form-input">
+
+                                    <option value="" disabled selected>
+                                        Sélectionnez le type de source
+                                    </option>
+
                                     <option value="patient">Patient</option>
                                     <option value="dentist">Dentiste</option>
+
                                 </select>
                             </div>
+
                             <small class="form-help">
-                                Sélectionnez si ce travail concerne un patient ou un dentiste
+                                Sélectionnez si ce travail concerne un patient ou un dentiste.
                             </small>
+
                         </div>
 
-                        <!-- Section du choix Patient -->
+
+                        <!-- PATIENT SECTION -->
                         <div id="PatientChoice" class="source-section hidden">
+
                             <div class="source-badge">
                                 <i class="fas fa-hospital-user"></i>
                                 <span>Travail pour un patient</span>
@@ -205,35 +295,40 @@
 
                             <div class="form-group">
                                 <label for="PatientID">
-                                    <i class="fas fa-hospital-user"></i> ID du patient
+                                    <i class="fas fa-hospital-user"></i>
+                                    ID du patient
                                     <span class="required">*</span>
                                 </label>
+
                                 <input
-                                        type="text"
-                                        id="PatientID"
-                                        name="PatientID"
-                                        placeholder="Saisissez l'ID du patient"
-                                        class="form-input"
-                                >
+                                    type="text"
+                                    id="PatientID"
+                                    name="PatientID"
+                                    placeholder="Saisissez l'ID du patient"
+                                    class="form-input">
                             </div>
 
                             <div class="form-group">
                                 <label for="PatientKhedmaName">
-                                    <i class="fas fa-briefcase"></i> ID du service
+                                    <i class="fas fa-briefcase"></i>
+                                    ID du service
                                     <span class="required">*</span>
                                 </label>
+
                                 <input
-                                        type="text"
-                                        id="PatientKhedmaName"
-                                        name="ServiceID"
-                                        placeholder="Vous pouvez trouver l'ID du service dans la première colonne du tableau de l'historique des patients"
-                                        class="form-input"
-                                >
+                                    type="text"
+                                    id="PatientKhedmaName"
+                                    name="ServiceID"
+                                    placeholder="ID du service : première colonne de l'historique des patients"
+                                    class="form-input">
                             </div>
+
                         </div>
 
-                        <!-- Section du choix Dentiste -->
+
+                        <!-- DENTIST SECTION -->
                         <div id="DentistChoice" class="source-section hidden">
+
                             <div class="source-badge">
                                 <i class="fas fa-user-md"></i>
                                 <span>Travail pour un dentiste</span>
@@ -241,234 +336,410 @@
 
                             <div class="form-group">
                                 <label for="DentistName">
-                                    <i class="fas fa-user-md"></i> Nom du dentiste
+                                    <i class="fas fa-user-md"></i>
+                                    Nom du dentiste
                                     <span class="required">*</span>
                                 </label>
+
                                 <input
-                                        type="text"
-                                        id="DentistName"
-                                        name="Dentist"
-                                        placeholder="Saisissez le nom du dentiste"
-                                        class="form-input"
-                                >
+                                    type="text"
+                                    id="DentistName"
+                                    name="Dentist"
+                                    placeholder="Saisissez le nom du dentiste"
+                                    class="form-input">
                             </div>
 
                             <div class="form-group">
                                 <label for="DPatientID">
-                                    <i class="fas fa-hospital-user"></i> ID du patient
+                                    <i class="fas fa-hospital-user"></i>
+                                    ID du patient
                                     <span class="required">*</span>
                                 </label>
+
                                 <input
-                                        type="text"
-                                        id="DPatientID"
-                                        name="DPatientID"
-                                        placeholder="Saisissez l'ID du patient"
-                                        class="form-input"
-                                >
+                                    type="text"
+                                    id="DPatientID"
+                                    name="DPatientID"
+                                    placeholder="Saisissez l'ID du patient"
+                                    class="form-input">
                             </div>
 
                             <div class="form-group">
                                 <label for="DentistKhedmaName">
-                                    <i class="fas fa-briefcase"></i> ID du service
+                                    <i class="fas fa-briefcase"></i>
+                                    ID du service
                                     <span class="required">*</span>
                                 </label>
+
                                 <input
-                                        type="text"
-                                        id="DentistKhedmaName"
-                                        name="DServiceID"
-                                        placeholder="Vous pouvez le trouver dans la première colonne du tableau de l'historique des dentistes"
-                                        class="form-input"
-                                >
+                                    type="text"
+                                    id="DentistKhedmaName"
+                                    name="DServiceID"
+                                    placeholder="ID du service : première colonne de l'historique des dentistes"
+                                    class="form-input">
                             </div>
+
                         </div>
+
+                    </section>
+
+
+                    <!-- FORM ACTIONS -->
+                    <div class="form-actions">
+
+                        <button type="reset" class="btn btn-secondary">
+                            <i class="fas fa-redo"></i>
+                            Effacer le formulaire
+                        </button>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i>
+                            Marquer comme terminé
+                        </button>
+
                     </div>
 
-                    <!-- Actions du formulaire -->
-                    <div class="form-actions">
-                        <button type="reset" class="btn btn-secondary">
-                            <i class="fas fa-redo"></i> Effacer le formulaire
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-check"></i> Marquer comme terminé
-                        </button>
-                    </div>
                 </form>
+
             </div>
 
-            <!-- Cartes d'information -->
-            <div class="info-cards-section">
-                <div class="info-card completion-card">
+
+            <!-- INFORMATION CARDS -->
+            <section class="info-cards-section">
+
+                <article class="info-card completion-card">
+
                     <div class="card-icon">
                         <i class="fas fa-tasks"></i>
                     </div>
+
                     <div class="card-content">
                         <h3>Suivi des travaux terminés</h3>
-                        <p>Conservez des enregistrements précis de tous les travaux terminés pour une gestion correcte du flux de travail</p>
+                        <p>
+                            Conservez des enregistrements précis de tous les travaux
+                            terminés pour une gestion correcte du flux de travail.
+                        </p>
                     </div>
-                </div>
 
-                <div class="info-card quality-card">
+                </article>
+
+
+                <article class="info-card quality-card">
+
                     <div class="card-icon">
                         <i class="fas fa-star"></i>
                     </div>
+
                     <div class="card-content">
                         <h3>Assurance qualité</h3>
-                        <p>Marquez le travail comme terminé uniquement après les contrôles qualité et la vérification du prothésiste</p>
+                        <p>
+                            Marquez le travail comme terminé uniquement après les
+                            contrôles qualité et la vérification du prothésiste.
+                        </p>
                     </div>
-                </div>
 
-                <div class="info-card report-card">
+                </article>
+
+
+                <article class="info-card report-card">
+
                     <div class="card-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
+
                     <div class="card-content">
                         <h3>Rapports de performance</h3>
-                        <p>Générez des rapports basés sur les tâches terminées pour analyser la productivité</p>
+                        <p>
+                            Générez des rapports basés sur les tâches terminées
+                            pour analyser la productivité.
+                        </p>
                     </div>
-                </div>
-            </div>
+
+                </article>
+
+            </section>
+
         </main>
     </div>
 </div>
 
-<!-- Scripts -->
+
 <script>
-    // Gérer le changement de source
-    function handleSourceChange() {
-        const choice = document.getElementById('Choice').value.toLowerCase().trim();
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const form = document.getElementById('finished-form');
+        const choiceSelect = document.getElementById('Choice');
+
         const patientSection = document.getElementById('PatientChoice');
         const dentistSection = document.getElementById('DentistChoice');
 
-        // Réinitialiser les sections
-        patientSection.classList.add('hidden');
-        dentistSection.classList.add('hidden');
+        const sidebar = document.getElementById('pageSidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarToggleIcon = document.getElementById('sidebarToggleIcon');
+        const sidebarToggleText = document.getElementById('sidebarToggleText');
 
-        // Effacer les champs
-        clearSectionInputs('patient');
-        clearSectionInputs('dentist');
 
-        // Afficher la section appropriée
-        if (choice === 'patient') {
-            patientSection.classList.remove('hidden');
-            document.getElementById('PatientID').focus();
-        } else if (choice === 'dentist') {
-            dentistSection.classList.remove('hidden');
-            document.getElementById('DentistName').focus();
+        /* =====================================
+           SIDEBAR SHOW / HIDE
+        ===================================== */
+
+        sidebarToggle.addEventListener('click', function () {
+
+            const isHidden = sidebar.classList.toggle('sidebar-collapsed');
+
+            sidebarToggle.setAttribute('aria-expanded', String(!isHidden));
+
+            if (isHidden) {
+                sidebarToggleIcon.className = 'fas fa-eye';
+                sidebarToggleText.textContent = 'Afficher la navigation';
+            } else {
+                sidebarToggleIcon.className = 'fas fa-eye-slash';
+                sidebarToggleText.textContent = 'Masquer la navigation';
+            }
+
+        });
+
+
+        /* =====================================
+           CLEAR SOURCE INPUTS
+        ===================================== */
+
+        function clearSectionInputs(section) {
+
+            if (section === 'patient') {
+                document.getElementById('PatientID').value = '';
+                document.getElementById('PatientKhedmaName').value = '';
+            }
+
+            if (section === 'dentist') {
+                document.getElementById('DentistName').value = '';
+                document.getElementById('DPatientID').value = '';
+                document.getElementById('DentistKhedmaName').value = '';
+            }
+
         }
-    }
 
-    // Effacer les champs d'une section
-    function clearSectionInputs(section) {
-        if (section === 'patient') {
-            document.getElementById('PatientID').value = '';
-            document.getElementById('PatientKhedmaName').value = '';
-        } else if (section === 'dentist') {
-            document.getElementById('DentistName').value = '';
-            document.getElementById('DPatientID').value = '';
-            document.getElementById('DentistKhedmaName').value = '';
+
+        /* =====================================
+           CHANGE SOURCE
+        ===================================== */
+
+        function handleSourceChange() {
+
+            const choice = choiceSelect.value.toLowerCase().trim();
+
+            patientSection.classList.add('hidden');
+            dentistSection.classList.add('hidden');
+
+            clearSectionInputs('patient');
+            clearSectionInputs('dentist');
+
+            if (choice === 'patient') {
+                patientSection.classList.remove('hidden');
+                scrollToSection(patientSection);
+            }
+
+            if (choice === 'dentist') {
+                dentistSection.classList.remove('hidden');
+                scrollToSection(dentistSection);
+            }
+
         }
-    }
 
-    // Validation du formulaire
-    document.getElementById('finished-form').addEventListener('submit', function(e) {
-        const choice = document.getElementById('Choice').value.toLowerCase().trim();
+        choiceSelect.addEventListener('change', handleSourceChange);
 
-        if (!choice) {
-            e.preventDefault();
-            showError('Veuillez sélectionner un type de source (patient ou dentiste)');
-            return false;
+
+        /* =====================================
+           MOBILE KEYBOARD / INPUT VISIBILITY
+        ===================================== */
+
+        function scrollToSection(element) {
+
+            if (window.innerWidth <= 768) {
+                setTimeout(function () {
+                    element.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }, 150);
+            }
+
         }
 
-        if (choice === 'patient') {
-            if (!document.getElementById('PatientID').value) {
-                e.preventDefault();
-                showError("Veuillez saisir l'ID du patient");
-                return false;
-            }
-            if (!document.getElementById('PatientKhedmaName').value) {
-                e.preventDefault();
-                showError('Veuillez saisir le nom de la tâche');
-                return false;
-            }
-        } else if (choice === 'dentist') {
-            if (!document.getElementById('DentistName').value) {
-                e.preventDefault();
-                showError('Veuillez saisir le nom du dentiste');
-                return false;
-            }
-            if (!document.getElementById('DPatientID').value) {
-                e.preventDefault();
-                showError("Veuillez saisir l'ID du patient");
-                return false;
-            }
-            if (!document.getElementById('DentistKhedmaName').value) {
-                e.preventDefault();
-                showError('Veuillez saisir le nom de la tâche');
-                return false;
-            }
-        } else if (choice !== 'patient' && choice !== 'dentist') {
-            e.preventDefault();
-            showError('Veuillez saisir soit « patient » soit « dentiste »');
-            return false;
-        }
-    });
+        document.querySelectorAll('.form-input').forEach(function (input) {
 
-    // Afficher un message d'erreur
-    function showError(message) {
-        const alertContainer = document.querySelector('.alert-container') || createAlertContainer();
-        const alertHTML = `
-            <div class="alert alert-error fade-in-slow">
-                <i class="fas fa-exclamation-circle"></i>
-                <div class="alert-content">
-                    <h3>Erreur</h3>
-                    <p>${message}</p>
+            input.addEventListener('focus', function () {
+
+                if (window.innerWidth <= 768) {
+
+                    setTimeout(function () {
+
+                        input.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+
+                    }, 300);
+
+                }
+
+            });
+
+        });
+
+
+        /* =====================================
+           FORM VALIDATION
+        ===================================== */
+
+        form.addEventListener('submit', function (e) {
+
+            const choice = choiceSelect.value.toLowerCase().trim();
+
+            if (!choice) {
+                e.preventDefault();
+                showError('Veuillez sélectionner un type de source (patient ou dentiste).');
+                return;
+            }
+
+            if (choice === 'patient') {
+
+                if (!document.getElementById('PatientID').value.trim()) {
+                    e.preventDefault();
+                    showError("Veuillez saisir l'ID du patient.");
+                    return;
+                }
+
+                if (!document.getElementById('PatientKhedmaName').value.trim()) {
+                    e.preventDefault();
+                    showError("Veuillez saisir l'ID du service.");
+                    return;
+                }
+
+            } else if (choice === 'dentist') {
+
+                if (!document.getElementById('DentistName').value.trim()) {
+                    e.preventDefault();
+                    showError('Veuillez saisir le nom du dentiste.');
+                    return;
+                }
+
+                if (!document.getElementById('DPatientID').value.trim()) {
+                    e.preventDefault();
+                    showError("Veuillez saisir l'ID du patient.");
+                    return;
+                }
+
+                if (!document.getElementById('DentistKhedmaName').value.trim()) {
+                    e.preventDefault();
+                    showError("Veuillez saisir l'ID du service.");
+                    return;
+                }
+
+            } else {
+
+                e.preventDefault();
+                showError('Veuillez sélectionner un patient ou un dentiste.');
+                return;
+
+            }
+
+        });
+
+
+        /* =====================================
+           ERROR MESSAGE
+        ===================================== */
+
+        function showError(message) {
+
+            let alertContainer = document.querySelector('.alert-container');
+
+            if (!alertContainer) {
+                alertContainer = document.createElement('div');
+                alertContainer.className = 'alert-container';
+
+                const formContainer = document.querySelector('.form-container');
+                document.querySelector('.content').insertBefore(
+                    alertContainer,
+                    formContainer
+                );
+            }
+
+            alertContainer.innerHTML = `
+                <div class="alert alert-error fade-in-slow" role="alert">
+
+                    <i class="fas fa-exclamation-circle"></i>
+
+                    <div class="alert-content">
+                        <h3>Erreur</h3>
+                        <p></p>
+                    </div>
+
+                    <button type="button"
+                            class="alert-close"
+                            aria-label="Fermer">
+                        <i class="fas fa-times"></i>
+                    </button>
+
                 </div>
-                <button class="alert-close" onclick="this.parentElement.style.display='none'">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `;
-        alertContainer.innerHTML = alertHTML;
-        alertContainer.style.display = 'block';
-        alertContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
+            `;
 
-    // Créer le conteneur d'alerte s'il n'existe pas
-    function createAlertContainer() {
-        const container = document.createElement('div');
-        container.className = 'alert-container';
-        document.querySelector('.content').insertBefore(container, document.querySelector('.form-container'));
-        return container;
-    }
+            alertContainer.querySelector('.alert-content p').textContent = message;
 
-    // Ajouter un effet d'ondulation aux boutons
-    function createRipple(e) {
-        const button = e.currentTarget;
-        const ripple = document.createElement('span');
-        const rect = button.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
+            alertContainer.querySelector('.alert-close').addEventListener('click', function () {
+                alertContainer.remove();
+            });
 
-        ripple.style.width = ripple.style.height = size + 'px';
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
-        ripple.classList.add('ripple');
+            alertContainer.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
 
-        button.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 600);
-    }
+        }
 
-    document.querySelectorAll('.btn').forEach(btn => {
-        btn.addEventListener('click', createRipple);
-    });
 
-    // Ajouter une animation progressive aux cartes d'information
-    document.querySelectorAll('.info-card').forEach((card, i) => {
-        card.style.animationDelay = (i * 0.1) + 's';
+        /* =====================================
+           RESET FORM
+        ===================================== */
+
+        form.addEventListener('reset', function () {
+
+            setTimeout(function () {
+                patientSection.classList.add('hidden');
+                dentistSection.classList.add('hidden');
+            }, 0);
+
+        });
+
+
+        /* =====================================
+           INFO CARD ANIMATIONS
+        ===================================== */
+
+        document.querySelectorAll('.info-card').forEach(function (card, index) {
+            card.style.animationDelay = (index * 0.1) + 's';
+        });
+
+
+        /* =====================================
+           CLOSE ALERTS
+        ===================================== */
+
+        document.querySelectorAll('.alert-close').forEach(function (button) {
+
+            button.addEventListener('click', function () {
+                const alert = button.closest('.alert-container');
+
+                if (alert) {
+                    alert.remove();
+                }
+            });
+
+        });
+
     });
 </script>
 
 </body>
-
 </html>

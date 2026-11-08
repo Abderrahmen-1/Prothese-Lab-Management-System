@@ -4,416 +4,505 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta name="description" content="Professional Prothesist Management System - Modify Versement">
     <meta name="keywords" content="Prothesist, Prosthetics, Versement, Lab Management, Flask">
     <meta name="author" content="Prosthetics Lab Team">
+
     <title>Modifier le versement - Gestion des prothésistes</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaProFile.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='ProthesistModifyVersement.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
 
-{% if message %}
-<div class="alert-container">
-    <div class="alert alert-success fade-in-slow">
-        <div class="alert-icon">
-            <i class="fas fa-check-circle"></i>
-        </div>
+<div class="page-wrapper">
 
-        <div class="alert-content">
-            <h3>Succès</h3>
-            <p>{{ message }}</p>
-        </div>
-
-        <button type="button" class="alert-close"
-                onclick="this.closest('.alert').remove()">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-</div>
-{% endif %}
-
-{% if error %}
-<div class="alert-container">
-    <div class="alert alert-error fade-in-slow">
-        <div class="alert-icon">
-            <i class="fas fa-exclamation-circle"></i>
-        </div>
-
-        <div class="alert-content">
-            <h3>Erreur</h3>
-            <p>{{ error }}</p>
-        </div>
-
-        <button type="button" class="alert-close"
-                onclick="this.closest('.alert').remove()">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-</div>
-{% endif %}
-
-<div class="animated-bg"></div>
-
-<div class="container">
-    <!-- En-tête -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo-section">
-                <div class="logo-icon">
-                    <i class="fas fa-tooth"></i>
-                </div>
-                <div class="logo-text">
-                    <h1>ProLab Hub</h1>
-                    <p>Système de gestion de laboratoire de prothèses</p>
-                </div>
-            </div>
-            <nav class="header-nav">
-                <a href="/prothesists/ProKhedma" class="nav-btn back-btn">
-                    <i class="fas fa-arrow-left"></i> Retour aux prothésistes
-                </a>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Mise en page principale -->
-    <div class="main-layout">
-
-        <!-- Barre latérale -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Modifier le versement</h2>
-                <div class="header-accent"></div>
+    <!-- Messages -->
+    {% if message %}
+    <div class="alert-container">
+        <div class="alert alert-success">
+            <div class="alert-icon">
+                <i class="fas fa-check-circle"></i>
             </div>
 
-            <nav class="sidebar-menu">
+            <div class="alert-content">
+                <h3>Succès</h3>
+                <p>{{ message }}</p>
+            </div>
 
-                <div class="menu-group">
-                    <h3 class="group-title">Navigation</h3>
+            <button type="button" class="alert-close"
+                    aria-label="Fermer le message"
+                    onclick="this.closest('.alert').remove()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    {% endif %}
 
-                    <a href="{{ url_for('prothesists.Proallkhedma') }}" class="menu-item all-item">
-                        <i class="fas fa-list-alt"></i>
-                        <span>Toutes les tâches</span>
-                    </a>
+    {% if error %}
+    <div class="alert-container">
+        <div class="alert alert-error">
+            <div class="alert-icon">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
 
-                    <a href="/prothesists/ProKhedma" class="menu-item get-item">
-                        <i class="fas fa-arrow-left"></i>
-                        <span>Retour à l'accueil</span>
-                    </a>
-                </div>
+            <div class="alert-content">
+                <h3>Erreur</h3>
+                <p>{{ error }}</p>
+            </div>
 
-                <div class="menu-group">
-                    <h3 class="group-title">Informations du formulaire</h3>
+            <button type="button" class="alert-close"
+                    aria-label="Fermer le message"
+                    onclick="this.closest('.alert').remove()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    {% endif %}
 
-                    <div class="info-box">
-                        <i class="fas fa-info-circle"></i>
+    <div class="container">
 
-                        <div class="info-content">
-                            <p><strong>Source de la tâche :</strong> Sélectionnez « patient » ou « dentiste »</p>
-                            <p><strong>Versement :</strong> Montant du paiement à modifier</p>
-                        </div>
+        <!-- En-tête -->
+        <header class="header">
+            <div class="header-content">
+
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-tooth"></i>
+                    </div>
+
+                    <div class="logo-text">
+                        <h1>ProLab Hub</h1>
+                        <p>Système de gestion de laboratoire de prothèses</p>
                     </div>
                 </div>
 
-            </nav>
-        </aside>
+                <nav class="header-nav">
+                    <a href="/prothesists/ProKhedma" class="nav-btn back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Retour aux prothésistes
+                    </a>
+                </nav>
 
-        <!-- Contenu principal -->
-        <main class="content">
-
-            <!-- Section d'accueil -->
-            <div class="form-header">
-                <div class="form-header-icon">
-                    <i class="fas fa-pencil-alt"></i>
-                </div>
-
-                <div class="form-header-content">
-                    <h1>Modifier le versement</h1>
-                    <p>Mettre à jour les informations de paiement des services du prothésiste</p>
-                </div>
             </div>
+        </header>
 
-            <!-- Section du formulaire -->
-            <div class="form-container">
+        <!-- Mise en page principale -->
+        <div class="main-layout">
 
-                <form action="/prothesists/ProModifyVersement" method="POST" class="modify-form" id="modifyVersementForm">
+            <!-- Barre latérale -->
+            <aside class="sidebar" id="modifySidebar">
 
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="sidebar-header">
+                    <h2>Modifier le versement</h2>
+                    <div class="header-accent"></div>
+                </div>
 
-                    <!-- Informations du prothésiste -->
-                    <div class="form-section">
+                <!-- Bouton masquer / afficher -->
+                <button type="button"
+                        class="sidebar-toggle"
+                        id="sidebarToggle"
+                        aria-expanded="true"
+                        aria-controls="sidebarMenu">
 
-                        <div class="section-header">
-                            <i class="fas fa-user-circle"></i>
-                            <h2>Informations du prothésiste</h2>
+                    <span>
+                        <i class="fas fa-bars"></i>
+                        Menu de navigation
+                    </span>
+
+                    <i class="fas fa-chevron-up toggle-icon"></i>
+                </button>
+
+                <nav class="sidebar-menu" id="sidebarMenu">
+
+                    <div class="menu-group">
+                        <h3 class="group-title">Navigation</h3>
+
+                        <a href="{{ url_for('prothesists.Proallkhedma') }}"
+                           class="menu-item all-item">
+                            <i class="fas fa-list-alt"></i>
+                            <span>Toutes les tâches</span>
+                        </a>
+
+                        <a href="/prothesists/ProKhedma"
+                           class="menu-item get-item">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Retour à l'accueil</span>
+                        </a>
+                    </div>
+
+                    <div class="menu-group">
+                        <h3 class="group-title">Informations du formulaire</h3>
+
+                        <div class="info-box">
+                            <i class="fas fa-info-circle"></i>
+
+                            <div class="info-content">
+                                <p>
+                                    <strong>Source de la tâche :</strong>
+                                    Sélectionnez « patient » ou « dentiste ».
+                                </p>
+
+                                <p>
+                                    <strong>Versement :</strong>
+                                    Montant du paiement à modifier.
+                                </p>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="ProthesistName">
-                                <i class="fas fa-user"></i> Nom du prothésiste
-                                <span class="required">*</span>
-                            </label>
+                </nav>
+            </aside>
 
-                            <input
+            <!-- Contenu principal -->
+            <main class="content">
+
+                <!-- En-tête du formulaire -->
+                <div class="form-header">
+                    <div class="form-header-icon">
+                        <i class="fas fa-pencil-alt"></i>
+                    </div>
+
+                    <div class="form-header-content">
+                        <h1>Modifier le versement</h1>
+                        <p>
+                            Mettre à jour les informations de paiement des services du prothésiste.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Formulaire -->
+                <div class="form-container">
+
+                    <form action="/prothesists/ProModifyVersement"
+                          method="POST"
+                          class="modify-form"
+                          id="modifyVersementForm">
+
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+                        <!-- Informations du prothésiste -->
+                        <section class="form-section">
+
+                            <div class="section-header">
+                                <i class="fas fa-user-circle"></i>
+                                <h2>Informations du prothésiste</h2>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ProthesistName">
+                                    <i class="fas fa-user"></i>
+                                    Nom du prothésiste
+                                    <span class="required">*</span>
+                                </label>
+
+                                <input
                                     type="text"
                                     id="ProthesistName"
                                     name="ProthesistName"
                                     placeholder="Entrez le nom du prothésiste"
                                     required
                                     class="form-input"
-                            >
-                        </div>
+                                    autocomplete="name"
+                                >
+                            </div>
 
-                        <div class="form-group">
-                            <label for="ProthesistNumber">
-                                <i class="fas fa-id-card"></i> Numéro du prothésiste
-                                <span class="required">*</span>
-                            </label>
+                            <div class="form-group">
+                                <label for="ProthesistNumber">
+                                    <i class="fas fa-id-card"></i>
+                                    Numéro du prothésiste
+                                    <span class="required">*</span>
+                                </label>
 
-                            <input
+                                <input
                                     type="text"
                                     id="ProthesistNumber"
                                     name="ProthesistNumber"
                                     placeholder="Entrez le numéro du prothésiste"
                                     required
                                     class="form-input"
-                            >
-                        </div>
+                                >
+                            </div>
 
-                    </div>
+                        </section>
 
-                    <!-- Informations sur la tâche -->
-                    <div class="form-section">
+                        <!-- Informations sur la tâche -->
+                        <section class="form-section">
 
-                        <div class="section-header">
-                            <i class="fas fa-list"></i>
-                            <h2>Informations sur la tâche</h2>
-                        </div>
+                            <div class="section-header">
+                                <i class="fas fa-list"></i>
+                                <h2>Informations sur la tâche</h2>
+                            </div>
 
-                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="KhedmaSource">
+                                    <i class="fas fa-layer-group"></i>
+                                    Source de la tâche
+                                    <span class="required">*</span>
+                                </label>
 
-                            <label for="KhedmaSource">
-                                <i class="fas fa-layer-group"></i> Source de la tâche
-                                <span class="required">*</span>
-                            </label>
-
-                            <div class="select-wrapper">
-
-                                <select
+                                <div class="select-wrapper">
+                                    <select
                                         id="KhedmaSource"
                                         name="khedmaSource"
                                         required
                                         class="form-select"
-                                        onchange="handleSourceChange()"
-                                >
-                                    <option value="">-- Sélectionnez une source --</option>
-                                    <option value="patient">Patient</option>
-                                    <option value="dentist">Dentiste</option>
-                                </select>
+                                    >
+                                        <option value="">-- Sélectionnez une source --</option>
+                                        <option value="patient">Patient</option>
+                                        <option value="dentist">Dentiste</option>
+                                    </select>
 
-                                <span class="select-icon">
-                                    <i class="fas fa-chevron-down"></i>
-                                </span>
-
+                                    <span class="select-icon">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Section Patient -->
-                        <div id="PatientSource" class="source-section hidden">
+                            <!-- Section Patient -->
+                            <div id="PatientSource"
+                                 class="source-section hidden"
+                                 aria-hidden="true">
 
-                            <div class="form-group">
+                                <div class="source-title">
+                                    <i class="fas fa-hospital-user"></i>
+                                    <h3>Informations du patient</h3>
+                                </div>
 
-                                <label for="PatientNumber">
-                                    <i class="fas fa-hospital-user"></i> Numéro du patient
-                                    <span class="required">*</span>
-                                </label>
+                                <div class="form-group">
+                                    <label for="PatientNumber">
+                                        <i class="fas fa-id-card"></i>
+                                        Numéro du patient
+                                        <span class="required">*</span>
+                                    </label>
 
-                                <input
+                                    <input
                                         type="text"
                                         id="PatientNumber"
                                         name="PatientNumber"
                                         placeholder="Entrez le numéro du patient"
                                         class="form-input"
-                                >
+                                    >
+                                </div>
 
-                            </div>
+                                <div class="form-group">
+                                    <label for="PatientKhedmaName">
+                                        <i class="fas fa-briefcase"></i>
+                                        ID du service
+                                        <span class="required">*</span>
+                                    </label>
 
-                            <div class="form-group">
-
-                                <label for="PatientKhedmaName">
-                                    <i class="fas fa-briefcase"></i> ID du service
-                                    <span class="required">*</span>
-                                </label>
-
-                                <input
+                                    <input
                                         type="text"
                                         id="PatientKhedmaName"
                                         name="ServiceID"
-                                        placeholder="Vous le trouverez dans la première colonne du tableau de l'historique des patients"
+                                        placeholder="Saisissez l'ID du service"
                                         class="form-input"
-                                >
+                                    >
+
+                                    <small class="form-help">
+                                        Disponible dans la première colonne de l'historique des patients.
+                                    </small>
+                                </div>
 
                             </div>
 
-                        </div>
+                            <!-- Section Dentiste -->
+                            <div id="DentistSource"
+                                 class="source-section hidden"
+                                 aria-hidden="true">
 
-                        <!-- Section Dentiste -->
-                        <div id="DentistSource" class="source-section hidden">
+                                <div class="source-title">
+                                    <i class="fas fa-user-md"></i>
+                                    <h3>Informations du dentiste</h3>
+                                </div>
 
-                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="DentistName">
+                                        <i class="fas fa-user-md"></i>
+                                        Nom du dentiste
+                                        <span class="required">*</span>
+                                    </label>
 
-                                <label for="DentistName">
-                                    <i class="fas fa-user-md"></i> Nom du dentiste
-                                    <span class="required">*</span>
-                                </label>
-
-                                <input
+                                    <input
                                         type="text"
                                         id="DentistName"
                                         name="DentistName"
                                         placeholder="Entrez le nom du dentiste"
                                         class="form-input"
-                                >
+                                    >
+                                </div>
 
-                            </div>
+                                <div class="form-group">
+                                    <label for="DentistNumber">
+                                        <i class="fas fa-id-badge"></i>
+                                        Numéro du service
+                                        <span class="required">*</span>
+                                    </label>
 
-                            <div class="form-group">
-
-                                <label for="DentistNumber">
-                                    <i class="fas fa-id-badge"></i> ID du service
-                                    <span class="required">*</span>
-                                </label>
-
-                                <input
+                                    <input
                                         type="text"
                                         id="DentistNumber"
                                         name="DentistNumber"
-                                        placeholder="Entrez l'ID du service"
+                                        placeholder="Entrez le numéro du service"
                                         class="form-input"
-                                >
+                                    >
+                                </div>
 
-                            </div>
+                                <div class="form-group">
+                                    <label for="DentistKhedmaName">
+                                        <i class="fas fa-briefcase"></i>
+                                        ID provenant de l'historique du dentiste
+                                        <span class="required">*</span>
+                                    </label>
 
-                            <div class="form-group">
-
-                                <label for="DentistKhedmaName">
-                                    <i class="fas fa-briefcase"></i> ID provenant de l'historique du dentiste
-                                    <span class="required">*</span>
-                                </label>
-
-                                <input
+                                    <input
                                         type="text"
                                         id="DentistKhedmaName"
                                         name="DServiceID"
-                                        placeholder="Vous le trouverez dans la première colonne de l'historique des dentistes"
+                                        placeholder="Saisissez l'ID du service"
                                         class="form-input"
-                                >
+                                    >
+
+                                    <small class="form-help">
+                                        Disponible dans la première colonne de l'historique des dentistes.
+                                    </small>
+                                </div>
 
                             </div>
 
-                        </div>
+                        </section>
 
-                    </div>
+                        <!-- Informations sur le paiement -->
+                        <section class="form-section">
 
-                    <!-- Section Versement -->
-                    <div class="form-section">
+                            <div class="section-header">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <h2>Informations sur le paiement</h2>
+                            </div>
 
-                        <div class="section-header">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <h2>Informations sur le paiement</h2>
-                        </div>
+                            <div class="form-group">
+                                <label for="VersaValue">
+                                    <i class="fas fa-coins"></i>
+                                    Montant du versement
+                                    <span class="required">*</span>
+                                </label>
 
-                        <div class="form-group">
-
-                            <label for="VersaValue">
-                                <i class="fas fa-coins"></i> Montant du versement
-                                <span class="required">*</span>
-                            </label>
-
-                            <div class="input-wrapper">
-
-                                <input
+                                <div class="input-wrapper">
+                                    <input
                                         type="number"
                                         id="VersaValue"
                                         name="VersaValue"
                                         placeholder="Entrez le montant à ajouter"
                                         required
                                         step="0.01"
+                                        min="0"
                                         class="form-input currency-input"
-                                >
+                                        inputmode="decimal"
+                                    >
 
-                                <span class="input-suffix">DZD</span>
+                                    <span class="input-suffix">DZD</span>
+                                </div>
 
+                                <small class="form-help">
+                                    Entrez le montant du paiement que vous souhaitez ajouter ou modifier.
+                                </small>
                             </div>
 
-                            <small class="form-help">
-                                Entrez le montant du paiement que vous souhaitez ajouter ou modifier
-                            </small>
+                        </section>
+
+                        <!-- Actions -->
+                        <div class="form-actions">
+
+                            <button type="reset" class="btn btn-secondary">
+                                <i class="fas fa-redo"></i>
+                                Effacer le formulaire
+                            </button>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check"></i>
+                                Confirmer la modification
+                            </button>
 
                         </div>
 
+                    </form>
+                </div>
+
+                <!-- Cartes d'information -->
+                <div class="info-cards-section">
+
+                    <div class="info-card success-card">
+                        <div class="card-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+
+                        <div class="card-content">
+                            <h3>Conseil</h3>
+                            <p>
+                                Vérifiez que toutes les informations sont correctes avant de confirmer la modification.
+                            </p>
+                        </div>
                     </div>
 
-                    <!-- Actions du formulaire -->
-                    <div class="form-actions">
+                    <div class="info-card info-card-blue">
+                        <div class="card-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
 
-                        <button type="reset" class="btn btn-secondary">
-                            <i class="fas fa-redo"></i> Effacer le formulaire
-                        </button>
-
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-check"></i> Confirmer la modification
-                        </button>
-
-                    </div>
-
-                </form>
-            </div>
-
-            <!-- Cartes d'information -->
-            <div class="info-cards-section">
-
-                <div class="info-card success-card">
-
-                    <div class="card-icon">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-
-                    <div class="card-content">
-                        <h3>Conseil</h3>
-                        <p>Vérifiez que toutes les informations sont correctes avant de confirmer la modification</p>
+                        <div class="card-content">
+                            <h3>Sécurité des données</h3>
+                            <p>
+                                Toutes les modifications sont enregistrées et peuvent être auditées à des fins de conformité.
+                            </p>
+                        </div>
                     </div>
 
                 </div>
 
-                <div class="info-card info-card-blue">
-
-                    <div class="card-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-
-                    <div class="card-content">
-                        <h3>Sécurité des données</h3>
-                        <p>Toutes les modifications sont enregistrées et peuvent être auditées à des fins de conformité</p>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </main>
+            </main>
+        </div>
     </div>
 </div>
 
-<!-- Scripts -->
 <script>
-    // ============================
-    // Handle Khedma Source Change
-    // ============================
+    // ==========================================
+    // Afficher / masquer le menu latéral
+    // ==========================================
+
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarMenu = document.getElementById('sidebarMenu');
+
+    sidebarToggle.addEventListener('click', function () {
+
+        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+        this.setAttribute('aria-expanded', String(!isExpanded));
+
+        sidebarMenu.classList.toggle('menu-hidden', isExpanded);
+
+        const toggleIcon = this.querySelector('.toggle-icon');
+
+        if (isExpanded) {
+            toggleIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+        } else {
+            toggleIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+        }
+    });
+
+
+    // ==========================================
+    // Gestion de la source de la tâche
+    // ==========================================
 
     function handleSourceChange() {
 
@@ -422,11 +511,14 @@
         const patientSection = document.getElementById('PatientSource');
         const dentistSection = document.getElementById('DentistSource');
 
-        // Hide both sections
+        // Masquer les deux sections
         patientSection.classList.add('hidden');
         dentistSection.classList.add('hidden');
 
-        // Clear source-specific inputs
+        patientSection.setAttribute('aria-hidden', 'true');
+        dentistSection.setAttribute('aria-hidden', 'true');
+
+        // Réinitialiser les champs spécifiques
         document.getElementById('PatientNumber').value = '';
         document.getElementById('PatientKhedmaName').value = '';
 
@@ -434,27 +526,48 @@
         document.getElementById('DentistNumber').value = '';
         document.getElementById('DentistKhedmaName').value = '';
 
-        // Show the selected section
+        // Afficher la section sélectionnée
+        let selectedSection = null;
+
         if (source === 'patient') {
 
             patientSection.classList.remove('hidden');
+            patientSection.setAttribute('aria-hidden', 'false');
 
-            document.getElementById('PatientNumber').focus();
+            selectedSection = patientSection;
 
         } else if (source === 'dentist') {
 
             dentistSection.classList.remove('hidden');
+            dentistSection.setAttribute('aria-hidden', 'false');
 
-            document.getElementById('DentistName').focus();
+            selectedSection = dentistSection;
+        }
+
+        // Ne pas appeler focus() ici :
+        // cela ouvre automatiquement le clavier sur téléphone.
+        if (selectedSection && window.innerWidth <= 768) {
+
+            setTimeout(function () {
+                selectedSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
+            }, 100);
         }
     }
 
+    document.getElementById('KhedmaSource').addEventListener(
+        'change',
+        handleSourceChange
+    );
 
-    // ============================
-    // Form Validation
-    // ============================
 
-    document.getElementById('modifyVersementForm').addEventListener('submit', function(e) {
+    // ==========================================
+    // Validation du formulaire
+    // ==========================================
+
+    document.getElementById('modifyVersementForm').addEventListener('submit', function (e) {
 
         const source = document.getElementById('KhedmaSource').value;
 
@@ -468,43 +581,40 @@
             document.getElementById('VersaValue').value.trim();
 
 
-        // Check Prothesist information
+        // Informations du prothésiste
         if (!prothesistName || !prothesistNumber) {
 
             e.preventDefault();
 
             alert('Veuillez entrer le nom et le numéro du prothésiste');
 
-            return false;
+            return;
         }
 
 
-        // Check Khedma source
+        // Source de la tâche
         if (!source) {
 
             e.preventDefault();
 
             alert('Veuillez sélectionner une source pour la tâche');
 
-            return false;
+            return;
         }
 
 
-        // Check Versement
-        if (!versaValue) {
+        // Versement
+        if (!versaValue || Number(versaValue) <= 0) {
 
             e.preventDefault();
 
-            alert('Veuillez entrer le montant du versement');
+            alert('Veuillez entrer un montant de versement valide');
 
-            return false;
+            return;
         }
 
 
-        // ============================
-        // Patient source
-        // ============================
-
+        // Source patient
         if (source === 'patient') {
 
             const patientNumber =
@@ -520,7 +630,7 @@
 
                 alert('Veuillez entrer le numéro du patient');
 
-                return false;
+                return;
             }
 
 
@@ -528,17 +638,14 @@
 
                 e.preventDefault();
 
-                alert('Veuillez entrer l\'ID du service');
+                alert("Veuillez entrer l'ID du service");
 
-                return false;
+                return;
             }
         }
 
 
-        // ============================
-        // Dentist source
-        // ============================
-
+        // Source dentiste
         if (source === 'dentist') {
 
             const dentistName =
@@ -557,7 +664,7 @@
 
                 alert('Veuillez entrer le nom du dentiste');
 
-                return false;
+                return;
             }
 
 
@@ -567,7 +674,7 @@
 
                 alert('Veuillez entrer le numéro du service');
 
-                return false;
+                return;
             }
 
 
@@ -575,26 +682,65 @@
 
                 e.preventDefault();
 
-                alert('Veuillez entrer l\'ID du service dans le tableau');
+                alert("Veuillez entrer l'ID du service dans le tableau");
 
-                return false;
+                return;
             }
         }
 
-
-        // Form is valid
         console.log('Formulaire envoyé avec succès');
-
     });
 
 
-    // ============================
-    // Ripple Effect
-    // ============================
+    // ==========================================
+    // Réinitialisation du formulaire
+    // ==========================================
+
+    document.getElementById('modifyVersementForm').addEventListener('reset', function () {
+
+        setTimeout(function () {
+            handleSourceChange();
+        }, 0);
+    });
+
+
+    // ==========================================
+    // Éviter que le clavier mobile cache le champ
+    // ==========================================
+
+    document.querySelectorAll('.form-input, .form-select').forEach(function (field) {
+
+        field.addEventListener('focus', function () {
+
+            if (window.innerWidth <= 768) {
+
+                const currentField = this;
+
+                setTimeout(function () {
+
+                    currentField.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+
+                }, 250);
+            }
+        });
+    });
+
+
+    // ==========================================
+    // Ripple effect des boutons
+    // ==========================================
 
     function createRipple(e) {
 
         const button = e.currentTarget;
+
+        // Pas de ripple artificiel sur les clics clavier
+        if (e.clientX === 0 && e.clientY === 0) {
+            return;
+        }
 
         const ripple = document.createElement('span');
 
@@ -603,38 +749,27 @@
         const size = Math.max(rect.width, rect.height);
 
         const x = e.clientX - rect.left - size / 2;
-
         const y = e.clientY - rect.top - size / 2;
-
 
         ripple.style.width = size + 'px';
         ripple.style.height = size + 'px';
-
         ripple.style.left = x + 'px';
         ripple.style.top = y + 'px';
 
         ripple.classList.add('ripple');
 
-
         button.appendChild(ripple);
 
-
-        setTimeout(function() {
-
+        setTimeout(function () {
             ripple.remove();
-
         }, 600);
     }
 
-
-    // Apply ripple effect to buttons
-    document.querySelectorAll('.btn').forEach(function(btn) {
-
+    document.querySelectorAll('.btn').forEach(function (btn) {
         btn.addEventListener('click', createRipple);
-
     });
+
 </script>
 
 </body>
-
 </html>

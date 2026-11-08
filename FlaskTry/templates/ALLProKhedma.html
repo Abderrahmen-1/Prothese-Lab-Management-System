@@ -1,22 +1,20 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-    <meta name="description"
-          content="Système professionnel de gestion de la base de données des tâches">
-
-    <meta name="keywords"
-          content="Tâches, Prothésiste, Prothèse, Gestion de laboratoire">
+    <meta name="description" content="Système professionnel de gestion des tâches pour laboratoire de prothèse">
+    <meta name="keywords" content="Tâches, Prothésiste, Prothèse, Gestion de laboratoire">
+    <meta name="theme-color" content="#059669">
 
     <title>Centre des tâches - Gestion de la base de données</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='ALLProKhedma.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='ALLProKhedma.css') }}">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap"
           rel="stylesheet">
 
     <link rel="stylesheet"
@@ -29,9 +27,8 @@
 
 <div class="container">
 
-    <!-- =====================================================
-         EN-TÊTE
-    ====================================================== -->
+    <!-- HEADER -->
+
     <header class="header">
 
         <div class="header-content">
@@ -74,13 +71,12 @@
     </header>
 
 
-    <!-- =====================================================
-         RECHERCHE
-    ====================================================== -->
+    <!-- SEARCH -->
 
     <div id="search-bar-container">
 
         {% if not asc and not desc and not most and not less %}
+
         <div class="search-section">
 
             <div class="search-form" id="search-form">
@@ -90,12 +86,12 @@
                     <i class="fas fa-search search-icon"></i>
 
                     <input
-                            type="text"
-                            id="searchInput"
-                            name="SearchBar"
-                            placeholder="Rechercher par numéro patient, dentiste, prothésiste ou tâche..."
-                            class="search-input"
-                            autocomplete="off"
+                        type="search"
+                        id="searchInput"
+                        name="SearchBar"
+                        placeholder="Rechercher par numéro patient, dentiste, prothésiste ou tâche..."
+                        class="search-input"
+                        autocomplete="off"
                     >
 
                     <button type="button"
@@ -112,60 +108,64 @@
             </div>
 
         </div>
+
         {% endif %}
 
     </div>
 
 
-    <!-- =====================================================
-         MISE EN PAGE PRINCIPALE
-    ====================================================== -->
+    <!-- MAIN LAYOUT -->
 
     <div class="main-layout">
 
 
-        <!-- =================================================
-             BARRE LATÉRALE
-        ================================================== -->
+        <!-- SIDEBAR -->
 
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
 
             <div class="sidebar-header">
 
-                <div>
+                <div class="sidebar-heading">
+
                     <h2>
                         <i class="fas fa-sliders"></i>
                         Options d'affichage
                     </h2>
+
+                    <div class="header-accent"></div>
+
                 </div>
 
-                <div class="header-accent"></div>
+                <button type="button"
+                        class="mobile-menu-toggle"
+                        id="sidebarToggle"
+                        aria-expanded="false"
+                        aria-controls="sidebarMenu">
+
+                    <i class="fas fa-chevron-down"></i>
+                    <span>Afficher les options</span>
+
+                </button>
 
             </div>
 
 
-            <nav class="sidebar-menu">
+            <nav class="sidebar-menu" id="sidebarMenu">
 
-
-                <!-- ================= AFFICHAGE ================= -->
+                <!-- AFFICHAGE -->
 
                 <div class="menu-group">
 
                     <h3 class="group-title">
-                        Afficher les tableaux
+                        Afficher les tâches
                     </h3>
-
 
                     <a href="/prothesists/ProAllkhedma"
                        class="menu-item all-item ajax-link">
 
                         <i class="fas fa-table-list"></i>
-
-                        <span>Tableau principal</span>
-
-                        <span class="badge badge-main">
-                            Afficher
-                        </span>
+                        <span>Toutes les tâches</span>
+                        <span class="badge badge-main">All</span>
 
                     </a>
 
@@ -174,12 +174,8 @@
                        class="menu-item asc-item ajax-link">
 
                         <i class="fas fa-arrow-up"></i>
-
                         <span>Les plus anciennes d'abord</span>
-
-                        <span class="badge badge-asc">
-                            ASC
-                        </span>
+                        <span class="badge badge-asc">ASC</span>
 
                     </a>
 
@@ -188,12 +184,8 @@
                        class="menu-item desc-item ajax-link">
 
                         <i class="fas fa-arrow-down"></i>
-
                         <span>Les plus récentes d'abord</span>
-
-                        <span class="badge badge-desc">
-                            DESC
-                        </span>
+                        <span class="badge badge-desc">DESC</span>
 
                     </a>
 
@@ -202,7 +194,6 @@
                        class="menu-item most-item ajax-link">
 
                         <i class="fas fa-arrow-trend-up"></i>
-
                         <span>Plus de tâches</span>
 
                     </a>
@@ -212,7 +203,6 @@
                        class="menu-item less-item ajax-link">
 
                         <i class="fas fa-arrow-trend-down"></i>
-
                         <span>Moins de tâches</span>
 
                     </a>
@@ -220,7 +210,7 @@
                 </div>
 
 
-                <!-- ================= GESTION ================= -->
+                <!-- GESTION -->
 
                 <div class="menu-group">
 
@@ -233,12 +223,8 @@
                        class="menu-item get-item">
 
                         <i class="fas fa-plus-circle"></i>
-
                         <span>Nouvelle tâche</span>
-
-                        <span class="badge badge-get">
-                            Ajouter
-                        </span>
+                        <span class="badge badge-get">Ajouter</span>
 
                     </a>
 
@@ -247,12 +233,8 @@
                        class="menu-item delete-patient-item">
 
                         <i class="fas fa-user-minus"></i>
-
                         <span>Supprimer un patient</span>
-
-                        <span class="badge badge-delete">
-                            Supprimer
-                        </span>
+                        <span class="badge badge-delete">Supprimer</span>
 
                     </a>
 
@@ -263,14 +245,12 @@
         </aside>
 
 
-        <!-- =================================================
-             CONTENU
-        ================================================== -->
+        <!-- MAIN CONTENT -->
 
         <main class="content">
 
 
-            <!-- ================= ALERTES ================= -->
+            <!-- ALERTS -->
 
             {% if message or error %}
 
@@ -280,18 +260,18 @@
 
                 <div class="alert alert-error fade-in-slow">
 
-                    <i class="fas fa-circle-exclamation"></i>
-
-                    <div class="alert-content">
-
-                        <h3>Erreur</h3>
-
-                        <p>{{ error }}</p>
-
+                    <div class="alert-icon">
+                        <i class="fas fa-circle-exclamation"></i>
                     </div>
 
-                    <button class="alert-close"
-                            onclick="this.parentElement.style.display='none'">
+                    <div class="alert-content">
+                        <h3>Erreur</h3>
+                        <p>{{ error }}</p>
+                    </div>
+
+                    <button type="button"
+                            class="alert-close"
+                            aria-label="Fermer l'alerte">
 
                         <i class="fas fa-times"></i>
 
@@ -306,18 +286,18 @@
 
                 <div class="alert alert-success fade-in-slow">
 
-                    <i class="fas fa-circle-check"></i>
-
-                    <div class="alert-content">
-
-                        <h3>Opération réussie</h3>
-
-                        <p>{{ message }}</p>
-
+                    <div class="alert-icon">
+                        <i class="fas fa-circle-check"></i>
                     </div>
 
-                    <button class="alert-close"
-                            onclick="this.parentElement.style.display='none'">
+                    <div class="alert-content">
+                        <h3>Opération réussie</h3>
+                        <p>{{ message }}</p>
+                    </div>
+
+                    <button type="button"
+                            class="alert-close"
+                            aria-label="Fermer l'alerte">
 
                         <i class="fas fa-times"></i>
 
@@ -332,632 +312,767 @@
             {% endif %}
 
 
-            <!-- ================= TABLEAUX ================= -->
+            <!-- TASK CARDS -->
 
-            <div class="table-section fade-in"
-                 id="table-section">
+            <div class="table-section fade-in" id="table-section">
 
 
-                <!-- =================================================
-                     TABLEAU PRINCIPAL
-                ================================================== -->
+                <!-- =========================================
+                     REUSABLE TASK CARD TEMPLATE
+                ========================================== -->
+
+                {% macro render_task_cards(rows) %}
+
+                <div class="task-grid">
+
+                    {% for row in rows %}
+
+                    <article class="task-card"
+                             data-search="{{ (row[2] ~ ' ' ~ row[3] ~ ' ' ~ row[4] ~ ' ' ~ row[5] ~ ' ' ~ row[6])|lower }}">
+
+
+                        <!-- CARD HEADER -->
+
+                        <div class="task-card-header">
+
+                            <div class="task-identity">
+
+                                <div class="task-icon">
+                                    <i class="fas fa-tooth"></i>
+                                </div>
+
+                                <div class="task-title-wrap">
+
+                                    <span class="task-reference">
+                                        Tâche #{{ row[0] }}
+                                    </span>
+
+                                    <h3>{{ row[6] }}</h3>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="task-status-group">
+
+                                {% if row[11]|string|lower == 'yes'
+                                   or row[11]|string|lower == 'true'
+                                   or row[11]|string|lower == '1'
+                                   or row[11]|string|lower == 'finished'
+                                   or row[11]|string|lower == 'terminé'
+                                   or row[11]|string|lower == 'termine' %}
+
+                                <span class="task-status status-finished">
+                                    <i class="fas fa-check-circle"></i>
+                                    Terminé
+                                </span>
+
+                                {% else %}
+
+                                <span class="task-status status-progress">
+                                    <i class="fas fa-clock"></i>
+                                    En cours
+                                </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PATIENT INFORMATION -->
+
+                        <div class="task-patient-section">
+
+                            <div class="patient-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+
+                            <div class="patient-information">
+
+                                <span class="detail-label">
+                                    Numéro du patient
+                                </span>
+
+                                <strong>{{ row[2] }}</strong>
+
+                            </div>
+
+                            <div class="task-user-id">
+
+                                <span class="detail-label">
+                                    ID utilisateur
+                                </span>
+
+                                <strong>{{ row[0] }}</strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- TEAM INFORMATION -->
+
+                        <div class="task-team-section">
+
+                            <div class="team-member">
+
+                                <div class="team-icon dentist-icon">
+                                    <i class="fas fa-user-doctor"></i>
+                                </div>
+
+                                <div class="team-information">
+
+                                    <span class="detail-label">
+                                        Dentiste
+                                    </span>
+
+                                    <strong>{{ row[3] }}</strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="team-member">
+
+                                <div class="team-icon prosthetist-icon">
+                                    <i class="fas fa-user-gear"></i>
+                                </div>
+
+                                <div class="team-information">
+
+                                    <span class="detail-label">
+                                        Prothésiste
+                                    </span>
+
+                                    <strong>{{ row[4] }}</strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="prosthetist-id">
+
+                                <span class="detail-label">
+                                    ID prothésiste
+                                </span>
+
+                                <strong>{{ row[5] }}</strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DATE INFORMATION -->
+
+                        <div class="task-dates">
+
+                            <div class="date-item">
+
+                                <div class="date-icon">
+                                    <i class="fas fa-calendar-plus"></i>
+                                </div>
+
+                                <div>
+                                    <span class="detail-label">
+                                        Date de création
+                                    </span>
+
+                                    <strong>{{ row[12] }}</strong>
+                                </div>
+
+                            </div>
+
+
+                            <div class="date-item deadline-item-card">
+
+                                <div class="date-icon">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+
+                                <div>
+                                    <span class="detail-label">
+                                        Date limite
+                                    </span>
+
+                                    <strong>{{ row[13] }}</strong>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PAYMENT INFORMATION -->
+
+                        <div class="task-payment">
+
+                            <div class="payment-heading">
+
+                                <i class="fas fa-wallet"></i>
+                                <span>Informations de paiement</span>
+
+                            </div>
+
+
+                            <div class="payment-values">
+
+                                <div class="payment-item">
+
+                                    <span>Prix</span>
+
+                                    <strong>
+                                        {{ row[7] }} DA
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="payment-item">
+
+                                    <span>Versement</span>
+
+                                    <strong class="paid-value">
+                                        {{ row[8] }} DA
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="payment-item">
+
+                                    <span>Reste</span>
+
+                                    <strong class="remaining-value">
+                                        {{ row[9] }} DA
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="payment-footer">
+
+                                <span>
+                                    <i class="fas fa-money-check-dollar"></i>
+                                    État du paiement
+                                </span>
+
+
+                                {% if row[10]|string|lower == 'yes'
+                                   or row[10]|string|lower == 'true'
+                                   or row[10]|string|lower == '1'
+                                   or row[10]|string|lower == 'paid'
+                                   or row[10]|string|lower == 'payé'
+                                   or row[10]|string|lower == 'paye' %}
+
+                                <strong class="payment-status payment-complete">
+                                    <i class="fas fa-check-circle"></i>
+                                    Payé
+                                </strong>
+
+                                {% else %}
+
+                                <strong class="payment-status payment-pending">
+                                    <i class="fas fa-hourglass-half"></i>
+                                    Non payé
+                                </strong>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CARD FOOTER -->
+
+                        <div class="task-card-footer">
+
+                            <span>
+                                <i class="fas fa-hashtag"></i>
+                                Enregistrement {{ loop.index }}
+                            </span>
+
+                            <span class="footer-task-status">
+                                {% if row[11]|string|lower == 'yes'
+                                   or row[11]|string|lower == 'true'
+                                   or row[11]|string|lower == '1'
+                                   or row[11]|string|lower == 'finished'
+                                   or row[11]|string|lower == 'terminé'
+                                   or row[11]|string|lower == 'termine' %}
+                                    Travail terminé
+                                {% else %}
+                                    Travail en cours
+                                {% endif %}
+                            </span>
+
+                        </div>
+
+
+                    </article>
+
+                    {% else %}
+
+                    <div class="empty-state compact-empty">
+
+                        <div class="empty-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+
+                        <h3>Aucune tâche trouvée</h3>
+
+                        <p>
+                            Aucun enregistrement disponible dans cette catégorie.
+                        </p>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% endmacro %}
+
+
+
+                <!-- =========================================
+                     MAIN TABLE / ALL TASKS
+                ========================================== -->
 
                 <div class="TableContainer"
                      id="MainTable"
                      style="display: {% if result %}block{% else %}none{% endif %};">
 
-                    <div class="table-header">
+                    <section class="task-section">
 
-                        <div>
+                        <div class="task-section-header">
 
-                            <h3>
-                                <i class="fas fa-table-list"></i>
-                                Registre principal
-                            </h3>
+                            <div>
+                                <span class="section-eyebrow">
+                                    GESTION DES TRAVAUX
+                                </span>
+
+                                <h2>
+                                    <i class="fas fa-layer-group"></i>
+                                    Toutes les tâches
+                                </h2>
+
+                                <p>
+                                    Registre complet des travaux du laboratoire
+                                </p>
+                            </div>
+
+                            <span class="result-count">
+                                {{ result|length }} tâches
+                            </span>
+
+                        </div>
+
+
+                        {% if result %}
+
+                        {{ render_task_cards(result) }}
+
+                        <div class="task-section-footer">
+
+                            <span class="record-count">
+                                <i class="fas fa-database"></i>
+                                Nombre total d'enregistrements :
+                                <strong>{{ result|length }}</strong>
+                            </span>
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+
+                            <h3>Aucune donnée disponible</h3>
 
                             <p>
-                                Base de données complète des tâches
+                                Aucun enregistrement trouvé dans le registre principal.
                             </p>
 
                         </div>
 
-                    </div>
+                        {% endif %}
 
-
-                    {% if result %}
-
-                    <div class="table-wrapper">
-
-                        <table class="data-table">
-
-                            <thead>
-
-                            <tr>
-                                <th>ID utilisateur</th>
-                                <th>Numéro du patient</th>
-                                <th>Dentiste</th>
-                                <th>Prothésiste</th>
-                                <th>ID du prothésiste</th>
-                                <th>Tâche</th>
-                                <th>Prix</th>
-                                <th>Versement</th>
-                                <th>Reste</th>
-                                <th>Payé</th>
-                                <th>Terminé</th>
-                                <th>Date</th>
-                                <th>Date limite</th>
-                            </tr>
-
-                            </thead>
-
-                            <tbody>
-
-                            {% for row in result %}
-
-                            <tr class="data-row">
-
-                                <td>{{ row[0] }}</td>
-                                <td>{{ row[2] }}</td>
-                                <td>{{ row[3] }}</td>
-                                <td>{{ row[4] }}</td>
-                                <td>{{ row[5] }}</td>
-                                <td class="service-cell">{{ row[6] }}</td>
-                                <td>{{ row[7] }}</td>
-                                <td>{{ row[8] }}</td>
-                                <td>{{ row[9] }}</td>
-                                <td>{{ row[10] }}</td>
-                                <td>{{ row[11] }}</td>
-                                <td>{{ row[12] }}</td>
-                                <td>{{ row[13] }}</td>
-
-                            </tr>
-
-                            {% endfor %}
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-
-                    <div class="table-footer">
-
-                        <span class="record-count">
-
-                            <i class="fas fa-database"></i>
-
-                            Nombre total d'enregistrements :
-                            <strong>{{ result|length }}</strong>
-
-                        </span>
-
-                    </div>
-
-
-                    {% else %}
-
-                    <div class="empty-state">
-
-                        <div class="empty-icon">
-                            <i class="fas fa-inbox"></i>
-                        </div>
-
-                        <h3>Aucune donnée disponible</h3>
-
-                        <p>
-                            Aucun enregistrement trouvé dans le registre principal.
-                        </p>
-
-                    </div>
-
-                    {% endif %}
+                    </section>
 
                 </div>
 
 
-                <!-- =================================================
-                     TABLEAU ASC
-                ================================================== -->
+
+                <!-- =========================================
+                     DATE ASC
+                ========================================== -->
 
                 <div class="TableContainer"
                      id="ASCTable"
                      style="display: {% if asc %}block{% else %}none{% endif %};">
 
-                    <div class="table-header">
+                    <section class="task-section">
 
-                        <h3>
-                            <i class="fas fa-arrow-up"></i>
-                            Du plus ancien au plus récent
-                        </h3>
+                        <div class="task-section-header asc-heading">
 
-                        <p>
-                            Enregistrements des tâches classés chronologiquement
-                        </p>
+                            <div>
+                                <span class="section-eyebrow">
+                                    TRI CHRONOLOGIQUE
+                                </span>
 
-                    </div>
+                                <h2>
+                                    <i class="fas fa-arrow-up-short-wide"></i>
+                                    Du plus ancien au plus récent
+                                </h2>
 
+                                <p>
+                                    Travaux classés par date croissante
+                                </p>
+                            </div>
 
-                    {% if asc %}
+                            <span class="result-count">
+                                {{ asc|length }} tâches
+                            </span>
 
-                    <div class="table-wrapper">
-
-                        <table class="data-table">
-
-                            <thead>
-
-                            <tr>
-                                <th>ID utilisateur</th>
-                                <th>Numéro du patient</th>
-                                <th>Dentiste</th>
-                                <th>Prothésiste</th>
-                                <th>ID du prothésiste</th>
-                                <th>Tâche</th>
-                                <th>Prix</th>
-                                <th>Versement</th>
-                                <th>Reste</th>
-                                <th>Payé</th>
-                                <th>Terminé</th>
-                                <th>Date</th>
-                                <th>Date limite</th>
-                            </tr>
-
-                            </thead>
-
-                            <tbody>
-
-                            {% for row in asc %}
-
-                            <tr class="data-row">
-
-                                <td>{{ row[0] }}</td>
-                                <td>{{ row[2] }}</td>
-                                <td>{{ row[3] }}</td>
-                                <td>{{ row[4] }}</td>
-                                <td>{{ row[5] }}</td>
-                                <td class="service-cell">{{ row[6] }}</td>
-                                <td>{{ row[7] }}</td>
-                                <td>{{ row[8] }}</td>
-                                <td>{{ row[9] }}</td>
-                                <td>{{ row[10] }}</td>
-                                <td>{{ row[11] }}</td>
-                                <td>{{ row[12] }}</td>
-                                <td>{{ row[13] }}</td>
-
-                            </tr>
-
-                            {% endfor %}
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-
-                    <div class="table-footer">
-
-                        <span class="record-count">
-
-                            <i class="fas fa-clock-rotate-left"></i>
-
-                            Nombre total d'enregistrements :
-                            <strong>{{ asc|length }}</strong>
-
-                        </span>
-
-                    </div>
-
-                    {% else %}
-
-                    <div class="empty-state">
-
-                        <div class="empty-icon">
-                            <i class="fas fa-inbox"></i>
                         </div>
 
-                        <h3>Aucune donnée disponible</h3>
 
-                        <p>
-                            Aucun enregistrement classé du plus ancien au plus récent.
-                        </p>
+                        {% if asc %}
 
-                    </div>
+                        {{ render_task_cards(asc) }}
 
-                    {% endif %}
+                        <div class="task-section-footer">
+
+                            <span class="record-count">
+                                <i class="fas fa-clock-rotate-left"></i>
+                                Nombre total d'enregistrements :
+                                <strong>{{ asc|length }}</strong>
+                            </span>
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+
+                            <h3>Aucune donnée disponible</h3>
+
+                            <p>
+                                Aucun enregistrement classé du plus ancien au plus récent.
+                            </p>
+
+                        </div>
+
+                        {% endif %}
+
+                    </section>
 
                 </div>
 
 
-                <!-- =================================================
-                     TABLEAU DESC
-                ================================================== -->
+
+                <!-- =========================================
+                     DATE DESC
+                ========================================== -->
 
                 <div class="TableContainer"
                      id="DESCTable"
                      style="display: {% if desc %}block{% else %}none{% endif %};">
 
-                    <div class="table-header">
+                    <section class="task-section">
 
-                        <h3>
-                            <i class="fas fa-arrow-down"></i>
-                            Du plus récent au plus ancien
-                        </h3>
+                        <div class="task-section-header desc-heading">
 
-                        <p>
-                            Enregistrements des tâches classés du plus récent au plus ancien
-                        </p>
+                            <div>
+                                <span class="section-eyebrow">
+                                    TRI CHRONOLOGIQUE
+                                </span>
 
-                    </div>
+                                <h2>
+                                    <i class="fas fa-arrow-down-wide-short"></i>
+                                    Du plus récent au plus ancien
+                                </h2>
 
+                                <p>
+                                    Travaux classés par date décroissante
+                                </p>
+                            </div>
 
-                    {% if desc %}
+                            <span class="result-count">
+                                {{ desc|length }} tâches
+                            </span>
 
-                    <div class="table-wrapper">
-
-                        <table class="data-table">
-
-                            <thead>
-
-                            <tr>
-                                <th>ID utilisateur</th>
-                                <th>Numéro du patient</th>
-                                <th>Dentiste</th>
-                                <th>Prothésiste</th>
-                                <th>ID du prothésiste</th>
-                                <th>Tâche</th>
-                                <th>Prix</th>
-                                <th>Versement</th>
-                                <th>Reste</th>
-                                <th>Payé</th>
-                                <th>Terminé</th>
-                                <th>Date</th>
-                                <th>Date limite</th>
-                            </tr>
-
-                            </thead>
-
-                            <tbody>
-
-                            {% for row in desc %}
-
-                            <tr class="data-row">
-
-                                <td>{{ row[0] }}</td>
-                                <td>{{ row[2] }}</td>
-                                <td>{{ row[3] }}</td>
-                                <td>{{ row[4] }}</td>
-                                <td>{{ row[5] }}</td>
-                                <td class="service-cell">{{ row[6] }}</td>
-                                <td>{{ row[7] }}</td>
-                                <td>{{ row[8] }}</td>
-                                <td>{{ row[9] }}</td>
-                                <td>{{ row[10] }}</td>
-                                <td>{{ row[11] }}</td>
-                                <td>{{ row[12] }}</td>
-                                <td>{{ row[13] }}</td>
-
-                            </tr>
-
-                            {% endfor %}
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-
-                    <div class="table-footer">
-
-                        <span class="record-count">
-
-                            <i class="fas fa-clock"></i>
-
-                            Nombre total d'enregistrements :
-                            <strong>{{ desc|length }}</strong>
-
-                        </span>
-
-                    </div>
-
-                    {% else %}
-
-                    <div class="empty-state">
-
-                        <div class="empty-icon">
-                            <i class="fas fa-inbox"></i>
                         </div>
 
-                        <h3>Aucune donnée disponible</h3>
 
-                        <p>
-                            Aucun enregistrement classé du plus récent au plus ancien.
-                        </p>
+                        {% if desc %}
 
-                    </div>
+                        {{ render_task_cards(desc) }}
 
-                    {% endif %}
+                        <div class="task-section-footer">
+
+                            <span class="record-count">
+                                <i class="fas fa-clock"></i>
+                                Nombre total d'enregistrements :
+                                <strong>{{ desc|length }}</strong>
+                            </span>
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+
+                            <h3>Aucune donnée disponible</h3>
+
+                            <p>
+                                Aucun enregistrement classé du plus récent au plus ancien.
+                            </p>
+
+                        </div>
+
+                        {% endif %}
+
+                    </section>
 
                 </div>
 
 
-                <!-- =================================================
-                     PLUS DE TÂCHES
-                ================================================== -->
+
+                <!-- =========================================
+                     MOST TASKS
+                ========================================== -->
 
                 <div id="MostTable"
                      class="TableContainer"
                      style="display: {% if most and most_name %}block{% else %}none{% endif %};">
 
-                    <div class="table-header">
+                    <section class="task-section">
 
-                        <h3>
-                            <i class="fas fa-arrow-trend-up"></i>
-                            Plus de tâches
-                        </h3>
+                        <div class="task-section-header most-heading">
 
-                        <p>
-                            Prothésiste ayant le plus grand nombre de tâches
-                        </p>
+                            <div>
+                                <span class="section-eyebrow">
+                                    PERFORMANCE
+                                </span>
+
+                                <h2>
+                                    <i class="fas fa-arrow-trend-up"></i>
+                                    Plus de tâches
+                                </h2>
+
+                                <p>
+                                    Travaux du prothésiste ayant le plus grand nombre de tâches
+                                </p>
+                            </div>
+
+                            <span class="result-count">
+                                {% if most and not most is mapping %}
+                                    {{ most|length }} tâches
+                                {% else %}
+                                    Résultat
+                                {% endif %}
+                            </span>
+
+                        </div>
+
 
                         {% if most and most_name %}
 
-                        <div class="highlight-badge">
+                        <div class="highlight-prosthetist">
 
-                            <i class="fas fa-user"></i>
+                            <div class="highlight-avatar">
+                                <i class="fas fa-trophy"></i>
+                            </div>
 
-                            <span>{{ most_name }}</span>
+                            <div>
+                                <span>Prothésiste le plus actif</span>
+                                <strong>{{ most_name }}</strong>
+                            </div>
 
                         </div>
 
                         {% endif %}
 
-                    </div>
 
+                        {% if most and not most is mapping %}
 
-                    {% if most and not most is mapping %}
+                            {{ render_task_cards(most) }}
 
-                    <div class="table-wrapper">
+                            <div class="task-section-footer">
 
-                        <table class="data-table">
+                                <span class="record-count">
+                                    <i class="fas fa-chart-line"></i>
+                                    Nombre total d'enregistrements :
+                                    <strong>{{ most|length if most else 0 }}</strong>
+                                </span>
 
-                            <thead>
+                            </div>
 
-                            <tr>
-                                <th>ID utilisateur</th>
-                                <th>Numéro du patient</th>
-                                <th>Dentiste</th>
-                                <th>Prothésiste</th>
-                                <th>ID du prothésiste</th>
-                                <th>Tâche</th>
-                                <th>Prix</th>
-                                <th>Versement</th>
-                                <th>Reste</th>
-                                <th>Payé</th>
-                                <th>Terminé</th>
-                                <th>Date</th>
-                                <th>Date limite</th>
-                            </tr>
+                        {% else %}
 
-                            </thead>
+                            <div class="empty-state">
 
-                            <tbody>
+                                <div class="empty-icon">
+                                    <i class="fas fa-chart-column"></i>
+                                </div>
 
-                            {% if most|length > 0 %}
+                                <h3>Aucune donnée disponible</h3>
 
-                            {% for row in most %}
+                                <p>
+                                    Aucune donnée disponible pour les prothésistes ayant le plus de tâches.
+                                </p>
 
-                            <tr class="data-row">
+                            </div>
 
-                                <td>{{ row[0] }}</td>
-                                <td>{{ row[2] }}</td>
-                                <td>{{ row[3] }}</td>
-                                <td>{{ row[4] }}</td>
-                                <td>{{ row[5] }}</td>
-                                <td class="service-cell">{{ row[6] }}</td>
-                                <td>{{ row[7] }}</td>
-                                <td>{{ row[8] }}</td>
-                                <td>{{ row[9] }}</td>
-                                <td>{{ row[10] }}</td>
-                                <td>{{ row[11] }}</td>
-                                <td>{{ row[12] }}</td>
-                                <td>{{ row[13] }}</td>
+                        {% endif %}
 
-                            </tr>
-
-                            {% endfor %}
-
-                            {% else %}
-
-                            <tr>
-                                <td colspan="13"
-                                    class="table-empty-row">
-                                    Aucune donnée disponible
-                                </td>
-                            </tr>
-
-                            {% endif %}
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-
-                    <div class="table-footer">
-
-                        <span class="record-count">
-
-                            <i class="fas fa-chart-line"></i>
-
-                            Nombre total d'enregistrements :
-                            <strong>{{ most|length if most else 0 }}</strong>
-
-                        </span>
-
-                    </div>
-
-                    {% else %}
-
-                    <div class="empty-state">
-
-                        <div class="empty-icon">
-                            <i class="fas fa-chart-column"></i>
-                        </div>
-
-                        <h3>Aucune donnée disponible</h3>
-
-                        <p>
-                            Aucune donnée disponible pour les prothésistes ayant le plus de tâches.
-                        </p>
-
-                    </div>
-
-                    {% endif %}
+                    </section>
 
                 </div>
 
 
-                <!-- =================================================
-                     MOINS DE TÂCHES
-                ================================================== -->
+
+                <!-- =========================================
+                     LESS TASKS
+                ========================================== -->
 
                 <div id="LessTable"
                      class="TableContainer"
                      style="display: {% if less and less_name %}block{% else %}none{% endif %};">
 
-                    <div class="table-header">
+                    <section class="task-section">
 
-                        <h3>
-                            <i class="fas fa-arrow-trend-down"></i>
-                            Moins de tâches
-                        </h3>
+                        <div class="task-section-header less-heading">
 
-                        <p>
-                            Prothésiste ayant le plus petit nombre de tâches
-                        </p>
+                            <div>
+                                <span class="section-eyebrow">
+                                    PERFORMANCE
+                                </span>
+
+                                <h2>
+                                    <i class="fas fa-arrow-trend-down"></i>
+                                    Moins de tâches
+                                </h2>
+
+                                <p>
+                                    Travaux du prothésiste ayant le plus petit nombre de tâches
+                                </p>
+                            </div>
+
+                            <span class="result-count">
+                                {% if less and not less is mapping %}
+                                    {{ less|length }} tâches
+                                {% else %}
+                                    Résultat
+                                {% endif %}
+                            </span>
+
+                        </div>
+
 
                         {% if less and not less is mapping and less_name %}
 
-                        <div class="highlight-badge">
+                        <div class="highlight-prosthetist less-highlight">
 
-                            <i class="fas fa-user"></i>
+                            <div class="highlight-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
 
-                            <span>{{ less_name }}</span>
+                            <div>
+                                <span>Prothésiste le moins actif</span>
+                                <strong>{{ less_name }}</strong>
+                            </div>
 
                         </div>
 
                         {% endif %}
 
-                    </div>
 
+                        {% if less and not less is mapping %}
 
-                    {% if less and not less is mapping %}
+                            {{ render_task_cards(less) }}
 
-                    <div class="table-wrapper">
+                            <div class="task-section-footer">
 
-                        <table class="data-table">
+                                <span class="record-count">
+                                    <i class="fas fa-chart-line"></i>
+                                    Nombre total d'enregistrements :
+                                    <strong>{{ less|length if less else 0 }}</strong>
+                                </span>
 
-                            <thead>
+                            </div>
 
-                            <tr>
-                                <th>ID utilisateur</th>
-                                <th>Numéro du patient</th>
-                                <th>Dentiste</th>
-                                <th>Prothésiste</th>
-                                <th>ID du prothésiste</th>
-                                <th>Tâche</th>
-                                <th>Prix</th>
-                                <th>Versement</th>
-                                <th>Reste</th>
-                                <th>Payé</th>
-                                <th>Terminé</th>
-                                <th>Date</th>
-                                <th>Date limite</th>
-                            </tr>
+                        {% else %}
 
-                            </thead>
+                            <div class="empty-state">
 
-                            <tbody>
+                                <div class="empty-icon">
+                                    <i class="fas fa-chart-column"></i>
+                                </div>
 
-                            {% if less|length > 0 %}
+                                <h3>Aucune donnée disponible</h3>
 
-                            {% for row in less %}
+                                <p>
+                                    Aucune donnée disponible pour les prothésistes ayant le moins de tâches.
+                                </p>
 
-                            <tr class="data-row">
+                            </div>
 
-                                <td>{{ row[0] }}</td>
-                                <td>{{ row[2] }}</td>
-                                <td>{{ row[3] }}</td>
-                                <td>{{ row[4] }}</td>
-                                <td>{{ row[5] }}</td>
-                                <td class="service-cell">{{ row[6] }}</td>
-                                <td>{{ row[7] }}</td>
-                                <td>{{ row[8] }}</td>
-                                <td>{{ row[9] }}</td>
-                                <td>{{ row[10] }}</td>
-                                <td>{{ row[11] }}</td>
-                                <td>{{ row[12] }}</td>
-                                <td>{{ row[13] }}</td>
+                        {% endif %}
 
-                            </tr>
-
-                            {% endfor %}
-
-                            {% else %}
-
-                            <tr>
-                                <td colspan="13"
-                                    class="table-empty-row">
-                                    Aucune donnée disponible
-                                </td>
-                            </tr>
-
-                            {% endif %}
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-
-                    <div class="table-footer">
-
-                        <span class="record-count">
-
-                            <i class="fas fa-chart-line"></i>
-
-                            Nombre total d'enregistrements :
-                            <strong>{{ less|length if less else 0 }}</strong>
-
-                        </span>
-
-                    </div>
-
-                    {% else %}
-
-                    <div class="empty-state">
-
-                        <div class="empty-icon">
-                            <i class="fas fa-chart-column"></i>
-                        </div>
-
-                        <h3>Aucune donnée disponible</h3>
-
-                        <p>
-                            Aucune donnée disponible pour les prothésistes ayant le moins de tâches.
-                        </p>
-
-                    </div>
-
-                    {% endif %}
+                    </section>
 
                 </div>
 
+
             </div>
+
+
+            <!-- GENERAL EMPTY STATE -->
+
+            {% if not result and not asc and not desc and not most and not less %}
+
+            <div class="empty-state general-empty">
+
+                <div class="empty-icon">
+                    <i class="fas fa-inbox"></i>
+                </div>
+
+                <h2>Aucune tâche pour le moment</h2>
+
+                <p>
+                    Utilisez le menu pour ajouter ou afficher des tâches.
+                </p>
+
+                <a href="/prothesists/ProGetKhedma" class="empty-action">
+                    <i class="fas fa-plus"></i>
+                    Ajouter une nouvelle tâche
+                </a>
+
+            </div>
+
+            {% endif %}
+
 
         </main>
 
@@ -966,381 +1081,489 @@
 </div>
 
 
-<!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
+
+<!-- JAVASCRIPT -->
 
 <script>
 
 
-    /* =========================================================
-       RECHERCHE DYNAMIQUE - CENTRE DES TACHES
-    ========================================================= */
+/* =========================================================
+   GET ACTIVE SECTION
+========================================================= */
 
-    function dynamicSearch() {
+function getActiveTable() {
 
-        const searchInput = document.getElementById('searchInput');
+    const containers = document.querySelectorAll('.TableContainer');
 
-        if (!searchInput) return;
+    for (const container of containers) {
 
-        const searchValue = searchInput.value
-            .toLowerCase()
-            .trim();
-
-        // Identifier le tableau actuellement visible
-        const containers = document.querySelectorAll('.TableContainer');
-
-        let activeContainer = null;
-
-        containers.forEach(container => {
-
-            if (getComputedStyle(container).display !== 'none') {
-                activeContainer = container;
-            }
-
-        });
-
-        if (!activeContainer) return;
-
-        const rows = activeContainer.querySelectorAll(
-            'tbody tr.data-row'
-        );
-
-        let visibleCount = 0;
-
-        rows.forEach(row => {
-
-            // Colonnes du tableau
-            const patientNumber = row.cells[1]?.textContent.toLowerCase().trim() || '';
-
-            const dentistName = row.cells[2]?.textContent.toLowerCase().trim() || '';
-
-            const prothesistName = row.cells[3]?.textContent.toLowerCase().trim() || '';
-
-            const prothesistID = row.cells[4]?.textContent.toLowerCase().trim() || '';
-
-            const serviceName = row.cells[5]?.textContent.toLowerCase().trim() || '';
-
-            // Données recherchables
-            const searchableData = [
-                patientNumber,
-                dentistName,
-                prothesistName,
-                prothesistID,
-                serviceName
-            ].join(' ');
-
-            const matches = searchableData.includes(searchValue);
-
-            row.style.display = matches ? '' : 'none';
-
-            if (matches) {
-                visibleCount++;
-            }
-
-        });
-
-        // Gestion du message "Aucun résultat"
-        const tbody = activeContainer.querySelector('tbody');
-
-        if (!tbody) return;
-
-        const oldMessage = tbody.querySelector('.search-empty-row');
-
-        if (oldMessage) {
-            oldMessage.remove();
-        }
-
-        if (searchValue !== '' && visibleCount === 0) {
-
-            const emptyRow = document.createElement('tr');
-
-            emptyRow.className = 'search-empty-row';
-
-            emptyRow.innerHTML = `
-                <td colspan="13" class="table-empty-row">
-                    <i class="fas fa-search"></i>
-                    Aucun résultat correspondant à "${escapeSearchText(searchValue)}"
-                </td>
-            `;
-
-            tbody.appendChild(emptyRow);
-        }
-
-        // Actualiser le compteur
-        const counter = activeContainer.querySelector(
-            '.record-count strong'
-        );
-
-        if (counter) {
-            counter.textContent = visibleCount;
+        if (getComputedStyle(container).display !== 'none') {
+            return container;
         }
 
     }
 
+    return null;
 
-    /* Protection du texte affiché dans le message */
-    function escapeSearchText(value) {
+}
 
-        const div = document.createElement('div');
 
-        div.textContent = value;
+/* =========================================================
+   DYNAMIC TASK SEARCH
+========================================================= */
 
-        return div.innerHTML;
+function dynamicSearch() {
+
+    const searchInput = document.getElementById('searchInput');
+
+    if (!searchInput) return;
+
+    const searchValue = searchInput.value.toLowerCase().trim();
+
+    const activeContainer = getActiveTable();
+
+    if (!activeContainer) return;
+
+
+    const cards = activeContainer.querySelectorAll('.task-card[data-search]');
+
+    let visibleCount = 0;
+
+
+    cards.forEach(card => {
+
+        const searchableData = card.dataset.search || '';
+
+        const matches = searchableData.includes(searchValue);
+
+        card.style.display = matches ? '' : 'none';
+
+        if (matches) {
+            visibleCount++;
+        }
+
+    });
+
+
+    const grid = activeContainer.querySelector('.task-grid');
+
+    if (!grid) return;
+
+
+    let oldMessage = grid.querySelector('.search-empty-state');
+
+    if (oldMessage) {
+        oldMessage.remove();
     }
 
 
-    /* =========================================================
-       INITIALISATION DE LA RECHERCHE
-    ========================================================= */
+    if (searchValue !== '' && visibleCount === 0) {
 
-    document.addEventListener('DOMContentLoaded', function () {
+        const emptyMessage = document.createElement('div');
 
-        const searchInput = document.getElementById('searchInput');
+        emptyMessage.className = 'empty-state search-empty-state';
 
-        const clearButton = document.getElementById('clearSearch');
+        emptyMessage.innerHTML = `
+            <div class="empty-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3>Aucun résultat trouvé</h3>
+            <p>Aucune tâche ne correspond à votre recherche.</p>
+        `;
 
-        if (searchInput) {
+        grid.appendChild(emptyMessage);
 
-            searchInput.addEventListener('input', dynamicSearch);
+    }
+
+
+    const counter = activeContainer.querySelector('.record-count strong');
+
+    if (counter) {
+
+        counter.textContent = searchValue === ''
+            ? cards.length
+            : visibleCount;
+
+    }
+
+}
+
+
+/* =========================================================
+   RIPPLE EFFECT
+========================================================= */
+
+function createRipple(event) {
+
+    if (event.pointerType === 'touch') return;
+
+    const button = event.currentTarget;
+
+    const ripple = document.createElement('span');
+
+    const rect = button.getBoundingClientRect();
+
+    const size = Math.max(rect.width, rect.height);
+
+    const x = event.clientX - rect.left - size / 2;
+    const y = event.clientY - rect.top - size / 2;
+
+    ripple.style.width = size + 'px';
+    ripple.style.height = size + 'px';
+
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+
+    ripple.classList.add('ripple');
+
+    button.appendChild(ripple);
+
+    setTimeout(() => ripple.remove(), 600);
+
+}
+
+
+/* =========================================================
+   CARD ANIMATIONS
+========================================================= */
+
+function applyCardAnimations() {
+
+    document.querySelectorAll('.task-card').forEach((card, index) => {
+
+        card.style.animationDelay =
+            (Math.min(index, 12) * 0.04) + 's';
+
+    });
+
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function initializeSidebar() {
+
+    const sidebar = document.getElementById('sidebar');
+
+    const toggle = document.getElementById('sidebarToggle');
+
+    if (!sidebar || !toggle) return;
+
+
+    toggle.addEventListener('click', function () {
+
+        const isOpen = sidebar.classList.toggle('is-open');
+
+        toggle.setAttribute('aria-expanded', String(isOpen));
+
+        const icon = toggle.querySelector('i');
+
+        const label = toggle.querySelector('span');
+
+
+        if (icon) {
+
+            icon.className = isOpen
+                ? 'fas fa-chevron-up'
+                : 'fas fa-chevron-down';
 
         }
 
-        if (clearButton) {
 
-            clearButton.addEventListener('click', function () {
+        if (label) {
 
-                searchInput.value = '';
-
-                dynamicSearch();
-
-                searchInput.focus();
-
-            });
+            label.textContent = isOpen
+                ? 'Masquer les options'
+                : 'Afficher les options';
 
         }
 
     });
 
 
-    /* =========================================================
-       Effet d'ondulation
-    ========================================================== */
+    const menu = document.getElementById('sidebarMenu');
 
-    function createRipple(e) {
+    if (menu) {
 
-        const button = e.currentTarget;
+        menu.addEventListener('click', function (event) {
 
-        const ripple = document.createElement('span');
+            if (
+                event.target.closest('a') &&
+                window.matchMedia('(max-width: 850px)').matches
+            ) {
 
-        const rect = button.getBoundingClientRect();
+                sidebar.classList.remove('is-open');
 
-        const size = Math.max(
-            rect.width,
-            rect.height
-        );
+                toggle.setAttribute('aria-expanded', 'false');
 
-        const x =
-            e.clientX -
-            rect.left -
-            size / 2;
+                const icon = toggle.querySelector('i');
 
-        const y =
-            e.clientY -
-            rect.top -
-            size / 2;
+                const label = toggle.querySelector('span');
 
-        ripple.style.width = size + 'px';
-        ripple.style.height = size + 'px';
+                if (icon) icon.className = 'fas fa-chevron-down';
 
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
+                if (label) label.textContent = 'Afficher les options';
 
-        ripple.classList.add('ripple');
-
-        button.appendChild(ripple);
-
-        setTimeout(() => {
-            ripple.remove();
-        }, 600);
-    }
-
-
-    /* =========================================================
-       Animations des lignes
-    ========================================================== */
-
-    function applyRowAnimations() {
-
-        const rows =
-            document.querySelectorAll('.data-row');
-
-        rows.forEach((row, index) => {
-
-            row.style.animationDelay =
-                (index * 0.035) + 's';
+            }
 
         });
+
     }
 
+}
 
-    /* =========================================================
-       INITIALISATION
-    ========================================================== */
 
-    document.addEventListener(
-        'DOMContentLoaded',
-        function () {
+/* =========================================================
+   ALERTS
+========================================================= */
 
-            applyRowAnimations();
+function initializeAlerts() {
 
-            document
-                .querySelectorAll('.menu-item, .nav-btn')
-                .forEach(item => {
+    document.querySelectorAll('.alert-close').forEach(button => {
 
-                    item.addEventListener(
-                        'click',
-                        createRipple
-                    );
+        button.addEventListener('click', function () {
 
+            const alert = this.closest('.alert');
+
+            if (alert) {
+                alert.remove();
+            }
+
+        });
+
+    });
+
+}
+
+
+/* =========================================================
+   AJAX NAVIGATION
+========================================================= */
+
+function initializeAjaxLinks() {
+
+    document.querySelectorAll('.ajax-link').forEach(item => {
+
+        item.addEventListener('click', async function (event) {
+
+            event.preventDefault();
+
+            const targetUrl = this.getAttribute('href');
+
+            const sectionContainer = document.getElementById('table-section');
+
+            if (!sectionContainer || !targetUrl) {
+                window.location.href = targetUrl;
+                return;
+            }
+
+
+            document.querySelectorAll('.sidebar-menu .menu-item').forEach(menuItem => {
+                menuItem.classList.remove('active');
+            });
+
+            this.classList.add('active');
+
+            sectionContainer.classList.add('loading');
+
+
+            try {
+
+                const response = await fetch(targetUrl, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
                 });
 
-        }
-    );
+                if (!response.ok) {
+                    throw new Error('Échec de la requête : ' + response.status);
+                }
 
 
-    /* =========================================================
-       NAVIGATION AJAX DES TABLEAUX
-    ========================================================== */
+                const html = await response.text();
 
-    document
-        .querySelectorAll('.ajax-link')
-        .forEach(item => {
+                const parser = new DOMParser();
 
-            item.addEventListener(
-                'click',
-                function (e) {
+                const doc = parser.parseFromString(html, 'text/html');
 
-                    e.preventDefault();
-
-                    const targetUrl =
-                        this.getAttribute('href');
-
-                    const sectionContainer =
-                        document.getElementById(
-                            'table-section'
-                        );
-
-                    if (!sectionContainer) {
-
-                        window.location.href =
-                            targetUrl;
-
-                        return;
-                    }
+                const newSection = doc.getElementById('table-section');
 
 
-                    /* Élément actif de la barre latérale */
-
-                    document
-                        .querySelectorAll(
-                            '.sidebar-menu .menu-item'
-                        )
-                        .forEach(menuItem => {
-
-                            menuItem.classList.remove(
-                                'active'
-                            );
-
-                        });
-
-                    this.classList.add('active');
+                if (!newSection) {
+                    window.location.href = targetUrl;
+                    return;
+                }
 
 
-                    /* État de chargement */
-
-                    sectionContainer.classList.add(
-                        'loading'
-                    );
+                sectionContainer.innerHTML = newSection.innerHTML;
 
 
-                    fetch(targetUrl)
+                /* Update search bar */
 
-                        .then(response => {
+                const newSearchContainer =
+                    doc.getElementById('search-bar-container');
 
-                            if (!response.ok) {
+                const oldSearchContainer =
+                    document.getElementById('search-bar-container');
 
-                                throw new Error(
-                                    'Échec de la requête : ' +
-                                    response.status
-                                );
+                if (newSearchContainer && oldSearchContainer) {
 
-                            }
-
-                            return response.text();
-
-                        })
-
-                        .then(html => {
-
-                            const parser =
-                                new DOMParser();
-
-                            const doc =
-                                parser.parseFromString(
-                                    html,
-                                    'text/html'
-                                );
-
-                            const newSection =
-                                doc.getElementById(
-                                    'table-section'
-                                );
-
-
-                            if (newSection) {
-
-                                sectionContainer.innerHTML =
-                                    newSection.innerHTML;
-
-                                applyRowAnimations();
-
-                                // Réappliquer la recherche après le changement de tableau
-                                dynamicSearch();
-
-                            }
-
-
-                            sectionContainer.classList.remove(
-                                'loading'
-                            );
-
-
-                            window.history.pushState(
-                                null,
-                                '',
-                                targetUrl
-                            );
-
-                        })
-
-                        .catch(error => {
-
-                            console.error(
-                                'Erreur de chargement AJAX :',
-                                error
-                            );
-
-                            sectionContainer.classList.remove(
-                                'loading'
-                            );
-
-                        });
+                    oldSearchContainer.innerHTML =
+                        newSearchContainer.innerHTML;
 
                 }
-            );
+
+
+                applyCardAnimations();
+
+                dynamicSearch();
+
+
+                window.history.pushState(null, '', targetUrl);
+
+
+                window.scrollTo({
+                    top: sectionContainer.getBoundingClientRect().top + window.scrollY - 20,
+                    behavior: 'smooth'
+                });
+
+
+            } catch (error) {
+
+                console.error('Erreur AJAX :', error);
+
+                window.location.href = targetUrl;
+
+            } finally {
+
+                sectionContainer.classList.remove('loading');
+
+            }
 
         });
+
+    });
+
+}
+
+
+/* =========================================================
+   MOBILE KEYBOARD / INPUT FOCUS
+========================================================= */
+
+function initializeMobileInputs() {
+
+    document.addEventListener('focusin', function (event) {
+
+        const input = event.target;
+
+        if (!input.matches('input, textarea, select')) return;
+
+
+        setTimeout(() => {
+
+            input.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'nearest'
+            });
+
+        }, 300);
+
+    });
+
+
+    if (window.visualViewport) {
+
+        window.visualViewport.addEventListener('resize', function () {
+
+            const active = document.activeElement;
+
+            if (active && active.matches('input, textarea, select')) {
+
+                setTimeout(() => {
+
+                    active.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+
+                }, 100);
+
+            }
+
+        });
+
+    }
+
+}
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const searchInput = document.getElementById('searchInput');
+
+    const clearButton = document.getElementById('clearSearch');
+
+
+    if (searchInput) {
+
+        searchInput.addEventListener('input', dynamicSearch);
+
+    }
+
+
+    if (clearButton && searchInput) {
+
+        clearButton.addEventListener('click', function () {
+
+            searchInput.value = '';
+
+            dynamicSearch();
+
+            searchInput.focus();
+
+        });
+
+    }
+
+
+    applyCardAnimations();
+
+    initializeSidebar();
+
+    initializeAlerts();
+
+    initializeAjaxLinks();
+
+    initializeMobileInputs();
+
+
+    document.querySelectorAll('.menu-item, .nav-btn').forEach(item => {
+
+        item.addEventListener('pointerdown', createRipple);
+
+    });
+
+});
+
+
+/* =========================================================
+   BROWSER BACK BUTTON
+========================================================= */
+
+window.addEventListener('popstate', function () {
+
+    window.location.reload();
+
+});
 
 </script>
 

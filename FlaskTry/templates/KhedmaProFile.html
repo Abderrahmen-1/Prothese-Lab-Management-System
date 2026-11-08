@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -31,9 +32,7 @@
 
 <div class="container">
 
-    <!-- =========================
-         EN-TÊTE
-    ========================== -->
+    <!-- HEADER -->
 
     <header class="header">
 
@@ -77,29 +76,40 @@
     </header>
 
 
-    <!-- =========================
-         STRUCTURE PRINCIPALE
-    ========================== -->
+    <!-- MAIN LAYOUT -->
 
     <div class="main-layout">
 
 
-        <!-- =========================
-             BARRE LATÉRALE
-        ========================== -->
+        <!-- SIDEBAR -->
 
         <aside class="sidebar">
 
             <div class="sidebar-header">
 
-                <h2>Actions</h2>
+                <div class="sidebar-heading">
 
-                <div class="header-accent"></div>
+                    <h2>Actions</h2>
+
+                    <div class="header-accent"></div>
+
+                </div>
+
+                <button type="button"
+                        class="sidebar-toggle"
+                        id="sidebarToggle"
+                        aria-expanded="true"
+                        aria-controls="sidebarMenu">
+
+                    <span>Masquer les actions</span>
+                    <i class="fas fa-chevron-down"></i>
+
+                </button>
 
             </div>
 
 
-            <nav class="sidebar-menu">
+            <nav class="sidebar-menu" id="sidebarMenu">
 
 
                 <!-- AFFICHER LES TÂCHES -->
@@ -162,7 +172,6 @@
                         Gestion
                     </h3>
 
-
                     <a href="/prothesists/AddProthesist"
                        class="menu-item add-item ripple-btn">
 
@@ -215,7 +224,6 @@
                         Analyses
                     </h3>
 
-
                     <a href="/prothesists/ProStat"
                        class="menu-item stat-item ripple-btn">
 
@@ -236,14 +244,12 @@
         </aside>
 
 
-        <!-- =========================
-             CONTENU
-        ========================== -->
+        <!-- CONTENT -->
 
         <main class="content">
 
 
-            <!-- MESSAGE DE SUCCÈS -->
+            <!-- SUCCESS MESSAGE -->
 
             {% if message %}
 
@@ -257,14 +263,14 @@
 
                         <h3>Opération réussie</h3>
 
-                        <p>
-                            {{ message }}
-                        </p>
+                        <p>{{ message }}</p>
 
                     </div>
 
-                    <button class="alert-close"
-                            onclick="this.parentElement.style.display='none'">
+                    <button type="button"
+                            class="alert-close"
+                            aria-label="Fermer"
+                            onclick="this.closest('.alert-container').remove()">
 
                         <i class="fas fa-times"></i>
 
@@ -277,9 +283,7 @@
             {% endif %}
 
 
-            <!-- =========================
-                 SECTION D'ACCUEIL
-            ========================== -->
+            <!-- WELCOME SECTION -->
 
             <section class="welcome-section">
 
@@ -321,9 +325,7 @@
                 </div>
 
 
-                <!-- =========================
-                     FLUX DE TRAVAIL
-                ========================== -->
+                <!-- WORKFLOW -->
 
                 <section class="workflow-section">
 
@@ -353,13 +355,11 @@
                     <div class="workflow-grid">
 
 
-                        <!-- ÉTAPE 1 -->
+                        <!-- STEP 1 -->
 
                         <div class="workflow-card workflow-add reveal-card">
 
-                            <div class="workflow-number">
-                                01
-                            </div>
+                            <div class="workflow-number">01</div>
 
                             <div class="workflow-icon">
                                 <i class="fas fa-user-plus"></i>
@@ -367,9 +367,7 @@
 
                             <div class="workflow-content">
 
-                                <span>
-                                    PREMIÈRE ÉTAPE
-                                </span>
+                                <span>PREMIÈRE ÉTAPE</span>
 
                                 <h4>
                                     Enregistrer le prothésiste
@@ -386,13 +384,11 @@
                         </div>
 
 
-                        <!-- ÉTAPE 2 -->
+                        <!-- STEP 2 -->
 
                         <div class="workflow-card workflow-get reveal-card">
 
-                            <div class="workflow-number">
-                                02
-                            </div>
+                            <div class="workflow-number">02</div>
 
                             <div class="workflow-icon">
                                 <i class="fas fa-handshake"></i>
@@ -400,9 +396,7 @@
 
                             <div class="workflow-content">
 
-                                <span>
-                                    TRAVAIL ENTRANT
-                                </span>
+                                <span>TRAVAIL ENTRANT</span>
 
                                 <h4>
                                     Recevoir une tâche
@@ -419,13 +413,11 @@
                         </div>
 
 
-                        <!-- ÉTAPE 3 -->
+                        <!-- STEP 3 -->
 
                         <div class="workflow-card workflow-payment reveal-card">
 
-                            <div class="workflow-number">
-                                03
-                            </div>
+                            <div class="workflow-number">03</div>
 
                             <div class="workflow-icon">
                                 <i class="fas fa-file-invoice-dollar"></i>
@@ -433,9 +425,7 @@
 
                             <div class="workflow-content">
 
-                                <span>
-                                    SUIVI
-                                </span>
+                                <span>SUIVI</span>
 
                                 <h4>
                                     Gérer les paiements
@@ -452,13 +442,11 @@
                         </div>
 
 
-                        <!-- ÉTAPE 4 -->
+                        <!-- STEP 4 -->
 
                         <div class="workflow-card workflow-analysis reveal-card">
 
-                            <div class="workflow-number">
-                                04
-                            </div>
+                            <div class="workflow-number">04</div>
 
                             <div class="workflow-icon">
                                 <i class="fas fa-chart-pie"></i>
@@ -466,9 +454,7 @@
 
                             <div class="workflow-content">
 
-                                <span>
-                                    ANALYSE
-                                </span>
+                                <span>ANALYSE</span>
 
                                 <h4>
                                     Consulter l'activité
@@ -489,9 +475,7 @@
                 </section>
 
 
-                <!-- =========================
-                     BANDEAU D'INFORMATIONS
-                ========================== -->
+                <!-- INFORMATION STRIP -->
 
                 <section class="info-strip">
 
@@ -503,9 +487,7 @@
 
                         <div>
 
-                            <span>
-                                ORGANISÉ
-                            </span>
+                            <span>ORGANISÉ</span>
 
                             <strong>
                                 Gestion centralisée des travaux
@@ -530,9 +512,7 @@
 
                         <div>
 
-                            <span>
-                                PROFESSIONNEL
-                            </span>
+                            <span>PROFESSIONNEL</span>
 
                             <strong>
                                 Conçu pour le flux de travail du laboratoire
@@ -560,68 +540,115 @@
 
 <script>
 
-    document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
 
+    /* ==========================================
+       RIPPLE EFFECT
+    ========================================== */
 
-        /* ==========================================
-           EFFET D'ONDULATION
-        ========================================== */
+    document.querySelectorAll(".ripple-btn").forEach(button => {
 
-        document.querySelectorAll(".ripple-btn").forEach(button => {
+        button.addEventListener("click", function(e) {
 
-            button.addEventListener("click", function (e) {
+            const ripple = document.createElement("span");
+            const rect = this.getBoundingClientRect();
 
-                const ripple = document.createElement("span");
+            const size = Math.max(rect.width, rect.height);
 
-                const rect = this.getBoundingClientRect();
+            ripple.style.width = size + "px";
+            ripple.style.height = size + "px";
 
-                const size = Math.max(
-                    rect.width,
-                    rect.height
-                );
+            ripple.style.left =
+                (e.clientX - rect.left - size / 2) + "px";
 
-                ripple.style.width = size + "px";
-                ripple.style.height = size + "px";
+            ripple.style.top =
+                (e.clientY - rect.top - size / 2) + "px";
 
-                ripple.style.left =
-                    (e.clientX - rect.left - size / 2) + "px";
+            ripple.classList.add("ripple");
 
-                ripple.style.top =
-                    (e.clientY - rect.top - size / 2) + "px";
+            this.appendChild(ripple);
 
-                ripple.classList.add("ripple");
-
-                this.appendChild(ripple);
-
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-
-            });
+            setTimeout(() => ripple.remove(), 650);
 
         });
 
+    });
 
-        /* ==========================================
-           AFFICHER LES CARTES DU FLUX DE TRAVAIL
-        ========================================== */
 
-        const cards =
-            document.querySelectorAll(".reveal-card");
+    /* ==========================================
+       COLLAPSIBLE SIDEBAR
+    ========================================== */
 
+    const sidebar = document.querySelector(".sidebar");
+    const sidebarToggle = document.getElementById("sidebarToggle");
+    const sidebarMenu = document.getElementById("sidebarMenu");
+
+    const mobileScreen = window.matchMedia("(max-width: 768px)");
+
+    function updateSidebar() {
+
+        if (mobileScreen.matches) {
+
+            sidebar.classList.add("sidebar-collapsed");
+
+            sidebarToggle.setAttribute("aria-expanded", "false");
+
+            sidebarToggle.querySelector("span").textContent =
+                "Afficher les actions";
+
+        } else {
+
+            sidebar.classList.remove("sidebar-collapsed");
+
+            sidebarToggle.setAttribute("aria-expanded", "true");
+
+            sidebarToggle.querySelector("span").textContent =
+                "Masquer les actions";
+
+        }
+
+    }
+
+    sidebarToggle.addEventListener("click", () => {
+
+        const isCollapsed =
+            sidebar.classList.toggle("sidebar-collapsed");
+
+        sidebarToggle.setAttribute(
+            "aria-expanded",
+            String(!isCollapsed)
+        );
+
+        sidebarToggle.querySelector("span").textContent =
+            isCollapsed ? "Afficher les actions" : "Masquer les actions";
+
+    });
+
+    updateSidebar();
+
+    if (mobileScreen.addEventListener) {
+        mobileScreen.addEventListener("change", updateSidebar);
+    } else {
+        mobileScreen.addListener(updateSidebar);
+    }
+
+
+    /* ==========================================
+       WORKFLOW CARD REVEAL
+    ========================================== */
+
+    const cards = document.querySelectorAll(".reveal-card");
+
+    if ("IntersectionObserver" in window) {
 
         const observer = new IntersectionObserver(
             (entries) => {
 
-                entries.forEach((entry, index) => {
+                entries.forEach(entry => {
 
                     if (entry.isIntersecting) {
 
-                        setTimeout(() => {
-
-                            entry.target.classList.add("show");
-
-                        }, index * 100);
+                        entry.target.classList.add("show");
 
                         observer.unobserve(entry.target);
 
@@ -631,61 +658,60 @@
 
             },
             {
-                threshold: 0.15
+                threshold: 0.12
             }
         );
 
+        cards.forEach(card => observer.observe(card));
 
-        cards.forEach(card => {
+    } else {
 
-            observer.observe(card);
+        cards.forEach(card => card.classList.add("show"));
 
-        });
-
-
-        /* ==========================================
-           INCLINAISON DES CARTES DU FLUX DE TRAVAIL
-        ========================================== */
-
-        document
-            .querySelectorAll(".workflow-card")
-            .forEach(card => {
-
-                card.addEventListener("mousemove", e => {
-
-                    const rect =
-                        card.getBoundingClientRect();
-
-                    const x =
-                        e.clientX - rect.left;
-
-                    const y =
-                        e.clientY - rect.top;
-
-                    const rotateX =
-                        ((y / rect.height) - 0.5) * -3;
-
-                    const rotateY =
-                        ((x / rect.width) - 0.5) * 3;
-
-                    card.style.transform =
-                        `perspective(900px)
-                         rotateX(${rotateX}deg)
-                         rotateY(${rotateY}deg)
-                         translateY(-4px)`;
-
-                });
+    }
 
 
-                card.addEventListener("mouseleave", () => {
+    /* ==========================================
+       CARD TILT EFFECT - DESKTOP ONLY
+    ========================================== */
 
-                    card.style.transform = "";
+    const canHover = window.matchMedia(
+        "(hover: hover) and (pointer: fine)"
+    );
 
-                });
+    if (canHover.matches) {
+
+        document.querySelectorAll(".workflow-card").forEach(card => {
+
+            card.addEventListener("mousemove", e => {
+
+                const rect = card.getBoundingClientRect();
+
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const rotateX = ((y / rect.height) - 0.5) * -3;
+                const rotateY = ((x / rect.width) - 0.5) * 3;
+
+                card.style.transform =
+                    `perspective(900px)
+                     rotateX(${rotateX}deg)
+                     rotateY(${rotateY}deg)
+                     translateY(-4px)`;
 
             });
 
-    });
+            card.addEventListener("mouseleave", () => {
+
+                card.style.transform = "";
+
+            });
+
+        });
+
+    }
+
+});
 
 </script>
 
