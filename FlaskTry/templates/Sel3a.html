@@ -1,230 +1,191 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sel3a Inventory Management - Prosthetics Lab Product Tracking">
-    <meta name="keywords" content="Inventory, Products, Sel3a, Prosthetics Lab">
+    <meta name="description" content="Gestion des stocks et produits du laboratoire de prothèses">
     <title>Sel3a - Gestion des stocks</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='Sel3a.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
-        /* Custom Context Menu Styles */
-        .context-menu {
-            position: absolute;
-            z-index: 10000;
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            min-width: 160px;
-            animation: fadeInMenu 0.15s ease-out;
-        }
-
-        .context-menu-item {
-            width: 100%;
-            padding: 12px 16px;
-            border: none;
-            background: transparent;
-            text-align: left;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: background 0.2s ease, color 0.2s ease;
-        }
-
-        .context-menu-item.delete-action {
-            color: #e63946;
-        }
-
-        .context-menu-item.delete-action:hover {
-            background: #ffebe9;
-            color: #c01927;
-        }
-
-        /* Active row selection state */
-        tr.row-selected {
-            background-color: rgba(230, 57, 70, 0.12) !important;
-        }
-
-        @keyframes fadeInMenu {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-    </style>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-<!-- Animated Background -->
-<div class="animated-bg"></div>
+
+<div class="page-background"></div>
 
 <div class="container">
-    <!-- Header -->
+
+    <!-- HEADER -->
     <header class="header">
-        <div class="header-content">
-            <div class="logo-section">
-                <div class="logo-icon">
-                    <i class="fas fa-box"></i>
-                </div>
-                <div class="logo-text">
-                    <h1>Sel3a Hub</h1>
-                    <p>Gestion des stocks et des produits</p>
-                </div>
+        <div class="header-left">
+            <button class="mobile-menu-btn" id="mobileMenuBtn"
+                    type="button" aria-label="Afficher les options"
+                    aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="brand-icon">
+                <i class="fas fa-boxes-stacked"></i>
             </div>
-            <nav class="header-nav">
-                <a href="/HomePage" class="nav-btn back-btn">
-                    <i class="fas fa-arrow-left"></i> Retour au menu
-                </a>
-            </nav>
+
+            <div class="brand-text">
+                <h1>Sel3a Hub</h1>
+                <p>Gestion des stocks et des produits</p>
+            </div>
         </div>
+
+        <a href="/HomePage" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            <span>Retour au menu</span>
+        </a>
     </header>
 
-    <!-- Main Layout -->
+
+    <!-- MAIN LAYOUT -->
     <div class="main-layout">
 
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Options d'affichage</h2>
-                <div class="header-accent"></div>
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-heading">
+                <div>
+                    <span class="eyebrow">NAVIGATION</span>
+                    <h2>Options d'affichage</h2>
+                </div>
+
+                <button type="button" class="sidebar-close"
+                        id="sidebarClose" aria-label="Fermer le menu">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
 
-            <nav class="sidebar-menu">
+            <div class="sidebar-menu">
 
-                <!-- Display Modes -->
                 <div class="menu-group">
-                    <h3 class="group-title">📊 Modes d'affichage</h3>
+                    <p class="group-title">Modes d'affichage</p>
 
-                    <a href="javascript:void(0);" onclick="ShowMainTable(); return false;"
-                       class="menu-item main-item active-item" data-table="MainTable">
-                        <i class="fas fa-th"></i>
+                    <button type="button"
+                            onclick="ShowMainTable()"
+                            class="menu-item active-item"
+                            data-table="MainTable">
+                        <i class="fas fa-boxes-stacked"></i>
                         <span>Stock principal</span>
-                        <span class="badge badge-primary">Tous</span>
-                    </a>
+                        <span class="menu-badge">Tous</span>
+                    </button>
 
-                    <a href="javascript:void(0);" onclick="ShowTableByPrice(); return false;"
-                       class="menu-item price-item" data-table="PriceTable">
+                    <button type="button"
+                            onclick="ShowTableByPrice()"
+                            class="menu-item price-item"
+                            data-table="PriceTable">
                         <i class="fas fa-arrow-down-up"></i>
                         <span>Par prix</span>
-                        <span class="badge badge-warning">💰</span>
-                    </a>
+                    </button>
 
-                    <a href="javascript:void(0);" onclick="ShowTableByDate(); return false;" class="menu-item date-item"
-                       data-table="DateTable">
-                        <i class="fas fa-calendar"></i>
+                    <button type="button"
+                            onclick="ShowTableByDate()"
+                            class="menu-item date-item"
+                            data-table="DateTable">
+                        <i class="fas fa-calendar-days"></i>
                         <span>Par date</span>
-                        <span class="badge badge-info">📅</span>
-                    </a>
+                    </button>
 
-                    <a href="javascript:void(0);" onclick="ShowStatTable(); return false;" class="menu-item stats-item"
-                       data-table="StatTable">
-                        <i class="fas fa-chart-bar"></i>
+                    <button type="button"
+                            onclick="ShowStatTable()"
+                            class="menu-item stats-item"
+                            data-table="StatTable">
+                        <i class="fas fa-chart-column"></i>
                         <span>Statistiques mensuelles</span>
-                        <span class="badge badge-info">📊</span>
-                    </a>
+                    </button>
                 </div>
 
-                <!-- Quick Actions -->
                 <div class="menu-group">
-                    <h3 class="group-title">⚡ Actions rapides</h3>
+                    <p class="group-title">Actions rapides</p>
 
                     <a href="/products/AddSel3a" class="menu-item add-item">
-                        <i class="fas fa-plus-circle"></i>
+                        <i class="fas fa-circle-plus"></i>
                         <span>Ajouter un produit</span>
-                        <span class="badge badge-success">+</span>
+                        <i class="fas fa-chevron-right menu-arrow"></i>
                     </a>
                 </div>
 
-                <!-- Quick Stats -->
-                <div class="menu-group">
-                    <h3 class="group-title">📊 Statistiques</h3>
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fas fa-boxes"></i>
-                        </div>
-                        <div class="stat-content">
-                            <p class="stat-label">Nombre total de produits</p>
-                            <p class="stat-value" id="totalProducts">--</p>
-                        </div>
-                    </div>
+            </div>
+
+            <div class="sidebar-stat">
+                <div class="sidebar-stat-icon">
+                    <i class="fas fa-cubes"></i>
                 </div>
 
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="content">
-
-            <!-- Hero Section -->
-            <div class="hero-section">
-                <div class="hero-content">
-                    <div class="hero-text">
-
-                        <h2 class="hero-title">
-                            <span class="title-icon">📦</span>
-                            Gestion des stocks
-                        </h2>
-
-                        <p class="hero-description">
-                            Suivez tous les produits et matériaux de votre laboratoire de prothèses.
-                            Gérez les stocks, surveillez les coûts et organisez les produits par prix ou par date.
-                        </p>
-
-                        <div class="hero-stats">
-
-                            <div class="hero-stat">
-                                <i class="fas fa-box"></i>
-                                <span>Produits</span>
-                            </div>
-
-                            <div class="hero-stat">
-                                <i class="fas fa-dollar-sign"></i>
-                                <span>Prix</span>
-                            </div>
-
-                            <div class="hero-stat">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span>Chronologie</span>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="hero-visual">
-                        <div class="floating-shape shape-1"></div>
-                        <div class="floating-shape shape-2"></div>
-                        <i class="fas fa-warehouse hero-icon"></i>
-                    </div>
-
+                <div>
+                    <p class="sidebar-stat-label">Produits affichés</p>
+                    <p class="sidebar-stat-value" id="totalProducts">--</p>
                 </div>
             </div>
 
-            <!-- Display Area -->
-            <div class="display-area">
+        </aside>
 
-                <!-- Main Table -->
+
+        <!-- CONTENT -->
+        <main class="content">
+
+            <!-- PAGE INTRO -->
+            <section class="page-intro">
+                <div class="intro-content">
+                    <div class="intro-text">
+                        <span class="eyebrow">ESPACE INVENTAIRE</span>
+
+                        <h2>
+                            Gestion des stocks
+                            <span class="intro-icon">📦</span>
+                        </h2>
+
+                        <p>
+                            Retrouvez vos produits et matériaux, consultez les quantités
+                            disponibles et suivez les paiements de votre laboratoire.
+                        </p>
+
+                        <div class="intro-tags">
+                            <span><i class="fas fa-box"></i> Inventaire</span>
+                            <span><i class="fas fa-coins"></i> Paiements</span>
+                            <span><i class="fas fa-calendar"></i> Historique</span>
+                        </div>
+                    </div>
+
+                    <div class="intro-decoration">
+                        <div class="decoration-circle circle-one"></div>
+                        <div class="decoration-circle circle-two"></div>
+                        <i class="fas fa-warehouse"></i>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- DISPLAY AREA -->
+            <section class="display-area">
+
+                <!-- MAIN TABLE -->
                 <div class="table-container" id="MainTable"
                      style="display: {% if table %}block{% else %}none{% endif %};">
 
-                    <div class="table-header">
-                        <div class="table-title">
-                            <i class="fas fa-table"></i>
-                            <h3>Stock principal</h3>
+                    <div class="section-header">
+                        <div class="section-title">
+                            <div class="section-icon blue-icon">
+                                <i class="fas fa-boxes-stacked"></i>
+                            </div>
+                            <div>
+                                <h3>Stock principal</h3>
+                                <p>Liste complète de vos produits</p>
+                            </div>
                         </div>
 
-                        <div class="table-info">
-                            <span class="info-badge">Tous les produits</span>
-                        </div>
+                        <span class="section-badge">Inventaire</span>
                     </div>
 
                     {% if table %}
@@ -232,60 +193,64 @@
                         <table class="data-table">
                             <thead>
                             <tr>
-                                <th><i class="fas fa-box-open"></i> Nom du produit</th>
-                                <th><i class="fas fa-box-open"></i> Quantité</th>
-                                <th><i class="fas fa-box-open"></i> Quantité maximale</th>
-                                <th><i class="fas fa-box-open"></i> Unité</th>
-                                <th><i class="fas fa-dollar-sign"></i> Prix unitaire</th>
-                                <th><i class="fas fa-dollar-sign"></i> Prix total</th>
-                                <th><i class="fas fa-calendar"></i> Date</th>
-                                <th><i class="fas fa-credit-card"></i> Payé</th>
-                                <th><i class="fas fa-money-bill"></i> Versement</th>
-                                <th><i class="fas fa-coins"></i> Reste</th>
+                                <th>Nom du produit</th>
+                                <th>Quantité</th>
+                                <th>Quantité maximale</th>
+                                <th>Unité</th>
+                                <th>Prix unitaire</th>
+                                <th>Prix total</th>
+                                <th>Date</th>
+                                <th>Payé</th>
+                                <th>Versement</th>
+                                <th>Reste</th>
                             </tr>
                             </thead>
 
                             <tbody>
                             {% for row in table %}
                             <tr class="table-row" data-id="{{ row[0] }}"
-                                style="animation-delay: {{ loop.index * 0.05 }}s;">
-                                <td><span class="cell-content">{{ row[2] }}</span></td>
-                                <td><span class="cell-content">{{ row[3] }}</span></td>
-                                <td><span class="cell-content">{{ row[4] }}</span></td>
-                                <td><span class="cell-content">{{ row[5] }}</span></td>
-                                <td><span class="cell-content">{{ row[6] }}</span></td>
-                                <td><span class="cell-content">{{ row[7] }}</span></td>
-                                <td><span class="cell-content">{{ row[8] }}</span></td>
-                                <td><span class="cell-content">{{ row[9] }}</span></td>
-                                <td><span class="cell-content">{{ row[10] }}</span></td>
-                                <td><span class="cell-content">{{ row[11] }}</span></td>
+                                style="animation-delay: {{ loop.index * 0.03 }}s;">
+                                <td data-label="Produit"><span class="cell-content product-name">{{ row[2] }}</span></td>
+                                <td data-label="Quantité"><span class="cell-content">{{ row[3] }}</span></td>
+                                <td data-label="Quantité maximale"><span class="cell-content">{{ row[4] }}</span></td>
+                                <td data-label="Unité"><span class="cell-content">{{ row[5] }}</span></td>
+                                <td data-label="Prix unitaire"><span class="cell-content">{{ row[6] }}</span></td>
+                                <td data-label="Prix total"><span class="cell-content">{{ row[7] }}</span></td>
+                                <td data-label="Date"><span class="cell-content">{{ row[8] }}</span></td>
+                                <td data-label="Payé"><span class="cell-content">{{ row[9] }}</span></td>
+                                <td data-label="Versement"><span class="cell-content">{{ row[10] }}</span></td>
+                                <td data-label="Reste"><span class="cell-content">{{ row[11] }}</span></td>
                             </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                     </div>
-
                     {% else %}
-                    <div class="empty-table">
-                        <i class="fas fa-inbox"></i>
-                        <p>Aucun produit disponible</p>
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <h4>Aucun produit disponible</h4>
+                        <p>Votre stock principal est actuellement vide.</p>
                     </div>
                     {% endif %}
                 </div>
 
-                <!-- Price Table -->
+
+                <!-- PRICE TABLE -->
                 <div class="table-container" id="PriceTable"
                      style="display: {% if Pricetable %}block{% else %}none{% endif %};">
 
-                    <div class="table-header">
-                        <div class="table-title">
-                            <i class="fas fa-arrow-down-up"></i>
-                            <h3>Trié par prix (du plus cher au moins cher)</h3>
+                    <div class="section-header">
+                        <div class="section-title">
+                            <div class="section-icon orange-icon">
+                                <i class="fas fa-arrow-down-up"></i>
+                            </div>
+                            <div>
+                                <h3>Classement par prix</h3>
+                                <p>Du plus cher au moins cher</p>
+                            </div>
                         </div>
 
-                        <div class="table-info">
-                            <span class="info-badge info-price">Trié par prix</span>
-                        </div>
+                        <span class="section-badge orange-badge">Prix</span>
                     </div>
 
                     {% if Pricetable %}
@@ -293,60 +258,64 @@
                         <table class="data-table">
                             <thead>
                             <tr>
-                                <th><i class="fas fa-box-open"></i> Nom du produit</th>
-                                <th><i class="fas fa-box-open"></i> Quantité</th>
-                                <th><i class="fas fa-box-open"></i> Quantité maximale</th>
-                                <th><i class="fas fa-box-open"></i> Unité</th>
-                                <th><i class="fas fa-dollar-sign"></i> Prix unitaire</th>
-                                <th><i class="fas fa-dollar-sign"></i> Prix total</th>
-                                <th><i class="fas fa-calendar"></i> Date</th>
-                                <th><i class="fas fa-credit-card"></i> Payé</th>
-                                <th><i class="fas fa-money-bill"></i> Versement</th>
-                                <th><i class="fas fa-coins"></i> Reste</th>
+                                <th>Nom du produit</th>
+                                <th>Quantité</th>
+                                <th>Quantité maximale</th>
+                                <th>Unité</th>
+                                <th>Prix unitaire</th>
+                                <th>Prix total</th>
+                                <th>Date</th>
+                                <th>Payé</th>
+                                <th>Versement</th>
+                                <th>Reste</th>
                             </tr>
                             </thead>
 
                             <tbody>
                             {% for row in Pricetable %}
                             <tr class="table-row" data-id="{{ row[0] }}"
-                                style="animation-delay: {{ loop.index * 0.05 }}s;">
-                                <td><span class="cell-content">{{ row[2] }}</span></td>
-                                <td><span class="cell-content">{{ row[3] }}</span></td>
-                                <td><span class="cell-content">{{ row[4] }}</span></td>
-                                <td><span class="cell-content">{{ row[5] }}</span></td>
-                                <td><span class="cell-content">{{ row[6] }}</span></td>
-                                <td><span class="cell-content">{{ row[7] }}</span></td>
-                                <td><span class="cell-content">{{ row[8] }}</span></td>
-                                <td><span class="cell-content">{{ row[9] }}</span></td>
-                                <td><span class="cell-content">{{ row[10] }}</span></td>
-                                <td><span class="cell-content">{{ row[11] }}</span></td>
+                                style="animation-delay: {{ loop.index * 0.03 }}s;">
+                                <td data-label="Produit"><span class="cell-content product-name">{{ row[2] }}</span></td>
+                                <td data-label="Quantité"><span class="cell-content">{{ row[3] }}</span></td>
+                                <td data-label="Quantité maximale"><span class="cell-content">{{ row[4] }}</span></td>
+                                <td data-label="Unité"><span class="cell-content">{{ row[5] }}</span></td>
+                                <td data-label="Prix unitaire"><span class="cell-content">{{ row[6] }}</span></td>
+                                <td data-label="Prix total"><span class="cell-content">{{ row[7] }}</span></td>
+                                <td data-label="Date"><span class="cell-content">{{ row[8] }}</span></td>
+                                <td data-label="Payé"><span class="cell-content">{{ row[9] }}</span></td>
+                                <td data-label="Versement"><span class="cell-content">{{ row[10] }}</span></td>
+                                <td data-label="Reste"><span class="cell-content">{{ row[11] }}</span></td>
                             </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                     </div>
-
                     {% else %}
-                    <div class="empty-table">
-                        <i class="fas fa-inbox"></i>
-                        <p>Aucun produit disponible</p>
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <h4>Aucun produit disponible</h4>
+                        <p>Aucun produit à afficher dans ce classement.</p>
                     </div>
                     {% endif %}
                 </div>
 
-                <!-- Date Table -->
+
+                <!-- DATE TABLE -->
                 <div class="table-container" id="DateTable"
                      style="display: {% if Datetable %}block{% else %}none{% endif %};">
 
-                    <div class="table-header">
-                        <div class="table-title">
-                            <i class="fas fa-calendar-alt"></i>
-                            <h3>Trié par date (du plus récent au plus ancien)</h3>
+                    <div class="section-header">
+                        <div class="section-title">
+                            <div class="section-icon cyan-icon">
+                                <i class="fas fa-calendar-days"></i>
+                            </div>
+                            <div>
+                                <h3>Classement par date</h3>
+                                <p>Du plus récent au plus ancien</p>
+                            </div>
                         </div>
 
-                        <div class="table-info">
-                            <span class="info-badge info-date">Trié par date</span>
-                        </div>
+                        <span class="section-badge cyan-badge">Chronologie</span>
                     </div>
 
                     {% if Datetable %}
@@ -354,254 +323,268 @@
                         <table class="data-table">
                             <thead>
                             <tr>
-                                <th><i class="fas fa-box-open"></i> Nom du produit</th>
-                                <th><i class="fas fa-box-open"></i> Quantité</th>
-                                <th><i class="fas fa-box-open"></i> Quantité maximale</th>
-                                <th><i class="fas fa-box-open"></i> Unité</th>
-                                <th><i class="fas fa-dollar-sign"></i> Prix unitaire</th>
-                                <th><i class="fas fa-dollar-sign"></i> Prix total</th>
-                                <th><i class="fas fa-calendar"></i> Date</th>
-                                <th><i class="fas fa-credit-card"></i> Payé</th>
-                                <th><i class="fas fa-money-bill"></i> Versement</th>
-                                <th><i class="fas fa-coins"></i> Reste</th>
+                                <th>Nom du produit</th>
+                                <th>Quantité</th>
+                                <th>Quantité maximale</th>
+                                <th>Unité</th>
+                                <th>Prix unitaire</th>
+                                <th>Prix total</th>
+                                <th>Date</th>
+                                <th>Payé</th>
+                                <th>Versement</th>
+                                <th>Reste</th>
                             </tr>
                             </thead>
 
                             <tbody>
                             {% for row in Datetable %}
                             <tr class="table-row" data-id="{{ row[0] }}"
-                                style="animation-delay: {{ loop.index * 0.05 }}s;">
-                                <td><span class="cell-content">{{ row[2] }}</span></td>
-                                <td><span class="cell-content">{{ row[3] }}</span></td>
-                                <td><span class="cell-content">{{ row[4] }}</span></td>
-                                <td><span class="cell-content">{{ row[5] }}</span></td>
-                                <td><span class="cell-content">{{ row[6] }}</span></td>
-                                <td><span class="cell-content">{{ row[7] }}</span></td>
-                                <td><span class="cell-content">{{ row[8] }}</span></td>
-                                <td><span class="cell-content">{{ row[9] }}</span></td>
-                                <td><span class="cell-content">{{ row[10] }}</span></td>
-                                <td><span class="cell-content">{{ row[11] }}</span></td>
+                                style="animation-delay: {{ loop.index * 0.03 }}s;">
+                                <td data-label="Produit"><span class="cell-content product-name">{{ row[2] }}</span></td>
+                                <td data-label="Quantité"><span class="cell-content">{{ row[3] }}</span></td>
+                                <td data-label="Quantité maximale"><span class="cell-content">{{ row[4] }}</span></td>
+                                <td data-label="Unité"><span class="cell-content">{{ row[5] }}</span></td>
+                                <td data-label="Prix unitaire"><span class="cell-content">{{ row[6] }}</span></td>
+                                <td data-label="Prix total"><span class="cell-content">{{ row[7] }}</span></td>
+                                <td data-label="Date"><span class="cell-content">{{ row[8] }}</span></td>
+                                <td data-label="Payé"><span class="cell-content">{{ row[9] }}</span></td>
+                                <td data-label="Versement"><span class="cell-content">{{ row[10] }}</span></td>
+                                <td data-label="Reste"><span class="cell-content">{{ row[11] }}</span></td>
                             </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                     </div>
-
                     {% else %}
-                    <div class="empty-table">
-                        <i class="fas fa-inbox"></i>
-                        <p>Aucun produit disponible</p>
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-xmark"></i>
+                        <h4>Aucun produit disponible</h4>
+                        <p>Aucune donnée à afficher pour le moment.</p>
                     </div>
                     {% endif %}
                 </div>
 
-                <!-- Statistics Table -->
+
+                <!-- STATISTICS TABLE -->
                 <div class="table-container" id="StatTable"
                      style="display: {% if stat_table %}block{% else %}none{% endif %};">
 
-                    <div class="table-header">
-                        <div class="table-title">
-                            <i class="fas fa-chart-bar"></i>
-                            <h3>Statistiques mensuelles</h3>
+                    <div class="section-header">
+                        <div class="section-title">
+                            <div class="section-icon purple-icon">
+                                <i class="fas fa-chart-column"></i>
+                            </div>
+                            <div>
+                                <h3>Statistiques mensuelles</h3>
+                                <p>Résumé des paiements par mois</p>
+                            </div>
                         </div>
 
-                        <div class="table-info">
-                            <span class="info-badge info-stats">Résumé</span>
-                        </div>
+                        <span class="section-badge purple-badge">Statistiques</span>
                     </div>
 
                     {% if stat_table %}
                     <div class="table-wrapper">
-                        <table class="data-table">
+                        <table class="data-table statistics-table">
                             <thead>
                             <tr>
-                                <th><i class="fas fa-calendar-days"></i> Mois</th>
-                                <th><i class="fas fa-calendar"></i> Année</th>
-                                <th><i class="fas fa-dollar-sign"></i> Payé</th>
-                                <th><i class="fas fa-dollar-sign"></i> Reste</th>
+                                <th>Mois</th>
+                                <th>Année</th>
+                                <th>Payé</th>
+                                <th>Reste</th>
                             </tr>
                             </thead>
 
                             <tbody>
                             {% for row in stat_table %}
-                            <tr class="table-row" style="animation-delay: {{ loop.index * 0.05 }}s;">
-                                <td><span class="cell-content">{{ row[2] }}</span></td>
-                                <td><span class="cell-content">{{ row[3] }}</span></td>
-                                <td><span class="cell-content stat-value-cell">{{ "%.2f"|format(row[0]) }}</span></td>
-                                <td><span class="cell-content stat-value-cell">{{ "%.2f"|format(row[1]) }}</span></td>
+                            <tr class="table-row"
+                                style="animation-delay: {{ loop.index * 0.03 }}s;">
+                                <td data-label="Mois"><span class="cell-content">{{ row[2] }}</span></td>
+                                <td data-label="Année"><span class="cell-content">{{ row[3] }}</span></td>
+                                <td data-label="Payé"><span class="cell-content stat-value-cell">{{ "%.2f"|format(row[0]) }}</span></td>
+                                <td data-label="Reste"><span class="cell-content stat-value-cell">{{ "%.2f"|format(row[1]) }}</span></td>
                             </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                     </div>
-
                     {% else %}
-                    <div class="empty-table">
-                        <i class="fas fa-inbox"></i>
-                        <p>Aucune statistique disponible</p>
+                    <div class="empty-state">
+                        <i class="fas fa-chart-pie"></i>
+                        <h4>Aucune statistique disponible</h4>
+                        <p>Les statistiques apparaîtront lorsque des données seront disponibles.</p>
                     </div>
                     {% endif %}
                 </div>
 
-                <!-- No Data State -->
+
+                <!-- NO DATA -->
                 {% if not table and not Pricetable and not Datetable and not stat_table %}
                 <div class="no-data-container">
                     <div class="no-data-icon">
-                        <i class="fas fa-inbox"></i>
+                        <i class="fas fa-box-open"></i>
                     </div>
 
-                    <h2>Aucun produit disponible</h2>
+                    <h2>Votre stock est vide</h2>
+                    <p>Commencez par ajouter des produits pour gérer votre inventaire.</p>
 
-                    <p>Commencez par ajouter des produits à votre stock</p>
-
-                    <a href="/products/AddSel3a" class="add-btn">
-                        <i class="fas fa-plus"></i> Ajouter le premier produit
+                    <a href="/products/AddSel3a" class="add-button">
+                        <i class="fas fa-plus"></i>
+                        Ajouter le premier produit
                     </a>
                 </div>
                 {% endif %}
 
-            </div>
+            </section>
+
         </main>
     </div>
 </div>
 
-<!-- Custom Floating Context Menu -->
+
+<!-- CONTEXT MENU -->
 <div id="custom-context-menu" class="context-menu" style="display: none;">
 
+    <div class="context-menu-heading">Actions sur le produit</div>
+
     <button id="paid-row-btn" class="context-menu-item paid-action">
-        <i class="fas fa-check-circle"></i> Marquer comme payé
+        <i class="fas fa-check-circle"></i>
+        <span>Marquer comme payé</span>
     </button>
 
     <button id="modify-versement-btn" class="context-menu-item versement-action">
-        <i class="fas fa-money-bill-wave"></i> Modifier le versement
+        <i class="fas fa-money-bill-wave"></i>
+        <span>Modifier le versement</span>
     </button>
 
-    <!-- Change Quantity -->
     <button id="use-product-btn" class="context-menu-item quantity-action">
-        <i class="fas fa-box-open"></i> Utiliser le produit
+        <i class="fas fa-box-open"></i>
+        <span>Utiliser le produit</span>
     </button>
 
     <button id="delete-row-btn" class="context-menu-item delete-action">
-        <i class="fas fa-trash-alt"></i> Supprimer le produit
+        <i class="fas fa-trash-alt"></i>
+        <span>Supprimer le produit</span>
     </button>
 
 </div>
 
+
 <script>
-    // Show Main Table
+    // ==========================================
+    // TABLE NAVIGATION
+    // ==========================================
+
     function ShowMainTable() {
         switchTable('MainTable');
         updateActiveButton('MainTable');
         updateTotalProducts();
+        closeMobileSidebar();
     }
 
-    // Show By Price
     function ShowTableByPrice() {
         switchTable('PriceTable');
         updateActiveButton('PriceTable');
         updateTotalProducts();
+        closeMobileSidebar();
     }
 
-    // Show By Date
     function ShowTableByDate() {
         switchTable('DateTable');
         updateActiveButton('DateTable');
         updateTotalProducts();
+        closeMobileSidebar();
     }
 
-    // Show Stats
     function ShowStatTable() {
         switchTable('StatTable');
         updateActiveButton('StatTable');
         updateTotalProducts();
+        closeMobileSidebar();
     }
 
-    // Switch table display
     function switchTable(tableId) {
-        const tables = document.querySelectorAll('.table-container');
-        tables.forEach(table => {
+        document.querySelectorAll('.table-container').forEach(table => {
             table.style.display = 'none';
-            table.classList.remove('fade-in');
         });
 
-        const targetTable = document.getElementById(tableId);
-        if (targetTable) {
-            targetTable.style.display = 'block';
-            targetTable.classList.add('fade-in');
+        const target = document.getElementById(tableId);
+
+        if (target) {
+            target.style.display = 'block';
+            target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     }
 
-    // Update active menu button
     function updateActiveButton(tableId) {
-        const buttons = document.querySelectorAll('.menu-item[data-table]');
-        buttons.forEach(btn => {
-            btn.classList.remove('active-item');
-            if (btn.getAttribute('data-table') === tableId) {
-                btn.classList.add('active-item');
-            }
+        document.querySelectorAll('.menu-item[data-table]').forEach(button => {
+            button.classList.toggle(
+                'active-item',
+                button.getAttribute('data-table') === tableId
+            );
         });
     }
 
-    // Count total products in current visible table
     function updateTotalProducts() {
         let total = 0;
-        const visibleTable = document.querySelector('.table-container[style*="display: block"] tbody');
+
+        const visibleTable = Array.from(
+            document.querySelectorAll('.table-container')
+        ).find(table => table.style.display === 'block');
+
         if (visibleTable) {
-            total = visibleTable.querySelectorAll('tr').length;
-        }
-        const totalElement = document.getElementById('totalProducts');
-        if (totalElement) {
-            totalElement.textContent = total || '--';
-        }
-    }
+            const tbody = visibleTable.querySelector('tbody');
 
-    // Ripple effect for buttons
-    function createRipple(e) {
-        const button = e.currentTarget;
-        const ripple = document.createElement('span');
-        const rect = button.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
-
-        ripple.style.width = ripple.style.height = size + 'px';
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
-        ripple.classList.add('ripple');
-
-        button.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 600);
-    }
-
-    // Initialize Context Menu & Mobile Long Press
-    document.addEventListener('DOMContentLoaded', function() {
-        // Ripple effect
-        document.querySelectorAll('.menu-item, .nav-btn').forEach(item => {
-            item.addEventListener('click', createRipple);
-        });
-
-        // Initial table visibility setup
-        const tables = ['MainTable', 'PriceTable', 'DateTable', 'StatTable'];
-        let found = false;
-
-        for (let tableId of tables) {
-            const table = document.getElementById(tableId);
-            const tbody = table ? table.querySelector('tbody') : null;
-
-            if (tbody && tbody.rows.length > 0) {
-                if (!found) {
-                    switchTable(tableId);
-                    updateActiveButton(tableId);
-                    found = true;
-                } else {
-                    table.style.display = 'none';
-                }
+            if (tbody) {
+                total = tbody.querySelectorAll('tr').length;
             }
         }
 
-        updateTotalProducts();
+        const totalElement = document.getElementById('totalProducts');
 
-        // Right Click & Mobile Long-Press Logic
+        if (totalElement) {
+            totalElement.textContent = total;
+        }
+    }
+
+
+    // ==========================================
+    // MOBILE SIDEBAR
+    // ==========================================
+
+    const sidebar = document.getElementById('sidebar');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebarClose = document.getElementById('sidebarClose');
+
+    function openMobileSidebar() {
+        sidebar.classList.add('sidebar-open');
+        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+    }
+
+    function closeMobileSidebar() {
+        sidebar.classList.remove('sidebar-open');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+    }
+
+    mobileMenuBtn.addEventListener('click', () => {
+        if (sidebar.classList.contains('sidebar-open')) {
+            closeMobileSidebar();
+        } else {
+            openMobileSidebar();
+        }
+    });
+
+    sidebarClose.addEventListener('click', closeMobileSidebar);
+
+
+    // ==========================================
+    // CONTEXT MENU AND PRODUCT ACTIONS
+    // ==========================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+
         const contextMenu = document.getElementById('custom-context-menu');
 
         const paidBtn = document.getElementById('paid-row-btn');
@@ -611,31 +594,96 @@
 
         let targetRow = null;
         let longPressTimer = null;
-        const LONG_PRESS_DURATION = 500; // 500ms for touch hold
+        const LONG_PRESS_DURATION = 500;
 
-        // Right Click Event Listener (Desktop)
+        // Select the initially visible table
+        const tableIds = ['MainTable', 'PriceTable', 'DateTable', 'StatTable'];
+
+        let found = false;
+
+        for (const tableId of tableIds) {
+            const table = document.getElementById(tableId);
+            const tbody = table ? table.querySelector('tbody') : null;
+
+            if (tbody && tbody.rows.length > 0 && !found) {
+                switchTable(tableId);
+                updateActiveButton(tableId);
+                found = true;
+            } else if (table) {
+                table.style.display = 'none';
+            }
+        }
+
+        updateTotalProducts();
+
+
+        // Context menu positioning
+        function openContextMenu(x, y, row) {
+            if (targetRow) {
+                targetRow.classList.remove('row-selected');
+            }
+
+            targetRow = row;
+            targetRow.classList.add('row-selected');
+
+            contextMenu.style.display = 'block';
+
+            const menuWidth = contextMenu.offsetWidth;
+            const menuHeight = contextMenu.offsetHeight;
+
+            const maxX = window.scrollX + window.innerWidth - menuWidth - 10;
+            const maxY = window.scrollY + window.innerHeight - menuHeight - 10;
+
+            contextMenu.style.left = Math.max(
+                window.scrollX + 10,
+                Math.min(x, maxX)
+            ) + 'px';
+
+            contextMenu.style.top = Math.max(
+                window.scrollY + 10,
+                Math.min(y, maxY)
+            ) + 'px';
+        }
+
+        function hideContextMenu() {
+            contextMenu.style.display = 'none';
+
+            if (targetRow) {
+                targetRow.classList.remove('row-selected');
+                targetRow = null;
+            }
+        }
+
+
+        // Desktop right click
         document.addEventListener('contextmenu', (e) => {
             const row = e.target.closest('.table-row');
-            // Ensure context menu applies only to product tables with data-id
+
             if (row && row.hasAttribute('data-id')) {
                 e.preventDefault();
                 openContextMenu(e.pageX, e.pageY, row);
             }
         });
 
-        // Touch Events for Mobile Long Press
+
+        // Mobile long press
         document.addEventListener('touchstart', (e) => {
             const row = e.target.closest('.table-row');
+
             if (!row || !row.hasAttribute('data-id')) return;
 
             const touch = e.touches[0];
+
             longPressTimer = setTimeout(() => {
                 openContextMenu(touch.pageX, touch.pageY, row);
             }, LONG_PRESS_DURATION);
+
         }, { passive: true });
+
 
         document.addEventListener('touchend', cancelLongPress);
         document.addEventListener('touchmove', cancelLongPress);
+        document.addEventListener('touchcancel', cancelLongPress);
 
         function cancelLongPress() {
             if (longPressTimer) {
@@ -644,76 +692,69 @@
             }
         }
 
-        // Display context menu at mouse/touch position
-        function openContextMenu(x, y, row) {
-            if (targetRow) targetRow.classList.remove('row-selected');
 
-            targetRow = row;
-            targetRow.classList.add('row-selected');
-
-            contextMenu.style.left = `${x}px`;
-            contextMenu.style.top = `${y}px`;
-            contextMenu.style.display = 'block';
-        }
-
-        // Dismiss menu on outside clicks
+        // Close menu when clicking outside
         document.addEventListener('click', (e) => {
             if (!contextMenu.contains(e.target)) {
                 hideContextMenu();
             }
         });
 
-        function hideContextMenu() {
-            contextMenu.style.display = 'none';
-            if (targetRow) {
-                targetRow.classList.remove('row-selected');
-                targetRow = null;
-            }
-        }
 
-        // Handle Row Deletion Asynchronously
+        // ==========================================
+        // DELETE PRODUCT
+        // ==========================================
+
         deleteBtn.addEventListener('click', async () => {
             if (!targetRow) return;
 
             const recordId = targetRow.getAttribute('data-id');
 
-            if (confirm(`Êtes-vous sûr de vouloir supprimer le produit #${recordId} ?`)) {
-                try {
-                    const response = await fetch(`/products/DeleteSel3a/${recordId}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' }
+            if (!confirm(`Êtes-vous sûr de vouloir supprimer le produit #${recordId} ?`)) {
+                hideContextMenu();
+                return;
+            }
+
+            try {
+                const response = await fetch(`/products/DeleteSel3a/${recordId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    const matchingRows = document.querySelectorAll(
+                        `tr[data-id="${recordId}"]`
+                    );
+
+                    matchingRows.forEach(row => {
+                        row.style.transition = 'all 0.3s ease';
+                        row.style.opacity = '0';
+                        row.style.transform = 'translateY(8px)';
+
+                        setTimeout(() => {
+                            row.remove();
+                            updateTotalProducts();
+                        }, 300);
                     });
 
-                    if (response.ok) {
-                        // Find matching rows across Main, Price, and Date tables with the same data-id
-                        const matchingRows = document.querySelectorAll(`tr[data-id="${recordId}"]`);
-
-                        matchingRows.forEach(row => {
-                            row.style.transition = 'all 0.3s ease';
-                            row.style.opacity = '0';
-                            row.style.transform = 'translateX(20px)';
-                            setTimeout(() => {
-                                row.remove();
-                                updateTotalProducts();
-                            }, 300);
-                        });
-
-                        hideContextMenu();
-                    } else {
-                        alert('Échec de la suppression du produit.');
-                        hideContextMenu();
-                    }
-                } catch (err) {
-                    console.error('Delete error:', err);
-                    alert('Une erreur est survenue lors de la communication avec le serveur.');
+                    hideContextMenu();
+                } else {
+                    alert('Échec de la suppression du produit.');
                     hideContextMenu();
                 }
-            } else {
+
+            } catch (err) {
+                console.error('Delete error:', err);
+                alert('Une erreur est survenue lors de la communication avec le serveur.');
                 hideContextMenu();
             }
         });
 
-        // Mark product as Paid
+
+        // ==========================================
+        // MARK PRODUCT AS PAID
+        // ==========================================
+
         paidBtn.addEventListener('click', async () => {
             if (!targetRow) return;
 
@@ -727,9 +768,7 @@
             try {
                 const response = await fetch(`/products/Sel3aPaid/${recordId}`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+                    headers: { 'Content-Type': 'application/json' }
                 });
 
                 if (response.ok) {
@@ -747,61 +786,65 @@
         });
 
 
-        // Modify Versement
+        // ==========================================
+        // MODIFY VERSEMENT
+        // ==========================================
+
         modifyVersementBtn.addEventListener('click', async () => {
-        if (!targetRow) return;
+            if (!targetRow) return;
 
-        const recordId = targetRow.getAttribute('data-id');
+            const recordId = targetRow.getAttribute('data-id');
 
-        const newVersement = prompt(
-            `Entrez le nouveau montant du versement pour le produit #${recordId} :`
-        );
+            const newVersement = prompt(
+                `Entrez le nouveau montant du versement pour le produit #${recordId} :`
+            );
 
-        if (newVersement === null) {
-            hideContextMenu();
-            return;
-        }
-
-        if (newVersement.trim() === '' || isNaN(newVersement)) {
-            alert('Veuillez entrer un montant valide.');
-            hideContextMenu();
-            return;
-        }
-
-        try {
-            const response = await fetch(`/products/ModifySel3aVersement/${recordId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    versement: parseFloat(newVersement)
-                })
-            });
-
-            // Read Flask's response
-            const data = await response.json();
-
-            console.log("Status:", response.status);
-            console.log("Response:", data);
-
-            if (response.ok && data.success) {
-                location.reload();
-            } else {
-                alert(data.error || data.message || 'Échec de la modification du versement.');
+            if (newVersement === null) {
+                hideContextMenu();
+                return;
             }
 
-        } catch (err) {
-            console.error('Versement error:', err);
-            alert('Une erreur est survenue lors de la communication avec le serveur.');
-        }
+            if (newVersement.trim() === '' || isNaN(newVersement)) {
+                alert('Veuillez entrer un montant valide.');
+                hideContextMenu();
+                return;
+            }
 
-        hideContextMenu();
-    });
+            try {
+                const response = await fetch(
+                    `/products/ModifySel3aVersement/${recordId}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            versement: parseFloat(newVersement)
+                        })
+                    }
+                );
 
-        // Change Product Quantity
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    location.reload();
+                } else {
+                    alert(data.error || data.message ||
+                          'Échec de la modification du versement.');
+                }
+
+            } catch (err) {
+                console.error('Versement error:', err);
+                alert('Une erreur est survenue lors de la communication avec le serveur.');
+            }
+
+            hideContextMenu();
+        });
+
+
+        // ==========================================
+        // CHANGE PRODUCT QUANTITY
+        // ==========================================
+
         changeQuantityBtn.addEventListener('click', async () => {
-
             if (!targetRow) return;
 
             const recordId = targetRow.getAttribute('data-id');
@@ -826,45 +869,36 @@
             }
 
             try {
-
-                const response = await fetch(`/products/ModifySel3aQuantity/${recordId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        used: parseFloat(newQuantity)
-                    })
-                });
+                const response = await fetch(
+                    `/products/ModifySel3aQuantity/${recordId}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            used: parseFloat(newQuantity)
+                        })
+                    }
+                );
 
                 const data = await response.json();
-
-                console.log("Status:", response.status);
-                console.log("Response:", data);
 
                 if (response.ok && data.success) {
                     location.reload();
                 } else {
-                    alert(
-                        data.error ||
-                        data.message ||
-                        'Échec de la modification de la quantité.'
-                    );
+                    alert(data.error || data.message ||
+                          'Échec de la modification de la quantité.');
                 }
 
             } catch (err) {
-
                 console.error('Quantity error:', err);
-
-                alert(
-                    'Une erreur est survenue lors de la communication avec le serveur.'
-                );
+                alert('Une erreur est survenue lors de la communication avec le serveur.');
             }
 
             hideContextMenu();
         });
+
     });
 </script>
-</body>
 
+</body>
 </html>

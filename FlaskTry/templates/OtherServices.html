@@ -1,2114 +1,1151 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="description"
-          content="Gestion des services - Centre professionnel">
+    <meta name="description" content="Gestion professionnelle des services">
+    <meta name="theme-color" content="#f4f7fb">
 
     <title>Gestion des services - Centre professionnel</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='OtherServices.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='OtherServices.css') }}">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
-
-        .context-menu {
-            position: absolute;
-            z-index: 10000;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            min-width: 210px;
-        }
-
-        .context-menu-item {
-            width: 100%;
-            padding: 12px 16px;
-            border: none;
-            background: transparent;
-            text-align: left;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-
-            display: flex;
-            align-items: center;
-            gap: 10px;
-
-            transition:
-                background 0.2s ease,
-                color 0.2s ease;
-        }
-
-        .paid-action {
-            color: #198754;
-        }
-
-        .paid-action:hover {
-            background: #e8f7ee;
-            color: #146c43;
-        }
-
-        .versement-action {
-            color: #0d6efd;
-        }
-
-        .versement-action:hover {
-            background: #e7f1ff;
-            color: #084298;
-        }
-
-        .delete-action {
-            color: #dc3545;
-        }
-
-        .delete-action:hover {
-            background: #ffebe9;
-            color: #b02a37;
-        }
-
-        .row-selected {
-            background-color: rgba(13, 110, 253, 0.10) !important;
-        }
-
-        .action-loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-    </style>
 </head>
-
 
 <body>
 
-<div class="animated-bg"></div>
-
+<div class="page-background"></div>
 
 <div class="container">
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
-
+    <!-- HEADER -->
     <header class="header">
-
         <div class="header-content">
 
             <div class="logo-section">
-
                 <div class="logo-icon">
                     <i class="fas fa-briefcase"></i>
                 </div>
 
                 <div class="logo-text">
-
                     <h1>Centre des services</h1>
-
-                    <p>
-                        Gestion professionnelle des services
-                    </p>
-
+                    <p>Gestion professionnelle des services</p>
                 </div>
-
             </div>
 
+            <div class="header-actions">
+                <button type="button"
+                        class="mobile-menu-toggle"
+                        id="sidebarToggle"
+                        aria-label="Afficher ou masquer le menu"
+                        aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                    <span>Menu</span>
+                </button>
 
-            <nav class="header-nav">
-
-                <a href="/HomePage"
-                   class="nav-btn back-btn">
-
+                <a href="/HomePage" class="nav-btn back-btn">
                     <i class="fas fa-arrow-left"></i>
-
-                    Retour au menu
-
+                    <span>Retour au menu</span>
                 </a>
-
-            </nav>
+            </div>
 
         </div>
-
     </header>
 
 
-    <!-- =====================================================
-         SEARCH
-    ====================================================== -->
+    <!-- SEARCH -->
+    {% if not stats %}
+    <section class="search-section">
+        <div class="search-heading">
+            <div class="search-heading-icon">
+                <i class="fas fa-search"></i>
+            </div>
 
-    <div class="SearchBar">
-
-        {% if not stats %}
+            <div>
+                <h2>Rechercher un service</h2>
+                <p>Recherchez rapidement par nom ou numéro de téléphone.</p>
+            </div>
+        </div>
 
         <div class="search-form">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search"></i>
 
-            <input
+                <input
                     type="search"
                     id="searchInput"
-                    placeholder="Rechercher par nom ou numéro de téléphone..."
+                    placeholder="Nom ou numéro de téléphone..."
                     autocomplete="off"
-            >
+                    aria-label="Rechercher un service">
+            </div>
 
             <button type="button" id="clearSearch">
                 <i class="fas fa-times"></i>
                 Effacer
             </button>
-
         </div>
 
-        <p id="searchCounter" style="display:none; margin-top:10px;"></p>
-
-        {% endif %}
-
-    </div>
+        <p id="searchCounter" class="search-counter" style="display:none;"></p>
+    </section>
+    {% endif %}
 
 
-    <!-- =====================================================
-         MAIN LAYOUT
-    ====================================================== -->
-
+    <!-- MAIN LAYOUT -->
     <div class="main-layout">
 
-
-        <!-- =================================================
-             SIDEBAR
-        ================================================== -->
-
-        <aside class="sidebar">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
 
             <div class="sidebar-header">
+                <div>
+                    <span class="sidebar-eyebrow">NAVIGATION</span>
+                    <h2>Actions des services</h2>
+                </div>
 
-                <h2>
-                    Actions des services
-                </h2>
-
-                <div class="header-accent"></div>
-
+                <div class="sidebar-header-icon">
+                    <i class="fas fa-sliders-h"></i>
+                </div>
             </div>
 
 
             <nav class="sidebar-menu">
 
-
-                <!-- SERVICE MANAGEMENT -->
-
                 <div class="menu-group">
-
-                    <h3 class="group-title">
-                        📋 Gestion des services
-                    </h3>
-
+                    <h3 class="group-title">Gestion des services</h3>
 
                     <a href="/services/OtherServicesTable"
                        class="menu-item view-item">
-
-                        <i class="fas fa-table"></i>
-
-                        <span>
-                            Afficher les services
+                        <span class="menu-icon">
+                            <i class="fas fa-table"></i>
                         </span>
 
-                        <span class="badge badge-primary">
-                            Afficher
-                        </span>
+                        <span class="menu-label">Afficher les services</span>
 
+                        <i class="fas fa-chevron-right menu-arrow"></i>
                     </a>
-
 
                     <a href="/services/AddService"
                        class="menu-item add-item">
-
-                        <i class="fas fa-plus-circle"></i>
-
-                        <span>
-                            Ajouter un service
+                        <span class="menu-icon">
+                            <i class="fas fa-plus"></i>
                         </span>
 
-                        <span class="badge badge-success">
-                            +
-                        </span>
+                        <span class="menu-label">Ajouter un service</span>
 
+                        <i class="fas fa-chevron-right menu-arrow"></i>
                     </a>
-
 
                     <a href="/services/ServicesStats"
                        class="menu-item stats-item">
-
-                        <i class="fas fa-chart-bar"></i>
-
-                        <span>
-                            Statistiques
+                        <span class="menu-icon">
+                            <i class="fas fa-chart-line"></i>
                         </span>
 
-                        <span class="badge badge-info">
-                            📊
-                        </span>
+                        <span class="menu-label">Statistiques</span>
 
+                        <i class="fas fa-chevron-right menu-arrow"></i>
                     </a>
-
                 </div>
 
 
-                <!-- QUICK STATISTICS -->
-
                 <div class="menu-group">
-
-                    <h3 class="group-title">
-                        📈 Statistiques rapides
-                    </h3>
-
+                    <h3 class="group-title">Statistiques rapides</h3>
 
                     <div class="stat-card">
-
                         <div class="stat-icon">
-
                             <i class="fas fa-briefcase"></i>
-
                         </div>
-
 
                         <div class="stat-content">
-
-                            <p class="stat-label">
-                                Nombre total de services
-                            </p>
-
-                            <p class="stat-value"
-                               id="totalServices">
-                                --
-                            </p>
-
+                            <p class="stat-label">Nombre total de services</p>
+                            <p class="stat-value" id="totalServices">--</p>
                         </div>
-
                     </div>
-
                 </div>
 
 
-                <!-- NAVIGATION -->
-
                 <div class="menu-group">
+                    <h3 class="group-title">Navigation</h3>
 
-                    <h3 class="group-title">
-                        🔗 Navigation
-                    </h3>
-
-
-                    <a href="/HomePage"
-                       class="menu-item nav-home-item">
-
-                        <i class="fas fa-house"></i>
-
-                        <span>
-                            Menu principal
+                    <a href="/HomePage" class="menu-item nav-home-item">
+                        <span class="menu-icon">
+                            <i class="fas fa-house"></i>
                         </span>
 
-                    </a>
+                        <span class="menu-label">Menu principal</span>
 
+                        <i class="fas fa-chevron-right menu-arrow"></i>
+                    </a>
                 </div>
 
             </nav>
 
+            <div class="sidebar-footer">
+                <i class="fas fa-shield-alt"></i>
+                <span>Espace de gestion professionnel</span>
+            </div>
+
         </aside>
 
 
-        <!-- =================================================
-             CONTENT
-        ================================================== -->
-
+        <!-- MAIN CONTENT -->
         <main class="content">
 
-
-            <!-- ERROR -->
-
+            <!-- ERROR MESSAGE -->
             {% if error %}
-
             <div class="alert-container">
-
-                <div class="alert alert-error fade-in-slow">
-
-                    <i class="fas fa-exclamation-triangle"></i>
-
-
-                    <div class="alert-content">
-
-                        <h3>
-                            Erreur / Introuvable
-                        </h3>
-
-                        <p>
-                            {{ error }}
-                        </p>
-
+                <div class="alert alert-error">
+                    <div class="alert-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
                     </div>
 
+                    <div class="alert-content">
+                        <h3>Erreur / Introuvable</h3>
+                        <p>{{ error }}</p>
+                    </div>
 
                     <button class="alert-close"
+                            type="button"
+                            aria-label="Fermer"
                             onclick="this.parentElement.remove()">
-
                         <i class="fas fa-times"></i>
-
                     </button>
-
                 </div>
-
             </div>
-
             {% endif %}
 
 
-            <!-- SUCCESS -->
-
+            <!-- SUCCESS MESSAGE -->
             {% if message %}
-
             <div class="alert-container">
-
-                <div class="alert alert-success fade-in-slow">
-
-                    <i class="fas fa-check-circle"></i>
-
-
-                    <div class="alert-content">
-
-                        <h3>
-                            Opération réussie
-                        </h3>
-
-                        <p>
-                            {{ message }}
-                        </p>
-
+                <div class="alert alert-success">
+                    <div class="alert-icon">
+                        <i class="fas fa-check-circle"></i>
                     </div>
 
+                    <div class="alert-content">
+                        <h3>Opération réussie</h3>
+                        <p>{{ message }}</p>
+                    </div>
 
                     <button class="alert-close"
+                            type="button"
+                            aria-label="Fermer"
                             onclick="this.parentElement.remove()">
-
                         <i class="fas fa-times"></i>
-
                     </button>
-
                 </div>
-
             </div>
-
             {% endif %}
 
 
-            <!-- =================================================
-                 HERO
-            ================================================== -->
-
-            <div class="hero-section">
-
+            <!-- HERO -->
+            <section class="hero-section">
                 <div class="hero-content">
 
-
                     <div class="hero-text">
-
                         <span class="hero-badge">
-
-                            <i class="fas fa-bolt"></i>
-
+                            <i class="fas fa-chart-pie"></i>
                             Vue d'ensemble
-
                         </span>
-
 
                         <h2 class="hero-title">
                             Centre de gestion des services
                         </h2>
 
-
                         <p class="hero-description">
-
-                            Gérez tous vos services professionnels
-                            depuis un seul endroit.
-                            Suivez les détails des services,
-                            surveillez les paiements et analysez
-                            facilement les indicateurs de performance.
-
+                            Gérez tous vos services professionnels depuis un seul endroit.
+                            Consultez les informations, suivez les paiements et gardez
+                            une vue claire sur votre activité.
                         </p>
 
-
                         <div class="hero-actions">
-
-                            <a href="/services/AddService"
-                               class="hero-btn">
-
-                                <i class="fas fa-plus-circle"></i>
-
+                            <a href="/services/AddService" class="hero-btn">
+                                <i class="fas fa-plus"></i>
                                 Ajouter un nouveau service
-
                             </a>
-
                         </div>
-
                     </div>
 
-
                     <div class="hero-visual">
-
                         <div class="hero-icon-wrapper">
-
                             <i class="fas fa-briefcase"></i>
-
-                            <span class="pulse-ring"></span>
-
+                            <span class="hero-icon-decoration"></span>
                         </div>
-
                     </div>
 
                 </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 DATA SECTION
-            ================================================== -->
-
-            <div class="data-section">
+            </section>
 
 
-                <!-- =================================================
-                     SERVICES TABLE
-                ================================================== -->
+            <!-- DATA SECTION -->
+            <section class="data-section">
 
+                <!-- SERVICES TABLE -->
                 <div class="table-card"
                      id="MainTable"
                      style="display: {% if result %}block{% else %}none{% endif %};">
 
-
                     <div class="table-header">
-
-                        <div class="header-left">
-
-                            <h2>
-
+                        <div class="table-heading">
+                            <div class="table-heading-icon">
                                 <i class="fas fa-database"></i>
+                            </div>
 
-                                Base de données des services
+                            <div>
+                                <h2>Base de données des services</h2>
 
-                            </h2>
-
-
-                            {% if result %}
-
-                            <span class="record-badge">
-
-                                <span id="recordCount">
-                                    {{ result|length }}
-                                </span>
-
-                                enregistrements trouvés
-
-                            </span>
-
-                            {% endif %}
-
+                                {% if result %}
+                                <p class="table-subtitle">
+                                    <span id="recordCount">{{ result|length }}</span>
+                                    enregistrements trouvés
+                                </p>
+                                {% endif %}
+                            </div>
                         </div>
 
+                        {% if result %}
+                        <span class="table-status">
+                            <span class="status-dot"></span>
+                            Données disponibles
+                        </span>
+                        {% endif %}
                     </div>
 
 
                     {% if result %}
 
-
                     <div class="table-wrapper">
-
                         <table class="data-table">
 
-
                             <thead>
-
                             <tr>
-
-                                <th>
-                                    <i class="fas fa-hashtag"></i>
-                                    ID du service
-                                </th>
-
-                                <th>
-                                    <i class="fas fa-user"></i>
-                                    Nom
-                                </th>
-
-                                <th>
-                                    <i class="fas fa-phone"></i>
-                                    Numéro
-                                </th>
-
-                                <th>
-                                    <i class="fas fa-calendar"></i>
-                                    Date
-                                </th>
-
-                                <th>
-                                    <i class="fas fa-dollar-sign"></i>
-                                    Prix
-                                </th>
-
-                                <th>
-                                    <i class="fas fa-money-bill"></i>
-                                    Khalsa
-                                </th>
-
-                                <th>
-                                    <i class="fas fa-coins"></i>
-                                    Versement
-                                </th>
-
-                                <th>
-                                    <i class="fas fa-wallet"></i>
-                                    Reste
-                                </th>
-
+                                <th>ID du service</th>
+                                <th>Nom</th>
+                                <th>Numéro</th>
+                                <th>Date</th>
+                                <th>Prix</th>
+                                <th>Khalsa</th>
+                                <th>Versement</th>
+                                <th>Reste</th>
                             </tr>
-
                             </thead>
-
 
                             <tbody id="servicesTableBody">
 
-
                             {% for row in result %}
-
                             <tr class="table-row"
-
                                 data-id="{{ row[0] }}"
-
                                 data-name="{{ row[1] }}"
-
                                 data-number="{{ row[2] }}"
-
                                 data-price="{{ row[4] }}">
 
-                                <td>
-
-                                    <span class="cell-content">
-                                        {{ row[0] }}
-                                    </span>
-
+                                <td data-label="ID du service">
+                                    <span class="cell-content id-cell">{{ row[0] }}</span>
                                 </td>
 
-
-                                <td>
-
-                                    <span class="cell-content">
-                                        {{ row[1] }}
-                                    </span>
-
+                                <td data-label="Nom">
+                                    <span class="cell-content name-cell">{{ row[1] }}</span>
                                 </td>
 
-
-                                <td>
-
-                                    <span class="cell-content">
-                                        {{ row[2] }}
-                                    </span>
-
+                                <td data-label="Numéro">
+                                    <span class="cell-content">{{ row[2] }}</span>
                                 </td>
 
-
-                                <td>
-
-                                    <span class="cell-content">
-                                        {{ row[3] }}
-                                    </span>
-
+                                <td data-label="Date">
+                                    <span class="cell-content">{{ row[3] }}</span>
                                 </td>
 
-
-                                <td>
-
-                                    <span class="cell-content price-cell">
-                                        {{ row[4] }}
-                                    </span>
-
+                                <td data-label="Prix">
+                                    <span class="cell-content price-cell">{{ row[4] }}</span>
                                 </td>
 
-
-                                <td>
-
-                                    <span class="cell-content khalsa-cell">
-                                        {{ row[5] }}
-                                    </span>
-
+                                <td data-label="Khalsa">
+                                    <span class="cell-content khalsa-cell">{{ row[5] }}</span>
                                 </td>
 
-
-                                <td>
-
-                                    <span class="cell-content versement-cell">
-                                        {{ row[6] }}
-                                    </span>
-
+                                <td data-label="Versement">
+                                    <span class="cell-content versement-cell">{{ row[6] }}</span>
                                 </td>
 
-
-                                <td>
-
-                                    <span class="cell-content reste-cell">
-                                        {{ row[7] }}
-                                    </span>
-
+                                <td data-label="Reste">
+                                    <span class="cell-content reste-cell">{{ row[7] }}</span>
                                 </td>
 
                             </tr>
-
                             {% endfor %}
 
-
                             </tbody>
-
                         </table>
-
                     </div>
 
+                    <p class="mobile-table-hint">
+                        <i class="fas fa-hand-pointer"></i>
+                        Maintenez un service appuyé pour afficher ses actions.
+                    </p>
 
                     {% else %}
 
                     <div class="empty-table">
+                        <div class="empty-table-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
 
-                        <i class="fas fa-inbox"></i>
-
-                        <p>
-                            Aucun service trouvé
-                        </p>
-
+                        <h3>Aucun service trouvé</h3>
+                        <p>Les services disponibles apparaîtront ici.</p>
                     </div>
 
                     {% endif %}
-
                 </div>
 
 
-                <!-- =================================================
-                     STATISTICS TABLE
-                ================================================== -->
-
+                <!-- STATISTICS TABLE -->
                 <div class="table-card"
                      id="StatTable"
                      style="display: {% if stats %}block{% else %}none{% endif %};">
 
-
                     <div class="table-header">
-
-                        <div class="header-left">
-
-                            <h2>
-
+                        <div class="table-heading">
+                            <div class="table-heading-icon statistics-icon">
                                 <i class="fas fa-chart-pie"></i>
+                            </div>
 
-                                Statistiques des services
-
-                            </h2>
-
+                            <div>
+                                <h2>Statistiques des services</h2>
+                                <p class="table-subtitle">Résumé de l'activité</p>
+                            </div>
                         </div>
-
                     </div>
 
 
                     {% if stats %}
 
-
                     <div class="table-wrapper">
-
-                        <table class="data-table">
+                        <table class="data-table statistics-table">
 
                             <thead>
-
                             <tr>
-
-                                <th>
-                                    Nom
-                                </th>
-
-                                <th>
-                                    Numéro
-                                </th>
-
-                                <th>
-                                    Total des Khedma
-                                </th>
-
-                                <th>
-                                    Khalsin
-                                </th>
-
-                                <th>
-                                    Non Khalsin
-                                </th>
-
-                                <th>
-                                    Mois
-                                </th>
-
-                                <th>
-                                    Année
-                                </th>
-
+                                <th>Nom</th>
+                                <th>Numéro</th>
+                                <th>Total des Khedma</th>
+                                <th>Khalsin</th>
+                                <th>Non Khalsin</th>
+                                <th>Mois</th>
+                                <th>Année</th>
                             </tr>
-
                             </thead>
 
-
                             <tbody>
-
                             {% for row in stats %}
-
                             <tr class="table-row">
-
-                                <td>
-                                    {{ row[1] }}
-                                </td>
-
-                                <td>
-                                    {{ row[2] }}
-                                </td>
-
-                                <td>
-                                    {{ row[3] }}
-                                </td>
-
-                                <td>
-                                    {{ row[4] }}
-                                </td>
-
-                                <td>
-                                    {{ row[5] }}
-                                </td>
-
-                                <td>
-                                    {{ row[6] }}
-                                </td>
-
-                                <td>
-                                    {{ row[7] }}
-                                </td>
-
+                                <td data-label="Nom">{{ row[1] }}</td>
+                                <td data-label="Numéro">{{ row[2] }}</td>
+                                <td data-label="Total des Khedma">{{ row[3] }}</td>
+                                <td data-label="Khalsin">{{ row[4] }}</td>
+                                <td data-label="Non Khalsin">{{ row[5] }}</td>
+                                <td data-label="Mois">{{ row[6] }}</td>
+                                <td data-label="Année">{{ row[7] }}</td>
                             </tr>
-
                             {% endfor %}
-
                             </tbody>
 
                         </table>
-
                     </div>
-
 
                     {% else %}
 
                     <div class="empty-table">
+                        <div class="empty-table-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
 
-                        <i class="fas fa-chart-line"></i>
-
-                        <p>
-                            Aucune statistique disponible
-                        </p>
-
+                        <h3>Aucune statistique disponible</h3>
+                        <p>Les statistiques apparaîtront ici lorsqu'elles seront disponibles.</p>
                     </div>
 
                     {% endif %}
-
                 </div>
 
 
                 <!-- EMPTY STATE -->
-
                 {% if not result and not stats %}
-
                 <div class="empty-state">
-
                     <div class="empty-icon">
-
-                        <i class="fas fa-inbox"></i>
-
+                        <i class="fas fa-folder-open"></i>
                     </div>
 
-
-                    <h2>
-                        Aucune information disponible
-                    </h2>
-
+                    <h2>Aucune information disponible</h2>
 
                     <p>
-
-                        Utilisez le menu latéral pour afficher
-                        les services ou en ajouter de nouveaux
-
+                        Utilisez le menu latéral pour afficher les services
+                        ou en ajouter de nouveaux.
                     </p>
 
+                    <a href="/services/AddService" class="empty-state-btn">
+                        <i class="fas fa-plus"></i>
+                        Ajouter un service
+                    </a>
                 </div>
-
                 {% endif %}
 
-
-            </div>
+            </section>
 
         </main>
-
     </div>
-
 </div>
 
 
-<!-- =========================================================
-     CONTEXT MENU
-========================================================= -->
-
-<div id="custom-context-menu"
-     class="context-menu"
-     style="display:none;">
-
+<!-- CONTEXT MENU -->
+<div id="custom-context-menu" class="context-menu" style="display:none;">
 
     <button id="paid-row-btn"
+            type="button"
             class="context-menu-item paid-action">
-
-        <i class="fas fa-check-circle"></i>
-
-        Marquer comme payé
-
+        <span class="context-icon"><i class="fas fa-check-circle"></i></span>
+        <span>Marquer comme payé</span>
     </button>
-
 
     <button id="modify-versement-btn"
+            type="button"
             class="context-menu-item versement-action">
-
-        <i class="fas fa-money-bill-wave"></i>
-
-        Modifier le versement
-
+        <span class="context-icon"><i class="fas fa-money-bill-wave"></i></span>
+        <span>Modifier le versement</span>
     </button>
 
+    <div class="context-divider"></div>
 
     <button id="delete-row-btn"
+            type="button"
             class="context-menu-item delete-action">
-
-        <i class="fas fa-trash-alt"></i>
-
-        Supprimer le service
-
+        <span class="context-icon"><i class="fas fa-trash-alt"></i></span>
+        <span>Supprimer le service</span>
     </button>
 
 </div>
 
 
 <script>
+document.addEventListener('DOMContentLoaded', function () {
 
-    document.addEventListener(
-        'DOMContentLoaded',
-        function () {
+    // =====================================================
+    // MOBILE SIDEBAR
+    // =====================================================
 
-            // =====================================================
-        // RECHERCHE DYNAMIQUE DES SERVICES
-        // =====================================================
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
 
-        const searchInput = document.getElementById('searchInput');
-        const clearSearch = document.getElementById('clearSearch');
-        const searchCounter = document.getElementById('searchCounter');
+    if (sidebar && sidebarToggle) {
+        sidebarToggle.addEventListener('click', function () {
+            const isOpen = sidebar.classList.toggle('sidebar-open');
 
-        function dynamicSearch() {
+            sidebarToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 
+            const icon = sidebarToggle.querySelector('i');
+            if (icon) {
+                icon.className = isOpen ? 'fas fa-times' : 'fas fa-bars';
+            }
+        });
+
+        sidebar.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function () {
+                if (window.innerWidth <= 800) {
+                    sidebar.classList.remove('sidebar-open');
+                    sidebarToggle.setAttribute('aria-expanded', 'false');
+
+                    const icon = sidebarToggle.querySelector('i');
+                    if (icon) icon.className = 'fas fa-bars';
+                }
+            });
+        });
+    }
+
+
+    // =====================================================
+    // DYNAMIC SEARCH
+    // =====================================================
+
+    const searchInput = document.getElementById('searchInput');
+    const clearSearch = document.getElementById('clearSearch');
+    const searchCounter = document.getElementById('searchCounter');
+
+    function escapeSearchText(value) {
+        const div = document.createElement('div');
+        div.textContent = value;
+        return div.innerHTML;
+    }
+
+    function dynamicSearch() {
+        if (!searchInput) return;
+
+        const searchValue = searchInput.value.toLowerCase().trim();
+        const mainTable = document.getElementById('MainTable');
+
+        if (!mainTable) return;
+
+        const rows = mainTable.querySelectorAll('#servicesTableBody tr.table-row');
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const name = (row.dataset.name || '').toLowerCase().trim();
+            const number = (row.dataset.number || '').toLowerCase().trim();
+
+            const matches = (name + ' ' + number).includes(searchValue);
+
+            row.style.display = matches ? '' : 'none';
+
+            if (matches) visibleCount++;
+        });
+
+        const tbody = document.getElementById('servicesTableBody');
+
+        if (tbody) {
+            const oldMessage = tbody.querySelector('.search-empty-row');
+            if (oldMessage) oldMessage.remove();
+
+            if (searchValue !== '' && visibleCount === 0) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.className = 'search-empty-row';
+
+                const cell = document.createElement('td');
+                cell.colSpan = 8;
+                cell.innerHTML = '<i class="fas fa-search"></i> ';
+
+                const message = document.createElement('span');
+                message.textContent = `Aucun service correspondant à "${searchValue}"`;
+
+                cell.appendChild(message);
+                emptyRow.appendChild(cell);
+                tbody.appendChild(emptyRow);
+            }
+        }
+
+        if (searchCounter) {
+            searchCounter.style.display = searchValue === '' ? 'none' : 'block';
+            searchCounter.textContent = searchValue === ''
+                ? ''
+                : `${visibleCount} résultat(s) trouvé(s)`;
+        }
+
+        updateTotal();
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', dynamicSearch);
+    }
+
+    if (clearSearch) {
+        clearSearch.addEventListener('click', function () {
             if (!searchInput) return;
 
-            const searchValue = searchInput.value
-                .toLowerCase()
-                .trim();
+            searchInput.value = '';
+            dynamicSearch();
+            searchInput.focus();
+        });
+    }
 
-            const mainTable = document.getElementById('MainTable');
 
-            if (!mainTable) return;
+    // =====================================================
+    // CONTEXT MENU ELEMENTS
+    // =====================================================
 
-            const rows = mainTable.querySelectorAll(
-                '#servicesTableBody tr.table-row'
-            );
+    const contextMenu = document.getElementById('custom-context-menu');
+    const paidBtn = document.getElementById('paid-row-btn');
+    const modifyBtn = document.getElementById('modify-versement-btn');
+    const deleteBtn = document.getElementById('delete-row-btn');
 
-            let visibleCount = 0;
+    let selectedRow = null;
+    let longPressTimer = null;
+    let touchStartX = 0;
+    let touchStartY = 0;
 
-            rows.forEach(row => {
 
-                // data-id est volontairement exclu
-                const name = (
-                    row.dataset.name || ''
-                ).toLowerCase().trim();
+    // =====================================================
+    // CSRF
+    // =====================================================
 
-                const number = (
-                    row.dataset.number || ''
-                ).toLowerCase().trim();
+    function getCSRFToken() {
+        const csrfInput = document.querySelector('input[name="csrf_token"]');
+        return csrfInput ? csrfInput.value : null;
+    }
 
-                const searchableData = name + ' ' + number;
 
-                const matches = searchableData.includes(searchValue);
+    // =====================================================
+    // FETCH REQUEST
+    // =====================================================
 
-                row.style.display = matches ? '' : 'none';
+    async function sendRequest(url, data = {}) {
+        const csrfToken = getCSRFToken();
 
-                if (matches) {
-                    visibleCount++;
-                }
-            });
+        const headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        };
 
-            // Message lorsqu'aucun résultat n'est trouvé
-            const tbody = document.getElementById('servicesTableBody');
-
-            if (tbody) {
-
-                const oldMessage = tbody.querySelector('.search-empty-row');
-
-                if (oldMessage) {
-                    oldMessage.remove();
-                }
-
-                if (searchValue !== '' && visibleCount === 0) {
-
-                    const emptyRow = document.createElement('tr');
-
-                    emptyRow.className = 'search-empty-row';
-
-                    emptyRow.innerHTML = `
-                        <td colspan="8" style="text-align:center; padding:25px;">
-                            <i class="fas fa-search"></i>
-                            Aucun service correspondant à "${escapeSearchText(searchValue)}"
-                        </td>
-                    `;
-
-                    tbody.appendChild(emptyRow);
-                }
-            }
-
-            // Mise à jour du compteur des résultats
-            if (searchCounter) {
-
-                searchCounter.style.display = 'block';
-
-                searchCounter.textContent = searchValue === ''
-                    ? ''
-                    : `${visibleCount} résultat(s) trouvé(s)`;
-            }
+        if (csrfToken) {
+            headers['X-CSRFToken'] = csrfToken;
         }
 
-        // Échapper le texte affiché dans le message
-        function escapeSearchText(value) {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        });
 
-            const div = document.createElement('div');
+        let result = {};
 
-            div.textContent = value;
-
-            return div.innerHTML;
+        try {
+            result = await response.json();
+        } catch (error) {
+            console.error('Le serveur n\'a pas renvoyé du JSON.', error);
         }
 
-        // Recherche pendant la saisie
-        if (searchInput) {
-            searchInput.addEventListener('input', dynamicSearch);
+        return {
+            response: response,
+            data: result
+        };
+    }
+
+
+    // =====================================================
+    // UPDATE TOTAL
+    // =====================================================
+
+    function updateTotal() {
+        const tbody = document.getElementById('servicesTableBody');
+        const totalElement = document.getElementById('totalServices');
+        const recordCount = document.getElementById('recordCount');
+
+        if (!tbody) {
+            if (totalElement) totalElement.textContent = '--';
+            return;
         }
 
-        // Effacer la recherche
-        if (clearSearch) {
+        const rows = tbody.querySelectorAll('tr.table-row');
 
-            clearSearch.addEventListener('click', function() {
+        const total = Array.from(rows).filter(row => {
+            return row.style.display !== 'none';
+        }).length;
 
-                searchInput.value = '';
+        if (totalElement) totalElement.textContent = total;
+        if (recordCount) recordCount.textContent = total;
+    }
 
-                dynamicSearch();
+    updateTotal();
 
-                searchInput.focus();
-            });
+
+    // =====================================================
+    // OPEN CONTEXT MENU
+    // =====================================================
+
+    function openContextMenu(x, y, row) {
+        if (!contextMenu || !row) return;
+
+        if (selectedRow) {
+            selectedRow.classList.remove('row-selected');
         }
 
+        selectedRow = row;
+        selectedRow.classList.add('row-selected');
 
-        // =====================================================
-        // ELEMENTS
-        // =====================================================
+        contextMenu.style.display = 'block';
 
-        const contextMenu =
-            document.getElementById(
-                'custom-context-menu'
-            );
+        const menuWidth = contextMenu.offsetWidth;
+        const menuHeight = contextMenu.offsetHeight;
 
-        const paidBtn =
-            document.getElementById(
-                'paid-row-btn'
-            );
+        let finalX = x;
+        let finalY = y;
 
-        const modifyBtn =
-            document.getElementById(
-                'modify-versement-btn'
-            );
+        const viewportRight = window.scrollX + window.innerWidth;
+        const viewportBottom = window.scrollY + window.innerHeight;
 
-        const deleteBtn =
-            document.getElementById(
-                'delete-row-btn'
-            );
-
-
-        let selectedRow = null;
-
-        let longPressTimer = null;
-
-
-        // =====================================================
-        // CSRF
-        // =====================================================
-
-        function getCSRFToken() {
-
-            const csrfInput =
-                document.querySelector(
-                    'input[name="csrf_token"]'
-                );
-
-
-            return csrfInput
-                ? csrfInput.value
-                : null;
+        if (x + menuWidth > viewportRight) {
+            finalX = viewportRight - menuWidth - 10;
         }
 
-
-        // =====================================================
-        // FETCH REQUEST
-        // =====================================================
-
-        async function sendRequest(
-            url,
-            data = {}
-        ) {
-
-            const csrfToken =
-                getCSRFToken();
-
-
-            const headers = {
-
-                'Content-Type':
-                    'application/json',
-
-                'Accept':
-                    'application/json'
-
-            };
-
-
-            if (csrfToken) {
-
-                headers['X-CSRFToken'] =
-                    csrfToken;
-            }
-
-
-            const response =
-                await fetch(
-                    url,
-                    {
-                        method: 'POST',
-                        headers: headers,
-                        body: JSON.stringify(data)
-                    }
-                );
-
-
-            let result = {};
-
-
-            try {
-
-                result =
-                    await response.json();
-
-            } catch (error) {
-
-                console.error(
-                    'Le serveur n\'a pas renvoyé du JSON.',
-                    error
-                );
-            }
-
-
-            return {
-                response: response,
-                data: result
-            };
+        if (y + menuHeight > viewportBottom) {
+            finalY = viewportBottom - menuHeight - 10;
         }
 
-
-        // =====================================================
-        // TOTAL
-        // =====================================================
-
-        function updateTotal() {
-
-            const tbody =
-                document.getElementById(
-                    'servicesTableBody'
-                );
+        contextMenu.style.left = `${Math.max(window.scrollX + 5, finalX)}px`;
+        contextMenu.style.top = `${Math.max(window.scrollY + 5, finalY)}px`;
+    }
 
 
-            const totalElement =
-                document.getElementById(
-                    'totalServices'
-                );
+    // =====================================================
+    // CLOSE CONTEXT MENU
+    // =====================================================
 
+    function closeContextMenu() {
+        if (contextMenu) contextMenu.style.display = 'none';
 
-            const recordCount =
-                document.getElementById(
-                    'recordCount'
-                );
-
-
-            if (!tbody) {
-
-                if (totalElement) {
-                    totalElement.textContent = '--';
-                }
-
-                return;
-            }
-
-
-            const rows =
-                tbody.querySelectorAll(
-                    'tr.table-row'
-                );
-
-
-            const total = Array.from(rows).filter(
-                row => row.style.display !== 'none'
-            ).length;
-
-
-            if (totalElement) {
-
-                totalElement.textContent =
-                    total;
-            }
-
-
-            if (recordCount) {
-
-                recordCount.textContent =
-                    total;
-            }
+        if (selectedRow) {
+            selectedRow.classList.remove('row-selected');
+            selectedRow = null;
         }
+    }
 
 
-        updateTotal();
+    // =====================================================
+    // RIGHT CLICK
+    // =====================================================
 
+    document.addEventListener('contextmenu', function (event) {
+        const row = event.target.closest('tr.table-row');
 
-        // =====================================================
-        // OPEN CONTEXT MENU
-        // =====================================================
+        if (!row || !row.hasAttribute('data-id')) return;
 
-        function openContextMenu(
-            x,
-            y,
-            row
-        ) {
-
-            if (selectedRow) {
-
-                selectedRow.classList.remove(
-                    'row-selected'
-                );
-            }
-
-
-            selectedRow = row;
-
-
-            selectedRow.classList.add(
-                'row-selected'
-            );
-
-
-            contextMenu.style.display =
-                'block';
-
-
-            /*
-             * Empêcher le menu de sortir de l'écran.
-             */
-
-            const menuWidth =
-                contextMenu.offsetWidth;
-
-            const menuHeight =
-                contextMenu.offsetHeight;
-
-
-            let finalX = x;
-
-            let finalY = y;
-
-
-            if (
-                x + menuWidth >
-                window.scrollX +
-                window.innerWidth
-            ) {
-
-                finalX =
-                    window.scrollX +
-                    window.innerWidth -
-                    menuWidth -
-                    10;
-            }
-
-
-            if (
-                y + menuHeight >
-                window.scrollY +
-                window.innerHeight
-            ) {
-
-                finalY =
-                    window.scrollY +
-                    window.innerHeight -
-                    menuHeight -
-                    10;
-            }
-
-
-            contextMenu.style.left =
-                `${Math.max(5, finalX)}px`;
-
-            contextMenu.style.top =
-                `${Math.max(5, finalY)}px`;
-        }
-
-
-        // =====================================================
-        // CLOSE CONTEXT MENU
-        // =====================================================
-
-        function closeContextMenu() {
-
-            contextMenu.style.display =
-                'none';
-
-
-            if (selectedRow) {
-
-                selectedRow.classList.remove(
-                    'row-selected'
-                );
-
-                selectedRow = null;
-            }
-        }
-
-
-        // =====================================================
-        // RIGHT CLICK
-        // =====================================================
-
-        document.addEventListener(
-            'contextmenu',
-            function (event) {
-
-                const row =
-                    event.target.closest(
-                        'tr.table-row'
-                    );
-
-
-                if (!row) {
-                    return;
-                }
-
-
-                if (
-                    !row.hasAttribute(
-                        'data-id'
-                    )
-                ) {
-                    return;
-                }
-
-
-                event.preventDefault();
-
-
-                openContextMenu(
-                    event.pageX,
-                    event.pageY,
-                    row
-                );
-            }
-        );
-
-
-        // =====================================================
-        // MOBILE LONG PRESS
-        // =====================================================
-
-        document.addEventListener(
-            'touchstart',
-            function (event) {
-
-                const row =
-                    event.target.closest(
-                        'tr.table-row'
-                    );
-
-
-                if (!row) {
-                    return;
-                }
-
-
-                const touch =
-                    event.touches[0];
-
-
-                longPressTimer =
-                    setTimeout(
-                        function () {
-
-                            openContextMenu(
-                                touch.pageX,
-                                touch.pageY,
-                                row
-                            );
-
-                        },
-                        500
-                    );
-            },
-            {
-                passive: true
-            }
-        );
-
-
-        document.addEventListener(
-            'touchend',
-            function () {
-
-                clearTimeout(
-                    longPressTimer
-                );
-            }
-        );
-
-
-        document.addEventListener(
-            'touchmove',
-            function () {
-
-                clearTimeout(
-                    longPressTimer
-                );
-            }
-        );
-
-
-        // =====================================================
-        // CLOSE MENU
-        // =====================================================
-
-        document.addEventListener(
-            'click',
-            function (event) {
-
-                if (
-                    !contextMenu.contains(
-                        event.target
-                    )
-                ) {
-
-                    closeContextMenu();
-                }
-            }
-        );
-
-
-        // =====================================================
-        // SHOW SUCCESS MESSAGE
-        // =====================================================
-
-        function showSuccess(message) {
-
-            const content =
-                document.querySelector(
-                    '.content'
-                );
-
-
-            if (!content) {
-                return;
-            }
-
-
-            const container =
-                document.createElement(
-                    'div'
-                );
-
-
-            container.className =
-                'alert-container';
-
-
-            const alertBox =
-                document.createElement(
-                    'div'
-                );
-
-
-            alertBox.className =
-                'alert alert-success';
-
-
-            alertBox.innerHTML = `
-
-                <i class="fas fa-check-circle"></i>
-
-                <div class="alert-content">
-
-                    <h3>
-                        Opération réussie
-                    </h3>
-
-                    <p></p>
-
-                </div>
-
-                <button class="alert-close">
-
-                    <i class="fas fa-times"></i>
-
-                </button>
-
-            `;
-
-
-            alertBox
-                .querySelector('p')
-                .textContent = message;
-
-
-            alertBox
-                .querySelector('.alert-close')
-                .addEventListener(
-                    'click',
-                    function () {
-
-                        container.remove();
-
-                    }
-                );
-
-
-            container.appendChild(
-                alertBox
-            );
-
-
-            content.prepend(
-                container
-            );
-
-
-            setTimeout(
-                function () {
-
-                    if (
-                        container.parentElement
-                    ) {
-
-                        container.remove();
-                    }
-
-                },
-                4000
-            );
-        }
-
-
-        // =====================================================
-        // MARQUER COMME PAYÉ
-        // =====================================================
-
-        paidBtn.addEventListener(
-            'click',
-            async function () {
-
-                if (!selectedRow) {
-                    return;
-                }
-
-
-                const row =
-                    selectedRow;
-
-
-                const id =
-                    row.dataset.id;
-
-                const name =
-                    row.dataset.name;
-
-                const number =
-                    row.dataset.number;
-
-
-                if (
-                    !confirm(
-                        `Marquer le service #${id} comme payé ?`
-                    )
-                ) {
-
-                    closeContextMenu();
-
-                    return;
-                }
-
-
-                paidBtn.classList.add(
-                    'action-loading'
-                );
-
-
-                try {
-
-                    const {
-                        response,
-                        data
-                    } =
-                        await sendRequest(
-                            `/services/ServicePaid/${id}`,
-                            {
-                                name: name,
-                                number: number
-                            }
-                        );
-
-
-                    if (
-                        response.ok &&
-                        data.success
-                    ) {
-
-
-                        // =====================================
-                        // UPDATE KHalsa
-                        // =====================================
-
-                        const khalsa =
-                            row.querySelector(
-                                '.khalsa-cell'
-                            );
-
-
-                        if (khalsa) {
-
-                            khalsa.textContent =
-                                data.khalsa !== undefined
-                                    ? data.khalsa
-                                    : 'Oui';
-                        }
-
-
-                        // =====================================
-                        // UPDATE VERSEMENT
-                        // =====================================
-
-                        const versement =
-                            row.querySelector(
-                                '.versement-cell'
-                            );
-
-
-                        if (
-                            versement &&
-                            data.versement !== undefined
-                        ) {
-
-                            versement.textContent =
-                                data.versement;
-                        }
-
-
-                        // =====================================
-                        // UPDATE RESTE
-                        // =====================================
-
-                        const reste =
-                            row.querySelector(
-                                '.reste-cell'
-                            );
-
-
-                        if (reste) {
-
-                            reste.textContent =
-                                data.reste !== undefined
-                                    ? data.reste
-                                    : '0';
-                        }
-
-
-                        // =====================================
-                        // VISUAL EFFECT
-                        // =====================================
-
-                        row.style.transition =
-                            'background-color 0.3s ease';
-
-
-                        row.style.backgroundColor =
-                            'rgba(25, 135, 84, 0.15)';
-
-
-                        setTimeout(
-                            function () {
-
-                                row.style.backgroundColor =
-                                    '';
-
-                            },
-                            1000
-                        );
-
-
-                        showSuccess(
-                            'Le service a été marqué comme payé.'
-                        );
-
-
-                    } else {
-
-                        alert(
-                            data.error ||
-                            data.message ||
-                            'Erreur lors du paiement.'
-                        );
-                    }
-
-
-                } catch (error) {
-
-                    console.error(
-                        error
-                    );
-
-
-                    alert(
-                        'Erreur de communication avec le serveur.'
-                    );
-
-                } finally {
-
-                    paidBtn.classList.remove(
-                        'action-loading'
-                    );
-
-                    closeContextMenu();
-                }
-
-            }
-        );
-
-
-        // =====================================================
-        // MODIFIER VERSEMENT
-        // =====================================================
-
-        modifyBtn.addEventListener(
-            'click',
-            async function () {
-
-                if (!selectedRow) {
-                    return;
-                }
-
-
-                const row =
-                    selectedRow;
-
-
-                const id =
-                    row.dataset.id;
-
-                const name =
-                    row.dataset.name;
-
-                const number =
-                    row.dataset.number;
-
-
-                const versementCell =
-                    row.querySelector(
-                        '.versement-cell'
-                    );
-
-
-                const currentVersement =
-                    versementCell
-                        ? versementCell.textContent.trim()
-                        : '0';
-
-
-                const newVersement =
-                    prompt(
-                        `Nouveau versement pour le service #${id} :`,
-                        currentVersement
-                    );
-
-
-                if (
-                    newVersement === null
-                ) {
-
-                    closeContextMenu();
-
-                    return;
-                }
-
-
-                const amount =
-                    parseFloat(
-                        newVersement
-                            .replace(',', '.')
-                            .trim()
-                    );
-
-
-                if (
-                    isNaN(amount) ||
-                    amount < 0
-                ) {
-
-                    alert(
-                        'Veuillez entrer un montant valide.'
-                    );
-
-                    closeContextMenu();
-
-                    return;
-                }
-
-
-                modifyBtn.classList.add(
-                    'action-loading'
-                );
-
-
-                try {
-
-                    const {
-                        response,
-                        data
-                    } =
-                        await sendRequest(
-                            `/services/ModifyServiceVersement/${id}`,
-                            {
-                                name: name,
-                                number: number,
-                                newVersement: amount
-                            }
-                        );
-
-
-                    if (
-                        response.ok &&
-                        data.success
-                    ) {
-
-
-                        // =====================================
-                        // UPDATE VERSEMENT
-                        // =====================================
-
-                        if (versementCell) {
-
-                            versementCell.textContent =
-                                data.versement !== undefined
-                                    ? data.versement
-                                    : amount;
-                        }
-
-
-                        // =====================================
-                        // UPDATE RESTE
-                        // =====================================
-
-                        const resteCell =
-                            row.querySelector(
-                                '.reste-cell'
-                            );
-
-
-                        if (resteCell) {
-
-                            if (
-                                data.reste !== undefined
-                            ) {
-
-                                resteCell.textContent =
-                                    data.reste;
-
-                            } else {
-
-                                const price =
-                                    parseFloat(
-                                        row.dataset.price
-                                    ) || 0;
-
-
-                                resteCell.textContent =
-                                    Math.max(
-                                        0,
-                                        price - amount
-                                    );
-                            }
-                        }
-
-
-                        showSuccess(
-                            'Le versement a été modifié avec succès.'
-                        );
-
-
-                    } else {
-
-                        alert(
-                            data.error ||
-                            data.message ||
-                            'Erreur lors de la modification.'
-                        );
-                    }
-
-
-                } catch (error) {
-
-                    console.error(
-                        error
-                    );
-
-
-                    alert(
-                        'Erreur de communication avec le serveur.'
-                    );
-
-                } finally {
-
-                    modifyBtn.classList.remove(
-                        'action-loading'
-                    );
-
-                    closeContextMenu();
-                }
-
-            }
-        );
-
-
-        // =====================================================
-        // SUPPRIMER
-        // =====================================================
-
-        deleteBtn.addEventListener(
-            'click',
-            async function () {
-
-                if (!selectedRow) {
-                    return;
-                }
-
-
-                const row =
-                    selectedRow;
-
-
-                const id =
-                    row.dataset.id;
-
-                const name =
-                    row.dataset.name;
-
-                const number =
-                    row.dataset.number;
-
-
-                if (
-                    !confirm(
-                        `Supprimer le service #${id} ?`
-                    )
-                ) {
-
-                    closeContextMenu();
-
-                    return;
-                }
-
-
-                deleteBtn.classList.add(
-                    'action-loading'
-                );
-
-
-                try {
-
-                    const {
-                        response,
-                        data
-                    } =
-                        await sendRequest(
-                            `/services/DeleteService/${id}`,
-                            {
-                                name: name,
-                                number: number
-                            }
-                        );
-
-
-                    if (
-                        response.ok &&
-                        data.success
-                    ) {
-
-
-                        // =====================================
-                        // REMOVE ROW WITHOUT RELOAD
-                        // =====================================
-
-                        row.style.transition =
-                            'opacity 0.3s ease, transform 0.3s ease';
-
-
-                        row.style.opacity =
-                            '0';
-
-
-                        row.style.transform =
-                            'translateX(30px)';
-
-
-                        setTimeout(
-                            function () {
-
-                                row.remove();
-
-
-                                updateTotal();
-
-
-                                const tbody =
-                                    document.getElementById(
-                                        'servicesTableBody'
-                                    );
-
-
-                                if (
-                                    tbody &&
-                                    tbody.querySelectorAll(
-                                        'tr.table-row'
-                                    ).length === 0
-                                ) {
-
-                                    const tableWrapper =
-                                        document.querySelector(
-                                            '#MainTable .table-wrapper'
-                                        );
-
-
-                                    if (tableWrapper) {
-
-                                        tableWrapper.style.display =
-                                            'none';
-                                    }
-
-
-                                    const empty =
-                                        document.createElement(
-                                            'div'
-                                        );
-
-
-                                    empty.className =
-                                        'empty-table';
-
-
-                                    empty.innerHTML = `
-
-                                        <i class="fas fa-inbox"></i>
-
-                                        <p>
-                                            Aucun service trouvé
-                                        </p>
-
-                                    `;
-
-
-                                    document
-                                        .getElementById(
-                                            'MainTable'
-                                        )
-                                        .appendChild(
-                                            empty
-                                        );
-                                }
-
-                            },
-                            300
-                        );
-
-
-                        showSuccess(
-                            'Le service a été supprimé avec succès.'
-                        );
-
-
-                    } else {
-
-                        alert(
-                            data.error ||
-                            data.message ||
-                            'Erreur lors de la suppression.'
-                        );
-                    }
-
-
-                } catch (error) {
-
-                    console.error(
-                        error
-                    );
-
-
-                    alert(
-                        'Erreur de communication avec le serveur.'
-                    );
-
-                } finally {
-
-                    deleteBtn.classList.remove(
-                        'action-loading'
-                    );
-
-                    closeContextMenu();
-                }
-
-            }
-        );
-        updateTotal();
+        event.preventDefault();
+        openContextMenu(event.pageX, event.pageY, row);
     });
 
+
+    // =====================================================
+    // MOBILE LONG PRESS
+    // =====================================================
+
+    document.addEventListener('touchstart', function (event) {
+        const row = event.target.closest('#servicesTableBody tr.table-row');
+
+        if (!row) return;
+
+        const touch = event.touches[0];
+
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+
+        clearTimeout(longPressTimer);
+
+        longPressTimer = setTimeout(function () {
+            openContextMenu(
+                window.scrollX + touchStartX,
+                window.scrollY + touchStartY,
+                row
+            );
+        }, 550);
+
+    }, { passive: true });
+
+
+    document.addEventListener('touchend', function () {
+        clearTimeout(longPressTimer);
+    });
+
+    document.addEventListener('touchmove', function (event) {
+        const touch = event.touches[0];
+
+        if (!touch) {
+            clearTimeout(longPressTimer);
+            return;
+        }
+
+        const moved = Math.abs(touch.clientX - touchStartX) > 10 ||
+                      Math.abs(touch.clientY - touchStartY) > 10;
+
+        if (moved) clearTimeout(longPressTimer);
+
+    }, { passive: true });
+
+
+    // =====================================================
+    // CLOSE MENU WHEN CLICKING OUTSIDE
+    // =====================================================
+
+    document.addEventListener('click', function (event) {
+        if (contextMenu && !contextMenu.contains(event.target)) {
+            closeContextMenu();
+        }
+    });
+
+
+    // =====================================================
+    // SUCCESS MESSAGE
+    // =====================================================
+
+    function showSuccess(message) {
+        const content = document.querySelector('.content');
+        if (!content) return;
+
+        const container = document.createElement('div');
+        container.className = 'alert-container';
+
+        const alertBox = document.createElement('div');
+        alertBox.className = 'alert alert-success';
+
+        alertBox.innerHTML = `
+            <div class="alert-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+
+            <div class="alert-content">
+                <h3>Opération réussie</h3>
+                <p></p>
+            </div>
+
+            <button class="alert-close" type="button" aria-label="Fermer">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+
+        alertBox.querySelector('p').textContent = message;
+
+        alertBox.querySelector('.alert-close').addEventListener('click', function () {
+            container.remove();
+        });
+
+        container.appendChild(alertBox);
+        content.prepend(container);
+
+        setTimeout(function () {
+            if (container.parentElement) container.remove();
+        }, 4000);
+    }
+
+
+    // =====================================================
+    // MARK AS PAID
+    // =====================================================
+
+    if (paidBtn) {
+        paidBtn.addEventListener('click', async function () {
+            if (!selectedRow) return;
+
+            const row = selectedRow;
+            const id = row.dataset.id;
+            const name = row.dataset.name;
+            const number = row.dataset.number;
+
+            if (!confirm(`Marquer le service #${id} comme payé ?`)) {
+                closeContextMenu();
+                return;
+            }
+
+            paidBtn.classList.add('action-loading');
+            paidBtn.disabled = true;
+
+            try {
+                const { response, data } = await sendRequest(
+                    `/services/ServicePaid/${id}`,
+                    { name: name, number: number }
+                );
+
+                if (response.ok && data.success) {
+                    const khalsa = row.querySelector('.khalsa-cell');
+                    if (khalsa) {
+                        khalsa.textContent = data.khalsa !== undefined ? data.khalsa : 'Oui';
+                    }
+
+                    const versement = row.querySelector('.versement-cell');
+                    if (versement && data.versement !== undefined) {
+                        versement.textContent = data.versement;
+                    }
+
+                    const reste = row.querySelector('.reste-cell');
+                    if (reste) {
+                        reste.textContent = data.reste !== undefined ? data.reste : '0';
+                    }
+
+                    row.classList.add('payment-success');
+
+                    setTimeout(function () {
+                        row.classList.remove('payment-success');
+                    }, 1200);
+
+                    showSuccess('Le service a été marqué comme payé.');
+                } else {
+                    alert(data.error || data.message || 'Erreur lors du paiement.');
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert('Erreur de communication avec le serveur.');
+
+            } finally {
+                paidBtn.classList.remove('action-loading');
+                paidBtn.disabled = false;
+                closeContextMenu();
+            }
+        });
+    }
+
+
+    // =====================================================
+    // MODIFY VERSEMENT
+    // =====================================================
+
+    if (modifyBtn) {
+        modifyBtn.addEventListener('click', async function () {
+            if (!selectedRow) return;
+
+            const row = selectedRow;
+            const id = row.dataset.id;
+            const name = row.dataset.name;
+            const number = row.dataset.number;
+
+            const versementCell = row.querySelector('.versement-cell');
+
+            const currentVersement = versementCell
+                ? versementCell.textContent.trim()
+                : '0';
+
+            const newVersement = prompt(
+                `Nouveau versement pour le service #${id} :`,
+                currentVersement
+            );
+
+            if (newVersement === null) {
+                closeContextMenu();
+                return;
+            }
+
+            const amount = parseFloat(
+                newVersement.replace(',', '.').trim()
+            );
+
+            if (isNaN(amount) || amount < 0) {
+                alert('Veuillez entrer un montant valide.');
+                closeContextMenu();
+                return;
+            }
+
+            modifyBtn.classList.add('action-loading');
+            modifyBtn.disabled = true;
+
+            try {
+                const { response, data } = await sendRequest(
+                    `/services/ModifyServiceVersement/${id}`,
+                    {
+                        name: name,
+                        number: number,
+                        newVersement: amount
+                    }
+                );
+
+                if (response.ok && data.success) {
+                    if (versementCell) {
+                        versementCell.textContent =
+                            data.versement !== undefined ? data.versement : amount;
+                    }
+
+                    const resteCell = row.querySelector('.reste-cell');
+
+                    if (resteCell) {
+                        if (data.reste !== undefined) {
+                            resteCell.textContent = data.reste;
+                        } else {
+                            const price = parseFloat(row.dataset.price) || 0;
+                            resteCell.textContent = Math.max(0, price - amount);
+                        }
+                    }
+
+                    showSuccess('Le versement a été modifié avec succès.');
+
+                } else {
+                    alert(data.error || data.message || 'Erreur lors de la modification.');
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert('Erreur de communication avec le serveur.');
+
+            } finally {
+                modifyBtn.classList.remove('action-loading');
+                modifyBtn.disabled = false;
+                closeContextMenu();
+            }
+        });
+    }
+
+
+    // =====================================================
+    // DELETE SERVICE
+    // =====================================================
+
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', async function () {
+            if (!selectedRow) return;
+
+            const row = selectedRow;
+            const id = row.dataset.id;
+            const name = row.dataset.name;
+            const number = row.dataset.number;
+
+            if (!confirm(`Supprimer le service #${id} ?`)) {
+                closeContextMenu();
+                return;
+            }
+
+            deleteBtn.classList.add('action-loading');
+            deleteBtn.disabled = true;
+
+            try {
+                const { response, data } = await sendRequest(
+                    `/services/DeleteService/${id}`,
+                    { name: name, number: number }
+                );
+
+                if (response.ok && data.success) {
+                    row.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(20px)';
+
+                    setTimeout(function () {
+                        row.remove();
+                        updateTotal();
+
+                        const tbody = document.getElementById('servicesTableBody');
+
+                        if (tbody && tbody.querySelectorAll('tr.table-row').length === 0) {
+                            const tableWrapper = document.querySelector('#MainTable .table-wrapper');
+
+                            if (tableWrapper) tableWrapper.style.display = 'none';
+
+                            const hint = document.querySelector('#MainTable .mobile-table-hint');
+                            if (hint) hint.remove();
+
+                            const empty = document.createElement('div');
+                            empty.className = 'empty-table';
+
+                            empty.innerHTML = `
+                                <div class="empty-table-icon">
+                                    <i class="fas fa-inbox"></i>
+                                </div>
+                                <h3>Aucun service trouvé</h3>
+                                <p>Les services disponibles apparaîtront ici.</p>
+                            `;
+
+                            document.getElementById('MainTable').appendChild(empty);
+                        }
+                    }, 300);
+
+                    showSuccess('Le service a été supprimé avec succès.');
+
+                } else {
+                    alert(data.error || data.message || 'Erreur lors de la suppression.');
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert('Erreur de communication avec le serveur.');
+
+            } finally {
+                deleteBtn.classList.remove('action-loading');
+                deleteBtn.disabled = false;
+                closeContextMenu();
+            }
+        });
+    }
+
+    updateTotal();
+
+});
 </script>
 
 </body>
-
 </html>

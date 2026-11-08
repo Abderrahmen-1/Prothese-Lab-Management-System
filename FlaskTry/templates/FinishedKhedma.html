@@ -4,395 +4,658 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta name="description" content="Marquer un travail de prothèse comme terminé - Système de gestion du laboratoire">
     <meta name="keywords" content="Prothèse, Laboratoire, Fin des travaux, Tâches, Terminé">
     <meta name="author" content="Équipe du laboratoire de prothèse">
+
     <title>Marquer le travail comme terminé - Tâches</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='FinishedKhedma.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-<!-- Animated Retourground -->
+
 <div class="animated-bg"></div>
 
 <div class="container">
-    <!-- En-tête -->
+
+    <!-- HEADER -->
     <header class="header">
         <div class="header-content">
+
             <div class="logo-section">
                 <div class="logo-icon">
                     <i class="fas fa-check-circle"></i>
                 </div>
+
                 <div class="logo-text">
                     <h1>Terminer le travail</h1>
                     <p>Marquer les travaux de prothèse comme terminés</p>
                 </div>
             </div>
+
             <nav class="header-nav">
                 <a href="/Khedma" class="nav-btn back-btn">
-                    <i class="fas fa-arrow-left"></i> Retour aux tâches
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Retour aux tâches</span>
                 </a>
             </nav>
+
         </div>
     </header>
 
-    <!-- Contenu principal -->
-    <div class="main-container">
-        <!-- Indicateur de progression -->
+
+    <!-- MAIN -->
+    <main class="main-container">
+
+        <!-- PROGRESS -->
         <div class="progress-container">
+
             <div class="progress-step active" id="step1">
                 <div class="step-number">1</div>
                 <div class="step-label">Choisir le type</div>
             </div>
-            <div class="progress-line"></div>
+
+            <div class="progress-line" id="progressLine"></div>
+
             <div class="progress-step" id="step2">
                 <div class="step-number">2</div>
                 <div class="step-label">Saisir les détails</div>
             </div>
+
             <div class="progress-line"></div>
+
             <div class="progress-step" id="step3">
-                <div class="step-number">3</div>
-                <div class="step-label">Terminer</div>
+                <div class="step-number">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="step-label">Validation</div>
             </div>
+
         </div>
 
-        <!-- Section du formulaire -->
-        <div class="form-wrapper">
-            <form action="/Finished" method="POST" class="form-main" id="mainForm">
+
+        <!-- FORM -->
+        <section class="form-wrapper">
+
+            <form action="/Finished"
+                  method="POST"
+                  class="form-main"
+                  id="mainForm"
+                  novalidate>
+
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <!-- Étape 1 : sélection du choix -->
+                <input type="hidden" id="Check" name="Choice" value="">
+
+
+                <!-- STEP 1 -->
                 <div class="form-step active-step" id="formStep1">
+
                     <div class="step-content">
+
                         <div class="step-header">
-                            <h2><i class="fas fa-list-check"></i> Quel type de travail avez-vous terminé ?</h2>
-                            <p>Sélectionnez si vous avez terminé un travail pour un patient ou reçu un travail d’un dentiste</p>
+                            <div class="section-icon">
+                                <i class="fas fa-list-check"></i>
+                            </div>
+
+                            <h2>Quel type de travail avez-vous terminé ?</h2>
+
+                            <p>
+                                Sélectionnez le type de travail que vous souhaitez marquer comme terminé.
+                            </p>
                         </div>
 
+
                         <div class="choice-buttons">
-                            <button type="button" class="choice-btn patient-choice" onclick="selectChoice('patient')">
+
+                            <button type="button"
+                                    class="choice-btn patient-choice"
+                                    onclick="selectChoice('patient')">
+
                                 <div class="choice-icon">
                                     <i class="fas fa-user"></i>
                                 </div>
+
                                 <div class="choice-text">
                                     <h3>Travail pour un patient</h3>
-                                    <p>Travail effectué directement pour un patient</p>
+                                    <p>Travail effectué directement pour un patient.</p>
                                 </div>
+
                                 <div class="choice-indicator">
                                     <i class="fas fa-chevron-right"></i>
                                 </div>
+
                             </button>
 
-                            <button type="button" class="choice-btn dentist-choice" onclick="selectChoice('dentist')">
-                                <div class="choice-icon">
+
+                            <button type="button"
+                                    class="choice-btn dentist-choice"
+                                    onclick="selectChoice('dentist')">
+
+                                <div class="choice-icon dentist-icon">
                                     <i class="fas fa-tooth"></i>
                                 </div>
+
                                 <div class="choice-text">
                                     <h3>Travail pour un dentiste</h3>
-                                    <p>Travail reçu sur prescription d’un dentiste</p>
+                                    <p>Travail reçu sur prescription d’un dentiste.</p>
                                 </div>
+
                                 <div class="choice-indicator">
                                     <i class="fas fa-chevron-right"></i>
                                 </div>
+
                             </button>
+
                         </div>
 
-                        <input type="hidden" id="Check" name="Choice"/>
                     </div>
                 </div>
 
-                <!-- Étape 2 : détails du patient -->
+
+                <!-- STEP 2 : PATIENT -->
                 <div class="form-step" id="formStep2Patient">
+
                     <div class="step-content">
+
                         <div class="step-header">
-                            <h2><i class="fas fa-user-check"></i> Travail pour un patient Details</h2>
-                            <p>Saisissez les informations du patient et les détails du travail</p>
+                            <div class="section-icon">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+
+                            <h2>Travail pour un patient</h2>
+
+                            <p>
+                                Saisissez l'identifiant du patient et celui du service terminé.
+                            </p>
                         </div>
 
+
                         <div class="form-group">
+
                             <label for="PatientID">
-                                <i class="fas fa-id-card"></i> ID du patient
+                                <i class="fas fa-id-card"></i>
+                                ID du patient
                             </label>
+
                             <input
-                                    type="text"
-                                    id="PatientID"
-                                    name="PatientID"
-                                    placeholder="Saisissez le numéro d’identification du patient"
-                                    class="form-input"
+                                type="text"
+                                id="PatientID"
+                                name="PatientID"
+                                class="form-input"
+                                placeholder="Numéro d’identification du patient"
+                                autocomplete="off"
                             >
-                            <p class="form-hint">Identifiant unique du patient</p>
+
+                            <p class="form-hint">
+                                Identifiant unique du patient.
+                            </p>
+
                         </div>
 
+
                         <div class="form-group">
+
                             <label for="PatientKhedmaName">
-                                <i class="fas fa-tools"></i> ID du service
+                                <i class="fas fa-tools"></i>
+                                ID du service
                             </label>
+
                             <input
-                                    type="text"
-                                    id="PatientKhedmaName"
-                                    name="ServiceID"
-                                    placeholder="Vous pouvez le trouver dans la première colonne du tableau de l’historique du patient"
-                                    class="form-input"
+                                type="text"
+                                id="PatientKhedmaName"
+                                name="ServiceID"
+                                class="form-input"
+                                placeholder="ID du service dans l’historique du patient"
+                                autocomplete="off"
                             >
-                            <p class="form-hint">Type de service de prothèse terminé</p>
+
+                            <p class="form-hint">
+                                Vous trouverez cet identifiant dans la première colonne de l'historique du patient.
+                            </p>
+
                         </div>
 
+
                         <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" onclick="resetChoice()">
-                                <i class="fas fa-arrow-left"></i> Retour
+
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    onclick="resetChoice()">
+
+                                <i class="fas fa-arrow-left"></i>
+                                Retour
                             </button>
+
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-check"></i> Terminer le travail
+                                <i class="fas fa-check"></i>
+                                Terminer le travail
                             </button>
+
                         </div>
+
                     </div>
                 </div>
 
-                <!-- Étape 2 : détails du dentiste -->
+
+                <!-- STEP 2 : DENTIST -->
                 <div class="form-step" id="formStep2Dentist">
+
                     <div class="step-content">
+
                         <div class="step-header">
-                            <h2><i class="fas fa-tooth-check"></i> Travail pour un dentiste Details</h2>
-                            <p>Saisissez les informations du dentiste et du patient</p>
+                            <div class="section-icon dentist-section-icon">
+                                <i class="fas fa-tooth"></i>
+                            </div>
+
+                            <h2>Travail pour un dentiste</h2>
+
+                            <p>
+                                Saisissez l'identifiant du patient et celui du service concerné.
+                            </p>
                         </div>
 
+
                         <div class="form-group">
+
                             <label for="DPatientID">
-                                <i class="fas fa-id-card"></i> ID du patient
+                                <i class="fas fa-id-card"></i>
+                                ID du patient
                             </label>
+
                             <input
-                                    type="text"
-                                    id="DPatientID"
-                                    name="DPatientID"
-                                    placeholder="Saisissez le numéro unique du patient"
-                                    class="form-input"
+                                type="text"
+                                id="DPatientID"
+                                name="DPatientID"
+                                class="form-input"
+                                placeholder="Numéro unique du patient"
+                                autocomplete="off"
                             >
-                            <p class="form-hint">Identifiant du patient pour ce cas</p>
+
+                            <p class="form-hint">
+                                Identifiant du patient associé à ce travail.
+                            </p>
+
                         </div>
+
 
                         <div class="form-group">
+
                             <label for="DentistName">
-                                <i class="fas fa-user-md"></i> ID du service
+                                <i class="fas fa-tools"></i>
+                                ID du service
                             </label>
+
                             <input
-                                    type="text"
-                                    id="DentistName"
-                                    name="DServiceID"
-                                    placeholder="Vous pouvez le trouver dans la première colonne du tableau de l’historique du dentiste "
-                                    class="form-input"
+                                type="text"
+                                id="DentistName"
+                                name="DServiceID"
+                                class="form-input"
+                                placeholder="ID du service dans l’historique du dentiste"
+                                autocomplete="off"
                             >
+
+                            <p class="form-hint">
+                                Vous trouverez cet identifiant dans la première colonne de l'historique du dentiste.
+                            </p>
+
                         </div>
 
-
-                        <!--  <div class="form-group">
-                              <label for="DentistKhedmaName">
-                                  <i class="fas fa-tools"></i> Nom du service
-                              </label>
-                              <input
-                                  type="text"
-                                  id="DentistKhedmaName"
-                                  name="Name"
-                                  placeholder="ex. : Prothèse, Couronne, Bridge"
-                                  class="form-input"
-                              >
-                              <p class="form-hint">Type de service de prothèse terminé</p>
-                          </div> -->
 
                         <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" onclick="resetChoice()">
-                                <i class="fas fa-arrow-left"></i> Retour
+
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    onclick="resetChoice()">
+
+                                <i class="fas fa-arrow-left"></i>
+                                Retour
                             </button>
+
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-check"></i> Terminer le travail
+                                <i class="fas fa-check"></i>
+                                Terminer le travail
                             </button>
+
                         </div>
+
                     </div>
                 </div>
+
             </form>
 
-            <!-- Carte d’information -->
-            <div class="info-card">
-                <div class="info-icon">
-                    <i class="fas fa-lightbulb"></i>
-                </div>
-                <div class="info-content">
-                    <h3>💡 Conseils rapides</h3>
-                    <ul>
-                        <li>Assurez-vous que tous les travaux sont soigneusement contrôlés avant de les marquer comme terminés</li>
-                        <li>Vérifiez à nouveau les informations du patient et du dentiste pour garantir leur exactitude</li>
-                        <li>Indiquez les noms précis des services pour une meilleure tenue des dossiers</li>
-                        <li>La validation mettra automatiquement à jour le statut du travail</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        </section>
 
-        <!-- Messages d’alerte -->
+
+        <!-- INFORMATION CARD -->
+        <section class="info-card" id="infoCard">
+
+            <button type="button"
+                    class="info-toggle"
+                    id="infoToggle"
+                    aria-expanded="true"
+                    aria-controls="infoContent"
+                    onclick="toggleInfo()">
+
+                <span class="info-toggle-left">
+                    <span class="info-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </span>
+
+                    <span>
+                        <strong>Conseils rapides</strong>
+                        <small>Quelques recommandations utiles</small>
+                    </span>
+                </span>
+
+                <i class="fas fa-chevron-down info-chevron"></i>
+
+            </button>
+
+
+            <div class="info-content" id="infoContent">
+
+                <ul>
+                    <li>
+                        Assurez-vous que le travail a été soigneusement contrôlé avant de le marquer comme terminé.
+                    </li>
+
+                    <li>
+                        Vérifiez les identifiants du patient et du service.
+                    </li>
+
+                    <li>
+                        Utilisez l'ID exact du service affiché dans l'historique.
+                    </li>
+
+                    <li>
+                        La validation mettra automatiquement à jour le statut du travail.
+                    </li>
+                </ul>
+
+            </div>
+
+        </section>
+
+
+        <!-- SUCCESS MESSAGE -->
         {% if message %}
         <div class="alert-container">
-            <div class="alert alert-success fade-in">
+
+            <div class="alert alert-success">
+
                 <div class="alert-icon">
                     <i class="fas fa-check-circle"></i>
                 </div>
+
                 <div class="alert-content">
                     <h3>Opération réussie !</h3>
                     <p>{{ message }}</p>
                 </div>
-                <button class="alert-close" onclick="this.parentElement.parentElement.style.display='none'">
+
+                <button type="button"
+                        class="alert-close"
+                        aria-label="Fermer"
+                        onclick="this.closest('.alert-container').remove()">
+
                     <i class="fas fa-times"></i>
                 </button>
+
             </div>
+
         </div>
         {% endif %}
 
+
+        <!-- ERROR MESSAGE -->
         {% if error %}
         <div class="alert-container">
-            <div class="alert alert-danger fade-in">
+
+            <div class="alert alert-danger">
+
                 <div class="alert-icon">
                     <i class="fas fa-exclamation-circle"></i>
                 </div>
+
                 <div class="alert-content">
-                    <h3>Erreur !</h3>
+                    <h3>Une erreur est survenue</h3>
                     <p>{{ error }}</p>
                 </div>
-                <button class="alert-close" onclick="this.parentElement.parentElement.style.display='none'">
+
+                <button type="button"
+                        class="alert-close"
+                        aria-label="Fermer"
+                        onclick="this.closest('.alert-container').remove()">
+
                     <i class="fas fa-times"></i>
                 </button>
+
             </div>
+
         </div>
         {% endif %}
-    </div>
+
+    </main>
+
 </div>
 
+
 <script>
-    // Gestion de l’état du formulaire
     let currentChoice = null;
 
-    // Sélectionner le choix et afficher le formulaire correspondant
+
+    // ==========================================
+    // CHOIX DU TYPE DE TRAVAIL
+    // ==========================================
+
     function selectChoice(choice) {
+
         currentChoice = choice;
+
         document.getElementById('Check').value = choice;
 
-        // Masquer toutes les étapes
         document.getElementById('formStep1').classList.remove('active-step');
         document.getElementById('formStep2Patient').classList.remove('active-step');
         document.getElementById('formStep2Dentist').classList.remove('active-step');
 
-        // Mettre à jour la progression
         document.getElementById('step1').classList.remove('active');
         document.getElementById('step2').classList.add('active');
 
-        // Afficher le formulaire approprié
         if (choice === 'patient') {
+
             document.getElementById('formStep2Patient').classList.add('active-step');
+
             document.querySelector('.patient-choice').classList.add('selected');
             document.querySelector('.dentist-choice').classList.remove('selected');
-        } else if (choice === 'dentist') {
+
+        } else {
+
             document.getElementById('formStep2Dentist').classList.add('active-step');
+
             document.querySelector('.dentist-choice').classList.add('selected');
             document.querySelector('.patient-choice').classList.remove('selected');
+
         }
 
-        // Défilement fluide vers le formulaire
-        setTimeout(() => {
-            document.querySelector('.form-wrapper').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
+        scrollToForm();
     }
 
-    // Réinitialiser le choix et revenir à la sélection
+
+    // ==========================================
+    // RETOUR À L'ÉTAPE 1
+    // ==========================================
+
     function resetChoice() {
+
         currentChoice = null;
+
         document.getElementById('Check').value = '';
 
-        // Masquer toutes les étapes
         document.getElementById('formStep1').classList.add('active-step');
         document.getElementById('formStep2Patient').classList.remove('active-step');
         document.getElementById('formStep2Dentist').classList.remove('active-step');
 
-        // Réinitialiser la progression
         document.getElementById('step1').classList.add('active');
         document.getElementById('step2').classList.remove('active');
         document.getElementById('step3').classList.remove('active');
 
-        // Supprimer les états sélectionnés
         document.querySelector('.patient-choice').classList.remove('selected');
         document.querySelector('.dentist-choice').classList.remove('selected');
 
-        // Revenir en haut
-        document.querySelector('.progress-container').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('progressLine').classList.remove('completed');
+
+        document.querySelector('.progress-container').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
     }
 
-    // Ajouter un effet d’ondulation aux boutons
-    function createRipple(e) {
-        const button = e.currentTarget;
-        const ripple = document.createElement('span');
-        const rect = button.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
 
-        ripple.style.width = ripple.style.height = size + 'px';
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
-        ripple.classList.add('ripple');
+    // ==========================================
+    // DÉFILEMENT VERS LE FORMULAIRE
+    // ==========================================
 
-        button.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 600);
+    function scrollToForm() {
+
+        setTimeout(() => {
+
+            document.querySelector('.form-wrapper').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+
+        }, 120);
+
     }
 
-    // Ajouter l’effet d’ondulation aux boutons
-    document.querySelectorAll('.choice-btn, .btn').forEach(btn => {
-        btn.addEventListener('click', createRipple);
-    });
 
-    // Validation du formulaire
+    // ==========================================
+    // VALIDATION DU FORMULAIRE
+    // ==========================================
+
     document.getElementById('mainForm').addEventListener('submit', function(e) {
+
         const choice = document.getElementById('Check').value;
 
         if (!choice) {
+
             e.preventDefault();
-            alert('Veuillez sélectionner un type de travail');
+
+            alert('Veuillez sélectionner un type de travail.');
+
             return;
         }
 
+
         if (choice === 'patient') {
+
             const patientID = document.getElementById('PatientID').value.trim();
-            const khedmaName = document.getElementById('PatientKhedmaName').value.trim();
+            const serviceID = document.getElementById('PatientKhedmaName').value.trim();
 
-            if (!patientID || !khedmaName) {
+            if (!patientID || !serviceID) {
+
                 e.preventDefault();
-                alert('Veuillez remplir tous les champs du patient');
+
+                alert('Veuillez remplir tous les champs du patient.');
+
                 return;
             }
-        } else if (choice === 'dentist') {
-            const dentistName = document.getElementById('DentistName').value.trim();
+
+        }
+
+
+        if (choice === 'dentist') {
+
             const patientID = document.getElementById('DPatientID').value.trim();
-            const khedmaName = document.getElementById('DentistKhedmaName').value.trim();
+            const serviceID = document.getElementById('DentistName').value.trim();
 
-            if (!dentistName || !patientID || !khedmaName) {
+            if (!patientID || !serviceID) {
+
                 e.preventDefault();
-                alert('Veuillez remplir tous les champs du dentiste');
+
+                alert('Veuillez remplir tous les champs du dentiste.');
+
                 return;
             }
+
         }
+
     });
 
-    // Fermer automatiquement l’alerte après 5 secondes
-    window.addEventListener('load', () => {
-        const alert = document.querySelector('.alert');
-        if (alert) {
+
+    // ==========================================
+    // AFFICHER / MASQUER LES CONSEILS
+    // ==========================================
+
+    function toggleInfo() {
+
+        const card = document.getElementById('infoCard');
+        const button = document.getElementById('infoToggle');
+
+        const isOpen = card.classList.toggle('info-collapsed');
+
+        button.setAttribute('aria-expanded', String(!isOpen));
+
+    }
+
+
+    // ==========================================
+    // CONFORT DU CLAVIER SUR MOBILE
+    // ==========================================
+
+    document.querySelectorAll('.form-input').forEach(input => {
+
+        input.addEventListener('focus', function() {
+
             setTimeout(() => {
-                alert.style.animation = 'fadeOut 0.5s ease forwards';
-                setTimeout(() => alert.remove(), 500);
-            }, 5000);
-        }
+
+                this.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+
+            }, 250);
+
+        });
+
     });
+
+
+    // ==========================================
+    // FERMETURE AUTOMATIQUE DES ALERTES
+    // ==========================================
+
+    window.addEventListener('DOMContentLoaded', () => {
+
+        const alerts = document.querySelectorAll('.alert-container');
+
+        alerts.forEach(alertContainer => {
+
+            setTimeout(() => {
+
+                if (!alertContainer.isConnected) return;
+
+                alertContainer.classList.add('alert-hiding');
+
+                setTimeout(() => {
+                    alertContainer.remove();
+                }, 400);
+
+            }, 6000);
+
+        });
+
+    });
+
 </script>
 
 </body>
-
 </html>

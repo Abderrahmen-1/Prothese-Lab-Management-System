@@ -1,30 +1,36 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta name="description" content="Système de gestion des travaux payés Khalsa - Laboratoire de prothèse">
     <meta name="keywords" content="Khalsa, Travaux payés, Statut des paiements, Laboratoire de prothèse">
     <meta name="author" content="Équipe du laboratoire de prothèse">
+
     <title>Khalsa - Gestion des travaux payés</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='KhedmaKhalsa.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
 
-<!-- Arrière-plan animé -->
 <div class="animated-bg"></div>
 
 <div class="container">
 
-    <!-- En-tête -->
+    <!-- EN-TÊTE -->
     <header class="header">
+
         <div class="header-content">
 
             <div class="logo-section">
@@ -43,42 +49,41 @@
             <nav class="header-nav">
 
                 <a href="/Khedma" class="nav-btn back-btn">
-                    <i class="fas fa-arrow-left"></i> Retour au menu
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Retour au menu</span>
                 </a>
 
             </nav>
 
         </div>
+
     </header>
 
 
-    <!-- Contenu principal -->
-    <div class="main-wrapper">
+    <!-- CONTENU PRINCIPAL -->
+    <main class="main-wrapper">
 
-        <!-- Section du formulaire -->
         <div class="form-section">
 
-            <div class="form-container">
+            <!-- FORMULAIRE -->
+            <section class="form-container">
 
                 <div class="form-header">
 
                     <div class="form-title">
-
                         <i class="fas fa-filter"></i>
-
                         <h2>Rechercher des travaux payés</h2>
-
                     </div>
 
                     <p class="form-subtitle">
-                        Recherchez et gérez les travaux payés (Khalsa) par patient ou par dentiste
+                        Recherchez et gérez les travaux payés (Khalsa)
+                        par patient ou par dentiste.
                     </p>
 
                 </div>
 
 
-                <!-- Messages d'alerte -->
-
+                <!-- MESSAGE DE SUCCÈS -->
                 {% if message %}
 
                 <div class="alert-container">
@@ -88,17 +93,15 @@
                         <i class="fas fa-check-circle"></i>
 
                         <div class="alert-content">
-
                             <h3>Opération réussie</h3>
-
                             <p>{{ message }}</p>
-
                         </div>
 
-                        <button class="alert-close" onclick="this.parentElement.style.display='none'">
-
+                        <button type="button"
+                                class="alert-close"
+                                aria-label="Fermer le message"
+                                onclick="this.closest('.alert').remove()">
                             <i class="fas fa-times"></i>
-
                         </button>
 
                     </div>
@@ -108,28 +111,25 @@
                 {% endif %}
 
 
+                <!-- MESSAGE D'ERREUR -->
                 {% if error %}
 
                 <div class="alert-container">
 
-                    <div class="alert alert-error fade-in-slow">
+                    <div class="alert alert-error fade-in">
 
                         <i class="fas fa-exclamation-circle"></i>
 
                         <div class="alert-content">
-
                             <h3>Erreur</h3>
-
                             <p>{{ error }}</p>
-
                         </div>
 
-                        <button class="alert-close"
-                                type="button"
-                                onclick="this.parentElement.style.display='none'">
-
+                        <button type="button"
+                                class="alert-close"
+                                aria-label="Fermer le message"
+                                onclick="this.closest('.alert').remove()">
                             <i class="fas fa-times"></i>
-
                         </button>
 
                     </div>
@@ -139,41 +139,47 @@
                 {% endif %}
 
 
-                <form action="/Khalsa" method="POST" class="search-form">
+                <!-- FORMULAIRE DE RECHERCHE -->
+                <form action="/Khalsa"
+                      method="POST"
+                      class="search-form">
 
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <input type="hidden"
+                           name="csrf_token"
+                           value="{{ csrf_token }}">
 
-                    <!-- Sélection du type de recherche -->
 
+                    <!-- TYPE DE RECHERCHE -->
                     <div class="form-group">
 
                         <label for="Check" class="form-label">
-
                             <i class="fas fa-clipboard-list"></i>
-
                             Type de recherche
-
                         </label>
 
                         <div class="select-wrapper">
 
                             <select id="Check"
                                     name="Choice"
-                                    oninput="GetTheChoice()"
-                                    class="form-select">
+                                    class="form-select"
+                                    onchange="GetTheChoice()">
 
-                                <option value="">-- Sélectionnez le type de recherche --</option>
+                                <option value="">
+                                    -- Sélectionnez le type de recherche --
+                                </option>
 
-                                <option value="patient">Rechercher par patient</option>
+                                <option value="patient">
+                                    Rechercher par patient
+                                </option>
 
-                                <option value="dentist">Rechercher par dentiste</option>
+                                <option value="dentist">
+                                    Rechercher par dentiste
+                                </option>
 
                             </select>
 
                             <span class="select-arrow">
-
                                 <i class="fas fa-chevron-down"></i>
-
                             </span>
 
                         </div>
@@ -181,17 +187,21 @@
                     </div>
 
 
-                    <!-- Section de sélection du patient -->
-
+                    <!-- RECHERCHE PAR PATIENT -->
                     <div id="PatientChoice"
                          class="choice-section patient-section"
                          style="display: none;">
 
                         <div class="section-header">
 
-                            <i class="fas fa-user-injured"></i>
+                            <div class="section-icon">
+                                <i class="fas fa-user-injured"></i>
+                            </div>
 
-                            <h3>Informations du patient</h3>
+                            <div>
+                                <h3>Informations du patient</h3>
+                                <p>Renseignez les informations nécessaires.</p>
+                            </div>
 
                         </div>
 
@@ -199,20 +209,16 @@
                         <div class="form-group">
 
                             <label for="PatientID" class="form-label">
-
                                 <i class="fas fa-id-card"></i>
-
                                 ID du patient
-
                             </label>
 
-                            <input
-                                    type="text"
-                                    id="PatientID"
-                                    name="PatientID"
-                                    class="form-input"
-                                    placeholder="Saisissez l'ID du patient"
-                            >
+                            <input type="text"
+                                   id="PatientID"
+                                   name="PatientID"
+                                   class="form-input"
+                                   placeholder="Saisissez l'ID du patient"
+                                   autocomplete="off">
 
                         </div>
 
@@ -220,37 +226,42 @@
                         <div class="form-group">
 
                             <label for="PatientKhedma" class="form-label">
-
                                 <i class="fas fa-tools"></i>
-
                                 Numéro du service (ID)
-
                             </label>
 
-                            <input
-                                    type="text"
-                                    id="PatientKhedma"
-                                    name="ServiceID"
-                                    class="form-input"
-                                    placeholder="Vous le trouverez dans la première colonne du tableau de l'historique des patients"
-                            >
+                            <input type="text"
+                                   id="PatientKhedma"
+                                   name="ServiceID"
+                                   class="form-input"
+                                   placeholder="ID dans l'historique des patients"
+                                   autocomplete="off">
+
+                            <small class="field-hint">
+                                Vous trouverez cet ID dans la première colonne
+                                du tableau de l'historique des patients.
+                            </small>
 
                         </div>
 
                     </div>
 
 
-                    <!-- Section de sélection du dentiste -->
-
+                    <!-- RECHERCHE PAR DENTISTE -->
                     <div id="DentistChoice"
                          class="choice-section dentist-section"
                          style="display: none;">
 
                         <div class="section-header">
 
-                            <i class="fas fa-tooth"></i>
+                            <div class="section-icon">
+                                <i class="fas fa-tooth"></i>
+                            </div>
 
-                            <h3>Informations du dentiste</h3>
+                            <div>
+                                <h3>Informations du dentiste</h3>
+                                <p>Renseignez les informations nécessaires.</p>
+                            </div>
 
                         </div>
 
@@ -258,20 +269,16 @@
                         <div class="form-group">
 
                             <label for="DentistName" class="form-label">
-
                                 <i class="fas fa-user-nurse"></i>
-
                                 Nom du dentiste
-
                             </label>
 
-                            <input
-                                    type="text"
-                                    id="DentistName"
-                                    name="Dentist"
-                                    class="form-input"
-                                    placeholder="Saisissez le nom du dentiste"
-                            >
+                            <input type="text"
+                                   id="DentistName"
+                                   name="Dentist"
+                                   class="form-input"
+                                   placeholder="Saisissez le nom du dentiste"
+                                   autocomplete="off">
 
                         </div>
 
@@ -279,20 +286,16 @@
                         <div class="form-group">
 
                             <label for="DentistPatientID" class="form-label">
-
                                 <i class="fas fa-id-card"></i>
-
                                 ID du patient
-
                             </label>
 
-                            <input
-                                    type="text"
-                                    id="DentistPatientID"
-                                    name="DPatientID"
-                                    class="form-input"
-                                    placeholder="Saisissez le numéro unique du patient"
-                            >
+                            <input type="text"
+                                   id="DentistPatientID"
+                                   name="DPatientID"
+                                   class="form-input"
+                                   placeholder="Numéro unique du patient"
+                                   autocomplete="off">
 
                         </div>
 
@@ -300,28 +303,28 @@
                         <div class="form-group">
 
                             <label for="DentistKhedma" class="form-label">
-
                                 <i class="fas fa-tools"></i>
-
                                 Numéro du service (ID)
-
                             </label>
 
-                            <input
-                                    type="text"
-                                    id="DentistKhedma"
-                                    name="DServiceID"
-                                    class="form-input"
-                                    placeholder="Vous le trouverez dans la première colonne du tableau de l'historique des dentistes"
-                            >
+                            <input type="text"
+                                   id="DentistKhedma"
+                                   name="DServiceID"
+                                   class="form-input"
+                                   placeholder="ID dans l'historique des dentistes"
+                                   autocomplete="off">
+
+                            <small class="field-hint">
+                                Vous trouverez cet ID dans la première colonne
+                                du tableau de l'historique des dentistes.
+                            </small>
 
                         </div>
 
                     </div>
 
 
-                    <!-- Bouton de recherche -->
-
+                    <!-- BOUTON DE RECHERCHE -->
                     <button type="submit" class="submit-btn">
 
                         <i class="fas fa-search"></i>
@@ -332,211 +335,200 @@
 
                 </form>
 
-            </div>
+            </section>
 
 
-            <!-- Cartes d'information -->
+            <!-- INFORMATIONS COMPLÉMENTAIRES -->
+            <aside class="info-area">
 
-            <div class="info-cards">
+                <button type="button"
+                        class="info-toggle"
+                        id="infoToggle"
+                        aria-expanded="false"
+                        aria-controls="infoCards"
+                        onclick="toggleInfoCards()">
 
-                <div class="info-card">
+                    <span class="info-toggle-label">
+                        <i class="fas fa-circle-info"></i>
+                        Informations et conseils
+                    </span>
 
-                    <div class="info-icon khalsa">
+                    <i class="fas fa-chevron-down toggle-icon"></i>
 
-                        <i class="fas fa-credit-card"></i>
+                </button>
 
-                    </div>
 
-                    <h3>Qu'est-ce que Khalsa ?</h3>
+                <div class="info-cards" id="infoCards" hidden>
 
-                    <p>
-                        Khalsa désigne les travaux qui ont été entièrement payés.
-                        Suivez et gérez ici toutes vos transactions de paiement terminées.
-                    </p>
+                    <article class="info-card">
+
+                        <div class="info-icon khalsa">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+
+                        <h3>Qu'est-ce que Khalsa ?</h3>
+
+                        <p>
+                            Khalsa désigne les travaux qui ont été entièrement payés.
+                            Suivez et gérez ici toutes vos transactions de paiement terminées.
+                        </p>
+
+                    </article>
+
+
+                    <article class="info-card">
+
+                        <div class="info-icon tips">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+
+                        <h3>Conseils pratiques</h3>
+
+                        <ul class="tips-list">
+
+                            <li>
+                                Sélectionnez Patient ou Dentiste pour affiner votre recherche.
+                            </li>
+
+                            <li>
+                                Saisissez l'ID du patient pour une recherche rapide.
+                            </li>
+
+                            <li>
+                                Ajoutez le numéro du service pour obtenir des résultats plus précis.
+                            </li>
+
+                        </ul>
+
+                    </article>
 
                 </div>
 
-
-                <div class="info-card">
-
-                    <div class="info-icon tips">
-
-                        <i class="fas fa-lightbulb"></i>
-
-                    </div>
-
-                    <h3>Conseils pratiques</h3>
-
-                    <ul class="tips-list">
-
-                        <li>Sélectionnez Patient ou Dentiste pour affiner votre recherche</li>
-
-                        <li>Saisissez l'ID du patient pour une recherche rapide</li>
-
-                        <li>Ajoutez le nom du service pour obtenir des résultats plus précis</li>
-
-                    </ul>
-
-                </div>
-
-            </div>
+            </aside>
 
         </div>
 
-    </div>
+    </main>
 
 
-    <!-- Section des résultats (si applicable) -->
-
-    <div class="results-section">
+    <!-- SECTION DES RÉSULTATS -->
+    <section class="results-section">
 
         <div class="results-message">
 
-            <i class="fas fa-info-circle"></i>
+            <div class="results-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
 
-            <p>Les résultats apparaîtront ici après votre recherche</p>
+            <div>
+                <h3>En attente de recherche</h3>
+                <p>
+                    Les résultats apparaîtront ici après votre recherche.
+                </p>
+            </div>
 
         </div>
 
-    </div>
+    </section>
 
 </div>
 
 
 <script>
 
-    // Gérer la sélection du type de recherche
-
+    // Gérer le choix du type de recherche
     function GetTheChoice() {
 
-        const choice =
-            document.getElementById("Check").value.toLowerCase();
+        const choice = document.getElementById("Check").value.toLowerCase();
 
-        const dentistSection =
-            document.getElementById("DentistChoice");
-
-        const patientSection =
-            document.getElementById("PatientChoice");
-
+        const dentistSection = document.getElementById("DentistChoice");
+        const patientSection = document.getElementById("PatientChoice");
 
         // Masquer les deux sections
-
         dentistSection.style.display = "none";
-
         patientSection.style.display = "none";
 
+        dentistSection.classList.remove("section-show");
+        patientSection.classList.remove("section-show");
 
-        // Afficher la section sélectionnée avec une animation
-
+        // Afficher la section sélectionnée
         if (choice === "patient") {
 
             patientSection.style.display = "block";
-
-            patientSection.classList.add('section-show');
+            patientSection.classList.add("section-show");
 
         } else if (choice === "dentist") {
 
             dentistSection.style.display = "block";
-
-            dentistSection.classList.add('section-show');
+            dentistSection.classList.add("section-show");
 
         }
 
     }
 
 
-    // Effet d'ondulation pour les boutons
+    // Afficher / masquer les informations complémentaires
+    function toggleInfoCards() {
 
-    function createRipple(e) {
+        const cards = document.getElementById("infoCards");
+        const button = document.getElementById("infoToggle");
+        const icon = button.querySelector(".toggle-icon");
 
-        const button = e.currentTarget;
+        const isExpanded = button.getAttribute("aria-expanded") === "true";
 
-        const ripple = document.createElement('span');
+        button.setAttribute("aria-expanded", String(!isExpanded));
+        cards.hidden = isExpanded;
 
-        const rect = button.getBoundingClientRect();
-
-        const size = Math.max(rect.width, rect.height);
-
-        const x =
-            e.clientX - rect.left - size / 2;
-
-        const y =
-            e.clientY - rect.top - size / 2;
-
-
-        ripple.style.width =
-            ripple.style.height = size + 'px';
-
-        ripple.style.left = x + 'px';
-
-        ripple.style.top = y + 'px';
-
-        ripple.classList.add('ripple');
-
-
-        button.appendChild(ripple);
-
-        setTimeout(() => ripple.remove(), 600);
+        icon.classList.toggle("fa-chevron-down", isExpanded);
+        icon.classList.toggle("fa-chevron-up", !isExpanded);
 
     }
 
 
-    // Appliquer l'effet d'ondulation aux boutons
+    // Améliorer le comportement des champs sur téléphone
+    document.querySelectorAll(".form-input, .form-select").forEach(input => {
 
-    document.querySelector('.submit-btn')?.addEventListener('click', function(e) {
+        input.addEventListener("focus", function () {
 
-        createRipple(e);
+            this.closest(".form-group")?.classList.add("focused");
 
-    });
+            // Laisser le temps au clavier mobile de s'afficher
+            setTimeout(() => {
 
+                this.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
 
-    document.querySelector('.nav-btn')?.addEventListener('click', function(e) {
+            }, 250);
 
-        createRipple(e);
+        });
+
+        input.addEventListener("blur", function () {
+
+            this.closest(".form-group")?.classList.remove("focused");
+
+        });
 
     });
 
 
     // Fermer automatiquement les alertes après 5 secondes
-
-    document.querySelectorAll('.alert').forEach(alert => {
+    document.querySelectorAll(".alert").forEach(alert => {
 
         setTimeout(() => {
 
-            alert.style.animation =
-                'fadeOut 0.5s ease forwards';
+            if (!alert.isConnected) return;
 
-            setTimeout(() => alert.remove(), 500);
+            alert.classList.add("alert-hiding");
+
+            setTimeout(() => alert.remove(), 450);
 
         }, 5000);
 
     });
 
-
-    // Validation des champs du formulaire
-
-    const inputs =
-        document.querySelectorAll('.form-input');
-
-    inputs.forEach(input => {
-
-        input.addEventListener('focus', function() {
-
-            this.parentElement.classList.add('focused');
-
-        });
-
-
-        input.addEventListener('blur', function() {
-
-            this.parentElement.classList.remove('focused');
-
-        });
-
-    });
-
 </script>
-
 
 </body>
 </html>
