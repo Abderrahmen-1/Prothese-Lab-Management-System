@@ -74,6 +74,32 @@
             transition: opacity .18s ease;
         }
 
+        .patient-card-top .status-select {
+            max-width: 155px;
+            min-width: 125px;
+            padding: 8px 30px 8px 10px;
+            border: 1px solid #bfdbfe;
+            border-radius: 9px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font: inherit;
+            font-size: .85rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .patient-card-top .status-select:disabled {
+            opacity: .65;
+            cursor: wait;
+        }
+
+        @media (max-width: 520px) {
+            .patient-card-top .status-select {
+                width: 100%;
+                max-width: none;
+            }
+        }
+
         .ripple {
             position: absolute;
             border-radius: 50%;
@@ -345,21 +371,78 @@
                                 </div>
                             </div>
 
-                            {% if row[14] == 'finished' %}
+                            <!-- EDITABLE STATUS ONLY IN MAIN TABLE -->
+                            {% if editable_status and row[14] not in ['finished', 'prothesist'] %}
+
+                            <select id="dentist-status-{{ loop.index }}"
+                                    class="status-select"
+                                    data-patient-number="{{ row[5] }}"
+                                    data-dentist-name="{{ row[2] }}"
+                                    aria-label="Modifier le statut du service #{{ row[0] }}">
+
+                                {% if row[14] == 'in process' %}
+                                <option value="in process" selected>En cours</option>
+                                {% else %}
+                                <option value="in process">En cours</option>
+                                {% endif %}
+
+                                {% if row[14] == 'prothesist' %}
+                                <option value="prothesist" selected>Prothésiste</option>
+                                {% else %}
+                                <option value="prothesist">Prothésiste</option>
+                                {% endif %}
+
+                                {% if row[14] == 'montage' %}
+                                <option value="montage" selected>Montage</option>
+                                {% else %}
+                                <option value="montage">Montage</option>
+                                {% endif %}
+
+                                {% if row[14] == 'esseyage' %}
+                                <option value="esseyage" selected>Essayage</option>
+                                {% else %}
+                                <option value="esseyage">Essayage</option>
+                                {% endif %}
+
+                            </select>
+
+                            {% elif row[14] == 'finished' %}
+
                             <span class="patient-status status-finished">
                                 <i class="fas fa-check-circle"></i>
                                 Terminé
                             </span>
+
                             {% elif row[14] == 'in process' %}
-                            <span class="patient-status status-progress">En cours</span>
+
+                            <span class="patient-status status-progress">
+                                En cours
+                            </span>
+
                             {% elif row[14] == 'prothesist' %}
-                            <span class="patient-status status-prothesist">Prothésiste</span>
+
+                            <span class="patient-status status-prothesist">
+                                Prothésiste
+                            </span>
+
                             {% elif row[14] == 'montage' %}
-                            <span class="patient-status status-montage">Montage</span>
+
+                            <span class="patient-status status-montage">
+                                Montage
+                            </span>
+
                             {% elif row[14] == 'esseyage' %}
-                            <span class="patient-status status-tryin">Essayage</span>
+
+                            <span class="patient-status status-tryin">
+                                Essayage
+                            </span>
+
                             {% else %}
-                            <span class="patient-status">{{ row[14] }}</span>
+
+                            <span class="patient-status">
+                                {{ row[14] }}
+                            </span>
+
                             {% endif %}
 
                         </div>
@@ -436,60 +519,6 @@
                             </div>
 
                         </div>
-
-
-                        <!-- STATUS SELECTOR -->
-                        {% if editable_status and row[14] != 'finished' %}
-
-                        <div class="patient-card-footer">
-
-                            <label for="dentist-status-{{ loop.index }}">
-                                Modifier le statut
-                            </label>
-
-                            <select id="dentist-status-{{ loop.index }}"
-                                    class="status-select"
-                                    data-patient-number="{{ row[5] }}"
-                                    data-dentist-name="{{ row[2] }}">
-
-                                {% if row[14] == 'in process' %}
-                                    <option value="in process" selected>En cours</option>
-                                {% else %}
-                                    <option value="in process">En cours</option>
-                                {% endif %}
-
-                                {% if row[14] == 'prothesist' %}
-                                    <option value="prothesist" selected>Prothésiste</option>
-                                {% else %}
-                                    <option value="prothesist">Prothésiste</option>
-                                {% endif %}
-
-                                {% if row[14] == 'montage' %}
-                                    <option value="montage" selected>Montage</option>
-                                {% else %}
-                                    <option value="montage">Montage</option>
-                                {% endif %}
-
-                                {% if row[14] == 'esseyage' %}
-                                    <option value="esseyage" selected>Essayage</option>
-                                {% else %}
-                                    <option value="esseyage">Essayage</option>
-                                {% endif %}
-
-                            </select>
-
-                        </div>
-
-                        {% elif row[14] == 'finished' %}
-
-                        <div class="patient-card-footer">
-                            <span>
-                                <i class="fas fa-check-circle"></i>
-                                Travail terminé
-                            </span>
-                        </div>
-
-                        {% endif %}
 
                     </article>
 
@@ -715,13 +744,13 @@
 
                             <tbody>
                             {% for dentist, values in result.items() %}
-                                {% for row in values %}
-                                <tr class="table-row-animate">
-                                    {% for item in row %}
-                                    <td>{{ item }}</td>
-                                    {% endfor %}
-                                </tr>
+                            {% for row in values %}
+                            <tr class="table-row-animate">
+                                {% for item in row %}
+                                <td>{{ item }}</td>
                                 {% endfor %}
+                            </tr>
+                            {% endfor %}
                             {% endfor %}
                             </tbody>
                         </table>
@@ -759,393 +788,393 @@
 
 
 <script>
-(() => {
-    "use strict";
+    (() => {
+        "use strict";
 
-    const TABLES_ID = "tables-container";
-    const SEARCH_ID = "search-bar-container";
+        const TABLES_ID = "tables-container";
+        const SEARCH_ID = "search-bar-container";
 
-    function showStatus(message, type = "error") {
-        const box = document.getElementById("statusMessage");
-        if (!box) return;
+        function showStatus(message, type = "error") {
+            const box = document.getElementById("statusMessage");
+            if (!box) return;
 
-        box.textContent = message;
-        box.className = `status-message ${type}`;
-    }
-
-
-    function initializeStatusSelects(root = document) {
-        root.querySelectorAll(".status-select").forEach(select => {
-            select.dataset.previousStatus = select.value;
-        });
-    }
-
-
-    function closeMobileSidebar() {
-        if (!window.matchMedia("(max-width: 850px)").matches) return;
-
-        const menu = document.getElementById("patientSidebarMenu");
-        const toggle = document.getElementById("sidebarToggle");
-
-        if (menu) {
-            menu.classList.remove("is-open");
+            box.textContent = message;
+            box.className = `status-message ${type}`;
         }
 
-        if (toggle) {
-            toggle.setAttribute("aria-expanded", "false");
-        }
-    }
 
-
-    function addRipple(element, event) {
-        if (!element || !element.getBoundingClientRect) return;
-
-        const rect = element.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-
-        const ripple = document.createElement("span");
-        ripple.className = "ripple";
-        ripple.style.width = `${size}px`;
-        ripple.style.height = `${size}px`;
-
-        ripple.style.left =
-            `${(event.clientX || rect.left + rect.width / 2) - rect.left - size / 2}px`;
-
-        ripple.style.top =
-            `${(event.clientY || rect.top + rect.height / 2) - rect.top - size / 2}px`;
-
-        element.appendChild(ripple);
-
-        window.setTimeout(() => ripple.remove(), 600);
-    }
-
-
-    async function loadDentistPage(url, options = {}) {
-
-        const tablesContainer = document.getElementById(TABLES_ID);
-        const searchContainer = document.getElementById(SEARCH_ID);
-
-        if (!tablesContainer || !searchContainer) {
-            window.location.href = url;
-            return;
-        }
-
-        const formData = options.formData || null;
-        const method = formData ? "POST" : "GET";
-
-        tablesContainer.style.opacity = "0.45";
-
-        try {
-
-            const response = await fetch(url, {
-                method: method,
-                body: formData || undefined,
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest"
-                }
+        function initializeStatusSelects(root = document) {
+            root.querySelectorAll(".status-select").forEach(select => {
+                select.dataset.previousStatus = select.value;
             });
+        }
 
-            if (!response.ok) {
-                throw new Error(`Erreur HTTP ${response.status}`);
+
+        function closeMobileSidebar() {
+            if (!window.matchMedia("(max-width: 850px)").matches) return;
+
+            const menu = document.getElementById("patientSidebarMenu");
+            const toggle = document.getElementById("sidebarToggle");
+
+            if (menu) {
+                menu.classList.remove("is-open");
             }
 
-            const html = await response.text();
+            if (toggle) {
+                toggle.setAttribute("aria-expanded", "false");
+            }
+        }
 
-            const parsed = new DOMParser().parseFromString(
-                html,
-                "text/html"
-            );
 
-            const newTables = parsed.getElementById(TABLES_ID);
-            const newSearch = parsed.getElementById(SEARCH_ID);
+        function addRipple(element, event) {
+            if (!element || !element.getBoundingClientRect) return;
 
-            // If the Flask response does not contain the expected containers,
-            // use normal navigation instead of displaying broken content.
-            if (!newTables) {
-                window.location.href = response.url || url;
+            const rect = element.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+
+            const ripple = document.createElement("span");
+            ripple.className = "ripple";
+            ripple.style.width = `${size}px`;
+            ripple.style.height = `${size}px`;
+
+            ripple.style.left =
+                `${(event.clientX || rect.left + rect.width / 2) - rect.left - size / 2}px`;
+
+            ripple.style.top =
+                `${(event.clientY || rect.top + rect.height / 2) - rect.top - size / 2}px`;
+
+            element.appendChild(ripple);
+
+            window.setTimeout(() => ripple.remove(), 600);
+        }
+
+
+        async function loadDentistPage(url, options = {}) {
+
+            const tablesContainer = document.getElementById(TABLES_ID);
+            const searchContainer = document.getElementById(SEARCH_ID);
+
+            if (!tablesContainer || !searchContainer) {
+                window.location.href = url;
                 return;
             }
 
-            tablesContainer.innerHTML = newTables.innerHTML;
+            const formData = options.formData || null;
+            const method = formData ? "POST" : "GET";
 
-            searchContainer.innerHTML = newSearch
-                ? newSearch.innerHTML
-                : "";
+            tablesContainer.style.opacity = "0.45";
 
-            initializeStatusSelects(tablesContainer);
+            try {
 
-            if (options.pushState !== false) {
-                window.history.pushState({}, "", url);
+                const response = await fetch(url, {
+                    method: method,
+                    body: formData || undefined,
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP ${response.status}`);
+                }
+
+                const html = await response.text();
+
+                const parsed = new DOMParser().parseFromString(
+                    html,
+                    "text/html"
+                );
+
+                const newTables = parsed.getElementById(TABLES_ID);
+                const newSearch = parsed.getElementById(SEARCH_ID);
+
+                // If the Flask response does not contain the expected containers,
+                // use normal navigation instead of displaying broken content.
+                if (!newTables) {
+                    window.location.href = response.url || url;
+                    return;
+                }
+
+                tablesContainer.innerHTML = newTables.innerHTML;
+
+                searchContainer.innerHTML = newSearch
+                    ? newSearch.innerHTML
+                    : "";
+
+                initializeStatusSelects(tablesContainer);
+
+                if (options.pushState !== false) {
+                    window.history.pushState({}, "", url);
+                }
+
+                closeMobileSidebar();
+
+                tablesContainer.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            } catch (error) {
+
+                console.error("Erreur de navigation DentistHub :", error);
+
+                showStatus(
+                    error.message || "Impossible de charger les données.",
+                    "error"
+                );
+
+            } finally {
+                tablesContainer.style.opacity = "1";
+            }
+        }
+
+
+        /* ==========================================
+           DELEGATED CLICK HANDLER
+           Works after AJAX content replacement.
+        ========================================== */
+
+        document.addEventListener("click", event => {
+
+            // SIDEBAR TOGGLE
+            const toggle = event.target.closest("#sidebarToggle");
+
+            if (toggle) {
+
+                const menu = document.getElementById("patientSidebarMenu");
+
+                if (!menu) return;
+
+                const opening =
+                    toggle.getAttribute("aria-expanded") !== "true";
+
+                toggle.setAttribute("aria-expanded", String(opening));
+
+                menu.classList.toggle("is-open", opening);
+
+                return;
             }
 
-            closeMobileSidebar();
 
-            tablesContainer.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
+            // AJAX FILTER LINKS
+            const ajaxLink = event.target.closest("a.ajax-link");
 
-        } catch (error) {
+            if (ajaxLink) {
 
-            console.error("Erreur de navigation DentistHub :", error);
+                event.preventDefault();
 
-            showStatus(
-                error.message || "Impossible de charger les données.",
-                "error"
+                const url = ajaxLink.getAttribute("href");
+
+                if (!url || url === "#") return;
+
+                addRipple(ajaxLink, event);
+
+                loadDentistPage(url);
+
+                return;
+            }
+
+
+            // RIPPLE EFFECT FOR OTHER LINKS
+            const menuLink = event.target.closest(".menu-item, .nav-btn");
+
+            if (menuLink) {
+                addRipple(menuLink, event);
+            }
+
+
+            // CLOSE MOBILE SIDEBAR AFTER NORMAL NAVIGATION
+            if (event.target.closest("a.menu-item") && !ajaxLink) {
+                closeMobileSidebar();
+            }
+
+        });
+
+
+        /* ==========================================
+           DYNAMIC SEARCH
+        ========================================== */
+
+        document.addEventListener("input", event => {
+
+            if (event.target.id !== "searchInput") return;
+
+            const value = event.target.value.toLocaleLowerCase().trim();
+
+            const cards = document.querySelectorAll(
+                `#${TABLES_ID} .patient-card[data-search]`
             );
 
-        } finally {
-            tablesContainer.style.opacity = "1";
-        }
-    }
+            let visible = 0;
+
+            cards.forEach(card => {
+
+                const matches = (card.dataset.search || "")
+                    .toLocaleLowerCase()
+                    .includes(value);
+
+                card.style.display = matches ? "" : "none";
+
+                if (matches) {
+                    visible++;
+                }
+
+            });
+
+            const counter = document.querySelector(
+                `#${TABLES_ID} .patient-section-header .result-count`
+            );
+
+            if (counter) {
+                counter.textContent = `${visible} enregistrements`;
+            }
+
+        });
 
 
-    /* ==========================================
-       DELEGATED CLICK HANDLER
-       Works after AJAX content replacement.
-    ========================================== */
+        /* ==========================================
+           SEARCH FORM SUBMISSION
+           Sends the search to the existing Flask route.
+        ========================================== */
 
-    document.addEventListener("click", event => {
+        document.addEventListener("submit", event => {
 
-        // SIDEBAR TOGGLE
-        const toggle = event.target.closest("#sidebarToggle");
-
-        if (toggle) {
-
-            const menu = document.getElementById("patientSidebarMenu");
-
-            if (!menu) return;
-
-            const opening =
-                toggle.getAttribute("aria-expanded") !== "true";
-
-            toggle.setAttribute("aria-expanded", String(opening));
-
-            menu.classList.toggle("is-open", opening);
-
-            return;
-        }
-
-
-        // AJAX FILTER LINKS
-        const ajaxLink = event.target.closest("a.ajax-link");
-
-        if (ajaxLink) {
+            if (event.target.id !== "search-form") return;
 
             event.preventDefault();
 
-            const url = ajaxLink.getAttribute("href");
+            const form = event.target;
 
-            if (!url || url === "#") return;
+            loadDentistPage(form.action, {
+                formData: new FormData(form)
+            });
 
-            addRipple(ajaxLink, event);
-
-            loadDentistPage(url);
-
-            return;
-        }
+        });
 
 
-        // RIPPLE EFFECT FOR OTHER LINKS
-        const menuLink = event.target.closest(".menu-item, .nav-btn");
+        /* ==========================================
+           UPDATE DENTIST STATUS
+        ========================================== */
 
-        if (menuLink) {
-            addRipple(menuLink, event);
-        }
+        document.addEventListener("change", async event => {
+
+            const select = event.target;
+
+            if (!select.classList.contains("status-select")) return;
+
+            const previousStatus =
+                select.dataset.previousStatus || select.value;
+
+            const patientNumber = select.dataset.patientNumber;
+            const dentistName = select.dataset.dentistName;
+            const newStatus = select.value;
 
 
-        // CLOSE MOBILE SIDEBAR AFTER NORMAL NAVIGATION
-        if (event.target.closest("a.menu-item") && !ajaxLink) {
-            closeMobileSidebar();
-        }
+            if (!patientNumber || !dentistName) {
 
-    });
+                select.value = previousStatus;
+
+                showStatus(
+                    "Informations du dentiste ou du patient manquantes.",
+                    "error"
+                );
+
+                return;
+            }
 
 
-    /* ==========================================
-       DYNAMIC SEARCH
-    ========================================== */
+            select.disabled = true;
 
-    document.addEventListener("input", event => {
+            try {
 
-        if (event.target.id !== "searchInput") return;
+                const response = await fetch(
+                    "/dentists/UpdateDentistStatus",
+                    {
+                        method: "POST",
 
-        const value = event.target.value.toLocaleLowerCase().trim();
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-Requested-With": "XMLHttpRequest"
+                        },
 
-        const cards = document.querySelectorAll(
-            `#${TABLES_ID} .patient-card[data-search]`
-        );
+                        body: JSON.stringify({
+                            patient_number: patientNumber,
+                            status: newStatus,
+                            dentist_name: dentistName
+                        })
+                    }
+                );
 
-        let visible = 0;
 
-        cards.forEach(card => {
+                const contentType =
+                    response.headers.get("content-type") || "";
 
-            const matches = (card.dataset.search || "")
-                .toLocaleLowerCase()
-                .includes(value);
+                const data = contentType.includes("application/json")
+                    ? await response.json()
+                    : {};
 
-            card.style.display = matches ? "" : "none";
 
-            if (matches) {
-                visible++;
+                if (!response.ok || data.success === false) {
+
+                    throw new Error(
+                        data.message ||
+                        `Échec de la mise à jour (HTTP ${response.status})`
+                    );
+
+                }
+
+
+                select.dataset.previousStatus = newStatus;
+
+                showStatus(
+                    data.message || "Statut modifié avec succès.",
+                    "success"
+                );
+
+
+            } catch (error) {
+
+                select.value = previousStatus;
+
+                showStatus(
+                    `Erreur : ${error.message}`,
+                    "error"
+                );
+
+                console.error(
+                    "Erreur de mise à jour du statut :",
+                    error
+                );
+
+            } finally {
+
+                select.disabled = false;
+
             }
 
         });
 
-        const counter = document.querySelector(
-            `#${TABLES_ID} .patient-section-header .result-count`
-        );
 
-        if (counter) {
-            counter.textContent = `${visible} enregistrements`;
-        }
+        /* ==========================================
+           BROWSER BACK / FORWARD
+        ========================================== */
 
-    });
+        window.addEventListener("popstate", () => {
 
-
-    /* ==========================================
-       SEARCH FORM SUBMISSION
-       Sends the search to the existing Flask route.
-    ========================================== */
-
-    document.addEventListener("submit", event => {
-
-        if (event.target.id !== "search-form") return;
-
-        event.preventDefault();
-
-        const form = event.target;
-
-        loadDentistPage(form.action, {
-            formData: new FormData(form)
-        });
-
-    });
-
-
-    /* ==========================================
-       UPDATE DENTIST STATUS
-    ========================================== */
-
-    document.addEventListener("change", async event => {
-
-        const select = event.target;
-
-        if (!select.classList.contains("status-select")) return;
-
-        const previousStatus =
-            select.dataset.previousStatus || select.value;
-
-        const patientNumber = select.dataset.patientNumber;
-        const dentistName = select.dataset.dentistName;
-        const newStatus = select.value;
-
-
-        if (!patientNumber || !dentistName) {
-
-            select.value = previousStatus;
-
-            showStatus(
-                "Informations du dentiste ou du patient manquantes.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        select.disabled = true;
-
-        try {
-
-            const response = await fetch(
-                "/dentists/UpdateDentistStatus",
+            loadDentistPage(
+                window.location.pathname + window.location.search,
                 {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-Requested-With": "XMLHttpRequest"
-                    },
-
-                    body: JSON.stringify({
-                        patient_number: patientNumber,
-                        status: newStatus,
-                        dentist_name: dentistName
-                    })
+                    pushState: false
                 }
             );
 
-
-            const contentType =
-                response.headers.get("content-type") || "";
-
-            const data = contentType.includes("application/json")
-                ? await response.json()
-                : {};
+        });
 
 
-            if (!response.ok || data.success === false) {
+        // Initialize status values when the page first loads.
+        initializeStatusSelects();
 
-                throw new Error(
-                    data.message ||
-                    `Échec de la mise à jour (HTTP ${response.status})`
-                );
-
-            }
-
-
-            select.dataset.previousStatus = newStatus;
-
-            showStatus(
-                data.message || "Statut modifié avec succès.",
-                "success"
-            );
-
-
-        } catch (error) {
-
-            select.value = previousStatus;
-
-            showStatus(
-                `Erreur : ${error.message}`,
-                "error"
-            );
-
-            console.error(
-                "Erreur de mise à jour du statut :",
-                error
-            );
-
-        } finally {
-
-            select.disabled = false;
-
-        }
-
-    });
-
-
-    /* ==========================================
-       BROWSER BACK / FORWARD
-    ========================================== */
-
-    window.addEventListener("popstate", () => {
-
-        loadDentistPage(
-            window.location.pathname + window.location.search,
-            {
-                pushState: false
-            }
-        );
-
-    });
-
-
-    // Initialize status values when the page first loads.
-    initializeStatusSelects();
-
-})();
+    })();
 </script>
 
 </body>

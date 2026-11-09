@@ -1,541 +1,689 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-          content="Visualisation professionnelle de l'historique des prothésistes pour la gestion d'un laboratoire de prothèse">
-    <meta name="keywords" content="Prothésiste, Historique, Dossiers, Laboratoire, Prothèse, Khedma">
-    <meta name="author" content="Équipe du laboratoire de prothèse">
-    <title>Historique du prothésiste</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='ProthesistHistory.css') }}">
+    <meta name="description" content="Historique des prothésistes - Système de gestion du laboratoire de prothèse">
+    <title>Historique des prothésistes</title>
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap"
-          rel="stylesheet">
-    <!-- Icônes Font Awesome -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='ProthesistHistory.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
 
 <body>
-
-<!-- Arrière-plan animé -->
-<div class="animated-bg"></div>
-
 <div class="page-container">
-    <!-- En-tête -->
+
+    <!-- HEADER -->
     <header class="page-header">
-        <div class="header-background"></div>
-        <div class="header-content">
-            <div class="header-left">
-                <a href="/prothesists/ProAllkhedma" class="back-button">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Retour à la page des prothésistes</span>
+        <div class="header-left">
+            <div class="header-icon">
+                <i class="fas fa-clock-rotate-left"></i>
+            </div>
+            <div class="header-title">
+                <span class="page-label">GESTION DES PROTHÉSISTES</span>
+                <h1>Historique des prothésistes</h1>
+                <p>Consultez les anciens travaux et les dossiers réalisés au laboratoire.</p>
+            </div>
+        </div>
+
+        <a href="/prothesists/ProAllkhedma" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            <span>Retour aux prothésistes</span>
+        </a>
+    </header>
+
+    <main class="main-content">
+
+        <!-- SEARCH CARD -->
+        <section class="search-card">
+            <div class="section-heading">
+                <div class="section-icon">
+                    <i class="fas fa-magnifying-glass"></i>
+                </div>
+                <div>
+                    <h2>Rechercher dans l'historique</h2>
+                    <p>Recherchez par dentiste, prothésiste, patient, téléphone ou type de service.</p>
+                </div>
+            </div>
+
+            <div class="search-controls">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input
+                        type="search"
+                        id="searchInput"
+                        class="search-input"
+                        placeholder="Nom, téléphone, patient ou service..."
+                        autocomplete="off"
+                        enterkeyhint="search"
+                        aria-label="Rechercher dans l'historique">
+
+                    <button type="button" id="clearSearch" class="clear-search" aria-label="Effacer la recherche">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <button type="button" id="searchButton" class="search-button">
+                    <i class="fas fa-search"></i>
+                    Rechercher
+                </button>
+            </div>
+
+            <div class="search-footer">
+                <div class="search-hint">
+                    <i class="fas fa-circle-info"></i>
+                    <span>La recherche se met à jour automatiquement pendant la saisie.</span>
+                </div>
+
+                <a href="/prothesists/AllProthesistHistory" class="all-history-button">
+                    <i class="fas fa-list-ul"></i>
+                    Afficher tout l'historique
+                    <i class="fas fa-arrow-right arrow-icon"></i>
                 </a>
             </div>
 
-            <div class="header-center">
-                <div class="logo-icon">
-                    <i class="fas fa-history"></i>
+            <p id="searchCounter" class="search-counter" aria-live="polite"></p>
+        </section>
+
+        <!-- ALERT -->
+        {% if message %}
+        <div class="alert-container">
+            <div class="alert alert-info">
+                <div class="alert-icon">
+                    <i class="fas fa-info-circle"></i>
                 </div>
-                <div class="header-title">
-                    <h1>Historique du prothésiste</h1>
-                    <p>Historique complet des travaux et des dossiers</p>
+
+                <div class="alert-content">
+                    <strong>Information</strong>
+                    <p>{{ message }}</p>
                 </div>
+
+                <button type="button" class="alert-close" aria-label="Fermer">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- TABLES -->
+        <section class="tables-section">
+
+            <!-- COMPLETE HISTORY -->
+            <div id="AllHistory" class="table-wrapper"
+                 style="display: {% if HistoryProthesist %}none{% else %}block{% endif %};">
+
+                {% if History %}
+
+                <div class="table-card">
+
+                    <div class="table-card-header">
+                        <div class="table-heading">
+                            <div class="table-icon">
+                                <i class="fas fa-folder-open"></i>
+                            </div>
+
+                            <div>
+                                <h2>Historique complet</h2>
+                                <p>Ensemble des travaux enregistrés pour tous les prothésistes.</p>
+                            </div>
+                        </div>
+
+                        <span class="result-count" data-total="{{ History|length }}">
+                            <i class="fas fa-file-lines"></i>
+                            {{ History|length }} enregistrements
+                        </span>
+                    </div>
+
+                    <div class="table-toolbar">
+                        <div class="table-toolbar-label">
+                            <i class="fas fa-table"></i>
+                            Liste des travaux
+                        </div>
+
+                        <span class="scroll-hint">
+                            <i class="fas fa-arrows-left-right"></i>
+                            Faites défiler horizontalement pour voir toutes les colonnes
+                        </span>
+                    </div>
+
+                    <div class="table-scroll" tabindex="0"
+                         aria-label="Tableau de l'historique complet, défilement horizontal">
+
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID historique</th>
+                                    <th>Nom du dentiste</th>
+                                    <th>Nom du prothésiste</th>
+                                    <th>Téléphone prothésiste</th>
+                                    <th>Prénom du patient</th>
+                                    <th>Nom du patient</th>
+                                    <th>Téléphone patient</th>
+                                    <th>Type de service</th>
+                                    <th>Prix</th>
+                                    <th>Versement</th>
+                                    <th>Reste</th>
+                                    <th>Date d'entrée</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for row in History %}
+
+                                <tr class="table-row"
+                                    data-search="{{ (row[1] ~ ' ' ~ row[2] ~ ' ' ~ row[3] ~ ' ' ~ row[4] ~ ' ' ~ row[5] ~ ' ' ~ row[6] ~ ' ' ~ row[7])|lower }}">
+
+                                    <td>
+                                        <span class="service-id">#{{ row[0] }}</span>
+                                    </td>
+
+                                    <td class="person-name">{{ row[1] }}</td>
+                                    <td class="person-name">{{ row[2] }}</td>
+
+                                    <td>
+                                        <span class="phone-number">
+                                            <i class="fas fa-phone"></i>
+                                            {{ row[3] }}
+                                        </span>
+                                    </td>
+
+                                    <td class="person-name">{{ row[4] }}</td>
+                                    <td class="person-name">{{ row[5] }}</td>
+
+                                    <td>
+                                        <span class="phone-number">
+                                            <i class="fas fa-phone"></i>
+                                            {{ row[6] }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="service-type">{{ row[7] }}</span>
+                                    </td>
+
+                                    <td class="amount-cell">{{ row[8] }}</td>
+                                    <td class="amount-cell paid-amount">{{ row[9] }}</td>
+                                    <td class="amount-cell remaining-amount">{{ row[10] }}</td>
+
+                                    <td>
+                                        <span class="date-value">{{ row[11] }}</span>
+                                    </td>
+
+                                    <td>
+                                        <span class="status-badge">{{ row[13] }}</span>
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-footer">
+                        <span>
+                            <i class="fas fa-database"></i>
+                            Historique complet des prothésistes
+                        </span>
+
+                        <span class="footer-count">
+                            {{ History|length }} enregistrements
+                        </span>
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+
+                    <h2>Aucun historique disponible</h2>
+                    <p>Aucun travail n'est encore disponible dans l'historique des prothésistes.</p>
+                </div>
+
+                {% endif %}
             </div>
 
-        </div>
-    </header>
 
-    <!-- Section de recherche -->
-    <!-- Section de recherche dynamique -->
-    <div class="search-container">
-        <div class="search-card">
+            <!-- SEARCHED PROTHESIST HISTORY -->
+            <div id="ProthesistHistory" class="table-wrapper"
+                 style="display: {% if HistoryProthesist %}block{% else %}none{% endif %};">
 
-            <div class="search-form">
-                <div class="search-wrapper">
-                    <div class="search-icon">
+                {% if HistoryProthesist %}
+
+                <div class="table-card">
+
+                    <div class="table-card-header">
+                        <div class="table-heading">
+                            <div class="table-icon search-result-icon">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+
+                            <div>
+                                <h2>Résultats de recherche</h2>
+                                <p>Historique des travaux du prothésiste recherché.</p>
+                            </div>
+                        </div>
+
+                        <span class="result-count" data-total="{{ HistoryProthesist|length }}">
+                            <i class="fas fa-file-lines"></i>
+                            {{ HistoryProthesist|length }} enregistrements
+                        </span>
+                    </div>
+
+                    <div class="table-toolbar">
+                        <div class="table-toolbar-label">
+                            <i class="fas fa-table"></i>
+                            Travaux du prothésiste
+                        </div>
+
+                        <span class="scroll-hint">
+                            <i class="fas fa-arrows-left-right"></i>
+                            Faites défiler horizontalement pour voir toutes les colonnes
+                        </span>
+                    </div>
+
+                    <div class="table-scroll" tabindex="0"
+                         aria-label="Tableau de l'historique du prothésiste, défilement horizontal">
+
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID historique</th>
+                                    <th>Nom du dentiste</th>
+                                    <th>Nom du prothésiste</th>
+                                    <th>Téléphone prothésiste</th>
+                                    <th>Prénom du patient</th>
+                                    <th>Nom du patient</th>
+                                    <th>Téléphone patient</th>
+                                    <th>Type de service</th>
+                                    <th>Prix</th>
+                                    <th>Versement</th>
+                                    <th>Reste</th>
+                                    <th>Date d'entrée</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for row in HistoryProthesist %}
+
+                                <tr class="table-row"
+                                    data-search="{{ (row[1] ~ ' ' ~ row[2] ~ ' ' ~ row[3] ~ ' ' ~ row[4] ~ ' ' ~ row[5] ~ ' ' ~ row[6] ~ ' ' ~ row[7])|lower }}">
+
+                                    <td>
+                                        <span class="service-id">#{{ row[0] }}</span>
+                                    </td>
+
+                                    <td class="person-name">{{ row[1] }}</td>
+                                    <td class="person-name">{{ row[2] }}</td>
+
+                                    <td>
+                                        <span class="phone-number">
+                                            <i class="fas fa-phone"></i>
+                                            {{ row[3] }}
+                                        </span>
+                                    </td>
+
+                                    <td class="person-name">{{ row[4] }}</td>
+                                    <td class="person-name">{{ row[5] }}</td>
+
+                                    <td>
+                                        <span class="phone-number">
+                                            <i class="fas fa-phone"></i>
+                                            {{ row[6] }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="service-type">{{ row[7] }}</span>
+                                    </td>
+
+                                    <td class="amount-cell">{{ row[8] }}</td>
+                                    <td class="amount-cell paid-amount">{{ row[9] }}</td>
+                                    <td class="amount-cell remaining-amount">{{ row[10] }}</td>
+
+                                    <td>
+                                        <span class="date-value">{{ row[11] }}</span>
+                                    </td>
+
+                                    <td>
+                                        <span class="status-badge">{{ row[13] }}</span>
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-footer">
+                        <span>
+                            <i class="fas fa-database"></i>
+                            Résultats du prothésiste
+                        </span>
+
+                        <span class="footer-count">
+                            {{ HistoryProthesist|length }} enregistrements
+                        </span>
+                    </div>
+
+                </div>
+
+                {% elif message %}
+
+                <div class="empty-state">
+                    <div class="empty-icon empty-search-icon">
                         <i class="fas fa-search"></i>
                     </div>
 
-                    <input
-                            type="text"
-                            id="searchInput"
-                            placeholder="Rechercher par dentiste, prothésiste, patient ou service..."
-                            class="search-input"
-                            autocomplete="off"
-                    >
+                    <h2>Aucun résultat trouvé</h2>
+                    <p>Aucun historique ne correspond au prothésiste recherché.</p>
 
-                    <button type="button" class="search-btn" id="clearSearch">
-                        <i class="fas fa-times"></i>
-                        <span>Effacer</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="search-hints">
-                <span class="hint-label">Accès rapide :</span>
-                <a href="/prothesists/AllProthesistHistory" class="hint-link">
-                    <i class="fas fa-layer-group"></i> Afficher tout l'historique
-                </a>
-            </div>
-
-            <p id="searchCounter" style="display:none; margin-top:12px;"></p>
-
-        </div>
-    </div>
-
-    <!-- Contenu principal -->
-    <main class="main-content">
-        <!-- Section des messages -->
-        {% if message %}
-        <div class="message-box fade-in">
-            <div class="message-icon">
-                <i class="fas fa-info-circle"></i>
-            </div>
-            <div class="message-content">
-                <h2>{{ message }}</h2>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Tableau de tout l'historique -->
-        <div id="AllHistory" class="table-section"
-             style="display: {% if HistoryProthesist %}none{% else %}block{% endif %}">
-            {% if History %}
-            <div class="table-card fade-in">
-                <div class="table-header">
-                    <div class="header-left">
-                        <h2><i class="fas fa-list-ul"></i> Historique complet des prothésistes</h2>
-                        <p>Enregistrement complet de tous les travaux réalisés par tous les prothésistes</p>
-                    </div>
-                    <div class="header-stats">
-                        <span class="stat-badge">{{ History|length }} enregistrements</span>
-                    </div>
+                    <a href="/prothesists/ProAllkhedma" class="empty-action">
+                        <i class="fas fa-redo"></i>
+                        Nouvelle recherche
+                    </a>
                 </div>
 
-                <div class="table-wrapper">
-                    <table class="data-table">
-                        <thead>
-                        <tr>
-                            <th><span class="th-content"><i class="fas fa-id-card"></i> ID de l'historique</span></th>
-                            <th><span class="th-content"><i class="fas fa-user-md"></i> Nom du dentiste</span></th>
-                            <th><span class="th-content"><i class="fas fa-user-cog"></i> Nom du prothésiste</span></th>
-                            <th><span class="th-content"><i class="fas fa-phone"></i> Numéro du prothésiste</span></th>
-                            <th><span class="th-content"><i class="fas fa-user"></i> Prénom du patient</span></th>
-                            <th><span class="th-content"><i class="fas fa-user"></i> Nom du patient</span></th>
-                            <th><span class="th-content"><i class="fas fa-hashtag"></i> Numéro du patient</span></th>
-                            <th><span class="th-content"><i class="fas fa-tools"></i> Type de service</span></th>
-                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Prix</span></th>
-                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Versement</span></th>
-                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Reste</span></th>
-                            <th><span class="th-content"><i class="fas fa-calendar-alt"></i> Date d'entrée</span></th>
-                            <th><span class="th-content"> Statut</span></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for row in History %}
-                        <tr class="table-row-animate">
-                            <td>{{ row[0] }}</td>
-                            <td>{{ row[1] }}</td>
-                            <td>{{ row[2] }}</td>
-                            <td>{{ row[3] }}</td>
-                            <td>{{ row[4] }}</td>
-                            <td>{{ row[5] }}</td>
-                            <td>{{ row[6] }}</td>
-                            <td>{{ row[7] }}</td>
-                            <td>{{ row[8] }}</td>
-                            <td>{{ row[9] }}</td>
-                            <td>{{ row[10] }}</td>
-                            <td>{{ row[11] }}</td>
-                            <td>{{ row[13] }}</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="table-footer">
-                    <span class="footer-text">
-                        <i class="fas fa-check-circle"></i> Affichage de {{ History|length }} enregistrements au total
-                    </span>
-                </div>
+                {% endif %}
             </div>
-            {% else %}
-            <div class="empty-state fade-in">
+
+
+            <!-- NO DATA -->
+            {% if not History and not HistoryProthesist and not message %}
+
+            <div class="empty-state">
                 <div class="empty-icon">
-                    <i class="fas fa-inbox"></i>
-                </div>
-                <h2>Aucun enregistrement historique trouvé</h2>
-                <p>Aucun enregistrement de travail n'est disponible pour le moment</p>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- Tableau de l'historique spécifique du prothésiste -->
-        <div id="ProthesistHistory" class="table-section"
-             style="display: {% if HistoryProthesist %}block{% else %}none{% endif %}">
-            {% if HistoryProthesist %}
-            <div class="table-card fade-in search-result-card">
-                <div class="table-header highlight-search">
-                    <div class="header-left">
-                        <h2><i class="fas fa-user-md"></i> Historique spécifique du prothésiste</h2>
-                        <p>Historique des travaux du prothésiste sélectionné</p>
-                    </div>
-                    <div class="header-stats">
-                        <span class="stat-badge">{{ HistoryProthesist|length }} enregistrements</span>
-                    </div>
+                    <i class="fas fa-history"></i>
                 </div>
 
-                <div class="table-wrapper">
-                    <table class="data-table">
-                        <thead>
-                        <tr>
-                            <th><span class="th-content"><i class="fas fa-id-card"></i> ID de l'historique</span></th>
-                            <th><span class="th-content"><i class="fas fa-user-md"></i> Nom du dentiste</span></th>
-                            <th><span class="th-content"><i class="fas fa-user-cog"></i> Nom du prothésiste</span></th>
-                            <th><span class="th-content"><i class="fas fa-phone"></i> Numéro du prothésiste</span></th>
-                            <th><span class="th-content"><i class="fas fa-user"></i> Prénom du patient</span></th>
-                            <th><span class="th-content"><i class="fas fa-user"></i> Nom du patient</span></th>
-                            <th><span class="th-content"><i class="fas fa-hashtag"></i> Numéro du patient</span></th>
-                            <th><span class="th-content"><i class="fas fa-tools"></i> Type de service</span></th>
-                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Prix</span></th>
-                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Versement</span></th>
-                            <th><span class="th-content"><i class="fas fa-dollar-sign"></i> Reste</span></th>
-                            <th><span class="th-content"><i class="fas fa-calendar-alt"></i> Date d'entrée</span></th>
-                            <th><span class="th-content"> Statut</span></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for row in HistoryProthesist %}
-                        <tr class="table-row-animate">
-                            <td>{{ row[0] }}</td>
-                            <td>{{ row[1] }}</td>
-                            <td>{{ row[2] }}</td>
-                            <td>{{ row[3] }}</td>
-                            <td>{{ row[4] }}</td>
-                            <td>{{ row[5] }}</td>
-                            <td>{{ row[6] }}</td>
-                            <td>{{ row[7] }}</td>
-                            <td>{{ row[8] }}</td>
-                            <td>{{ row[9] }}</td>
-                            <td>{{ row[10] }}</td>
-                            <td>{{ row[11] }}</td>
-                            <td>{{ row[13] }}</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                <h2>Aucune donnée disponible</h2>
+                <p>Utilisez la recherche pour retrouver un historique ou affichez tous les dossiers.</p>
 
-                <div class="table-footer">
-                    <span class="footer-text">
-                        <i class="fas fa-check-circle"></i> Affichage de {{ HistoryProthesist|length }} enregistrements pour ce prothésiste
-                    </span>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- État vide des résultats -->
-        {% if not History and not HistoryProthesist and not message %}
-        <div class="empty-state fade-in">
-            <div class="empty-icon">
-                <i class="fas fa-history"></i>
-            </div>
-            <h2>Aucune donnée disponible</h2>
-            <p>Utilisez la barre de recherche pour trouver l'historique d'un prothésiste ou cliquez sur « Tout
-                l'historique » pour afficher tous les dossiers</p>
-            <div class="empty-actions">
-                <a href="/prothesists/AllProthesistHistory" class="empty-action-btn">
+                <a href="/prothesists/AllProthesistHistory" class="empty-action">
                     <i class="fas fa-layer-group"></i>
-                    <span>Afficher tout l'historique</span>
+                    Afficher tout l'historique
                 </a>
             </div>
-        </div>
-        {% endif %}
+
+            {% endif %}
+
+        </section>
     </main>
 
-    <!-- Pied de page -->
+    <!-- FOOTER -->
     <footer class="page-footer">
-        <div class="footer-content">
-            <p>&copy; 2024 Système de gestion du laboratoire de prothèse. Tous droits réservés.</p>
-            <p class="footer-note">Les dossiers historiques sont conservés même si la khedma d'origine est supprimée</p>
-        </div>
+        <span>Gestion du laboratoire de prothèse</span>
+        <span>Historique des prothésistes</span>
     </footer>
+
 </div>
 
-<!-- Scripts -->
+
+<!-- JAVASCRIPT -->
 <script>
-    // Animations fluides des lignes du tableau au chargement
-    window.addEventListener('load', function() {
-        const rows = document.querySelectorAll('.table-row-animate');
-        rows.forEach((row, index) => {
-            row.style.animationDelay = `${index * 0.05}s`;
-        });
-    });
+document.addEventListener('DOMContentLoaded', function () {
 
-    // Amélioration du formulaire de recherche
-    const searchForm = document.querySelector('.search-form');
-    const searchInput = document.querySelector('.search-input');
-
-    if (searchForm) {
-        searchForm.addEventListener('submit', function(e) {
-            if (!searchInput.value.trim()) {
-                e.preventDefault();
-                searchInput.classList.add('shake');
-                setTimeout(() => searchInput.classList.remove('shake'), 500);
-            }
-        });
-    }
-
-    // Effets lors du focus
-    if (searchInput) {
-        searchInput.addEventListener('focus', function() {
-            this.closest('.search-wrapper').classList.add('focused');
-        });
-
-        searchInput.addEventListener('blur', function() {
-            this.closest('.search-wrapper').classList.remove('focused');
-        });
-
-        searchInput.addEventListener('input', function() {
-            if (this.value.length > 0) {
-                this.closest('.search-form').classList.add('has-input');
-            } else {
-                this.closest('.search-form').classList.remove('has-input');
-            }
-        });
-    }
-
-    // Effet ripple sur les boutons
-    document.querySelectorAll('.search-btn, .empty-action-btn').forEach(button => {
-        button.addEventListener('click', function(e) {
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            ripple.classList.add('ripple');
-
-            this.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 600);
-        });
-    });
-
-    // Faire défiler jusqu'au tableau après une recherche
-    const AllHistoryDiv = document.getElementById('AllHistory');
-    const ProthesistHistoryDiv = document.getElementById('ProthesistHistory');
-
-    if (ProthesistHistoryDiv && ProthesistHistoryDiv.style.display !== 'none') {
-        setTimeout(() => {
-            ProthesistHistoryDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 300);
-    }
-
-    // Trier le tableau par colonne (amélioration optionnelle)
-    document.querySelectorAll('.data-table th').forEach(th => {
-        th.style.cursor = 'pointer';
-        th.addEventListener('click', function() {
-            // Vous pouvez implémenter le tri ici si nécessaire
-            console.log('Colonne sélectionnée :', this.textContent);
-        });
-    });
-
-    // Exporter le tableau au format CSV (amélioration optionnelle)
-    function exportTableToCSV(filename, tableId) {
-        const table = document.getElementById(tableId);
-        if (!table) return;
-
-        let csv = [];
-        const rows = table.querySelectorAll('tr');
-
-        for (let i = 0; i < rows.length; i++) {
-            let row = [], cols = rows[i].querySelectorAll('td, th');
-            for (let j = 0; j < cols.length; j++) {
-                let text = cols[j].innerText.replace(/"/g, '""');
-                row.push('"' + text + '"');
-            }
-            csv.push(row.join(','));
-        }
-
-        downloadCSV(csv.join('\n'), filename);
-    }
-
-    function downloadCSV(csv, filename) {
-        const csvFile = new Blob([csv], { type: 'text/csv' });
-        const downloadLink = document.createElement('a');
-        downloadLink.href = URL.createObjectURL(csvFile);
-        downloadLink.download = filename;
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-    }
-
-    // Raccourci clavier pour la recherche (Ctrl/Cmd + K)
-    document.addEventListener('keydown', function(e) {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-            e.preventDefault();
-            searchInput?.focus();
-        }
-    });
-
-    // ==========================================
-    // RECHERCHE DYNAMIQUE DE L'HISTORIQUE
-    // ==========================================
-
-    const clearSearch = document.getElementById('clearSearch');
+    const searchInput = document.getElementById('searchInput');
+    const clearButton = document.getElementById('clearSearch');
+    const searchButton = document.getElementById('searchButton');
     const searchCounter = document.getElementById('searchCounter');
 
-    function dynamicSearch() {
+    const allHistory = document.getElementById('AllHistory');
+    const prothesistHistory = document.getElementById('ProthesistHistory');
 
-        if (!searchInput) return;
 
-        const searchValue = searchInput.value
+    // Normalize text for accent-insensitive searching
+    function normalizeText(value) {
+
+        return (value || '')
+            .toString()
             .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
             .trim();
 
-        // Déterminer le tableau actuellement affiché
-        const allHistory = document.getElementById('AllHistory');
-        const prothesistHistory = document.getElementById('ProthesistHistory');
+    }
 
-        let activeSection = null;
+
+    // Identify the currently displayed history
+    function getActiveSection() {
 
         if (prothesistHistory &&
             prothesistHistory.style.display !== 'none') {
 
-            activeSection = prothesistHistory;
+            return prothesistHistory;
 
-        } else if (allHistory &&
-                   allHistory.style.display !== 'none') {
-
-            activeSection = allHistory;
         }
+
+        if (allHistory &&
+            allHistory.style.display !== 'none') {
+
+            return allHistory;
+
+        }
+
+        return null;
+
+    }
+
+
+    // Dynamic search
+    function runSearch() {
+
+        if (!searchInput) return;
+
+        const query = normalizeText(searchInput.value);
+        const activeSection = getActiveSection();
 
         if (!activeSection) return;
 
         const rows = activeSection.querySelectorAll(
-            '.data-table tbody tr.table-row-animate'
+            '.data-table tbody tr.table-row'
         );
 
         let visibleCount = 0;
 
         rows.forEach(row => {
 
-            // Colonnes recherchables
-            // 0 = ID historique : EXCLU
-            // 1 = Nom dentiste
-            // 2 = Nom prothésiste
-            // 3 = Numéro prothésiste
-            // 4 = Prénom patient
-            // 5 = Nom patient
-            // 6 = Numéro patient
-            // 7 = Type de service
+            const searchableText = normalizeText(
+                row.dataset.search || row.textContent
+            );
 
-            const dentist = row.cells[1]?.textContent.toLowerCase().trim() || '';
-            const prothesist = row.cells[2]?.textContent.toLowerCase().trim() || '';
-            const prothesistNumber = row.cells[3]?.textContent.toLowerCase().trim() || '';
-            const patientFirstName = row.cells[4]?.textContent.toLowerCase().trim() || '';
-            const patientLastName = row.cells[5]?.textContent.toLowerCase().trim() || '';
-            const patientNumber = row.cells[6]?.textContent.toLowerCase().trim() || '';
-            const service = row.cells[7]?.textContent.toLowerCase().trim() || '';
+            const matches = searchableText.includes(query);
 
-            const searchableData = [
-                dentist,
-                prothesist,
-                prothesistNumber,
-                patientFirstName,
-                patientLastName,
-                patientNumber,
-                service
-            ].join(' ');
-
-            const matches = searchableData.includes(searchValue);
-
-            row.style.display = matches ? '' : 'none';
+            row.hidden = !matches;
 
             if (matches) {
                 visibleCount++;
             }
+
         });
 
-        // Supprimer l'ancien message de recherche vide
-        const tbody = activeSection.querySelector('.data-table tbody');
 
-        if (tbody) {
+        // Update result counter
+        const total = rows.length;
 
-            const oldMessage = tbody.querySelector('.search-empty-row');
+        const counter = activeSection.querySelector('.result-count');
 
-            if (oldMessage) {
-                oldMessage.remove();
-            }
+        if (counter) {
 
-            // Ajouter un message si aucun résultat
-            if (searchValue !== '' && visibleCount === 0) {
+            counter.innerHTML =
+                '<i class="fas fa-file-lines"></i> ' +
+                (
+                    query
+                        ? `${visibleCount} / ${total} résultats`
+                        : `${total} enregistrements`
+                );
 
-                const emptyRow = document.createElement('tr');
-
-                emptyRow.className = 'search-empty-row';
-
-                emptyRow.innerHTML = `
-                    <td colspan="13" class="table-empty-row">
-                        <i class="fas fa-search"></i>
-                        Aucun résultat correspondant à "${escapeSearchText(searchValue)}"
-                    </td>
-                `;
-
-                tbody.appendChild(emptyRow);
-            }
         }
 
-        // Actualiser le compteur
+
+        // Update search information
         if (searchCounter) {
 
-            searchCounter.style.display = 'block';
+            searchCounter.textContent = query
+                ? `${visibleCount} résultat(s) trouvé(s) sur ${total}`
+                : '';
 
-            searchCounter.textContent =
-                searchValue === ''
-                    ? ''
-                    : `${visibleCount} résultat(s) trouvé(s)`;
+            searchCounter.classList.toggle(
+                'visible',
+                Boolean(query)
+            );
+
         }
+
+
+        // Show or hide clear button
+        if (clearButton) {
+
+            clearButton.style.display = query ? 'flex' : 'none';
+
+        }
+
+
+        // Display an empty result message when necessary
+        let emptyMessage = activeSection.querySelector(
+            '.search-empty-state'
+        );
+
+        if (query && visibleCount === 0) {
+
+            if (!emptyMessage) {
+
+                emptyMessage = document.createElement('div');
+
+                emptyMessage.className = 'search-empty-state';
+
+                emptyMessage.innerHTML =
+                    '<i class="fas fa-magnifying-glass"></i>' +
+                    '<span>Aucun résultat correspondant à votre recherche.</span>';
+
+                activeSection
+                    .querySelector('.table-card')
+                    ?.appendChild(emptyMessage);
+
+            }
+
+        } else if (emptyMessage) {
+
+            emptyMessage.remove();
+
+        }
+
     }
 
 
-    // Échapper le texte affiché dans le message vide
-    function escapeSearchText(value) {
-
-        const div = document.createElement('div');
-
-        div.textContent = value;
-
-        return div.innerHTML;
-    }
-
-
-    // Événement de recherche en temps réel
+    // Search while typing
     if (searchInput) {
 
-        searchInput.addEventListener('input', dynamicSearch);
+        searchInput.addEventListener('input', runSearch);
+
+        searchInput.addEventListener('keydown', function (event) {
+
+            if (event.key === 'Enter') {
+
+                event.preventDefault();
+
+                runSearch();
+
+                this.blur();
+
+            }
+
+        });
+
     }
 
 
-    // Bouton Effacer
-    if (clearSearch) {
+    // Search button
+    if (searchButton) {
 
-        clearSearch.addEventListener('click', function() {
+        searchButton.addEventListener('click', runSearch);
+
+    }
+
+
+    // Clear search
+    if (clearButton) {
+
+        clearButton.addEventListener('click', function () {
 
             searchInput.value = '';
 
-            dynamicSearch();
+            runSearch();
 
             searchInput.focus();
+
         });
+
     }
+
+
+    // Close alert
+    document.querySelectorAll('.alert-close').forEach(button => {
+
+        button.addEventListener('click', function () {
+
+            this.closest('.alert-container')?.remove();
+
+        });
+
+    });
+
+
+    // Ctrl + K / Cmd + K focuses search
+    document.addEventListener('keydown', function (event) {
+
+        if (
+            (event.ctrlKey || event.metaKey) &&
+            event.key.toLowerCase() === 'k'
+        ) {
+
+            event.preventDefault();
+
+            searchInput?.focus();
+
+        }
+
+    });
+
+
+    // Mobile keyboard support
+    if (searchInput) {
+
+        searchInput.addEventListener('focus', function () {
+
+            if (window.matchMedia('(max-width: 650px)').matches) {
+
+                setTimeout(() => {
+
+                    this.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+
+                }, 250);
+
+            }
+
+        });
+
+    }
+
+
+    // Initial search setup
+    runSearch();
+
+});
 </script>
 
 </body>

@@ -503,7 +503,7 @@
 
                         <!-- STATUS SELECTOR -->
 
-                        {% if editable_status and row[13] != 'finished' %}
+                        {% if editable_status and row[13] not in ['finished', 'prothesist'] %}
 
                         <div class="patient-card-footer">
 
