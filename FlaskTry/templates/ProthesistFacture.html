@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Facture mensuelle des prestations du dentiste - DentistHub">
+
+    <title>Facture - ProthesistHub</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='ProthesistFacture.css') }}">
+</head>
+
+<body>
+
+<div class="invoice-container">
+
+    <!-- ACTIONS -->
+    <div class="actions">
+
+        <button type="button"
+                class="action-btn back-btn"
+                onclick="window.location.href='/prothesists/ProStat'">
+
+            <i class="fas fa-arrow-left"></i>
+            Retour aux statistiques
+
+        </button>
+
+        <button type="button"
+                class="action-btn print-btn"
+                onclick="window.print()">
+
+            <i class="fas fa-print"></i>
+            Imprimer la facture
+
+        </button>
+
+    </div>
+
+
+    <!-- INVOICE -->
+    <main class="invoice">
+
+        <!-- HEADER -->
+        <header class="invoice-header">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    <i class="fas fa-tooth"></i>
+                </div>
+
+                <div>
+                    <h2>DentistHub</h2>
+                    <p>Gestion des dentistes du laboratoire de prothèse</p>
+                </div>
+
+            </div>
+
+            <div class="invoice-title">
+
+                <h1>FACTURE</h1>
+
+                <p>Facture mensuelle des prestations</p>
+
+                <p>
+                    N° Facture :
+                    <strong>{{ invoice_number }}</strong>
+                </p>
+
+                <p>
+                    Date d'émission :
+                    {{ emission_date }}
+                </p>
+
+            </div>
+
+        </header>
+
+        <!-- INFORMATION -->
+        <section class="information">
+
+            <div class="info-card">
+
+                <h3>Facturé à</h3>
+
+                <h2>{{ prothesistName }}</h2>
+
+                <p>
+                    Profession :
+                    <strong>Prothésiste</strong>
+                </p>
+
+                {% if details %}
+                <p>
+                    Numéro du prothésiste :
+                    <strong>{{ details[0].prothesistNumber or '-' }}</strong>
+                </p>
+                {% endif %}
+
+            </div>
+
+            <div class="info-card">
+
+                <h3>Informations de facturation</h3>
+
+                <h2>{{ month_name }} {{ year }}</h2>
+
+                <p>
+                    Période : {{ month }}/{{ year }}
+                </p>
+
+                <p>
+                    Nombre de prestations :
+                    <strong>{{ details|length }}</strong>
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- DETAILS -->
+        <section>
+
+            <h3 class="section-title">
+                <i class="fas fa-list-ul"></i>
+                Détail des prestations
+            </h3>
+
+            <div class="table-wrapper">
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Nom Prothésiste</th>
+                        <th>N° Prothésiste</th>
+
+                        {% if show_patient_numbers %}
+                            <th>N° Patient</th>
+                        {% endif %}
+
+                        <th>Prestation</th>
+                        <th>Date</th>
+                        <th>Versement</th>
+                        <th>Reste</th>
+                        <th>Statut</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for detail in details %}
+
+                    <tr>
+                        <td>{{ detail.prothesistName or '-' }}</td>
+                        <td>{{ detail.prothesistNumber or '-' }}</td>
+
+                        {% if show_patient_numbers %}
+                        <td>{{ detail.patientNumber or '-' }}</td>
+                        {% endif %}
+
+                        <td class="service-name">
+                            {{ detail.service or '-' }}
+                        </td>
+
+                        <td>{{ detail.date }}</td>
+
+                        <td class="amount paid">
+                            {{ "%.2f"|format(detail.versement) }} DA
+                        </td>
+
+                        <td class="amount remaining">
+                            {{ "%.2f"|format(detail.remaining) }} DA
+                        </td>
+
+                        <td class="service-name">
+                            {{ detail.status or '-' }}
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="{{ 7 if show_patient_numbers else 6 }}" class="empty-row">
+                            Aucune prestation disponible.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- TOTAL -->
+        <section class="total-section">
+
+            <div class="total-card">
+
+                <div class="total-row">
+
+                    <span>Total des versements</span>
+
+                    <strong>
+                        {{ "%.2f"|format(total_versement) }} DA
+                    </strong>
+
+                </div>
+
+                <div class="total-row">
+
+                    <span>Total restant</span>
+
+                    <strong>
+                        {{ "%.2f"|format(total) }} DA
+                    </strong>
+
+                </div>
+
+                <!--<div class="total-row final">
+
+                    <span>Total général</span>
+
+                    <strong>
+                        {{ "%.2f"|format(total_versement + total) }} DA
+                    </strong>
+
+                </div> -->
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer class="invoice-footer">
+
+            <p>
+                <strong>DentistHub</strong>
+                - Gestion des dentistes du laboratoire de prothèse
+            </p>
+
+            <p>Merci pour votre collaboration.</p>
+
+            <p>
+                Document généré automatiquement par le système.
+            </p>
+
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

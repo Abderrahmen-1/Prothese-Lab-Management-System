@@ -1,7 +1,8 @@
 import secrets
-from flask import Blueprint, request, render_template, redirect, url_for, session
+from flask import Blueprint, request, render_template, redirect, url_for, session, jsonify
 from FlaskTry.FunctionFile import *
 from FlaskTry.ConnectToSql import get_connection
+from datetime import date
 
 prothesists = Blueprint("prothesists", __name__, url_prefix="/prothesists")
 
@@ -1721,3 +1722,120 @@ def ProSearchPage():
     finally:
         cursor.close()
         conn.close()
+
+
+@prothesists.route("/ProthesistFacture", methods=["GET"])
+def ProthesistFacture():
+
+    if not is_logged_in():
+        return redirect(url_for("home"))
+
+    prothesist = request.args.get("prothesist")
+    month = request.args.get("month", type=int)
+    year = request.args.get("year", type=int)
+    patientNumberShow = request.args.get("PatientNumberShow", "non")
+
+    if not prothesist or month is None or year is None:
+        return redirect(url_for("prothesists.ProStat"))
+
+    if not 1 <= month <= 12 or year < 2000:
+        return redirect(url_for("prothesists.ProStat"))
+
+    if patientNumberShow not in ("oui", "non"):
+        return redirect(url_for("prothesists.ProStat"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+
+        if patientNumberShow == "oui":
+
+            cursor.execute("""
+                SELECT prothesist, pNumber, patient_number, pKhedma, versement, b9aw,
+                    pDate, STATUS
+                FROM other_prothesists_history
+                WHERE 
+                user_id = %s AND prothesist = %s AND MONTH(pDate) = %s AND YEAR(pDate) = %s
+            """, (session["id"], prothesist, month, year))
+
+            results = cursor.fetchall()
+
+            details = []
+
+            for row in results:
+
+                details.append({
+                    "prothesistName": row[0],
+                    "prothesistNumber": row[1],
+                    "patientNumber": row[2],
+                    "service": row[3],
+                    "versement": float(row[4] or 0),
+                    "remaining": float(row[5] or 0),
+                    "date": row[6],
+                    "status": row[7]
+                })
+
+        else:
+
+            cursor.execute("""
+                SELECT prothesist, pNumber, pKhedma, versement, b9aw, pDate, STATUS
+                FROM other_prothesists_history
+                WHERE 
+                user_id = %s AND prothesist = %s AND MONTH(pDate) = %s AND YEAR(pDate) = %s
+            """, (session["id"], prothesist, month, year))
+
+            results = cursor.fetchall()
+
+            details = []
+
+            for row in results:
+
+                details.append({
+                    "prothesistName": row[0],
+                    "prothesistNumber": row[1],
+                    "patientNumber": None,
+                    "service": row[2],
+                    "versement": float(row[3] or 0),
+                    "remaining": float(row[4] or 0),
+                    "date": row[5],
+                    "status": row[6]
+                })
+
+        if not details:
+            return redirect(url_for("prothesists.ProStat"))
+
+        total_versement = sum(d["versement"] for d in details if d['status'] != 'deleted')
+        total = sum(d["remaining"] for d in details if d['status'] != 'deleted')
+
+        month_names = [
+            "Janvier", "Février", "Mars", "Avril",
+            "Mai", "Juin", "Juillet", "Août",
+            "Septembre", "Octobre", "Novembre", "Décembre"
+        ]
+
+        return render_template(
+            "ProthesistFacture.html",
+            prothesistName=prothesist,
+            month=month,
+            year=year,
+            month_name=month_names[month - 1],
+            invoice_number=f"PL-{session['id']}-{year}{month:02d}",
+            emission_date=date.today().strftime("%d/%m/%Y"),
+            details=details,
+            total_versement=total_versement,
+            total=total,
+            show_patient_numbers=(patientNumberShow == "oui")
+        )
+
+    except Exception as e:
+
+        conn.rollback()
+        print("Prothesist invoice error:", e)
+
+        return redirect(url_for("prothesists.ProStat"))
+
+    finally:
+        cursor.close()
+        conn.close()
+

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -5,16 +6,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <meta name="theme-color" content="#315efb">
+    <meta name="description" content="Facture mensuelle des prestations du laboratoire DentistHub">
+
     <title>Facture - DentistHub</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='Facture.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap"
           rel="stylesheet">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='DentistFacture.css') }}">
 </head>
 
 <body>
@@ -22,27 +29,33 @@
 <div class="invoice-page">
 
     <!-- ACTIONS -->
-    <div class="invoice-actions">
+    <nav class="invoice-actions" aria-label="Actions de la facture">
 
-        <button type="button" class="action-btn back-btn" id="closeInvoice">
-            <i class="fas fa-arrow-left"></i>
+        <button type="button"
+                class="action-btn back-btn"
+                id="closeInvoice">
+            <i class="fas fa-times"></i>
             Fermer
         </button>
 
-        <button type="button" id="backToDentists" class="back-btn">
+        <button type="button"
+                class="action-btn back-btn"
+                id="backToDentists">
             <i class="fas fa-arrow-left"></i>
             Retour aux dentistes
         </button>
 
-        <button type="button" class="action-btn print-btn" id="printInvoice">
+        <button type="button"
+                class="action-btn print-btn"
+                id="printInvoice">
             <i class="fas fa-print"></i>
             Imprimer / PDF
         </button>
 
-    </div>
+    </nav>
 
 
-    <!-- INVOICE -->
+    <!-- INVOICE DOCUMENT -->
     <main class="invoice-document">
 
         <!-- HEADER -->
@@ -50,20 +63,23 @@
 
             <div class="company-information">
 
-                <div class="company-logo">
+                <div class="company-logo" aria-hidden="true">
                     <i class="fas fa-tooth"></i>
                 </div>
 
-                <div>
+                <div class="company-text">
                     <h1>Dentist<span>Hub</span></h1>
                     <p>Laboratoire de prothèse dentaire</p>
                 </div>
 
             </div>
 
+
             <div class="invoice-heading">
 
-                <span class="invoice-label">DOCUMENT FINANCIER</span>
+                <span class="invoice-label">
+                    DOCUMENT FINANCIER
+                </span>
 
                 <h2>FACTURE</h2>
 
@@ -80,16 +96,19 @@
 
 
         <!-- INFORMATION -->
-        <section class="invoice-information">
+        <section class="invoice-information"
+                 aria-label="Informations de facturation">
 
             <div class="information-block">
 
-                <span class="information-label">FACTURÉ À</span>
+                <span class="information-label">
+                    FACTURÉ À
+                </span>
 
                 <h3>{{ dentistName }}</h3>
 
                 <p>
-                    <i class="fas fa-user-md"></i>
+                    <i class="fas fa-user-md" aria-hidden="true"></i>
                     Dentiste partenaire
                 </p>
 
@@ -98,12 +117,14 @@
 
             <div class="information-block">
 
-                <span class="information-label">PÉRIODE</span>
+                <span class="information-label">
+                    PÉRIODE
+                </span>
 
                 <h3>{{ month }}/{{ year }}</h3>
 
                 <p>
-                    <i class="far fa-calendar-alt"></i>
+                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
                     Facture mensuelle
                 </p>
 
@@ -112,12 +133,14 @@
 
             <div class="information-block">
 
-                <span class="information-label">DATE D'ÉMISSION</span>
+                <span class="information-label">
+                    DATE D'ÉMISSION
+                </span>
 
                 <h3>{{ emission_date }}</h3>
 
                 <p>
-                    <i class="fas fa-file-invoice"></i>
+                    <i class="fas fa-file-invoice" aria-hidden="true"></i>
                     Document généré
                 </p>
 
@@ -132,7 +155,10 @@
             <div class="section-heading">
 
                 <div>
-                    <span class="section-eyebrow">DÉTAILS FINANCIERS</span>
+                    <span class="section-eyebrow">
+                        DÉTAILS FINANCIERS
+                    </span>
+
                     <h3>Prestations réalisées</h3>
                 </div>
 
@@ -149,46 +175,59 @@
 
                     <thead>
                     <tr>
-                        <th>N°</th>
-                        <th>Patient</th>
-                        <th>Prestation</th>
-                        <th>Date</th>
-                        <th>Versement</th>
-                        <th>Reste</th>
+                        <th scope="col">N°</th>
+                        <th scope="col">Patient</th>
+                        <th scope="col">Prestation</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Versement</th>
+                        <th scope="col">Reste</th>
+                        <th scope="col">Status</th>
                     </tr>
                     </thead>
+
 
                     <tbody>
 
                     {% for item in details %}
 
                     <tr>
-                        <td class="number-cell">{{ loop.index }}</td>
 
-                        <td class="patient-cell">
-                            {{ item.patientNumber }}
+                        <td class="number-cell" data-label="N°">
+                            {{ loop.index }}
                         </td>
 
-                        <td class="service-cell">
-                            {{ item.service }}
+                        <td class="patient-cell" data-label="Patient">
+                            {{ item.patientNumber or '-' }}
                         </td>
 
-                        <td>{{ item.date }}</td>
+                        <td class="service-cell" data-label="Prestation">
+                            {{ item.service or '-' }}
+                        </td>
 
-                        <td class="paid-cell">
+                        <td data-label="Date">
+                            {{ item.date or '-' }}
+                        </td>
+
+                        <td class="paid-cell" data-label="Versement">
                             {{ "{:,.2f}".format(item.versement|float) }} DA
                         </td>
 
-                        <td class="remaining-cell">
+                        <td class="remaining-cell" data-label="Reste">
                             {{ "{:,.2f}".format(item.remaining|float) }} DA
                         </td>
+
+                        <td class="service-cell" data-label="Prestation">
+                            {{ item.status or '-' }}
+                        </td>
+
                     </tr>
 
                     {% else %}
 
                     <tr>
                         <td colspan="6" class="empty-table">
-                            Aucune prestation trouvée.
+                            <i class="fas fa-inbox" aria-hidden="true"></i>
+                            <span>Aucune prestation trouvée.</span>
                         </td>
                     </tr>
 
@@ -203,22 +242,24 @@
         </section>
 
 
-        <!-- SUMMARY -->
+        <!-- FINANCIAL SUMMARY -->
         <section class="financial-summary">
 
             <div class="summary-note">
 
-                <div class="note-icon">
+                <div class="note-icon" aria-hidden="true">
                     <i class="fas fa-info-circle"></i>
                 </div>
 
-                <div>
+                <div class="note-content">
+
                     <strong>Information</strong>
 
                     <p>
                         Cette facture présente les prestations enregistrées
                         et les montants restant à régler pour la période indiquée.
                     </p>
+
                 </div>
 
             </div>
@@ -247,8 +288,11 @@
 
 
                 <div class="summary-status">
-                    <i class="fas fa-clock"></i>
+
+                    <i class="fas fa-clock" aria-hidden="true"></i>
+
                     Montant restant dû
+
                 </div>
 
             </div>
@@ -257,16 +301,24 @@
 
 
         <!-- SIGNATURES -->
-        <section class="signature-section">
+        <section class="signature-section"
+                 aria-label="Signatures">
 
             <div class="signature-box">
+
                 <p>Signature du laboratoire</p>
+
                 <div class="signature-line"></div>
+
             </div>
 
+
             <div class="signature-box">
+
                 <p>Signature du dentiste</p>
+
                 <div class="signature-line"></div>
+
             </div>
 
         </section>
@@ -279,14 +331,27 @@
 
             <div class="footer-content">
 
-                <div>
+                <div class="footer-left">
+
                     <strong>DentistHub</strong>
-                    <p>Gestion professionnelle du laboratoire</p>
+
+                    <p>
+                        Gestion professionnelle du laboratoire
+                    </p>
+
                 </div>
 
+
                 <div class="footer-right">
-                    <p>Document généré automatiquement</p>
-                    <span>Merci pour votre confiance.</span>
+
+                    <p>
+                        Document généré automatiquement
+                    </p>
+
+                    <span>
+                        Merci pour votre confiance.
+                    </span>
+
                 </div>
 
             </div>
@@ -298,52 +363,36 @@
 </div>
 
 
-<!-- ==========================================
-     JAVASCRIPT
-========================================== -->
-
+<!-- JAVASCRIPT -->
 <script>
-
-    document.getElementById("backToDentists").addEventListener("click", function () {
-        window.location.href = "/Dentist";
-    });
 
     "use strict";
 
-    document.addEventListener("DOMContentLoaded", () => {
-
-        const closeButton = document.getElementById("closeInvoice");
-        const printButton = document.getElementById("printInvoice");
-
-
-        // CLOSE INVOICE
-        closeButton.addEventListener("click", () => {
-
-            window.close();
-
-        });
+    const closeButton = document.getElementById("closeInvoice");
+    const backButton = document.getElementById("backToDentists");
+    const printButton = document.getElementById("printInvoice");
 
 
-        // PRINT / SAVE AS PDF
-        printButton.addEventListener("click", () => {
+    // CLOSE INVOICE
+    closeButton.addEventListener("click", function () {
 
-            window.print();
+        window.close();
 
-        });
+    });
 
 
-        // OPTIONAL: KEYBOARD SHORTCUT CTRL + P
-        document.addEventListener("keydown", (event) => {
+    // BACK TO DENTISTS
+    backButton.addEventListener("click", function () {
 
-            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "p") {
+        window.location.href = "/dentists/Dentist";
 
-                event.preventDefault();
+    });
 
-                window.print();
 
-            }
+    // PRINT / SAVE AS PDF
+    printButton.addEventListener("click", function () {
 
-        });
+        window.print();
 
     });
 

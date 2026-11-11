@@ -1345,96 +1345,80 @@ def UpdateDentistStatus():
 
 
 
-@dentists.route("/GetFacture", methods=["POST"])
-def GetFacture():
+
+from datetime import date
+
+@dentists.route("/DentistFacture", methods=["GET"])
+def DentistFacture():
+
     if not is_logged_in():
-        return jsonify({
-            'success': False,
-            'message': 'Utilisateur non autorisé'
-        }), 403
+        return redirect(url_for("home"))
 
-    data = request.get_json(silent=True)
-
-    if not data:
-        return jsonify({
-            'success': False,
-            'message': 'Aucune donnée reçue'
-        }), 400
-
-    dentistName = data.get('dentistName')
-    month = data.get('month')
-    year = data.get('year')
+    dentistName = request.args.get("dentist")
+    month = request.args.get("month")
+    year = request.args.get("year")
 
     if not dentistName or not month or not year:
-        return jsonify({
-            'success': False,
-            'message': 'Informations manquantes'
-        }), 400
+        return "Informations de facture manquantes", 400
 
     try:
         month = int(month)
         year = int(year)
 
-        if not 1 <= month <= 12:
-            raise ValueError("Mois invalide")
+        if not 1 <= month <= 12 or year < 2000:
+            return "Mois ou année invalide", 400
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute("""
+                SELECT dentistname, pNumber, pKhedma, versement, b9aw, pDate, STATUS
+                FROM dentist_history
+                WHERE 
+                user_id = %s AND dentistname = %s AND MONTH(pDate) = %s AND YEAR(pDate) = %s
+            """, (session['id'], dentistName, month, year))
+
+            results = cursor.fetchall()
+
+            if not results:
+                return "Aucune prestation trouvée pour cette période.", 404
+
+            total = sum(float(row[4] or 0) for row in results if row[6] != 'deleted')
+
+            details = []
+
+            for row in results:
+                details.append({
+                    "dentistName": row[0],
+                    "patientNumber": row[1],
+                    "service": row[2],
+                    "versement": float(row[3] or 0),
+                    "remaining": float(row[4] or 0),
+                    "date": str(row[5]),
+                    "status": row[6]
+                })
+
+            return render_template(
+                "DentistFacture.html",
+                invoice_number=f"DH-{session['id']}-{year}{month:02d}",
+                dentistName=dentistName,
+                month=month,
+                year=year,
+                emission_date=date.today().strftime("%d/%m/%Y"),
+                details=details,
+                total=total
+            )
+
+        finally:
+            cursor.close()
+            conn.close()
 
     except (ValueError, TypeError):
-        return jsonify({
-            'success': False,
-            'message': 'Mois ou année invalide'
-        }), 400
-
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    try:
-        cursor.execute("""
-            SELECT dentistname, pNumber, pKhedma, versement, b9aw, pDate
-            FROM dentist_history
-            WHERE 
-            user_id = %s AND dentistname = %s AND MONTH(pDate) = %s AND YEAR(pDate) = %s
-        """, (session['id'], dentistName, month, year))
-
-        results = cursor.fetchall()
-
-        if not results:
-            return jsonify({
-                'success': False,
-                'message': f'Aucune prestation de {dentistName} pour {month}/{year}'
-            }), 404
-
-        total = sum(float(row[4] or 0) for row in results)
-
-        facture_details = []
-
-        for row in results:
-            facture_details.append({
-                'dentistName': row[0],
-                'patientNumber': row[1],
-                'service': row[2],
-                'versement': float(row[3] or 0),
-                'remaining': float(row[4] or 0),
-                'date': str(row[5])
-            })
-
-        return jsonify({
-            'success': True,
-            'dentistName': dentistName,
-            'month': month,
-            'year': year,
-            'details': facture_details,
-            'total': total
-        }), 200
+        return "Mois ou année invalide", 400
 
     except Exception as e:
-        conn.rollback()
-        return jsonify({
-            'success': False,
-            'message': f'Erreur : {str(e)}'
-        }), 500
-
-    finally:
-        cursor.close()
-        conn.close()
+        print("Erreur DentistFacture:", e)
+        return "Erreur lors de la génération de la facture.", 500
 
 

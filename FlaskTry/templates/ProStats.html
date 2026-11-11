@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -7,8 +8,10 @@
 
     <meta name="description"
           content="Système professionnel de gestion des prothésistes - Page des statistiques">
+
     <meta name="keywords"
           content="Statistiques, Analyses, Prothésiste, Prothèse, Gestion de laboratoire, Flask">
+
     <meta name="author" content="Équipe du laboratoire de prothèse">
 
     <title>Statistiques - Gestion des prothésistes</title>
@@ -79,9 +82,14 @@
         <!-- ================= SIDEBAR ================= -->
 
         <aside class="sidebar">
-            <button type="button" id="toggleSidebar" class="toggle-sidebar-btn">
+
+            <button type="button"
+                    id="toggleSidebar"
+                    class="toggle-sidebar-btn">
+
                 <i class="fas fa-eye-slash"></i>
                 <span>Masquer le menu</span>
+
             </button>
 
             <div class="sidebar-header">
@@ -91,7 +99,6 @@
                 <div class="header-accent"></div>
 
             </div>
-
 
             <nav class="sidebar-menu">
 
@@ -104,35 +111,29 @@
                        data-table="SearchTable">
 
                         <i class="fas fa-search"></i>
-
                         <span>Résultats de recherche</span>
 
                     </a>
-
 
                     <a href="/prothesists/ProTotal"
                        class="menu-item finish-item"
                        data-table="TotalTable">
 
                         <i class="fas fa-calculator"></i>
-
                         <span>Résumé total</span>
 
                     </a>
-
 
                     <a href="/prothesists/ProStat"
                        class="menu-item get-item"
                        data-table="StatTable">
 
                         <i class="fas fa-chart-bar"></i>
-
                         <span>Tableau des statistiques</span>
 
                     </a>
 
                 </div>
-
 
                 <div class="menu-group">
 
@@ -143,7 +144,6 @@
                        id="printBtn">
 
                         <i class="fas fa-print"></i>
-
                         <span>Imprimer</span>
 
                     </a>
@@ -158,8 +158,6 @@
         <!-- ================= CONTENT ================= -->
 
         <main class="content">
-
-            <!-- Statistics heading -->
 
             <div class="stats-header">
 
@@ -296,7 +294,6 @@
 
                             </thead>
 
-
                             <tbody>
 
                             {% if result|length > 0 %}
@@ -389,7 +386,6 @@
 
                             </thead>
 
-
                             <tbody>
 
                             {% if total|length > 0 %}
@@ -410,7 +406,6 @@
 
                                 </td>
 
-
                                 <td>
 
                                     <code>
@@ -419,21 +414,19 @@
 
                                 </td>
 
-
                                 <td>
 
-                                        <span class="badge-value">
-                                            {{ value[2]|int }}
-                                        </span>
+                                    <span class="badge-value">
+                                        {{ value[2]|int }}
+                                    </span>
 
                                 </td>
 
-
                                 <td>
 
-                                        <span class="badge-value secondary">
-                                            {{ value[3]|int }}
-                                        </span>
+                                    <span class="badge-value secondary">
+                                        {{ value[3]|int }}
+                                    </span>
 
                                 </td>
 
@@ -520,26 +513,29 @@
 
                             </thead>
 
-
                             <tbody>
 
                             {% if result|length > 0 %}
 
                             {% for dentist, values in result.items() %}
 
-                            {% for item in values %}
+                                {% for item in values %}
 
-                            <tr>
+                                <tr class="invoice-row"
+                                    data-prothesist-name="{{ item[0] }}"
+                                    data-month="{{ item[7] }}"
+                                    data-year="{{ item[8] }}"
+                                    title="Cliquez droit pour générer la facture">
 
-                                {% for v in item %}
+                                    {% for v in item %}
 
-                                <td>{{ v if v is not none else '-' }}</td>
+                                    <td>{{ v if v is not none else '-' }}</td>
+
+                                    {% endfor %}
+
+                                </tr>
 
                                 {% endfor %}
-
-                            </tr>
-
-                            {% endfor %}
 
                             {% endfor %}
 
@@ -564,7 +560,14 @@
 
                         <p>
                             Points de données :
-                            <strong>{{ result|length if result else 0 }}</strong>
+                            <strong>
+                                {{ result.values()|map('length')|sum }}
+                            </strong>
+                        </p>
+
+                        <p>
+                            <i class="fas fa-mouse-pointer"></i>
+                            Cliquez droit sur une ligne pour générer la facture.
                         </p>
 
                     </div>
@@ -596,181 +599,256 @@
 
 <script>
 
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
 
-        const printBtn = document.getElementById('printBtn');
+    const printBtn = document.getElementById('printBtn');
 
-        const toggleSidebar = document.getElementById('toggleSidebar');
-        const sidebar = document.querySelector('.sidebar');
-
-        if (toggleSidebar && sidebar) {
-
-            toggleSidebar.addEventListener('click', function () {
-
-                sidebar.classList.toggle('menu-hidden');
-
-                const isHidden = sidebar.classList.contains('menu-hidden');
-
-                toggleSidebar.innerHTML = isHidden
-                    ? '<i class="fas fa-eye"></i><span>Afficher le menu</span>'
-                    : '<i class="fas fa-eye-slash"></i><span>Masquer le menu</span>';
-
-            });
-
-        }
+    const toggleSidebar = document.getElementById('toggleSidebar');
+    const sidebar = document.querySelector('.sidebar');
 
 
-        /* =====================================================
-           TABLE SWITCHING
-        ===================================================== */
+    /* =====================================================
+       SIDEBAR TOGGLE
+    ===================================================== */
 
-        function handleTableSwitch(tableId, element) {
+    if (toggleSidebar && sidebar) {
 
-            document.querySelectorAll('.table-container').forEach(table => {
+        toggleSidebar.addEventListener('click', function () {
 
-                table.classList.add('hidden');
-                table.classList.remove('active');
+            sidebar.classList.toggle('menu-hidden');
 
-            });
+            const isHidden = sidebar.classList.contains('menu-hidden');
 
+            toggleSidebar.innerHTML = isHidden
+                ? '<i class="fas fa-eye"></i><span>Afficher le menu</span>'
+                : '<i class="fas fa-eye-slash"></i><span>Masquer le menu</span>';
 
-            const selectedTable = document.getElementById(tableId);
+        });
 
-            if (selectedTable) {
-
-                selectedTable.classList.remove('hidden');
-                selectedTable.classList.add('active');
-
-            }
+    }
 
 
-            document.querySelectorAll('.sidebar-menu a[data-table]').forEach(link => {
+    /* =====================================================
+       TABLE SWITCHING
+    ===================================================== */
 
-                link.classList.remove('active');
+    function handleTableSwitch(tableId, element) {
 
-            });
+        document.querySelectorAll('.table-container').forEach(table => {
 
-
-            if (element) {
-
-                element.classList.add('active');
-
-            }
-
-        }
-
-
-        /* =====================================================
-           INITIAL TABLE SELECTION
-        ===================================================== */
-
-        const searchTable = document.getElementById('SearchTable');
-        const totalTable = document.getElementById('TotalTable');
-        const statTable = document.getElementById('StatTable');
-
-
-        const hasSearchData = searchTable &&
-            searchTable.querySelector('.data-table tbody tr:not(.empty-state)');
-
-        const hasTotalData = totalTable &&
-            totalTable.querySelector('.data-table tbody tr:not(.empty-state)');
-
-        const hasStatData = statTable &&
-            statTable.querySelector('.data-table tbody tr:not(.empty-state)');
-
-
-        let initialTable = 'SearchTable';
-
-
-        if (hasStatData) {
-
-            initialTable = 'StatTable';
-
-        } else if (hasSearchData) {
-
-            initialTable = 'SearchTable';
-
-        } else if (hasTotalData) {
-
-            initialTable = 'TotalTable';
-
-        }
-
-
-        const initialLink = document.querySelector(
-            `.sidebar-menu a[data-table="${initialTable}"]`
-        );
-
-        handleTableSwitch(initialTable, initialLink);
-
-
-        /* =====================================================
-           ALERT AUTO DISMISS
-        ===================================================== */
-
-        document.querySelectorAll('.alert').forEach(alert => {
-
-            setTimeout(() => {
-
-                alert.style.opacity = '0';
-                alert.style.transform = 'translateY(-8px)';
-
-                setTimeout(() => {
-
-                    alert.remove();
-
-                }, 500);
-
-            }, 8000);
+            table.classList.add('hidden');
+            table.classList.remove('active');
 
         });
 
 
-        /* =====================================================
-           PRINT CURRENTLY VISIBLE TABLE
-        ===================================================== */
+        const selectedTable = document.getElementById(tableId);
 
-        if (printBtn) {
+        if (selectedTable) {
 
-            printBtn.addEventListener('click', function (event) {
-
-                event.preventDefault();
-
-                const activeTable = document.querySelector(
-                    '.table-container.active:not(.hidden)'
-                );
-
-
-                if (!activeTable) {
-
-                    alert("Aucun tableau disponible pour l'impression.");
-
-                    return;
-
-                }
-
-
-                activeTable.classList.add('print-target');
-
-                window.print();
-
-                setTimeout(() => {
-
-                    activeTable.classList.remove('print-target');
-
-                }, 500);
-
-            });
+            selectedTable.classList.remove('hidden');
+            selectedTable.classList.add('active');
 
         }
 
 
-        /* =====================================================
-           SIDEBAR LINKS
-           Keep their original Flask navigation routes.
-        ===================================================== */
+        document.querySelectorAll('.sidebar-menu a[data-table]').forEach(link => {
+
+            link.classList.remove('active');
+
+        });
+
+
+        if (element) {
+
+            element.classList.add('active');
+
+        }
+
+    }
+
+
+    /* =====================================================
+       INITIAL TABLE SELECTION
+    ===================================================== */
+
+    const searchTable = document.getElementById('SearchTable');
+    const totalTable = document.getElementById('TotalTable');
+    const statTable = document.getElementById('StatTable');
+
+
+    const hasSearchData = searchTable &&
+        searchTable.querySelector('.data-table tbody tr:not(.empty-state)');
+
+    const hasTotalData = totalTable &&
+        totalTable.querySelector('.data-table tbody tr:not(.empty-state)');
+
+    const hasStatData = statTable &&
+        statTable.querySelector('.invoice-row');
+
+
+    let initialTable = 'SearchTable';
+
+
+    if (hasStatData) {
+
+        initialTable = 'StatTable';
+
+    } else if (hasSearchData) {
+
+        initialTable = 'SearchTable';
+
+    } else if (hasTotalData) {
+
+        initialTable = 'TotalTable';
+
+    }
+
+
+    const initialLink = document.querySelector(
+        `.sidebar-menu a[data-table="${initialTable}"]`
+    );
+
+    handleTableSwitch(initialTable, initialLink);
+
+
+    /* =====================================================
+       ALERT AUTO DISMISS
+    ===================================================== */
+
+    document.querySelectorAll('.alert').forEach(alert => {
+
+        setTimeout(() => {
+
+            alert.style.opacity = '0';
+            alert.style.transform = 'translateY(-8px)';
+
+            setTimeout(() => {
+
+                alert.remove();
+
+            }, 500);
+
+        }, 8000);
 
     });
+
+
+    /* =====================================================
+       PRINT CURRENTLY VISIBLE TABLE
+    ===================================================== */
+
+    if (printBtn) {
+
+        printBtn.addEventListener('click', function (event) {
+
+            event.preventDefault();
+
+            const activeTable = document.querySelector(
+                '.table-container.active:not(.hidden)'
+            );
+
+
+            if (!activeTable) {
+
+                alert("Aucun tableau disponible pour l'impression.");
+
+                return;
+
+            }
+
+
+            activeTable.classList.add('print-target');
+
+            window.print();
+
+            setTimeout(() => {
+
+                activeTable.classList.remove('print-target');
+
+            }, 500);
+
+        });
+
+    }
+
+
+    /* =====================================================
+       GENERATE INVOICE ON RIGHT CLICK
+    ===================================================== */
+
+    document.addEventListener('contextmenu', function (event) {
+
+        const row = event.target.closest('.invoice-row');
+
+        if (!row) return;
+
+
+        // Prevent the browser's default context menu
+        event.preventDefault();
+
+
+        const prothesistName = row.dataset.prothesistName;
+        const month = row.dataset.month;
+        const year = row.dataset.year;
+
+
+        if (!prothesistName || !month || !year) {
+
+            alert("Informations du prothésiste manquantes.");
+
+            return;
+
+        }
+
+
+        /* FIRST CONFIRMATION */
+
+        const generateInvoice = confirm(
+            `Voulez-vous générer la facture de ${prothesistName} pour ${month}/${year} ?`
+        );
+
+
+        if (!generateInvoice) {
+
+            return;
+
+        }
+
+
+        /* SECOND CONFIRMATION */
+
+        const showPatientNumbers = confirm(
+            "Voulez-vous afficher les numéros des patients sur la facture ?\n\nOK = Oui\nAnnuler = Non"
+        );
+
+
+        const patientNumberShow = showPatientNumbers ? 'oui' : 'non';
+
+
+        /* =====================================================
+           REDIRECT TO THE FLASK INVOICE PAGE
+        ===================================================== */
+
+        const params = new URLSearchParams({
+
+            prothesist: prothesistName,
+
+            month: month,
+
+            year: year,
+
+            PatientNumberShow: patientNumberShow
+
+        });
+
+
+        window.location.href =
+            `/prothesists/ProthesistFacture?${params.toString()}`;
+
+    });
+
+});
 
 </script>
 

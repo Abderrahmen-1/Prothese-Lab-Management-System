@@ -1385,16 +1385,15 @@
 
 
 
+
         /* ==========================================
            INVOICE GENERATION
         ========================================== */
 
         const contextMenu = document.getElementById("factureContextMenu");
-
         const generateButton = document.getElementById("generateFacture");
 
         let selectedFacture = null;
-
 
 
         // RIGHT CLICK ON STATISTICS ROW
@@ -1403,53 +1402,37 @@
 
             const row = event.target.closest(".facture-row");
 
-
             if (!row) {
-
                 contextMenu.style.display = "none";
-
                 return;
-
             }
-
 
             event.preventDefault();
 
-
             selectedFacture = {
-
                 dentistName: row.dataset.dentistName,
-
                 month: row.dataset.month,
-
                 year: row.dataset.year
-
             };
 
+            const menuWidth = 230;
+            const menuHeight = 55;
 
             contextMenu.style.display = "block";
 
-
-            const menuWidth = 230;
-
-            const menuHeight = 55;
-
-
             contextMenu.style.left =
-                Math.min(
+                Math.max(10, Math.min(
                     event.clientX,
                     window.innerWidth - menuWidth - 10
-                ) + "px";
-
+                )) + "px";
 
             contextMenu.style.top =
-                Math.min(
+                Math.max(10, Math.min(
                     event.clientY,
                     window.innerHeight - menuHeight - 10
-                ) + "px";
+                )) + "px";
 
         });
-
 
 
         // CLOSE CONTEXT MENU
@@ -1457,108 +1440,31 @@
         document.addEventListener("click", event => {
 
             if (!event.target.closest("#factureContextMenu")) {
-
                 contextMenu.style.display = "none";
-
             }
 
         });
-
 
 
         // GENERATE INVOICE
 
-        generateButton.addEventListener("click", async () => {
+        generateButton.addEventListener("click", () => {
 
             contextMenu.style.display = "none";
 
-
             if (!selectedFacture) return;
 
+            const params = new URLSearchParams({
+                dentist: selectedFacture.dentistName,
+                month: selectedFacture.month,
+                year: selectedFacture.year
+            });
 
-            // Open synchronously to avoid popup blockers.
-
-            const invoiceWindow = window.open("", "_self");
-
-
-            if (!invoiceWindow) {
-
-                showStatus(
-                    "Autorisez les fenêtres pop-up pour générer la facture.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            invoiceWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Facture</title>
-                </head>
-
-                <body style="font-family:Arial;padding:40px">
-
-                    <h2>Génération de la facture...</h2>
-
-                    <p>Veuillez patienter.</p>
-
-                </body>
-                </html>
-            `);
-
-
-            try {
-
-                const response = await fetch(
-                    "/dentists/GetFacture",
-                    {
-
-                        method: "POST",
-
-                        headers: {
-
-                            "Content-Type": "application/json",
-
-                            "X-Requested-With": "XMLHttpRequest"
-
-                        },
-
-                        body: JSON.stringify(selectedFacture)
-
-                    }
-                );
-
-
-                const data = await response.json();
-
-
-                if (!response.ok || !data.success) {
-
-                    throw new Error(
-                        data.message || "Impossible de générer la facture."
-                    );
-
-                }
-
-
-                renderFacture(invoiceWindow, data);
-
-
-            } catch (error) {
-
-                invoiceWindow.close();
-
-                showStatus(error.message, "error");
-
-                console.error("Facture error:", error);
-
-            }
+            window.location.href =
+                `/dentists/DentistFacture?${params.toString()}`;
 
         });
+
 
 
 
