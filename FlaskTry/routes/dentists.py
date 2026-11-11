@@ -2,6 +2,7 @@ import secrets
 from flask import Blueprint, request, render_template, redirect, url_for, session, jsonify
 from FlaskTry.FunctionFile import *
 from FlaskTry.ConnectToSql import get_connection
+from datetime import date
 
 dentists = Blueprint("dentists", __name__, url_prefix="/dentists")
 
@@ -1342,11 +1343,6 @@ def UpdateDentistStatus():
         'success': True,
         'message': 'Statut mis à jour avec succès'
     })
-
-
-
-
-from datetime import date
 
 @dentists.route("/DentistFacture", methods=["GET"])
 def DentistFacture():

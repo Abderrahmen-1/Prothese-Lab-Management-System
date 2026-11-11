@@ -1723,7 +1723,6 @@ def ProSearchPage():
         cursor.close()
         conn.close()
 
-
 @prothesists.route("/ProthesistFacture", methods=["GET"])
 def ProthesistFacture():
 
