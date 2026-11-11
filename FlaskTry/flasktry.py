@@ -19,6 +19,7 @@ from FlaskTry.routes.sel3a import products
 from FlaskTry.routes.services import services
 import random
 from flask_mail import Mail, Message
+from flask_compress import Compress
 
 load_dotenv()
 
@@ -27,6 +28,11 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 limiter = Limiter(get_remote_address, app=app, default_limits=["200 per hour"])
+
+app.config['COMPRESS_LEVEL'] = os.getenv('COMPRESS_LEVEL')
+app.config['COMPRESS_MIN_SIZE'] = os.getenv('COMPRESS_MIN_SIZE')
+
+Compress(app)
 
 app.register_blueprint(users)
 app.register_blueprint(patients)
@@ -884,7 +890,7 @@ def khedmaMkemla():
                                            message="Patient introuvable dans les dossiers du dentiste",
                                            csrf_token=new_token)
 
-                    # Verify dentist record
+                # Verify dentist record
                 cursor.execute(""" 
                     SELECT d.id, k.id  
                     FROM dentists d 

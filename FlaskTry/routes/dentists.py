@@ -174,7 +174,7 @@ def DeleteDentist():
                                (session['id'], Dentist_deleted))
 
                 cursor.execute("DELETE FROM khedma WHERE user_id = %s AND khedma_dentist = %s",
-                               (session['id'], f"Dr.{Dentist_deleted}"))
+                               (session['id'], Dentist_deleted))
 
                 conn.commit()
                 return render_template("DeleteDentist.html", message="Dentiste supprimé avec succès",
@@ -640,7 +640,7 @@ def Get_From_Dentist():
                     khedma_wajda, khedma_khalsa, prothesist_name, prothesist_number, user_id, DeadLine ) 
                 VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ) 
                 """,
-                (choice, price, date, f"Dr.{dentist}", unique, "no", dentist_khalsa,
+                (choice, price, date, dentist, unique, "no", dentist_khalsa,
                  prothesist_name, prothesist_number, session["id"], deadLine))
 
             Dentist_History(cursor, conn, dentist)
@@ -951,7 +951,7 @@ def DeleteDentistKhedma():
                            (session['id'], Dentist_name, PatientF_deleted, PatientL_deleted, Patient_unique))
 
             cursor.execute("DELETE FROM khedma WHERE user_id = %s AND khedma_patient = %s AND khedma_dentist = %s ",
-                           (session['id'], Patient_unique, f"Dr.{Dentist_name}"))
+                           (session['id'], Patient_unique, Dentist_name))
 
             cursor.execute(""" 
                 DELETE FROM dentists 
