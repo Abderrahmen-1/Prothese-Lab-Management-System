@@ -7,6 +7,7 @@
     <meta name="description" content="Système professionnel de gestion des dentistes pour laboratoire de prothèse">
     <meta name="keywords" content="Dentistes, Prothèse, Gestion de laboratoire">
     <meta name="author" content="Équipe du laboratoire de prothèse">
+
     <title>Système de gestion des dentistes</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='Dentist.css') }}">
@@ -14,109 +15,12 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Sora:wght@400;500;600&display=swap"
           rel="stylesheet">
+
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <style>
-        .sidebar-toggle {
-            display: none;
-        }
-
-        @media (max-width: 850px) {
-            .sidebar-toggle {
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 12px;
-                margin: 10px 0 12px;
-                padding: 12px 14px;
-                border: 1px solid #dbe5f1;
-                border-radius: 10px;
-                background: #f8fbff;
-                color: #1e3a5f;
-                font: inherit;
-                font-weight: 700;
-                cursor: pointer;
-            }
-
-            .sidebar-toggle > span {
-                display: inline-flex;
-                align-items: center;
-                gap: 9px;
-            }
-
-            .sidebar-toggle .toggle-chevron {
-                transition: transform .2s ease;
-            }
-
-            .sidebar-toggle[aria-expanded="true"] .toggle-chevron {
-                transform: rotate(180deg);
-            }
-
-            .sidebar-menu {
-                display: none !important;
-            }
-
-            .sidebar-menu.is-open {
-                display: grid !important;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-
-        @media (max-width: 680px) {
-            .sidebar-menu.is-open {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .tables-container {
-            transition: opacity .18s ease;
-        }
-
-        .patient-card-top .status-select {
-            max-width: 155px;
-            min-width: 125px;
-            padding: 8px 30px 8px 10px;
-            border: 1px solid #bfdbfe;
-            border-radius: 9px;
-            background: #eff6ff;
-            color: #1d4ed8;
-            font: inherit;
-            font-size: .85rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .patient-card-top .status-select:disabled {
-            opacity: .65;
-            cursor: wait;
-        }
-
-        @media (max-width: 520px) {
-            .patient-card-top .status-select {
-                width: 100%;
-                max-width: none;
-            }
-        }
-
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            transform: scale(0);
-            animation: dentistRipple .55s linear;
-            background: rgba(37, 99, 235, .18);
-            pointer-events: none;
-        }
-
-        @keyframes dentistRipple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-    </style>
 </head>
+
 
 <body>
 
@@ -125,10 +29,13 @@
 <div class="container">
 
     <!-- HEADER -->
+
     <header class="header">
+
         <div class="header-content">
 
             <div class="logo-section">
+
                 <div class="logo-icon">
                     <i class="fas fa-tooth"></i>
                 </div>
@@ -137,9 +44,11 @@
                     <h1>DentistHub</h1>
                     <p>Gestion des dentistes du laboratoire de prothèse</p>
                 </div>
+
             </div>
 
             <nav class="header-nav">
+
                 <a href="/HomePage" class="nav-btn back-btn">
                     <i class="fas fa-arrow-left"></i>
                     Retour au menu
@@ -149,18 +58,22 @@
                     <i class="fas fa-history"></i>
                     Historique
                 </a>
+
             </nav>
 
         </div>
+
     </header>
 
 
     <!-- SEARCH -->
+
     <div id="search-bar-container">
 
         {% if main and not result and not result is mapping and not most and not less and not total %}
 
         <div class="search-section">
+
             <form action="{{ url_for('dentists.DentistPage') }}"
                   method="POST"
                   class="search-form"
@@ -171,6 +84,7 @@
                        value="{{ csrf_token }}">
 
                 <div class="search-wrapper">
+
                     <i class="fas fa-search"></i>
 
                     <input type="text"
@@ -184,26 +98,36 @@
                         <i class="fas fa-magnifying-glass"></i>
                         Rechercher
                     </button>
+
                 </div>
+
             </form>
+
         </div>
 
         {% endif %}
+
     </div>
 
 
     <div class="main-layout">
 
+
         <!-- SIDEBAR -->
+
         <aside class="sidebar">
 
             <div class="sidebar-header">
+
                 <h2>
                     <i class="fas fa-user-md"></i>
                     Actions des dentistes
                 </h2>
+
                 <div class="header-accent"></div>
+
             </div>
+
 
             <button type="button"
                     class="sidebar-toggle"
@@ -217,83 +141,120 @@
                 </span>
 
                 <i class="fas fa-chevron-down toggle-chevron"></i>
+
             </button>
+
 
             <nav class="sidebar-menu" id="patientSidebarMenu">
 
+
                 <div class="menu-group">
+
                     <h3 class="group-title">Analyses</h3>
+
 
                     <a href="/dentists/DentistMainTable"
                        class="menu-item main-item ajax-link">
+
                         <i class="fas fa-table"></i>
                         <span>Tableau principal</span>
                         <span class="badge">Principal</span>
+
                     </a>
+
 
                     <a href="/dentists/DentistMostKhedma"
                        class="menu-item sort-item ajax-link">
+
                         <i class="fas fa-chart-line"></i>
                         <span>Plus de tâches</span>
                         <span class="badge">Plus</span>
+
                     </a>
+
 
                     <a href="/dentists/DentistLessKhedma"
                        class="menu-item sort-item ajax-link">
+
                         <i class="fas fa-chart-bar"></i>
                         <span>Moins de tâches</span>
                         <span class="badge">Moins</span>
+
                     </a>
+
 
                     <a href="/dentists/DentistDeadLine"
                        class="menu-item deadline-item ajax-link">
+
                         <i class="fas fa-calendar-check"></i>
                         <span>Par échéance</span>
                         <span class="badge">Dates</span>
+
                     </a>
+
 
                     <a href="/dentists/DentistTotal"
                        class="menu-item price-item ajax-link">
+
                         <i class="fas fa-users"></i>
                         <span>Total des dentistes</span>
                         <span class="badge">Total</span>
+
                     </a>
+
 
                     <a href="/dentists/DentistsStat"
                        class="menu-item stats-item ajax-link">
+
                         <i class="fas fa-chart-pie"></i>
                         <span>Statistiques</span>
                         <span class="badge badge-stats">Stats</span>
+
                     </a>
+
                 </div>
 
 
                 <div class="menu-group">
+
                     <h3 class="group-title">Gestion</h3>
 
+
                     <a href="/dentists/AddDentist" class="menu-item add-item">
+
                         <i class="fas fa-user-plus"></i>
                         <span>Ajouter un dentiste</span>
                         <span class="badge badge-add">+</span>
+
                     </a>
 
+
                     <a href="/dentists/DeleteDentistPatient" class="menu-item delete-item">
+
                         <i class="fas fa-user-minus"></i>
                         <span>Supprimer une tâche patient</span>
                         <span class="badge badge-delete">−</span>
+
                     </a>
 
+
                     <a href="/dentists/GetFromDentist" class="menu-item modify-item">
+
                         <i class="fas fa-handshake"></i>
                         <span>Recevoir une tâche</span>
                         <span class="badge">Entrée</span>
+
                     </a>
 
+
                     <a href="/dentists/DentistVersement" class="menu-item modify-item">
+
                         <i class="fas fa-money-bill-wave"></i>
                         <span>Modifier le versement</span>
                         <span class="badge">✎</span>
+
                     </a>
+
                 </div>
 
             </nav>
@@ -302,49 +263,75 @@
 
 
         <!-- MAIN CONTENT -->
+
         <main class="content">
 
+
             {% if message or error %}
+
             <div class="alert-container">
 
                 {% if error %}
+
                 <div class="alert alert-error fade-in">
+
                     <div class="alert-icon">
                         <i class="fas fa-exclamation-circle"></i>
                     </div>
+
                     <div class="alert-content">
                         <h3>Erreur</h3>
                         <p>{{ error }}</p>
                     </div>
-                    <button class="alert-close" type="button"
+
+                    <button class="alert-close"
+                            type="button"
                             onclick="this.parentElement.style.display='none'">
+
                         <i class="fas fa-times"></i>
+
                     </button>
+
                 </div>
+
                 {% endif %}
 
+
                 {% if message %}
+
                 <div class="alert alert-success fade-in">
+
                     <div class="alert-icon">
                         <i class="fas fa-check-circle"></i>
                     </div>
+
                     <div class="alert-content">
                         <h3>Opération réussie</h3>
                         <p>{{ message }}</p>
                     </div>
-                    <button class="alert-close" type="button"
+
+                    <button class="alert-close"
+                            type="button"
                             onclick="this.parentElement.style.display='none'">
+
                         <i class="fas fa-times"></i>
+
                     </button>
+
                 </div>
+
                 {% endif %}
 
             </div>
+
             {% endif %}
+
 
             <div id="statusMessage" class="status-message"></div>
 
+
             <div class="tables-container" id="tables-container">
+
 
                 {% macro render_dentist_cards(rows, editable_status=false) %}
 
@@ -355,23 +342,30 @@
                     <article class="patient-card"
                              data-search="{{ (row[2] ~ ' ' ~ row[3] ~ ' ' ~ row[4] ~ ' ' ~ row[5])|lower }}">
 
+
                         <!-- CARD HEADER -->
+
                         <div class="patient-card-top">
 
                             <div class="patient-identity">
+
                                 <div class="patient-avatar">
                                     <i class="fas fa-user-md"></i>
                                 </div>
 
                                 <div class="patient-name-wrap">
+
                                     <h3>{{ row[2] }}</h3>
+
                                     <span class="patient-meta">
                                         Patient : {{ row[3] }} {{ row[4] }} · {{ row[5] }}
                                     </span>
+
                                 </div>
+
                             </div>
 
-                            <!-- EDITABLE STATUS ONLY IN MAIN TABLE -->
+
                             {% if editable_status and row[14] not in ['finished', 'prothesist'] %}
 
                             <select id="dentist-status-{{ loop.index }}"
@@ -406,6 +400,7 @@
 
                             </select>
 
+
                             {% elif row[14] == 'finished' %}
 
                             <span class="patient-status status-finished">
@@ -413,11 +408,13 @@
                                 Terminé
                             </span>
 
+
                             {% elif row[14] == 'in process' %}
 
                             <span class="patient-status status-progress">
                                 En cours
                             </span>
+
 
                             {% elif row[14] == 'prothesist' %}
 
@@ -425,17 +422,20 @@
                                 Prothésiste
                             </span>
 
+
                             {% elif row[14] == 'montage' %}
 
                             <span class="patient-status status-montage">
                                 Montage
                             </span>
 
+
                             {% elif row[14] == 'esseyage' %}
 
                             <span class="patient-status status-tryin">
                                 Essayage
                             </span>
+
 
                             {% else %}
 
@@ -449,7 +449,9 @@
 
 
                         <!-- SERVICE INFORMATION -->
+
                         <div class="patient-service-line">
+
                             <span>
                                 <i class="fas fa-tooth"></i>
                                 {{ row[6] }}
@@ -459,39 +461,54 @@
                                 <i class="fas fa-calendar-plus"></i>
                                 {{ row[12] }}
                             </span>
+
                         </div>
 
 
                         <!-- DETAILS -->
+
                         <div class="patient-details-grid">
 
                             <div class="patient-detail">
+
                                 <span class="detail-label">ID du service</span>
                                 <strong>#{{ row[0] }}</strong>
+
                             </div>
 
+
                             <div class="patient-detail">
+
                                 <span class="detail-label">Date limite</span>
+
                                 <strong>
                                     <i class="far fa-calendar-check"></i>
                                     {{ row[13] }}
                                 </strong>
+
                             </div>
 
+
                             <div class="patient-detail">
+
                                 <span class="detail-label">Travail terminé</span>
                                 <strong>{{ row[10] }}</strong>
+
                             </div>
 
+
                             <div class="patient-detail">
+
                                 <span class="detail-label">Payée</span>
                                 <strong>{{ row[11] }}</strong>
+
                             </div>
 
                         </div>
 
 
                         <!-- PAYMENT INFORMATION -->
+
                         <div class="patient-payment">
 
                             <div class="payment-heading">
@@ -522,11 +539,15 @@
 
                     </article>
 
+
                     {% else %}
 
                     <div class="empty-state compact-empty">
+
                         <i class="fas fa-user-slash"></i>
+
                         <h3>Aucun enregistrement trouvé</h3>
+
                     </div>
 
                     {% endfor %}
@@ -536,23 +557,29 @@
                 {% endmacro %}
 
 
-                <!-- MAIN DENTIST TABLE AS CARDS -->
+                <!-- MAIN DENTIST TABLE -->
+
                 {% if main and not result and not result is mapping and not most and not less and not total %}
 
                 <section class="patient-section fade-in">
 
                     <div class="patient-section-header">
+
                         <div>
+
                             <span class="section-eyebrow">GESTION DES DENTISTES</span>
+
                             <h2>
                                 <i class="fas fa-users"></i>
                                 Tableau principal
                             </h2>
+
                         </div>
 
                         <span class="result-count">
                             {{ main|length }} enregistrements
                         </span>
+
                     </div>
 
                     {{ render_dentist_cards(main, true) }}
@@ -563,22 +590,28 @@
 
 
                 <!-- SEARCH RESULTS -->
+
                 {% if result and not result is mapping and not most and not less and not total %}
 
                 <section class="patient-section fade-in">
 
                     <div class="patient-section-header">
+
                         <div>
+
                             <span class="section-eyebrow">RECHERCHE</span>
+
                             <h2>
                                 <i class="fas fa-search"></i>
                                 Résultats de recherche
                             </h2>
+
                         </div>
 
                         <span class="result-count">
                             {{ result|length }} résultats
                         </span>
+
                     </div>
 
                     {{ render_dentist_cards(result) }}
@@ -589,20 +622,28 @@
 
 
                 <!-- MOST TASKS -->
+
                 {% if most and not most is mapping %}
 
                 <section class="patient-section fade-in">
 
                     <div class="patient-section-header">
+
                         <div>
+
                             <span class="section-eyebrow">ANALYSE D'ACTIVITÉ</span>
+
                             <h2>
                                 <i class="fas fa-chart-line"></i>
                                 Dentiste avec le plus de tâches
                             </h2>
+
                         </div>
 
-                        <span class="result-count">{{ most_name }}</span>
+                        <span class="result-count">
+                            {{ most_name }}
+                        </span>
+
                     </div>
 
                     {{ render_dentist_cards(most) }}
@@ -613,20 +654,28 @@
 
 
                 <!-- LESS TASKS -->
+
                 {% if less and not less is mapping %}
 
                 <section class="patient-section fade-in">
 
                     <div class="patient-section-header">
+
                         <div>
+
                             <span class="section-eyebrow">ANALYSE D'ACTIVITÉ</span>
+
                             <h2>
                                 <i class="fas fa-chart-bar"></i>
                                 Dentiste avec le moins de tâches
                             </h2>
+
                         </div>
 
-                        <span class="result-count">{{ less_name }}</span>
+                        <span class="result-count">
+                            {{ less_name }}
+                        </span>
+
                     </div>
 
                     {{ render_dentist_cards(less) }}
@@ -637,22 +686,28 @@
 
 
                 <!-- DEADLINES -->
+
                 {% if dateDeadLine %}
 
                 <section class="patient-section fade-in">
 
                     <div class="patient-section-header deadline-heading">
+
                         <div>
+
                             <span class="section-eyebrow">SUIVI DES DÉLAIS</span>
+
                             <h2>
                                 <i class="fas fa-calendar-check"></i>
                                 Planning des échéances
                             </h2>
+
                         </div>
 
                         <span class="result-count">
                             {{ dateDeadLine|length }} éléments
                         </span>
+
                     </div>
 
                     {{ render_dentist_cards(dateDeadLine) }}
@@ -663,46 +718,69 @@
 
 
                 <!-- TOTAL -->
+
                 {% if total %}
 
                 <section class="patient-section fade-in">
 
                     <div class="patient-section-header price-heading">
+
                         <div>
+
                             <span class="section-eyebrow">SUIVI FINANCIER</span>
+
                             <h2>
                                 <i class="fas fa-coins"></i>
                                 Total restant à payer
                             </h2>
+
                         </div>
 
                         <span class="result-count">
                             {{ total|length }} dentistes
                         </span>
+
                     </div>
 
+
                     <div class="table-wrapper">
+
                         <table class="data-table summary-table">
+
                             <thead>
+
                             <tr>
                                 <th>Dentiste</th>
                                 <th>Total restant à payer</th>
                             </tr>
+
                             </thead>
 
+
                             <tbody>
+
                             {% for dentist, value in total.items() %}
+
                             <tr class="table-row-animate">
+
                                 <td class="dentist-cell">
                                     <strong>{{ dentist }}</strong>
                                 </td>
+
                                 <td class="value-cell">
-                                    <span class="badge badge-value">{{ value }} DA</span>
+                                    <span class="badge badge-value">
+                                        {{ value }} DA
+                                    </span>
                                 </td>
+
                             </tr>
+
                             {% endfor %}
+
                             </tbody>
+
                         </table>
+
                     </div>
 
                 </section>
@@ -711,25 +789,37 @@
 
 
                 <!-- STATISTICS -->
+
                 {% if result and result is mapping %}
 
                 <section class="patient-section fade-in">
 
                     <div class="patient-section-header">
+
                         <div>
+
                             <span class="section-eyebrow">ANALYSE DES DONNÉES</span>
+
                             <h2>
                                 <i class="fas fa-chart-pie"></i>
                                 Statistiques des dentistes
                             </h2>
+
                         </div>
 
-                        <span class="result-count">Analyse détaillée</span>
+                        <span class="result-count">
+                            Analyse détaillée
+                        </span>
+
                     </div>
 
+
                     <div class="table-wrapper">
+
                         <table class="data-table summary-table">
+
                             <thead>
+
                             <tr>
                                 <th>ID des données</th>
                                 <th>Dentiste</th>
@@ -740,33 +830,61 @@
                                 <th>Année</th>
                                 <th>ID utilisateur</th>
                             </tr>
+
                             </thead>
 
+
                             <tbody>
+
                             {% for dentist, values in result.items() %}
+
                             {% for row in values %}
-                            <tr class="table-row-animate">
+
+                            <tr class="table-row-animate facture-row"
+
+                                data-dentist-name="{{ row[1] }}"
+                                data-month="{{ row[5] }}"
+                                data-year="{{ row[6] }}"
+
+                                title="Clic droit pour générer la facture">
+
                                 {% for item in row %}
+
                                 <td>{{ item }}</td>
+
                                 {% endfor %}
+
                             </tr>
+
                             {% endfor %}
+
                             {% endfor %}
+
                             </tbody>
+
                         </table>
+
+                    </div>
+
+                    <div style="margin-top: 12px; color: #64748b; font-size: .85rem;">
+                        <i class="fas fa-info-circle"></i>
+                        Faites un clic droit sur une ligne pour générer sa facture.
                     </div>
 
                 </section>
 
                 {% endif %}
 
+
             </div>
 
 
             <!-- EMPTY STATE -->
+
             {% if not result and not most and not less and not total and not dateDeadLine and not main %}
 
             <div class="empty-state">
+
                 <div class="empty-icon">
                     <i class="fas fa-inbox"></i>
                 </div>
@@ -776,9 +894,11 @@
                 <p>
                     Sélectionnez une action dans le menu pour afficher les informations des dentistes
                 </p>
+
             </div>
 
             {% endif %}
+
 
         </main>
 
@@ -787,30 +907,61 @@
 </div>
 
 
+<!-- ==========================================
+     CUSTOM INVOICE CONTEXT MENU
+========================================== -->
+
+<div id="factureContextMenu" class="facture-context-menu">
+
+    <button type="button" id="generateFacture">
+
+        <i class="fas fa-file-invoice-dollar"></i>
+
+        Générer la facture
+
+    </button>
+
+</div>
+
+
 <script>
+
     (() => {
+
         "use strict";
+
 
         const TABLES_ID = "tables-container";
         const SEARCH_ID = "search-bar-container";
 
+
         function showStatus(message, type = "error") {
+
             const box = document.getElementById("statusMessage");
+
             if (!box) return;
 
             box.textContent = message;
             box.className = `status-message ${type}`;
+
         }
+
 
 
         function initializeStatusSelects(root = document) {
+
             root.querySelectorAll(".status-select").forEach(select => {
+
                 select.dataset.previousStatus = select.value;
+
             });
+
         }
 
 
+
         function closeMobileSidebar() {
+
             if (!window.matchMedia("(max-width: 850px)").matches) return;
 
             const menu = document.getElementById("patientSidebarMenu");
@@ -823,17 +974,23 @@
             if (toggle) {
                 toggle.setAttribute("aria-expanded", "false");
             }
+
         }
 
 
+
         function addRipple(element, event) {
+
             if (!element || !element.getBoundingClientRect) return;
 
             const rect = element.getBoundingClientRect();
+
             const size = Math.max(rect.width, rect.height);
 
             const ripple = document.createElement("span");
+
             ripple.className = "ripple";
+
             ripple.style.width = `${size}px`;
             ripple.style.height = `${size}px`;
 
@@ -846,8 +1003,14 @@
             element.appendChild(ripple);
 
             window.setTimeout(() => ripple.remove(), 600);
+
         }
 
+
+
+        /* ==========================================
+           AJAX PAGE NAVIGATION
+        ========================================== */
 
         async function loadDentistPage(url, options = {}) {
 
@@ -855,28 +1018,42 @@
             const searchContainer = document.getElementById(SEARCH_ID);
 
             if (!tablesContainer || !searchContainer) {
+
                 window.location.href = url;
+
                 return;
+
             }
 
+
             const formData = options.formData || null;
+
             const method = formData ? "POST" : "GET";
 
             tablesContainer.style.opacity = "0.45";
 
+
             try {
 
                 const response = await fetch(url, {
+
                     method: method,
+
                     body: formData || undefined,
+
                     headers: {
                         "X-Requested-With": "XMLHttpRequest"
                     }
+
                 });
 
+
                 if (!response.ok) {
+
                     throw new Error(`Erreur HTTP ${response.status}`);
+
                 }
+
 
                 const html = await response.text();
 
@@ -885,15 +1062,20 @@
                     "text/html"
                 );
 
+
                 const newTables = parsed.getElementById(TABLES_ID);
+
                 const newSearch = parsed.getElementById(SEARCH_ID);
 
-                // If the Flask response does not contain the expected containers,
-                // use normal navigation instead of displaying broken content.
+
                 if (!newTables) {
+
                     window.location.href = response.url || url;
+
                     return;
+
                 }
+
 
                 tablesContainer.innerHTML = newTables.innerHTML;
 
@@ -901,18 +1083,28 @@
                     ? newSearch.innerHTML
                     : "";
 
+
                 initializeStatusSelects(tablesContainer);
 
+
                 if (options.pushState !== false) {
+
                     window.history.pushState({}, "", url);
+
                 }
+
 
                 closeMobileSidebar();
 
+
                 tablesContainer.scrollIntoView({
+
                     behavior: "smooth",
+
                     block: "start"
+
                 });
+
 
             } catch (error) {
 
@@ -924,19 +1116,24 @@
                 );
 
             } finally {
+
                 tablesContainer.style.opacity = "1";
+
             }
+
         }
+
 
 
         /* ==========================================
            DELEGATED CLICK HANDLER
-           Works after AJAX content replacement.
         ========================================== */
 
         document.addEventListener("click", event => {
 
+
             // SIDEBAR TOGGLE
+
             const toggle = event.target.closest("#sidebarToggle");
 
             if (toggle) {
@@ -953,10 +1150,13 @@
                 menu.classList.toggle("is-open", opening);
 
                 return;
+
             }
 
 
+
             // AJAX FILTER LINKS
+
             const ajaxLink = event.target.closest("a.ajax-link");
 
             if (ajaxLink) {
@@ -972,23 +1172,31 @@
                 loadDentistPage(url);
 
                 return;
+
             }
 
 
-            // RIPPLE EFFECT FOR OTHER LINKS
+
+            // RIPPLE EFFECT
+
             const menuLink = event.target.closest(".menu-item, .nav-btn");
 
             if (menuLink) {
+
                 addRipple(menuLink, event);
+
             }
 
 
-            // CLOSE MOBILE SIDEBAR AFTER NORMAL NAVIGATION
+
             if (event.target.closest("a.menu-item") && !ajaxLink) {
+
                 closeMobileSidebar();
+
             }
 
         });
+
 
 
         /* ==========================================
@@ -1007,6 +1215,7 @@
 
             let visible = 0;
 
+
             cards.forEach(card => {
 
                 const matches = (card.dataset.search || "")
@@ -1021,20 +1230,23 @@
 
             });
 
+
             const counter = document.querySelector(
                 `#${TABLES_ID} .patient-section-header .result-count`
             );
 
             if (counter) {
+
                 counter.textContent = `${visible} enregistrements`;
+
             }
 
         });
 
 
+
         /* ==========================================
            SEARCH FORM SUBMISSION
-           Sends the search to the existing Flask route.
         ========================================== */
 
         document.addEventListener("submit", event => {
@@ -1046,10 +1258,13 @@
             const form = event.target;
 
             loadDentistPage(form.action, {
+
                 formData: new FormData(form)
+
             });
 
         });
+
 
 
         /* ==========================================
@@ -1062,11 +1277,14 @@
 
             if (!select.classList.contains("status-select")) return;
 
+
             const previousStatus =
                 select.dataset.previousStatus || select.value;
 
             const patientNumber = select.dataset.patientNumber;
+
             const dentistName = select.dataset.dentistName;
+
             const newStatus = select.value;
 
 
@@ -1080,28 +1298,39 @@
                 );
 
                 return;
+
             }
 
 
             select.disabled = true;
+
 
             try {
 
                 const response = await fetch(
                     "/dentists/UpdateDentistStatus",
                     {
+
                         method: "POST",
 
                         headers: {
+
                             "Content-Type": "application/json",
+
                             "X-Requested-With": "XMLHttpRequest"
+
                         },
 
                         body: JSON.stringify({
+
                             patient_number: patientNumber,
+
                             status: newStatus,
+
                             dentist_name: dentistName
+
                         })
+
                     }
                 );
 
@@ -1155,6 +1384,711 @@
         });
 
 
+
+        /* ==========================================
+           INVOICE GENERATION
+        ========================================== */
+
+        const contextMenu = document.getElementById("factureContextMenu");
+
+        const generateButton = document.getElementById("generateFacture");
+
+        let selectedFacture = null;
+
+
+
+        // RIGHT CLICK ON STATISTICS ROW
+
+        document.addEventListener("contextmenu", event => {
+
+            const row = event.target.closest(".facture-row");
+
+
+            if (!row) {
+
+                contextMenu.style.display = "none";
+
+                return;
+
+            }
+
+
+            event.preventDefault();
+
+
+            selectedFacture = {
+
+                dentistName: row.dataset.dentistName,
+
+                month: row.dataset.month,
+
+                year: row.dataset.year
+
+            };
+
+
+            contextMenu.style.display = "block";
+
+
+            const menuWidth = 230;
+
+            const menuHeight = 55;
+
+
+            contextMenu.style.left =
+                Math.min(
+                    event.clientX,
+                    window.innerWidth - menuWidth - 10
+                ) + "px";
+
+
+            contextMenu.style.top =
+                Math.min(
+                    event.clientY,
+                    window.innerHeight - menuHeight - 10
+                ) + "px";
+
+        });
+
+
+
+        // CLOSE CONTEXT MENU
+
+        document.addEventListener("click", event => {
+
+            if (!event.target.closest("#factureContextMenu")) {
+
+                contextMenu.style.display = "none";
+
+            }
+
+        });
+
+
+
+        // GENERATE INVOICE
+
+        generateButton.addEventListener("click", async () => {
+
+            contextMenu.style.display = "none";
+
+
+            if (!selectedFacture) return;
+
+
+            // Open synchronously to avoid popup blockers.
+
+            const invoiceWindow = window.open("", "_self");
+
+
+            if (!invoiceWindow) {
+
+                showStatus(
+                    "Autorisez les fenêtres pop-up pour générer la facture.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            invoiceWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Facture</title>
+                </head>
+
+                <body style="font-family:Arial;padding:40px">
+
+                    <h2>Génération de la facture...</h2>
+
+                    <p>Veuillez patienter.</p>
+
+                </body>
+                </html>
+            `);
+
+
+            try {
+
+                const response = await fetch(
+                    "/dentists/GetFacture",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type": "application/json",
+
+                            "X-Requested-With": "XMLHttpRequest"
+
+                        },
+
+                        body: JSON.stringify(selectedFacture)
+
+                    }
+                );
+
+
+                const data = await response.json();
+
+
+                if (!response.ok || !data.success) {
+
+                    throw new Error(
+                        data.message || "Impossible de générer la facture."
+                    );
+
+                }
+
+
+                renderFacture(invoiceWindow, data);
+
+
+            } catch (error) {
+
+                invoiceWindow.close();
+
+                showStatus(error.message, "error");
+
+                console.error("Facture error:", error);
+
+            }
+
+        });
+
+
+
+        /* ==========================================
+           RENDER PROFESSIONAL INVOICE
+        ========================================== */
+
+        function renderFacture(win, data) {
+
+
+            // Protect the invoice against HTML injection.
+
+            const escapeHTML = value =>
+
+                String(value ?? "").replace(/[&<>"']/g, char => ({
+
+                    "&": "&amp;",
+
+                    "<": "&lt;",
+
+                    ">": "&gt;",
+
+                    '"': "&quot;",
+
+                    "'": "&#39;"
+
+                })[char]);
+
+
+            const formatMoney = value => {
+
+                const amount = Number(value);
+
+                if (!Number.isFinite(amount)) return "0,00";
+
+                return amount.toLocaleString("fr-FR", {
+
+                    minimumFractionDigits: 2,
+
+                    maximumFractionDigits: 2
+
+                });
+
+            };
+
+
+            const rows = data.details.map((item, index) => `
+
+                <tr>
+
+                    <td>${index + 1}</td>
+
+                    <td>${escapeHTML(item.patientNumber)}</td>
+
+                    <td>${escapeHTML(item.service)}</td>
+
+                    <td>${escapeHTML(item.date)}</td>
+
+                    <td>${formatMoney(item.versement)} DA</td>
+
+                    <td>${formatMoney(item.remaining)} DA</td>
+
+                </tr>
+
+            `).join("");
+
+
+
+            win.document.open();
+
+
+            win.document.write(`
+
+                <!DOCTYPE html>
+
+                <html lang="fr">
+
+                <head>
+
+                    <meta charset="UTF-8">
+
+                    <meta name="viewport"
+                          content="width=device-width, initial-scale=1">
+
+                    <title>
+                        Facture - ${escapeHTML(data.dentistName)}
+                    </title>
+
+
+                    <style>
+
+                        * {
+                            box-sizing: border-box;
+                        }
+
+
+                        body {
+
+                            font-family: Arial, sans-serif;
+
+                            color: #1e293b;
+
+                            background: #f1f5f9;
+
+                            padding: 30px;
+
+                            margin: 0;
+
+                        }
+
+
+                        .invoice {
+
+                            max-width: 950px;
+
+                            margin: auto;
+
+                            background: white;
+
+                            padding: 45px;
+
+                            border-radius: 12px;
+
+                            box-shadow: 0 5px 25px rgba(0,0,0,.06);
+
+                        }
+
+
+                        .header {
+
+                            display: flex;
+
+                            justify-content: space-between;
+
+                            align-items: flex-start;
+
+                            border-bottom: 3px solid #315efb;
+
+                            padding-bottom: 25px;
+
+                            margin-bottom: 30px;
+
+                            gap: 20px;
+
+                        }
+
+
+                        h1 {
+
+                            color: #315efb;
+
+                            margin: 0;
+
+                            font-size: 32px;
+
+                        }
+
+
+                        .subtitle {
+
+                            color: #64748b;
+
+                        }
+
+
+                        .info {
+
+                            margin-bottom: 30px;
+
+                            display: flex;
+
+                            justify-content: space-between;
+
+                            gap: 20px;
+
+                        }
+
+
+                        .info h3 {
+
+                            margin-bottom: 5px;
+
+                        }
+
+
+                        table {
+
+                            width: 100%;
+
+                            border-collapse: collapse;
+
+                            margin-top: 25px;
+
+                        }
+
+
+                        th {
+
+                            background: #315efb;
+
+                            color: white;
+
+                            padding: 13px 8px;
+
+                            text-align: left;
+
+                        }
+
+
+                        td {
+
+                            padding: 13px 8px;
+
+                            border-bottom: 1px solid #e2e8f0;
+
+                        }
+
+
+                        tbody tr:nth-child(even) {
+
+                            background: #f8fafc;
+
+                        }
+
+
+                        .total {
+
+                            margin-top: 30px;
+
+                            margin-left: auto;
+
+                            max-width: 330px;
+
+                            padding: 20px;
+
+                            background: #eff6ff;
+
+                            border-radius: 10px;
+
+                        }
+
+
+                        .total p {
+
+                            margin-top: 0;
+
+                            color: #475569;
+
+                        }
+
+
+                        .total strong {
+
+                            color: #1d4ed8;
+
+                            font-size: 22px;
+
+                        }
+
+
+                        .footer {
+
+                            margin-top: 60px;
+
+                            text-align: center;
+
+                            color: #64748b;
+
+                            border-top: 1px solid #e2e8f0;
+
+                            padding-top: 20px;
+
+                        }
+
+
+                        .print-btn {
+
+                            background: #315efb;
+
+                            color: white;
+
+                            padding: 12px 22px;
+
+                            border: 0;
+
+                            border-radius: 8px;
+
+                            cursor: pointer;
+
+                            margin-bottom: 20px;
+
+                            font-weight: bold;
+
+                            font-size: 14px;
+
+                        }
+
+
+                        .print-btn:hover {
+
+                            background: #244bd0;
+
+                        }
+
+
+                        @media (max-width: 650px) {
+
+                            body {
+                                padding: 10px;
+                            }
+
+                            .invoice {
+                                padding: 20px;
+                            }
+
+                            .header {
+                                flex-direction: column;
+                            }
+
+                            .info {
+                                flex-direction: column;
+                            }
+
+                            table {
+                                font-size: 11px;
+                            }
+
+                            th, td {
+                                padding: 8px 4px;
+                            }
+
+                        }
+
+
+                        @media print {
+
+                            body {
+
+                                background: white;
+
+                                padding: 0;
+
+                            }
+
+                            .invoice {
+
+                                max-width: none;
+
+                                padding: 15px;
+
+                                box-shadow: none;
+
+                            }
+
+                            .print-btn {
+
+                                display: none;
+
+                            }
+
+                            @page {
+
+                                size: A4;
+
+                                margin: 12mm;
+
+                            }
+
+                        }
+
+                    </style>
+
+                </head>
+
+
+
+                <body>
+
+
+                    <div class="invoice">
+
+
+                        <button class="print-btn"
+                                onclick="window.print()">
+
+                            Imprimer / Enregistrer en PDF
+
+                        </button>
+
+
+
+                        <!-- INVOICE HEADER -->
+
+                        <div class="header">
+
+                            <div>
+
+                                <h1>FACTURE</h1>
+
+                                <p class="subtitle">
+                                    Laboratoire de prothèse dentaire
+                                </p>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>Facture mensuelle</strong>
+
+                                <p>
+                                    ${escapeHTML(data.month)}/${escapeHTML(data.year)}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- DENTIST INFORMATION -->
+
+                        <div class="info">
+
+                            <div>
+
+                                <strong>Facturé à :</strong>
+
+                                <h3>
+                                    ${escapeHTML(data.dentistName)}
+                                </h3>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>Période :</strong>
+
+                                <p>
+                                    ${escapeHTML(data.month)}/${escapeHTML(data.year)}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- SERVICES TABLE -->
+
+                        <h3>Détails des prestations</h3>
+
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>#</th>
+
+                                    <th>Patient</th>
+
+                                    <th>Prestation</th>
+
+                                    <th>Date</th>
+
+                                    <th>Versement</th>
+
+                                    <th>Reste</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                ${rows}
+
+                            </tbody>
+
+                        </table>
+
+
+
+                        <!-- TOTAL -->
+
+                        <div class="total">
+
+                            <p>Total restant à payer</p>
+
+                            <strong>
+                                ${formatMoney(data.total)} DA
+                            </strong>
+
+                        </div>
+
+
+
+                        <!-- FOOTER -->
+
+                        <div class="footer">
+
+                            <p>Merci pour votre confiance.</p>
+
+                            <p>
+                                Document généré automatiquement par DentistHub.
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                </body>
+
+                </html>
+
+            `);
+
+
+            win.document.close();
+
+        }
+
+
+
         /* ==========================================
            BROWSER BACK / FORWARD
         ========================================== */
@@ -1162,20 +2096,31 @@
         window.addEventListener("popstate", () => {
 
             loadDentistPage(
+
                 window.location.pathname + window.location.search,
+
                 {
+
                     pushState: false
+
                 }
+
             );
 
         });
 
 
-        // Initialize status values when the page first loads.
+
+        // INITIALIZATION
+
         initializeStatusSelects();
 
+
     })();
+
 </script>
 
+
 </body>
+
 </html>

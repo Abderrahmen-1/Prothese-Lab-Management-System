@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Facture - DentistHub</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='Facture.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+<div class="invoice-page">
+
+    <!-- ACTIONS -->
+    <div class="invoice-actions">
+
+        <button type="button" class="action-btn back-btn" id="closeInvoice">
+            <i class="fas fa-arrow-left"></i>
+            Fermer
+        </button>
+
+        <button type="button" id="backToDentists" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Retour aux dentistes
+        </button>
+
+        <button type="button" class="action-btn print-btn" id="printInvoice">
+            <i class="fas fa-print"></i>
+            Imprimer / PDF
+        </button>
+
+    </div>
+
+
+    <!-- INVOICE -->
+    <main class="invoice-document">
+
+        <!-- HEADER -->
+        <header class="invoice-header">
+
+            <div class="company-information">
+
+                <div class="company-logo">
+                    <i class="fas fa-tooth"></i>
+                </div>
+
+                <div>
+                    <h1>Dentist<span>Hub</span></h1>
+                    <p>Laboratoire de prothèse dentaire</p>
+                </div>
+
+            </div>
+
+            <div class="invoice-heading">
+
+                <span class="invoice-label">DOCUMENT FINANCIER</span>
+
+                <h2>FACTURE</h2>
+
+                <p class="invoice-number">
+                    N° {{ invoice_number }}
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <div class="header-line"></div>
+
+
+        <!-- INFORMATION -->
+        <section class="invoice-information">
+
+            <div class="information-block">
+
+                <span class="information-label">FACTURÉ À</span>
+
+                <h3>{{ dentistName }}</h3>
+
+                <p>
+                    <i class="fas fa-user-md"></i>
+                    Dentiste partenaire
+                </p>
+
+            </div>
+
+
+            <div class="information-block">
+
+                <span class="information-label">PÉRIODE</span>
+
+                <h3>{{ month }}/{{ year }}</h3>
+
+                <p>
+                    <i class="far fa-calendar-alt"></i>
+                    Facture mensuelle
+                </p>
+
+            </div>
+
+
+            <div class="information-block">
+
+                <span class="information-label">DATE D'ÉMISSION</span>
+
+                <h3>{{ emission_date }}</h3>
+
+                <p>
+                    <i class="fas fa-file-invoice"></i>
+                    Document généré
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- SERVICES -->
+        <section class="services-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="section-eyebrow">DÉTAILS FINANCIERS</span>
+                    <h3>Prestations réalisées</h3>
+                </div>
+
+                <span class="services-count">
+                    {{ details|length }} prestations
+                </span>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table class="invoice-table">
+
+                    <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Patient</th>
+                        <th>Prestation</th>
+                        <th>Date</th>
+                        <th>Versement</th>
+                        <th>Reste</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for item in details %}
+
+                    <tr>
+                        <td class="number-cell">{{ loop.index }}</td>
+
+                        <td class="patient-cell">
+                            {{ item.patientNumber }}
+                        </td>
+
+                        <td class="service-cell">
+                            {{ item.service }}
+                        </td>
+
+                        <td>{{ item.date }}</td>
+
+                        <td class="paid-cell">
+                            {{ "{:,.2f}".format(item.versement|float) }} DA
+                        </td>
+
+                        <td class="remaining-cell">
+                            {{ "{:,.2f}".format(item.remaining|float) }} DA
+                        </td>
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="6" class="empty-table">
+                            Aucune prestation trouvée.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- SUMMARY -->
+        <section class="financial-summary">
+
+            <div class="summary-note">
+
+                <div class="note-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+
+                <div>
+                    <strong>Information</strong>
+
+                    <p>
+                        Cette facture présente les prestations enregistrées
+                        et les montants restant à régler pour la période indiquée.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-row">
+
+                    <span>Nombre de prestations</span>
+
+                    <strong>{{ details|length }}</strong>
+
+                </div>
+
+
+                <div class="summary-row total-row">
+
+                    <span>TOTAL RESTANT À PAYER</span>
+
+                    <strong>
+                        {{ "{:,.2f}".format(total|float) }} DA
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-status">
+                    <i class="fas fa-clock"></i>
+                    Montant restant dû
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SIGNATURES -->
+        <section class="signature-section">
+
+            <div class="signature-box">
+                <p>Signature du laboratoire</p>
+                <div class="signature-line"></div>
+            </div>
+
+            <div class="signature-box">
+                <p>Signature du dentiste</p>
+                <div class="signature-line"></div>
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer class="invoice-footer">
+
+            <div class="footer-line"></div>
+
+            <div class="footer-content">
+
+                <div>
+                    <strong>DentistHub</strong>
+                    <p>Gestion professionnelle du laboratoire</p>
+                </div>
+
+                <div class="footer-right">
+                    <p>Document généré automatiquement</p>
+                    <span>Merci pour votre confiance.</span>
+                </div>
+
+            </div>
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<!-- ==========================================
+     JAVASCRIPT
+========================================== -->
+
+<script>
+
+    document.getElementById("backToDentists").addEventListener("click", function () {
+        window.location.href = "/Dentist";
+    });
+
+    "use strict";
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const closeButton = document.getElementById("closeInvoice");
+        const printButton = document.getElementById("printInvoice");
+
+
+        // CLOSE INVOICE
+        closeButton.addEventListener("click", () => {
+
+            window.close();
+
+        });
+
+
+        // PRINT / SAVE AS PDF
+        printButton.addEventListener("click", () => {
+
+            window.print();
+
+        });
+
+
+        // OPTIONAL: KEYBOARD SHORTCUT CTRL + P
+        document.addEventListener("keydown", (event) => {
+
+            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "p") {
+
+                event.preventDefault();
+
+                window.print();
+
+            }
+
+        });
+
+    });
+
+</script>
+
+</body>
+</html>

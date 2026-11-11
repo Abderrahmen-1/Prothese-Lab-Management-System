@@ -30,7 +30,7 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 limiter = Limiter(get_remote_address, app=app, default_limits=["200 per hour"])
 
 app.config['COMPRESS_LEVEL'] = os.getenv('COMPRESS_LEVEL')
-app.config['COMPRESS_MIN_SIZE'] = os.getenv('COMPRESS_MIN_SIZE')
+app.config['COMPRESS_MIN_SIZE'] = int(os.getenv('COMPRESS_MIN_SIZE'))
 
 Compress(app)
 
