@@ -1,5 +1,4 @@
 import time
-
 from flask import Flask, request, render_template, session, redirect, url_for, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from FlaskTry.FunctionFile import *

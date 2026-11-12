@@ -1,10 +1,7 @@
-import os
 from datetime import date, timedelta, datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 from dotenv import load_dotenv
-from flask import Flask
-from flask_mail import Mail
-from FlaskTry.email_service import send_deadline_emails, send_quantity_email, send_prothesists_email, send_abonnement_email
+from FlaskTry.scheduler.email_service import send_deadline_emails, send_quantity_email, send_prothesists_email, send_abonnement_email
 from FlaskTry.flasktry import app, mail
 from FlaskTry.FunctionFile import get_connection
 
@@ -200,10 +197,10 @@ def check_abonnement_deadline():
 scheduler = BlockingScheduler()
 
 scheduler.add_job(
-    check_abonnement_deadline(),
-    trigger='corn',
+    check_abonnement_deadline,
+    trigger='cron',
     hour=8,
-    minut=0
+    minute=0
 )
 
 scheduler.add_job(
@@ -214,7 +211,7 @@ scheduler.add_job(
 )
 
 scheduler.add_job(
-    check_prothesist_deadline(),
+    check_prothesist_deadline,
     trigger="cron",
     hour=10,
     minute=0
