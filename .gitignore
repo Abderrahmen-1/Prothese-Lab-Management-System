@@ -3,4 +3,4 @@ __pycache__/
 *.pyc
 .env
 .idea/
-.labo_web.sql
+labo_web.sql
