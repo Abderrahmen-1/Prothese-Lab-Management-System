@@ -1403,7 +1403,7 @@ def AllTotal():
     
             GROUP BY month, year 
             ORDER BY year, month 
-            LIMIT 13 
+            LIMIT 12 
             """, (session['id'], session['id'], session['id'], session['id'], session['id']))
 
             result = cursor.fetchall()

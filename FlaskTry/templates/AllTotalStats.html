@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -26,9 +27,7 @@
 
 <div class="page-container">
 
-    <!-- =========================================================
-         TOP BAR
-    ========================================================== -->
+    <!-- TOP BAR -->
     <header class="topbar">
 
         <div class="topbar-left">
@@ -56,7 +55,6 @@
 
         </div>
 
-
         <div class="topbar-actions">
 
             <button class="action-button secondary"
@@ -67,7 +65,6 @@
                 <span>Imprimer</span>
 
             </button>
-
 
             <button class="action-button primary"
                     id="exportBtn"
@@ -85,47 +82,33 @@
 
     {% if result_table %}
 
-    {# =====================================================
-    IMPORTANT:
-    Your Flask route only sends "result".
-
-    We therefore take the last row here.
-    ====================================================== #}
-
     {% set last_row = result_table[-1] %}
-
-    {# =====================================================
-    CALCUL DES TOTAUX
-    ====================================================== #}
 
     {% set totals = namespace(paid=0, unpaid=0) %}
 
     {% for row in result_table %}
 
-    {% set totals.paid = totals.paid
-    + (row[2] or 0)
-    + (row[4] or 0)
-    %}
+        {% set totals.paid = totals.paid
+            + (row[2] or 0)
+            + (row[4] or 0)
+        %}
 
-    {% set totals.unpaid = totals.unpaid
-    + (row[3] or 0)
-    + (row[5] or 0)
-    %}
+        {% set totals.unpaid = totals.unpaid
+            + (row[3] or 0)
+            + (row[5] or 0)
+        %}
 
     {% endfor %}
 
     {% set total_paid = totals.paid %}
     {% set total_unpaid = totals.unpaid %}
-
     {% set total_periods = result_table|length %}
 
-    <!-- =====================================================
-         RÉSUMÉ
-    ====================================================== -->
 
+    <!-- SUMMARY -->
     <section class="summary-grid">
 
-        <!-- BÉNÉFICE NET -->
+        <!-- NET PROFIT -->
         <article class="stat-card profit-card">
 
             <div class="stat-card-top">
@@ -135,17 +118,15 @@
                 </div>
 
                 <span class="stat-label">
-                        Bénéfice net
-                    </span>
+                    Bénéfice net
+                </span>
 
             </div>
-
 
             <div class="stat-value">
                 {{ "{:,.2f}".format(last_row[-1]|float) }}
                 <span>DA</span>
             </div>
-
 
             <div class="stat-footer">
                 <i class="fa-solid fa-chart-line"></i>
@@ -155,7 +136,7 @@
         </article>
 
 
-        <!-- TOTAL PAYÉ -->
+        <!-- TOTAL PAID -->
         <article class="stat-card paid-card">
 
             <div class="stat-card-top">
@@ -165,17 +146,15 @@
                 </div>
 
                 <span class="stat-label">
-                        Total encaissé
-                    </span>
+                    Total encaissé
+                </span>
 
             </div>
-
 
             <div class="stat-value">
                 {{ "{:,.2f}".format(total_paid|float) }}
                 <span>DA</span>
             </div>
-
 
             <div class="stat-footer">
                 <i class="fa-solid fa-wallet"></i>
@@ -185,7 +164,7 @@
         </article>
 
 
-        <!-- TOTAL IMPAYÉ -->
+        <!-- TOTAL UNPAID -->
         <article class="stat-card unpaid-card">
 
             <div class="stat-card-top">
@@ -195,17 +174,15 @@
                 </div>
 
                 <span class="stat-label">
-                        Impayé
-                    </span>
+                    Impayé
+                </span>
 
             </div>
-
 
             <div class="stat-value">
                 {{ "{:,.2f}".format(total_unpaid|float) }}
                 <span>DA</span>
             </div>
-
 
             <div class="stat-footer">
                 <i class="fa-solid fa-hourglass-half"></i>
@@ -215,7 +192,7 @@
         </article>
 
 
-        <!-- PÉRIODES -->
+        <!-- PERIODS -->
         <article class="stat-card periods-card">
 
             <div class="stat-card-top">
@@ -225,16 +202,14 @@
                 </div>
 
                 <span class="stat-label">
-                        Périodes
-                    </span>
+                    Périodes
+                </span>
 
             </div>
-
 
             <div class="stat-value">
                 {{ total_periods }}
             </div>
-
 
             <div class="stat-footer">
                 <i class="fa-solid fa-database"></i>
@@ -246,26 +221,20 @@
     </section>
 
 
-    <!-- =====================================================
-         ZONE D’ANALYSE
-    ====================================================== -->
-
+    <!-- ANALYTICS -->
     <section class="analytics-grid">
 
 
-        <!-- =================================================
-             GRAPHIQUE DU BÉNÉFICE
-        ================================================== -->
-
+        <!-- FINANCIAL CHART -->
         <article class="panel chart-panel">
 
             <div class="panel-header">
 
                 <div>
 
-                        <span class="panel-eyebrow">
-                            PERFORMANCES
-                        </span>
+                    <span class="panel-eyebrow">
+                        PERFORMANCES
+                    </span>
 
                     <h2>
                         Performance financière
@@ -276,7 +245,6 @@
                     </p>
 
                 </div>
-
 
                 <div class="chart-controls">
 
@@ -310,45 +278,66 @@
                     <i class="fa-solid fa-chart-line"></i>
 
                     <span>
-                            Aucune donnée disponible pour le graphique
-                        </span>
+                        Aucune donnée disponible pour le graphique
+                    </span>
 
                 </div>
 
             </div>
 
+
+            <!-- SERVICES CHART -->
             <section class="panel services-chart-panel">
 
                 <div class="panel-header">
+
                     <div>
-                        <span class="panel-eyebrow">ANALYSE DES SERVICES</span>
 
-                        <h2>Services du laboratoire</h2>
+                        <span class="panel-eyebrow">
+                            ANALYSE DES SERVICES
+                        </span>
 
-                        <p>Services mensuels des patients et des dentistes</p>
+                        <h2>
+                            Services du laboratoire
+                        </h2>
+
+                        <p>
+                            Services mensuels des patients et des dentistes
+                        </p>
+
                     </div>
+
                 </div>
 
                 <div class="chart-wrapper">
+
                     <canvas id="servicesChart"></canvas>
 
                     <div class="chart-empty" id="servicesChartEmpty">
+
                         <i class="fa-solid fa-chart-line"></i>
-                        <span>Aucune donnée disponible pour les services</span>
+
+                        <span>
+                            Aucune donnée disponible pour les services
+                        </span>
+
                     </div>
+
                 </div>
 
             </section>
 
+
+            <!-- FINISHED SERVICES -->
             <section class="panel finished-services-panel">
 
-                <div class="panel-header">
+                <div class="panel-header finished-services-header">
 
                     <div>
 
-            <span class="panel-eyebrow">
-                ANALYSE DES TERMINAISONS
-            </span>
+                        <span class="panel-eyebrow">
+                            ANALYSE DES TERMINAISONS
+                        </span>
 
                         <h2>
                             Services terminés
@@ -360,6 +349,36 @@
 
                     </div>
 
+                    <!-- FILTER FOR FINISHED SERVICES TABLE -->
+                    <div class="chart-controls">
+
+                        <select id="finishedPeriodFilter"
+                                class="table-period-filter">
+
+                            <option value="all">
+                                Toutes les périodes
+                            </option>
+
+                            <option value="6">
+                                Les 6 derniers mois
+                            </option>
+
+                            <option value="12">
+                                Les 12 derniers mois
+                            </option>
+
+                            <option value="24">
+                                Les 2 dernières années
+                            </option>
+
+                            <option value="60">
+                                Les 5 dernières années
+                            </option>
+
+                        </select>
+
+                    </div>
+
                 </div>
 
 
@@ -368,6 +387,7 @@
                     <table class="finished-services-table">
 
                         <thead>
+
                         <tr>
                             <th>Période</th>
 
@@ -383,15 +403,17 @@
 
                             <th>Taux de réalisation</th>
                         </tr>
+
                         </thead>
 
                         <tbody>
 
                         {% for row in total_finished %}
 
-                        <tr>
+                        <!-- ADDED CLASS AND DATA INDEX -->
+                        <tr class="finished-month-row"
+                            data-finished-index="{{ loop.index0 }}">
 
-                            <!-- PERIOD -->
                             <td>
                                 <div class="period-info">
                                     <strong>{{ row[0] }}</strong>
@@ -399,7 +421,6 @@
                                 </div>
                             </td>
 
-                            <!-- SERVICES DES PATIENTS -->
                             <td>
                                 <div class="service-breakdown">
 
@@ -413,6 +434,7 @@
 
                             <td>
                                 <div class="service-breakdown">
+
                                     <div class="unfinished-value">
                                         <i class="fa-solid fa-circle-check"></i>
                                         {{ row[3]|float|int }}
@@ -421,7 +443,6 @@
                                 </div>
                             </td>
 
-                            <!-- SERVICES DES DENTISTES -->
                             <td>
                                 <div class="service-breakdown">
 
@@ -432,6 +453,7 @@
 
                                 </div>
                             </td>
+
                             <td>
                                 <div class="service-breakdown">
 
@@ -443,14 +465,12 @@
                                 </div>
                             </td>
 
-                            <!-- TOTAL DES SERVICES -->
                             <td>
                                 <strong>
                                     {{ (row[6]|float + row[7]|float)|int }}
                                 </strong>
                             </td>
 
-                            <!-- TOTAL FINISHED -->
                             <td>
                                 <div class="finished-value">
                                     <i class="fa-solid fa-circle-check"></i>
@@ -458,7 +478,6 @@
                                 </div>
                             </td>
 
-                            <!-- TOTAL NOT FINISHED -->
                             <td>
                                 <div class="unfinished-value">
                                     <i class="fa-solid fa-clock"></i>
@@ -466,7 +485,6 @@
                                 </div>
                             </td>
 
-                            <!-- COMPLETION RATE -->
                             <td>
                                 <div class="completion-rate">
 
@@ -476,36 +494,39 @@
 
                                     <div class="completion-bar">
                                         <div
-                                                class="completion-bar-fill"
-                                                style="width: {{ row[8]|float }}%;">
+                                            class="completion-bar-fill"
+                                            style="width: {{ row[8]|float }}%;">
                                         </div>
                                     </div>
+
                                 </div>
                             </td>
 
                         </tr>
+
                         {% endfor %}
+
                         </tbody>
+
                     </table>
+
                 </div>
 
             </section>
+
         </article>
 
 
-        <!-- =================================================
-             APERÇU DES PAIEMENTS
-        ================================================== -->
-
+        <!-- PAYMENT OVERVIEW -->
         <article class="panel payment-panel">
 
             <div class="panel-header">
 
                 <div>
 
-                        <span class="panel-eyebrow">
-                            PAIEMENTS
-                        </span>
+                    <span class="panel-eyebrow">
+                        PAIEMENTS
+                    </span>
 
                     <h2>
                         Aperçu des paiements
@@ -528,25 +549,24 @@
 
                         {% if (total_paid|float + total_unpaid|float) > 0 %}
 
-                        {% set paid_percentage =
-                        ((total_paid|float /
-                        (total_paid|float + total_unpaid|float)) * 100)
-                        %}
+                            {% set paid_percentage =
+                                ((total_paid|float /
+                                (total_paid|float + total_unpaid|float)) * 100)
+                            %}
 
                         {% else %}
 
-                        {% set paid_percentage = 0 %}
+                            {% set paid_percentage = 0 %}
 
                         {% endif %}
-
 
                         <strong id="paidPercentage">
                             {{ "%.1f"|format(paid_percentage) }}%
                         </strong>
 
                         <span>
-                                encaissé
-                            </span>
+                            encaissé
+                        </span>
 
                     </div>
 
@@ -559,12 +579,12 @@
 
                 <div class="legend-row">
 
-                        <span class="legend-name">
+                    <span class="legend-name">
 
-                            <span class="legend-dot paid-dot"></span>
-                            Payé par les dentistes et les patients
-                        </span>
+                        <span class="legend-dot paid-dot"></span>
+                        Payé par les dentistes et les patients
 
+                    </span>
 
                     <strong>
                         {{ "{:,.2f}".format(total_paid|float) }} DA
@@ -575,10 +595,12 @@
 
                 <div class="legend-row">
 
-                        <span class="legend-name">
-                            <span class="legend-dot unpaid-dot"></span>
-                            Impayé par les dentistes et les patients
-                        </span>
+                    <span class="legend-name">
+
+                        <span class="legend-dot unpaid-dot"></span>
+                        Impayé par les dentistes et les patients
+
+                    </span>
 
                     <strong>
                         {{ "{:,.2f}".format(total_unpaid|float) }} DA
@@ -593,10 +615,7 @@
     </section>
 
 
-    <!-- =====================================================
-         CATEGORY RÉPARTITION
-    ====================================================== -->
-
+    <!-- CATEGORY DISTRIBUTION -->
     <section class="panel category-panel">
 
         <button class="collapse-header"
@@ -605,15 +624,15 @@
 
             <div class="collapse-title">
 
-                    <span class="collapse-icon">
-                        <i class="fa-solid fa-layer-group"></i>
-                    </span>
+                <span class="collapse-icon">
+                    <i class="fa-solid fa-layer-group"></i>
+                </span>
 
                 <div>
 
-                        <span class="panel-eyebrow">
-                            RÉPARTITION
-                        </span>
+                    <span class="panel-eyebrow">
+                        RÉPARTITION
+                    </span>
 
                     <h2>
                         Chiffre d’affaires par catégorie du dernier mois
@@ -622,7 +641,6 @@
                 </div>
 
             </div>
-
 
             <i class="fa-solid fa-chevron-down collapse-arrow"></i>
 
@@ -644,9 +662,9 @@
 
                     <div class="category-info">
 
-                            <span>
-                                Patients
-                            </span>
+                        <span>
+                            Patients
+                        </span>
 
                         <strong>
                             {{ "{:,.2f}".format(last_row[2]|float) }} DA
@@ -665,7 +683,7 @@
                 </div>
 
 
-                <!-- DENTIST -->
+                <!-- DENTISTS -->
                 <div class="category-card">
 
                     <div class="category-icon dentist-icon">
@@ -674,9 +692,9 @@
 
                     <div class="category-info">
 
-                            <span>
-                                Dentistes
-                            </span>
+                        <span>
+                            Dentistes
+                        </span>
 
                         <strong>
                             {{ "{:,.2f}".format(last_row[4]|float) }} DA
@@ -704,9 +722,9 @@
 
                     <div class="category-info">
 
-                            <span>
-                                Prothésistes
-                            </span>
+                        <span>
+                            Prothésistes
+                        </span>
 
                         <strong>
                             {{ "{:,.2f}".format(last_row[6]|float) }} DA
@@ -734,9 +752,9 @@
 
                     <div class="category-info">
 
-                            <span>
-                                Stock
-                            </span>
+                        <span>
+                            Stock
+                        </span>
 
                         <strong>
                             {{ "{:,.2f}".format(last_row[8]|float) }} DA
@@ -764,9 +782,9 @@
 
                     <div class="category-info">
 
-                            <span>
-                                Autres services
-                            </span>
+                        <span>
+                            Autres services
+                        </span>
 
                         <strong>
                             {{ "{:,.2f}".format(last_row[10]|float) }} DA
@@ -784,7 +802,6 @@
 
                 </div>
 
-
             </div>
 
         </div>
@@ -792,19 +809,16 @@
     </section>
 
 
-    <!-- =====================================================
-         DÉTAILS MENSUELS
-    ====================================================== -->
-
+    <!-- MONTHLY DETAILS -->
     <section class="panel table-panel">
 
         <div class="panel-header table-panel-header">
 
             <div>
 
-                    <span class="panel-eyebrow">
-                        RAPPORT DÉTAILLÉ
-                    </span>
+                <span class="panel-eyebrow">
+                    RAPPORT DÉTAILLÉ
+                </span>
 
                 <h2>
                     Statistiques mensuelles
@@ -817,7 +831,34 @@
             </div>
 
 
-            <div class="table-tools">
+            <div class="chart-controls">
+
+                <!-- MONTHLY TABLE PERIOD FILTER -->
+                <select id="tablePeriodFilter"
+                        class="table-period-filter">
+
+                    <option value="all">
+                        Toutes les périodes
+                    </option>
+
+                    <option value="6">
+                        Les 6 derniers mois
+                    </option>
+
+                    <option value="12">
+                        Les 12 derniers mois
+                    </option>
+
+                    <option value="24">
+                        Les 2 dernières années
+                    </option>
+
+                    <option value="60">
+                        Les 5 dernières années
+                    </option>
+
+                </select>
+
 
                 <button class="table-tool"
                         id="expandAllBtn"
@@ -911,8 +952,8 @@
                             </strong>
 
                             <span>
-                                        {{ row[1] }}
-                                    </span>
+                                {{ row[1] }}
+                            </span>
 
                         </div>
 
@@ -1004,7 +1045,7 @@
                     </td>
 
 
-                    <!-- BÉNÉFICE NET -->
+                    <!-- NET PROFIT -->
                     <td>
 
                         <div class="profit-value">
@@ -1021,10 +1062,7 @@
                 </tr>
 
 
-                <!-- =================================================
-                     EXPANDED ROW
-                ================================================== -->
-
+                <!-- EXPANDED ROW -->
                 <tr class="details-row"
                     data-details="{{ loop.index0 }}">
 
@@ -1047,31 +1085,37 @@
                                 <!-- PATIENT -->
                                 <div class="detail-item">
 
-                                            <span class="detail-category">
+                                    <span class="detail-category">
 
-                                                <i class="fa-solid fa-user"></i>
+                                        <i class="fa-solid fa-user"></i>
 
-                                                Patients
+                                        Patients
 
-                                            </span>
+                                    </span>
 
                                     <div class="detail-values">
 
-                                                <span class="paid-detail">
-                                                    <small>Paid</small>
-                                                    <strong>
-                                                        {{ "{:,.2f}".format(row[2]|float) }}
-                                                        DA
-                                                    </strong>
-                                                </span>
+                                        <span class="paid-detail">
+
+                                            <small>Paid</small>
+
+                                            <strong>
+                                                {{ "{:,.2f}".format(row[2]|float) }}
+                                                DA
+                                            </strong>
+
+                                        </span>
 
                                         <span class="unpaid-detail">
-                                                    <small>Unpaid</small>
-                                                    <strong>
-                                                        {{ "{:,.2f}".format(row[3]|float) }}
-                                                        DA
-                                                    </strong>
-                                                </span>
+
+                                            <small>Unpaid</small>
+
+                                            <strong>
+                                                {{ "{:,.2f}".format(row[3]|float) }}
+                                                DA
+                                            </strong>
+
+                                        </span>
 
                                     </div>
 
@@ -1081,31 +1125,37 @@
                                 <!-- DENTIST -->
                                 <div class="detail-item">
 
-                                            <span class="detail-category">
+                                    <span class="detail-category">
 
-                                                <i class="fa-solid fa-user-doctor"></i>
+                                        <i class="fa-solid fa-user-doctor"></i>
 
-                                                Dentistes
+                                        Dentistes
 
-                                            </span>
+                                    </span>
 
                                     <div class="detail-values">
 
-                                                <span class="paid-detail">
-                                                    <small>Paid</small>
-                                                    <strong>
-                                                        {{ "{:,.2f}".format(row[4]|float) }}
-                                                        DA
-                                                    </strong>
-                                                </span>
+                                        <span class="paid-detail">
+
+                                            <small>Paid</small>
+
+                                            <strong>
+                                                {{ "{:,.2f}".format(row[4]|float) }}
+                                                DA
+                                            </strong>
+
+                                        </span>
 
                                         <span class="unpaid-detail">
-                                                    <small>Unpaid</small>
-                                                    <strong>
-                                                        {{ "{:,.2f}".format(row[5]|float) }}
-                                                        DA
-                                                    </strong>
-                                                </span>
+
+                                            <small>Unpaid</small>
+
+                                            <strong>
+                                                {{ "{:,.2f}".format(row[5]|float) }}
+                                                DA
+                                            </strong>
+
+                                        </span>
 
                                     </div>
 
@@ -1115,31 +1165,37 @@
                                 <!-- PROTHESIST -->
                                 <div class="detail-item">
 
-                                            <span class="detail-category">
+                                    <span class="detail-category">
 
-                                                <i class="fa-solid fa-tooth"></i>
+                                        <i class="fa-solid fa-tooth"></i>
 
-                                                Prothésistes
+                                        Prothésistes
 
-                                            </span>
+                                    </span>
 
                                     <div class="detail-values">
 
-                                                <span class="paid-detail">
-                                                    <small>Paid</small>
-                                                    <strong>
-                                                        {{ "{:,.2f}".format(row[6]|float) }}
-                                                        DA
-                                                    </strong>
-                                                </span>
+                                        <span class="paid-detail">
+
+                                            <small>Paid</small>
+
+                                            <strong>
+                                                {{ "{:,.2f}".format(row[6]|float) }}
+                                                DA
+                                            </strong>
+
+                                        </span>
 
                                         <span class="unpaid-detail">
-                                                    <small>Unpaid</small>
-                                                    <strong>
-                                                        {{ "{:,.2f}".format(row[7]|float) }}
-                                                        DA
-                                                    </strong>
-                                                </span>
+
+                                            <small>Unpaid</small>
+
+                                            <strong>
+                                                {{ "{:,.2f}".format(row[7]|float) }}
+                                                DA
+                                            </strong>
+
+                                        </span>
 
                                     </div>
 
@@ -1149,65 +1205,77 @@
                                 <!-- INVENTORY -->
                                 <div class="detail-item">
 
-                                            <span class="detail-category">
+                                    <span class="detail-category">
 
-                                                <i class="fa-solid fa-boxes-stacked"></i>
+                                        <i class="fa-solid fa-boxes-stacked"></i>
 
-                                                Stock
+                                        Stock
 
-                                            </span>
+                                    </span>
 
                                     <div class="detail-values">
 
-                                                <span class="paid-detail">
-                                                    <small>Paid</small>
-                                                    <strong>
-                                                        {{ "{:,.2f}".format(row[8]|float) }}
-                                                        DA
-                                                    </strong>
-                                                </span>
+                                        <span class="paid-detail">
+
+                                            <small>Paid</small>
+
+                                            <strong>
+                                                {{ "{:,.2f}".format(row[8]|float) }}
+                                                DA
+                                            </strong>
+
+                                        </span>
 
                                         <span class="unpaid-detail">
-                                                    <small>Unpaid</small>
-                                                    <strong>
-                                                        {{ "{:,.2f}".format(row[9]|float) }}
-                                                        DA
-                                                    </strong>
-                                                </span>
+
+                                            <small>Unpaid</small>
+
+                                            <strong>
+                                                {{ "{:,.2f}".format(row[9]|float) }}
+                                                DA
+                                            </strong>
+
+                                        </span>
 
                                     </div>
 
                                 </div>
 
 
-                                <!-- OTHER -->
+                                <!-- OTHER SERVICES -->
                                 <div class="detail-item">
 
-                                            <span class="detail-category">
+                                    <span class="detail-category">
 
-                                                <i class="fa-solid fa-briefcase"></i>
+                                        <i class="fa-solid fa-briefcase"></i>
 
-                                                Autres services
+                                        Autres services
 
-                                            </span>
+                                    </span>
 
                                     <div class="detail-values">
 
-                                                <span class="paid-detail">
-                                                    <small>Paid</small>
-                                                    <strong>
-                                                        {{ "{:,.2f}".format(row[10]|float) }}
-                                                        DA
-                                                    </strong>
-                                                </span>
+                                        <span class="paid-detail">
+
+                                            <small>Paid</small>
+
+                                            <strong>
+                                                {{ "{:,.2f}".format(row[10]|float) }}
+                                                DA
+                                            </strong>
+
+                                        </span>
 
                                         <span class="unpaid-detail">
-                                                    <small>Unpaid</small>
-                                                    <strong>
-                                                        {{ "{:,.2f}".format(row[11]|float) }}
-                                                        DA
-                                                    </strong>
-                                                </span>
+
+                                            <small>Unpaid</small>
+
+                                            <strong>
+                                                {{ "{:,.2f}".format(row[11]|float) }}
+                                                DA
+                                            </strong>
+
+                                        </span>
 
                                     </div>
 
@@ -1217,13 +1285,13 @@
                                 <!-- PROFIT -->
                                 <div class="detail-item profit-detail">
 
-                                            <span class="detail-category">
+                                    <span class="detail-category">
 
-                                                <i class="fa-solid fa-arrow-trend-up"></i>
+                                        <i class="fa-solid fa-arrow-trend-up"></i>
 
-                                                Bénéfice net
+                                        Bénéfice net
 
-                                            </span>
+                                    </span>
 
                                     <div class="profit-detail-value">
 
@@ -1254,10 +1322,7 @@
     </section>
 
 
-    <!-- =====================================================
-         AVIS D’INFORMATION
-    ====================================================== -->
-
+    <!-- INFORMATION NOTICE -->
     <div class="info-notice">
 
         <div class="notice-icon">
@@ -1284,10 +1349,7 @@
     {% else %}
 
 
-    <!-- =====================================================
-         ÉTAT VIDE
-    ====================================================== -->
-
+    <!-- EMPTY STATE -->
     <section class="empty-state">
 
         <div class="empty-icon">
@@ -1296,17 +1358,14 @@
 
         </div>
 
-
         <h2>
             Aucune statistique disponible
         </h2>
-
 
         <p>
             Aucune donnée financière n’est actuellement disponible
             pour votre laboratoire.
         </p>
-
 
         <a href="{{ url_for('getHome') }}"
            class="empty-button">
@@ -1319,544 +1378,674 @@
 
     </section>
 
-
     {% endif %}
 
 </div>
 
 
-<!-- =========================================================
-     JAVASCRIPT
-========================================================== -->
-
+<!-- JAVASCRIPT -->
 <script>
 
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-        console.log("Script AllTotalStats chargé");
-
-
-        /* =========================================================
-           ÉLÉMENTS
-        ========================================================== */
-
-        const exportBtn =
-            document.getElementById("exportBtn");
-
-        const printBtn =
-            document.getElementById("printBtn");
-
-        const categoryToggle =
-            document.getElementById("categoryToggle");
-
-        const categoryContent =
-            document.getElementById("categoryContent");
-
-        const periodFilter =
-            document.getElementById("periodFilter");
-
-        const expandAllBtn =
-            document.getElementById("expandAllBtn");
-
-        const collapseAllBtn =
-            document.getElementById("collapseAllBtn");
-
-        const paymentCircle =
-            document.querySelector(".payment-circle");
-
-        const paidPercentage =
-            document.getElementById("paidPercentage");
+    console.log("Script AllTotalStats chargé");
 
 
-        /* =========================================================
-           CERCLE DES PAIEMENTS
-        ========================================================== */
+    /* =========================================================
+       ELEMENTS
+    ========================================================== */
 
-        if (paymentCircle && paidPercentage) {
+    const exportBtn =
+        document.getElementById("exportBtn");
 
-            const percentage =
-                parseFloat(paidPercentage.textContent);
+    const printBtn =
+        document.getElementById("printBtn");
 
-            paymentCircle.style.background =
-                `conic-gradient(
-                    var(--success) 0% ${percentage}%,
-                    var(--border) ${percentage}% 100%
-                )`;
+    const categoryToggle =
+        document.getElementById("categoryToggle");
+
+    const categoryContent =
+        document.getElementById("categoryContent");
+
+    const periodFilter =
+        document.getElementById("periodFilter");
+
+    const tablePeriodFilter =
+        document.getElementById("tablePeriodFilter");
+
+    const finishedPeriodFilter =
+        document.getElementById("finishedPeriodFilter");
+
+    const expandAllBtn =
+        document.getElementById("expandAllBtn");
+
+    const collapseAllBtn =
+        document.getElementById("collapseAllBtn");
+
+    const paymentCircle =
+        document.querySelector(".payment-circle");
+
+    const paidPercentage =
+        document.getElementById("paidPercentage");
+
+
+    /* =========================================================
+       PAYMENT CIRCLE
+    ========================================================== */
+
+    if (paymentCircle && paidPercentage) {
+
+        const percentage =
+            parseFloat(paidPercentage.textContent);
+
+        paymentCircle.style.background =
+            `conic-gradient(
+                var(--success) 0% ${percentage}%,
+                var(--border) ${percentage}% 100%
+            )`;
+
+    }
+
+
+    /* =========================================================
+       SERVICES DATA
+    ========================================================== */
+
+    const servicesData = [
+
+        {% for row in Total_khedma %}
+
+        {
+            month: {{ row[0]|tojson }},
+            year: {{ row[1]|tojson }},
+            total: {{ row[2]|float|tojson }}
         }
 
+        {% if not loop.last %},{% endif %}
 
-        /* =========================================================
-           DONNÉES DES SERVICES
+        {% endfor %}
 
-           Total des tâches :
-           row[0] = month
-           row[1] = year
-           row[2] = total services
-
-           patients:
-           row[0] = total patient services
-           row[1] = month
-           row[2] = year
-
-           dentists:
-           row[0] = total dentist services
-           row[1] = month
-           row[2] = year
-        ========================================================== */
-
-        const servicesData = [
-
-            {% for row in Total_khedma %}
-
-            {
-                month: {{ row[0]|tojson }},
-                year: {{ row[1]|tojson }},
-                total: {{ row[2]|float|tojson }}
-            }
-
-            {% if not loop.last %},{% endif %}
-
-            {% endfor %}
-
-        ];
+    ];
 
 
-        const patientsData = [
+    const patientsData = [
 
-            {% for row in patients %}
+        {% for row in patients %}
 
-            {
-                total: {{ row[0]|float|tojson }},
-                month: {{ row[1]|tojson }},
-                year: {{ row[2]|tojson }}
-            }
-
-            {% if not loop.last %},{% endif %}
-
-            {% endfor %}
-
-        ];
-
-
-        const dentistsData = [
-
-            {% for row in dentists %}
-
-            {
-                total: {{ row[0]|float|tojson }},
-                month: {{ row[1]|tojson }},
-                year: {{ row[2]|tojson }}
-            }
-
-            {% if not loop.last %},{% endif %}
-
-            {% endfor %}
-
-        ];
-
-
-        console.log("Total des tâches :", servicesData);
-        console.log("Patients:", patientsData);
-        console.log("Dentistes:", dentistsData);
-
-
-        /* =========================================================
-           REPLI DE LA CATÉGORIE
-        ========================================================== */
-
-        if (categoryToggle && categoryContent) {
-
-            categoryToggle.addEventListener("click", function () {
-
-                categoryContent.classList.toggle("collapsed");
-
-                categoryToggle.classList.toggle("active");
-
-            });
-
+        {
+            total: {{ row[0]|float|tojson }},
+            month: {{ row[1]|tojson }},
+            year: {{ row[2]|tojson }}
         }
 
+        {% if not loop.last %},{% endif %}
 
-        /* =========================================================
-           DÉVELOPPEMENT DES LIGNES MENSUELLES
-        ========================================================== */
+        {% endfor %}
 
-        const monthRows =
-            document.querySelectorAll(".month-row");
+    ];
 
 
-        monthRows.forEach(function (row) {
+    const dentistsData = [
 
-            const button =
-                row.querySelector(".expand-row");
+        {% for row in dentists %}
 
+        {
+            total: {{ row[0]|float|tojson }},
+            month: {{ row[1]|tojson }},
+            year: {{ row[2]|tojson }}
+        }
 
-            if (!button) {
-                return;
-            }
+        {% if not loop.last %},{% endif %}
 
+        {% endfor %}
 
-            button.addEventListener("click", function () {
-
-                const index =
-                    row.dataset.index;
-
-
-                const details =
-                    document.querySelector(
-                        `.details-row[data-details="${index}"]`
-                    );
+    ];
 
 
-                if (!details) {
-                    return;
-                }
+    console.log("Total des tâches :", servicesData);
+    console.log("Patients:", patientsData);
+    console.log("Dentistes:", dentistsData);
 
 
-                const isOpen =
-                    details.classList.contains("open");
+    /* =========================================================
+       CATEGORY COLLAPSE
+    ========================================================== */
 
+    if (categoryToggle && categoryContent) {
 
-                details.classList.toggle(
-                    "open",
-                    !isOpen
-                );
+        categoryToggle.addEventListener("click", function () {
 
+            categoryContent.classList.toggle("collapsed");
 
-                row.classList.toggle(
-                    "expanded",
-                    !isOpen
-                );
-
-            });
+            categoryToggle.classList.toggle("active");
 
         });
 
-
-        /* =========================================================
-           TOUT DÉVELOPPER
-        ========================================================== */
-
-        if (expandAllBtn) {
-
-            expandAllBtn.addEventListener("click", function () {
-
-                document.querySelectorAll(".details-row")
-                    .forEach(function (row) {
-
-                        row.classList.add("open");
-
-                    });
+    }
 
 
-                document.querySelectorAll(".month-row")
-                    .forEach(function (row) {
+    /* =========================================================
+       MONTHLY TABLE ROWS
+    ========================================================== */
 
-                        row.classList.add("expanded");
+    const monthRows =
+        document.querySelectorAll(".month-row");
 
-                    });
 
-            });
+    /* =========================================================
+       MONTHLY TABLE PERIOD FILTER
+
+       6  = Last 6 available periods
+       12 = Last 12 available periods
+       24 = Last 24 available periods
+       60 = Last 60 available periods
+       all = All available periods
+    ========================================================== */
+
+    function filterStatisticsTable() {
+
+        if (!tablePeriodFilter) {
+            return;
+        }
+
+        const selectedPeriod =
+            tablePeriodFilter.value;
+
+        const totalRows =
+            monthRows.length;
+
+        let visibleCount;
+
+        if (selectedPeriod === "all") {
+
+            visibleCount = totalRows;
+
+        } else {
+
+            visibleCount = parseInt(selectedPeriod, 10);
 
         }
 
+        const firstVisibleIndex = Math.max(
+            0,
+            totalRows - visibleCount
+        );
 
-        /* =========================================================
-           TOUT RÉDUIRE
-        ========================================================== */
+        monthRows.forEach(function (row, index) {
 
-        if (collapseAllBtn) {
+            const isVisible =
+                index >= firstVisibleIndex;
 
-            collapseAllBtn.addEventListener("click", function () {
+            const rowIndex =
+                row.dataset.index;
 
-                document.querySelectorAll(".details-row")
-                    .forEach(function (row) {
+            // Main row
+            row.style.display =
+                isVisible ? "" : "none";
 
-                        row.classList.remove("open");
-
-                    });
-
-
-                document.querySelectorAll(".month-row")
-                    .forEach(function (row) {
-
-                        row.classList.remove("expanded");
-
-                    });
-
-            });
-
-        }
-
-
-        /* =========================================================
-           DONNÉES DU GRAPHIQUE FINANCIER
-        ========================================================== */
-
-        const chartCanvas =
-            document.getElementById("profitChart");
-
-        const chartEmpty =
-            document.getElementById("chartEmpty");
-
-
-        let chart = null;
-
-
-        const statisticsData = [
-
-            {% for row in result %}
-
-            {
-                month: {{ row[0]|tojson }},
-                year: {{ row[1]|tojson }},
-
-                paid:
-                    {{
-                        (
-                            row[2]|float
-                            + row[4]|float
-                            + row[6]|float
-                            + row[8]|float
-                            + row[10]|float
-                        )|tojson
-                    }},
-
-                unpaid:
-                    {{
-                        (
-                            row[3]|float
-                            + row[5]|float
-                            + row[7]|float
-                            + row[9]|float
-                            + row[11]|float
-                        )|tojson
-                    }},
-
-                profit:
-                    {{ row[-1]|float|tojson }}
-            }
-
-            {% if not loop.last %},{% endif %}
-
-            {% endfor %}
-
-        ];
-
-
-        /* =========================================================
-           CHARGEMENT DE CHART.JS
-        ========================================================== */
-
-        function loadChartJS(callback) {
-
-            if (window.Chart) {
-
-                callback();
-
-                return;
-            }
-
-
-            const script =
-                document.createElement("script");
-
-
-            script.src =
-                "https://cdn.jsdelivr.net/npm/chart.js";
-
-
-            script.onload = callback;
-
-
-            script.onerror = function () {
-
-                console.error(
-                    "Impossible de charger Chart.js"
+            // Corresponding details row
+            const detailsRow =
+                document.querySelector(
+                    `.details-row[data-details="${rowIndex}"]`
                 );
 
-            };
+            if (detailsRow) {
+
+                detailsRow.style.display =
+                    isVisible ? "" : "none";
+
+                // Close details when hidden
+                if (!isVisible) {
+                    detailsRow.classList.remove("open");
+                    row.classList.remove("expanded");
+                }
+
+            }
+
+        });
+
+    }
 
 
-            document.head.appendChild(script);
+    if (tablePeriodFilter) {
+
+        tablePeriodFilter.addEventListener(
+            "change",
+            filterStatisticsTable
+        );
+
+    }
+
+    filterStatisticsTable();
+
+
+    /* =========================================================
+       FINISHED SERVICES TABLE PERIOD FILTER
+
+       6  = Last 6 available periods
+       12 = Last 12 available periods
+       24 = Last 24 available periods
+       60 = Last 60 available periods
+       all = All available periods
+
+       This filter works independently from the monthly
+       statistics table filter.
+    ========================================================== */
+
+    const finishedMonthRows =
+        document.querySelectorAll(".finished-month-row");
+
+
+    function filterFinishedServicesTable() {
+
+        if (!finishedPeriodFilter) {
+            return;
+        }
+
+        const selectedPeriod =
+            finishedPeriodFilter.value;
+
+        const totalRows =
+            finishedMonthRows.length;
+
+        let visibleCount;
+
+        if (selectedPeriod === "all") {
+
+            visibleCount = totalRows;
+
+        } else {
+
+            visibleCount = parseInt(selectedPeriod, 10);
 
         }
 
+        const firstVisibleIndex = Math.max(
+            0,
+            totalRows - visibleCount
+        );
 
-        /* =========================================================
-           CRÉATION DU GRAPHIQUE FINANCIER
-        ========================================================== */
+        finishedMonthRows.forEach(function (row, index) {
 
-        function createChart(data) {
+            const isVisible =
+                index >= firstVisibleIndex;
 
-            if (!chartCanvas) {
+            row.style.display =
+                isVisible ? "" : "none";
+
+        });
+
+    }
+
+
+    if (finishedPeriodFilter) {
+
+        finishedPeriodFilter.addEventListener(
+            "change",
+            filterFinishedServicesTable
+        );
+
+    }
+
+    filterFinishedServicesTable();
+
+
+    /* =========================================================
+       EXPAND / COLLAPSE MONTHLY ROWS
+    ========================================================== */
+
+    monthRows.forEach(function (row) {
+
+        const button =
+            row.querySelector(".expand-row");
+
+        if (!button) {
+            return;
+        }
+
+        button.addEventListener("click", function () {
+
+            const index =
+                row.dataset.index;
+
+            const details =
+                document.querySelector(
+                    `.details-row[data-details="${index}"]`
+                );
+
+            if (!details) {
                 return;
             }
 
+            const isOpen =
+                details.classList.contains("open");
 
-            if (!data.length) {
+            details.classList.toggle(
+                "open",
+                !isOpen
+            );
 
-                if (chartEmpty) {
-                    chartEmpty.classList.add("visible");
-                }
+            row.classList.toggle(
+                "expanded",
+                !isOpen
+            );
 
-                return;
-            }
+        });
 
+    });
+
+
+    /* =========================================================
+       EXPAND ALL
+    ========================================================== */
+
+    if (expandAllBtn) {
+
+        expandAllBtn.addEventListener("click", function () {
+
+            document.querySelectorAll(".details-row")
+                .forEach(function (row) {
+
+                    if (row.style.display !== "none") {
+                        row.classList.add("open");
+                    }
+
+                });
+
+            document.querySelectorAll(".month-row")
+                .forEach(function (row) {
+
+                    if (row.style.display !== "none") {
+                        row.classList.add("expanded");
+                    }
+
+                });
+
+        });
+
+    }
+
+
+    /* =========================================================
+       COLLAPSE ALL
+    ========================================================== */
+
+    if (collapseAllBtn) {
+
+        collapseAllBtn.addEventListener("click", function () {
+
+            document.querySelectorAll(".details-row")
+                .forEach(function (row) {
+
+                    row.classList.remove("open");
+
+                });
+
+            document.querySelectorAll(".month-row")
+                .forEach(function (row) {
+
+                    row.classList.remove("expanded");
+
+                });
+
+        });
+
+    }
+
+
+    /* =========================================================
+       FINANCIAL CHART DATA
+    ========================================================== */
+
+    const chartCanvas =
+        document.getElementById("profitChart");
+
+    const chartEmpty =
+        document.getElementById("chartEmpty");
+
+    let chart = null;
+
+
+    const statisticsData = [
+
+        {% for row in result %}
+
+        {
+            month: {{ row[0]|tojson }},
+            year: {{ row[1]|tojson }},
+
+            paid: {{
+                (
+                    row[2]|float
+                    + row[4]|float
+                    + row[6]|float
+                    + row[8]|float
+                    + row[10]|float
+                )|tojson
+            }},
+
+            unpaid: {{
+                (
+                    row[3]|float
+                    + row[5]|float
+                    + row[7]|float
+                    + row[9]|float
+                    + row[11]|float
+                )|tojson
+            }},
+
+            profit: {{ row[-1]|float|tojson }}
+        }
+
+        {% if not loop.last %},{% endif %}
+
+        {% endfor %}
+
+    ];
+
+
+    /* =========================================================
+       LOAD CHART.JS
+    ========================================================== */
+
+    function loadChartJS(callback) {
+
+        if (window.Chart) {
+
+            callback();
+
+            return;
+
+        }
+
+        const script =
+            document.createElement("script");
+
+        script.src =
+            "https://cdn.jsdelivr.net/npm/chart.js";
+
+        script.onload = callback;
+
+        script.onerror = function () {
+
+            console.error(
+                "Impossible de charger Chart.js"
+            );
+
+        };
+
+        document.head.appendChild(script);
+
+    }
+
+
+    /* =========================================================
+       CREATE FINANCIAL CHART
+    ========================================================== */
+
+    function createChart(data) {
+
+        if (!chartCanvas) {
+            return;
+        }
+
+        if (!data.length) {
 
             if (chartEmpty) {
-                chartEmpty.classList.remove("visible");
+                chartEmpty.classList.add("visible");
             }
-
-
-            const labels =
-                data.map(function (item) {
-
-                    return item.month +
-                        " " +
-                        item.year;
-
-                });
-
-
-            const profitData =
-                data.map(function (item) {
-
-                    return item.profit;
-
-                });
-
 
             if (chart) {
                 chart.destroy();
+                chart = null;
             }
 
+            return;
 
-            chart = new Chart(
+        }
 
-                chartCanvas,
+        if (chartEmpty) {
+            chartEmpty.classList.remove("visible");
+        }
 
-                {
+        const labels =
+            data.map(function (item) {
 
-                    type: "line",
+                return item.month +
+                    " " +
+                    item.year;
 
-                    data: {
+            });
 
-                        labels: labels,
+        const profitData =
+            data.map(function (item) {
 
-                        datasets: [
+                return item.profit;
 
-                            {
-                                label: "Bénéfice net",
+            });
 
-                                data: profitData,
+        if (chart) {
+            chart.destroy();
+        }
 
-                                borderWidth: 3,
+        chart = new Chart(
 
-                                pointRadius: 4,
+            chartCanvas,
 
-                                pointHoverRadius: 6,
+            {
 
-                                tension: 0.35,
+                type: "line",
 
-                                fill: true
+                data: {
+
+                    labels: labels,
+
+                    datasets: [
+
+                        {
+
+                            label: "Bénéfice net",
+
+                            data: profitData,
+
+                            borderWidth: 3,
+
+                            pointRadius: 4,
+
+                            pointHoverRadius: 6,
+
+                            tension: 0.35,
+
+                            fill: true
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    interaction: {
+                        mode: "index",
+                        intersect: false
+                    },
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        },
+
+                        tooltip: {
+
+                            callbacks: {
+
+                                label: function (context) {
+
+                                    return (
+                                        "Bénéfice net: " +
+
+                                        Number(context.raw)
+                                            .toLocaleString(
+                                                "fr-FR",
+                                                {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2
+                                                }
+                                            )
+
+                                        + " DA"
+                                    );
+
+                                }
+
                             }
 
-                        ]
+                        }
 
                     },
 
+                    scales: {
 
-                    options: {
+                        x: {
 
-                        responsive: true,
-
-                        maintainAspectRatio: false,
-
-                        interaction: {
-                            mode: "index",
-                            intersect: false
-                        },
-
-
-                        plugins: {
-
-                            legend: {
+                            grid: {
                                 display: false
                             },
 
+                            ticks: {
 
-                            tooltip: {
-
-                                callbacks: {
-
-                                    label: function (context) {
-
-                                        return (
-                                            "Bénéfice net: " +
-
-                                            Number(context.raw)
-                                                .toLocaleString(
-                                                    "fr-FR",
-                                                    {
-                                                        minimumFractionDigits: 2,
-                                                        maximumFractionDigits: 2
-                                                    }
-                                                )
-
-                                            + " DA"
-                                        );
-
-                                    }
-
+                                font: {
+                                    family: "Outfit",
+                                    size: 11
                                 }
 
                             }
 
                         },
 
+                        y: {
 
-                        scales: {
+                            ticks: {
 
-                            x: {
+                                callback: function (value) {
 
-                                grid: {
-                                    display: false
+                                    return (
+                                        Number(value)
+                                            .toLocaleString("fr-FR")
+                                        + " DA"
+                                    );
+
                                 },
 
-
-                                ticks: {
-
-                                    font: {
-                                        family: "Outfit",
-                                        size: 11
-                                    }
-
-                                }
-
-                            },
-
-
-                            y: {
-
-                                ticks: {
-
-                                    callback: function (value) {
-
-                                        return (
-                                            Number(value)
-                                                .toLocaleString("fr-FR")
-                                            + " DA"
-                                        );
-
-                                    },
-
-
-                                    font: {
-                                        family: "Outfit",
-                                        size: 11
-                                    }
-
+                                font: {
+                                    family: "Outfit",
+                                    size: 11
                                 }
 
                             }
@@ -1867,354 +2056,285 @@
 
                 }
 
+            }
+
+        );
+
+    }
+
+
+    /* =========================================================
+       SERVICES CHART
+    ========================================================== */
+
+    const servicesCanvas =
+        document.getElementById("servicesChart");
+
+    const servicesEmpty =
+        document.getElementById("servicesChartEmpty");
+
+    let servicesChart = null;
+
+
+    function createServicesChart() {
+
+        console.log(
+            "Création du graphique des services"
+        );
+
+        if (!servicesCanvas) {
+
+            console.error(
+                "Canvas servicesChart introuvable"
             );
+
+            return;
 
         }
 
+        if (!servicesData.length) {
 
-        /* =========================================================
-           GRAPHIQUE DES SERVICES
-        ========================================================== */
-
-        const servicesCanvas =
-            document.getElementById("servicesChart");
-
-        const servicesEmpty =
-            document.getElementById("servicesChartEmpty");
-
-
-        let servicesChart = null;
-
-
-        function createServicesChart() {
-
-            console.log(
-                "Création du graphique des services"
+            console.warn(
+                "Aucune donnée disponible pour les services"
             );
-
-
-            if (!servicesCanvas) {
-
-                console.error(
-                    "Canvas servicesChart introuvable"
-                );
-
-                return;
-            }
-
-
-            if (!servicesData.length) {
-
-                console.warn(
-                    "Aucune donnée disponible pour les services"
-                );
-
-
-                if (servicesEmpty) {
-
-                    servicesEmpty.classList.add(
-                        "visible"
-                    );
-
-                }
-
-                return;
-            }
-
 
             if (servicesEmpty) {
 
-                servicesEmpty.classList.remove(
+                servicesEmpty.classList.add(
                     "visible"
                 );
 
             }
 
+            return;
 
-            /* =====================================================
-               LIBELLÉS
-            ====================================================== */
+        }
 
-            const labels =
-                servicesData.map(function (item) {
+        if (servicesEmpty) {
 
-                    return item.month +
-                        " " +
-                        item.year;
-
-                });
-
-
-            /* =====================================================
-               TOTAL DES SERVICES
-            ====================================================== */
-
-            const totalValues =
-                servicesData.map(function (item) {
-
-                    return Number(item.total);
-
-                });
-
-
-            /* =====================================================
-               SERVICES DES PATIENTS
-
-               Find the patient statistic corresponding
-               to the same month and year.
-            ====================================================== */
-
-            const patientValues =
-                servicesData.map(function (item) {
-
-                    const found =
-                        patientsData.find(function (patient) {
-
-                            return (
-                                patient.month == item.month &&
-                                patient.year == item.year
-                            );
-
-                        });
-
-
-                    return found
-                        ? Number(found.total)
-                        : 0;
-
-                });
-
-
-            /* =====================================================
-               SERVICES DES DENTISTES
-
-               Find the dentist statistic corresponding
-               to the same month and year.
-            ====================================================== */
-
-            const dentistValues =
-                servicesData.map(function (item) {
-
-                    const found =
-                        dentistsData.find(function (dentist) {
-
-                            return (
-                                dentist.month == item.month &&
-                                dentist.year == item.year
-                            );
-
-                        });
-
-
-                    return found
-                        ? Number(found.total)
-                        : 0;
-
-                });
-
-
-            console.log(
-                "Libellés du graphique des services :",
-                labels
+            servicesEmpty.classList.remove(
+                "visible"
             );
 
-            console.log(
-                "Total des services :",
-                totalValues
-            );
-
-            console.log(
-                "Services des patients :",
-                patientValues
-            );
-
-            console.log(
-                "Services des dentistes :",
-                dentistValues
-            );
+        }
 
 
-            /* =====================================================
-               SUPPRESSION DE L’ANCIEN GRAPHIQUE
-            ====================================================== */
+        /* LABELS */
 
-            if (servicesChart) {
+        const labels =
+            servicesData.map(function (item) {
 
-                servicesChart.destroy();
+                return item.month +
+                    " " +
+                    item.year;
 
-            }
-
-
-            /* =====================================================
-               CREATE GRAPHIQUE DES SERVICES
-            ====================================================== */
-
-            servicesChart = new Chart(
-
-                servicesCanvas,
-
-                {
-
-                    type: "line",
+            });
 
 
-                    data: {
+        /* TOTAL SERVICES */
 
-                        labels: labels,
+        const totalValues =
+            servicesData.map(function (item) {
 
+                return Number(item.total);
 
-                        datasets: [
-
-                            /* =====================================
-                               TOTAL DES SERVICES
-                            ====================================== */
-
-                            {
-
-                                label: "Total des services",
-
-                                data: totalValues,
-
-                                borderColor: "#6366f1",
-
-                                backgroundColor:
-                                    "rgba(99, 102, 241, 0.10)",
-
-                                borderWidth: 3,
-
-                                pointRadius: 4,
-
-                                pointHoverRadius: 6,
-
-                                tension: 0.35,
-
-                                fill: true
-
-                            },
+            });
 
 
-                            /* =====================================
-                               SERVICES DES PATIENTS
-                            ====================================== */
+        /* PATIENT SERVICES */
 
-                            {
+        const patientValues =
+            servicesData.map(function (item) {
 
-                                label: "Services des patients",
+                const found =
+                    patientsData.find(function (patient) {
 
-                                data: patientValues,
+                        return (
+                            patient.month == item.month &&
+                            patient.year == item.year
+                        );
 
-                                borderColor: "#22c55e",
+                    });
 
-                                backgroundColor:
-                                    "rgba(34, 197, 94, 0.08)",
+                return found
+                    ? Number(found.total)
+                    : 0;
 
-                                borderWidth: 3,
-
-                                pointRadius: 4,
-
-                                pointHoverRadius: 6,
-
-                                tension: 0.35,
-
-                                fill: false
-
-                            },
+            });
 
 
-                            /* =====================================
-                               SERVICES DES DENTISTES
-                            ====================================== */
+        /* DENTIST SERVICES */
 
-                            {
+        const dentistValues =
+            servicesData.map(function (item) {
 
-                                label: "Dentistes Services",
+                const found =
+                    dentistsData.find(function (dentist) {
 
-                                data: dentistValues,
+                        return (
+                            dentist.month == item.month &&
+                            dentist.year == item.year
+                        );
 
-                                borderColor: "#f59e0b",
+                    });
 
-                                backgroundColor:
-                                    "rgba(245, 158, 11, 0.08)",
+                return found
+                    ? Number(found.total)
+                    : 0;
 
-                                borderWidth: 3,
+            });
 
-                                pointRadius: 4,
 
-                                pointHoverRadius: 6,
+        console.log(
+            "Libellés du graphique des services :",
+            labels
+        );
 
-                                tension: 0.35,
+        console.log(
+            "Total des services :",
+            totalValues
+        );
 
-                                fill: false
+        console.log(
+            "Services des patients :",
+            patientValues
+        );
 
-                            }
+        console.log(
+            "Services des dentistes :",
+            dentistValues
+        );
 
-                        ]
+
+        /* DESTROY OLD CHART */
+
+        if (servicesChart) {
+            servicesChart.destroy();
+        }
+
+
+        /* CREATE SERVICES CHART */
+
+        servicesChart = new Chart(
+
+            servicesCanvas,
+
+            {
+
+                type: "line",
+
+                data: {
+
+                    labels: labels,
+
+                    datasets: [
+
+                        {
+
+                            label: "Total des services",
+
+                            data: totalValues,
+
+                            borderColor: "#6366f1",
+
+                            backgroundColor:
+                                "rgba(99, 102, 241, 0.10)",
+
+                            borderWidth: 3,
+
+                            pointRadius: 4,
+
+                            pointHoverRadius: 6,
+
+                            tension: 0.35,
+
+                            fill: true
+
+                        },
+
+                        {
+
+                            label: "Services des patients",
+
+                            data: patientValues,
+
+                            borderColor: "#22c55e",
+
+                            backgroundColor:
+                                "rgba(34, 197, 94, 0.08)",
+
+                            borderWidth: 3,
+
+                            pointRadius: 4,
+
+                            pointHoverRadius: 6,
+
+                            tension: 0.35,
+
+                            fill: false
+
+                        },
+
+                        {
+
+                            label: "Dentistes Services",
+
+                            data: dentistValues,
+
+                            borderColor: "#f59e0b",
+
+                            backgroundColor:
+                                "rgba(245, 158, 11, 0.08)",
+
+                            borderWidth: 3,
+
+                            pointRadius: 4,
+
+                            pointHoverRadius: 6,
+
+                            tension: 0.35,
+
+                            fill: false
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    interaction: {
+
+                        mode: "index",
+
+                        intersect: false
 
                     },
 
+                    plugins: {
 
-                    options: {
+                        legend: {
 
-                        responsive: true,
+                            display: true,
 
-                        maintainAspectRatio: false,
+                            position: "top",
 
+                            labels: {
 
-                        interaction: {
+                                usePointStyle: true,
 
-                            mode: "index",
+                                padding: 20,
 
-                            intersect: false
+                                font: {
 
-                        },
+                                    family: "Outfit",
 
-
-                        plugins: {
-
-                            legend: {
-
-                                display: true,
-
-                                position: "top",
-
-
-                                labels: {
-
-                                    usePointStyle: true,
-
-                                    padding: 20,
-
-                                    font: {
-
-                                        family: "Outfit",
-
-                                        size: 12
-
-                                    }
-
-                                }
-
-                            },
-
-
-                            tooltip: {
-
-                                callbacks: {
-
-                                    label: function (context) {
-
-                                        return (
-
-                                            context.dataset.label +
-
-                                            ": " +
-
-                                            Number(context.raw)
-                                                .toLocaleString("fr-FR")
-
-                                        );
-
-                                    }
+                                    size: 12
 
                                 }
 
@@ -2222,65 +2342,74 @@
 
                         },
 
+                        tooltip: {
 
-                        scales: {
+                            callbacks: {
 
-                            x: {
+                                label: function (context) {
 
-                                grid: {
+                                    return (
 
-                                    display: false
+                                        context.dataset.label +
 
-                                },
+                                        ": " +
 
+                                        Number(context.raw)
+                                            .toLocaleString("fr-FR")
 
-                                ticks: {
-
-                                    font: {
-
-                                        family: "Outfit",
-
-                                        size: 11
-
-                                    }
+                                    );
 
                                 }
 
+                            }
+
+                        }
+
+                    },
+
+                    scales: {
+
+                        x: {
+
+                            grid: {
+                                display: false
                             },
 
+                            ticks: {
 
-                            y: {
+                                font: {
+                                    family: "Outfit",
+                                    size: 11
+                                }
 
-                                beginAtZero: true,
+                            }
 
+                        },
 
-                                title: {
+                        y: {
 
-                                    display: true,
+                            beginAtZero: true,
 
-                                    text: "Services"
+                            title: {
+
+                                display: true,
+
+                                text: "Services"
+
+                            },
+
+                            ticks: {
+
+                                callback: function (value) {
+
+                                    return Number(value)
+                                        .toLocaleString("fr-FR");
 
                                 },
 
-
-                                ticks: {
-
-                                    callback: function (value) {
-
-                                        return Number(value)
-                                            .toLocaleString("fr-FR");
-
-                                    },
-
-
-                                    font: {
-
-                                        family: "Outfit",
-
-                                        size: 11
-
-                                    }
-
+                                font: {
+                                    family: "Outfit",
+                                    size: 11
                                 }
 
                             }
@@ -2291,319 +2420,289 @@
 
                 }
 
-            );
-
-        }
-
-
-        /* =========================================================
-           FILTRE DES PÉRIODES
-
-           Ce filtre affecte uniquement le graphique FINANCIER,
-           exactement comme dans votre version précédente.
-        ========================================================== */
-
-        function getFilteredData() {
-
-            if (!periodFilter) {
-                return statisticsData;
             }
 
+        );
 
-            const value =
-                periodFilter.value;
-
-
-            if (value === "all") {
-
-                return statisticsData;
-
-            }
+    }
 
 
-            const count =
-                parseInt(value);
+    /* =========================================================
+       FINANCIAL CHART PERIOD FILTER
+    ========================================================== */
 
+    function getFilteredData() {
 
-            if (isNaN(count)) {
-
-                return statisticsData;
-
-            }
-
-
-            return statisticsData.slice(-count);
-
+        if (!periodFilter) {
+            return statisticsData;
         }
 
+        const value =
+            periodFilter.value;
 
-        if (periodFilter) {
-
-            periodFilter.addEventListener(
-                "change",
-                function () {
-
-                    createChart(
-                        getFilteredData()
-                    );
-
-                }
-            );
-
+        if (value === "all") {
+            return statisticsData;
         }
 
+        const count =
+            parseInt(value, 10);
 
-        /* =========================================================
-           INITIALISATION DES DEUX GRAPHIQUES
-        ========================================================== */
+        if (isNaN(count)) {
+            return statisticsData;
+        }
 
-        loadChartJS(function () {
+        return statisticsData.slice(-count);
 
-            console.log(
-                "Chart.js chargé avec succès"
-            );
+    }
 
 
-            /* Graphique financier existant */
+    if (periodFilter) {
 
-            if (chartCanvas) {
+        periodFilter.addEventListener(
+            "change",
+            function () {
 
                 createChart(
-                    statisticsData
+                    getFilteredData()
                 );
 
             }
+        );
+
+    }
 
 
-            /* Nouveau graphique des services */
+    /* =========================================================
+       INITIALIZE BOTH CHARTS
+    ========================================================== */
 
-            if (servicesCanvas) {
+    loadChartJS(function () {
 
-                createServicesChart();
+        console.log(
+            "Chart.js chargé avec succès"
+        );
 
-            }
+        if (chartCanvas) {
 
-        });
-
-
-        /* =========================================================
-           EXPORT CSV
-        ========================================================== */
-
-        if (exportBtn) {
-
-            exportBtn.addEventListener(
-                "click",
-                function () {
-
-                    const rows = [];
-
-
-                    rows.push([
-
-                        "Mois",
-                        "Année",
-
-                        "Patients payés",
-                        "Patients impayés",
-
-                        "Dentistes Paid",
-                        "Dentistes Unpaid",
-
-                        "Prothésistes Paid",
-                        "Prothésistes Unpaid",
-
-                        "Stock Paid",
-                        "Stock Unpaid",
-
-                        "Autres services Paid",
-                        "Autres services Unpaid",
-
-                        "Bénéfice net"
-
-                    ]);
-
-
-                    {% for row in result %}
-
-                    rows.push([
-
-                        {{ row[0]|tojson }},
-                        {{ row[1]|tojson }},
-
-                        {{ row[2]|float|tojson }},
-                        {{ row[3]|float|tojson }},
-
-                        {{ row[4]|float|tojson }},
-                        {{ row[5]|float|tojson }},
-
-                        {{ row[6]|float|tojson }},
-                        {{ row[7]|float|tojson }},
-
-                        {{ row[8]|float|tojson }},
-                        {{ row[9]|float|tojson }},
-
-                        {{ row[10]|float|tojson }},
-                        {{ row[11]|float|tojson }},
-
-                        {{ row[-1]|float|tojson }}
-
-                    ]);
-
-
-                    {% endfor %}
-
-
-                    const csv =
-                        rows.map(function (row) {
-
-                            return row.map(function (value) {
-
-                                const stringValue =
-                                    String(value ?? "");
-
-
-                                return '"' +
-                                    stringValue.replace(
-                                        /"/g,
-                                        '""'
-                                    ) +
-                                    '"';
-
-                            }).join(",");
-
-                        }).join("\n");
-
-
-                    const blob =
-                        new Blob(
-                            [csv],
-                            {
-                                type:
-                                    "text/csv;charset=utf-8;"
-                            }
-                        );
-
-
-                    const url =
-                        URL.createObjectURL(blob);
-
-
-                    const link =
-                        document.createElement("a");
-
-
-                    link.href = url;
-
-
-                    link.download =
-                        "lab_statistics.csv";
-
-
-                    document.body.appendChild(link);
-
-
-                    link.click();
-
-
-                    document.body.removeChild(link);
-
-
-                    URL.revokeObjectURL(url);
-
-                }
+            createChart(
+                statisticsData
             );
 
         }
 
+        if (servicesCanvas) {
 
-        /* =========================================================
-           IMPRESSION
-        ========================================================== */
-
-        if (printBtn) {
-
-            printBtn.addEventListener(
-                "click",
-                function () {
-
-                    window.print();
-
-                }
-            );
+            createServicesChart();
 
         }
-
-
-        /* =========================================================
-           EFFET D’ONDE DES BOUTONS
-        ========================================================== */
-
-        document.querySelectorAll(
-            ".action-button, .icon-button, .table-tool"
-        ).forEach(function (button) {
-
-            button.addEventListener(
-                "click",
-                function (event) {
-
-                    const ripple =
-                        document.createElement("span");
-
-
-                    ripple.classList.add("ripple");
-
-
-                    const rect =
-                        button.getBoundingClientRect();
-
-
-                    ripple.style.left =
-                        (event.clientX - rect.left) +
-                        "px";
-
-
-                    ripple.style.top =
-                        (event.clientY - rect.top) +
-                        "px";
-
-
-                    button.appendChild(ripple);
-
-
-                    setTimeout(
-                        function () {
-
-                            ripple.remove();
-
-                        },
-                        600
-                    );
-
-                }
-            );
-
-        });
-
-
-        /* =========================================================
-           ANIMATION DES CARTES
-        ========================================================== */
-
-        const cards =
-            document.querySelectorAll(
-                ".stat-card, .category-card"
-            );
-
-
-        cards.forEach(function (card, index) {
-
-            card.style.animationDelay =
-                (index * 70) + "ms";
-
-        });
 
     });
+
+
+    /* =========================================================
+       CSV EXPORT
+    ========================================================== */
+
+    if (exportBtn) {
+
+        exportBtn.addEventListener(
+            "click",
+            function () {
+
+                const rows = [];
+
+                rows.push([
+
+                    "Mois",
+                    "Année",
+
+                    "Patients payés",
+                    "Patients impayés",
+
+                    "Dentistes Paid",
+                    "Dentistes Unpaid",
+
+                    "Prothésistes Paid",
+                    "Prothésistes Unpaid",
+
+                    "Stock Paid",
+                    "Stock Unpaid",
+
+                    "Autres services Paid",
+                    "Autres services Unpaid",
+
+                    "Bénéfice net"
+
+                ]);
+
+
+                {% for row in result %}
+
+                rows.push([
+
+                    {{ row[0]|tojson }},
+                    {{ row[1]|tojson }},
+
+                    {{ row[2]|float|tojson }},
+                    {{ row[3]|float|tojson }},
+
+                    {{ row[4]|float|tojson }},
+                    {{ row[5]|float|tojson }},
+
+                    {{ row[6]|float|tojson }},
+                    {{ row[7]|float|tojson }},
+
+                    {{ row[8]|float|tojson }},
+                    {{ row[9]|float|tojson }},
+
+                    {{ row[10]|float|tojson }},
+                    {{ row[11]|float|tojson }},
+
+                    {{ row[-1]|float|tojson }}
+
+                ]);
+
+                {% endfor %}
+
+
+                const csv =
+                    rows.map(function (row) {
+
+                        return row.map(function (value) {
+
+                            const stringValue =
+                                String(value ?? "");
+
+                            return '"' +
+                                stringValue.replace(
+                                    /"/g,
+                                    '""'
+                                ) +
+                                '"';
+
+                        }).join(",");
+
+                    }).join("\n");
+
+
+                const blob =
+                    new Blob(
+                        [csv],
+                        {
+                            type:
+                                "text/csv;charset=utf-8;"
+                        }
+                    );
+
+
+                const url =
+                    URL.createObjectURL(blob);
+
+
+                const link =
+                    document.createElement("a");
+
+
+                link.href = url;
+
+                link.download =
+                    "lab_statistics.csv";
+
+
+                document.body.appendChild(link);
+
+                link.click();
+
+                document.body.removeChild(link);
+
+                URL.revokeObjectURL(url);
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       PRINT
+    ========================================================== */
+
+    if (printBtn) {
+
+        printBtn.addEventListener(
+            "click",
+            function () {
+
+                window.print();
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       BUTTON RIPPLE EFFECT
+    ========================================================== */
+
+    document.querySelectorAll(
+        ".action-button, .icon-button, .table-tool"
+    ).forEach(function (button) {
+
+        button.addEventListener(
+            "click",
+            function (event) {
+
+                const ripple =
+                    document.createElement("span");
+
+                ripple.classList.add("ripple");
+
+                const rect =
+                    button.getBoundingClientRect();
+
+                ripple.style.left =
+                    (event.clientX - rect.left) +
+                    "px";
+
+                ripple.style.top =
+                    (event.clientY - rect.top) +
+                    "px";
+
+                button.appendChild(ripple);
+
+                setTimeout(
+                    function () {
+
+                        ripple.remove();
+
+                    },
+                    600
+                );
+
+            }
+        );
+
+    });
+
+
+    /* =========================================================
+       CARD ANIMATIONS
+    ========================================================== */
+
+    const cards =
+        document.querySelectorAll(
+            ".stat-card, .category-card"
+        );
+
+    cards.forEach(function (card, index) {
+
+        card.style.animationDelay =
+            (index * 70) + "ms";
+
+    });
+
+});
 
 </script>
 
