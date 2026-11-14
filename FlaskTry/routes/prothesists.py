@@ -1621,27 +1621,64 @@ def ProStat():
                 AND machi_khalsin = 0
         """, (session['id'],))
 
+        cursor.execute("""
+                        SELECT ps.id, ps.total_khedma, COUNT(CASE WHEN ph.status = 'finished' AND ph.b9aw = 0 THEN 1 END) AS total_finished
+                        FROM prothesist_stat ps 
+                        JOIN other_prothesists_history ph 
+                                    ON ph.user_id = ps.user_id AND ph.prothesist = ps.prothesist_name AND 
+                                    ph.pNumber = ps.prothesist_number AND MONTH(ph.pDate) = ps.month AND YEAR(ph.pDate) = ps.year
+                        WHERE 
+                        ps.user_id = %s AND ph.pDate >= DATE_SUB(CURDATE() , INTERVAL 18 MONTH)
+                        GROUP BY  
+                        ps.id , ps.total_khedma                              
+                        """,(session['id'],))
+        deleted = cursor.fetchall()
+
+        hiders = [delete[0] for delete in deleted if delete[1] == delete[2]]
+
         conn.commit()
 
         Pro_list = GetAllProthesists(cursor)
         result = {}
+
+        placeholders = ','.join(['%s']*len(hiders))
         for Pro in Pro_list:
+            if hiders :
+                cursor.execute(f"""
+                    SELECT p.prothesist_name, p.prothesist_number, p.total_khedma, SUM(CASE WHEN o.status = 'finished' THEN 1 ELSE 0 END) AS total_finished,
+                            SUM(CASE WHEN o.status NOT IN ('finished' , 'deleted') THEN 1 ELSE 0 END) AS total_not_finished,
+                            p.khalsin, p.machi_khalsin, p.month, p.year
+                    FROM prothesist_stat p
+                    JOIN other_prothesists_history o ON p.user_id = o.user_id AND p.prothesist_name = o.prothesist 
+                                                    AND p.prothesist_number = o.pNumber AND MONTH(o.pDate) = p.month AND YEAR(o.pDate) = p.year
+                    WHERE 
+                    p.id NOT IN ({placeholders})
+                      AND p.user_id = %s
+                      AND p.prothesist_name = %s
+                      AND p.prothesist_number = %s
+                    GROUP BY p.month, p.year 
+                    ORDER BY p.year DESC, p.month DESC
+                """, (*hiders, session['id'], Pro[1], Pro[0]))
 
-            cursor.execute("""
-                SELECT p.prothesist_name, p.prothesist_number, p.total_khedma, SUM(CASE WHEN o.status = 'finished' THEN 1 ELSE 0 END) AS total_finished,
-                        SUM(CASE WHEN o.status NOT IN ('finished' , 'deleted') THEN 1 ELSE 0 END) AS total_not_finished,
-                        p.khalsin, p.machi_khalsin, p.month, p.year
-                FROM prothesist_stat p
-                JOIN other_prothesists_history o ON p.user_id = o.user_id AND p.prothesist_name = o.prothesist 
-                                                AND p.prothesist_number = o.pNumber AND MONTH(o.pDate) = p.month AND YEAR(o.pDate) = p.year
-                WHERE p.user_id = %s
-                  AND p.prothesist_name = %s
-                  AND p.prothesist_number = %s
-                GROUP BY p.month, p.year 
-                ORDER BY p.year DESC, p.month DESC
-            """, (session['id'], Pro[1], Pro[0]))
+                rows = cursor.fetchall()
+            else :
+                cursor.execute(f"""
+                     SELECT p.prothesist_name, p.prothesist_number, p.total_khedma, SUM(CASE WHEN o.status = 'finished' THEN 1 ELSE 0 END) AS total_finished,
+                            SUM(CASE WHEN o.status NOT IN ('finished' , 'deleted') THEN 1 ELSE 0 END) AS total_not_finished,
+                            p.khalsin, p.machi_khalsin, p.month, p.year
+                     FROM prothesist_stat p
+                     JOIN other_prothesists_history o ON p.user_id = o.user_id AND p.prothesist_name = o.prothesist 
+                                                      AND p.prothesist_number = o.pNumber AND MONTH(o.pDate) = p.month AND YEAR(o.pDate) = p.year
+                     WHERE 
+                      p.user_id = %s
+                      AND p.prothesist_name = %s
+                      AND p.prothesist_number = %s
+                      GROUP BY p.month, p.year 
+                      ORDER BY p.year DESC, p.month DESC
+                       """, ( session['id'], Pro[1], Pro[0]))
 
-            rows = cursor.fetchall()
+                rows = cursor.fetchall()
+
 
             print(rows[0])
 
@@ -1675,6 +1712,104 @@ def ProStat():
     finally:
         cursor.close()
         conn.close()
+
+@prothesists.route("/ProStatByPeriod")
+def ProStatByPeriod():
+
+    if not is_logged_in():
+        return jsonify({
+            "success": False,
+            "message": "Authentication required"
+        }), 401
+
+    try:
+        month = int(request.args.get("month", 0))
+        year = int(request.args.get("year", 0))
+
+        if not 1 <= month <= 12 or year < 2000:
+            return jsonify({
+                "success": False,
+                "message": "Invalid month or year"
+            }), 400
+
+        conn = get_connection()
+        cursor = conn.cursor(buffered=True)
+
+        try:
+            cursor.execute("""
+                SELECT p.prothesist_name, p.prothesist_number, p.total_khedma,
+                    COALESCE(
+                        SUM(CASE WHEN o.status = 'finished' THEN 1 ELSE 0 END), 0
+                    ) AS total_finished,
+
+                    COALESCE(
+                        SUM(CASE WHEN o.status NOT IN ('finished', 'deleted') THEN 1 ELSE 0 END), 0
+                    ) AS total_not_finished,
+
+                    p.khalsin,
+                    p.machi_khalsin
+
+                FROM prothesist_stat p
+
+                LEFT JOIN other_prothesists_history o
+                    ON p.user_id = o.user_id
+                    AND p.prothesist_name = o.prothesist
+                    AND p.prothesist_number = o.pNumber
+                    AND MONTH(o.pDate) = p.month
+                    AND YEAR(o.pDate) = p.year
+
+                WHERE 
+                p.user_id = %s AND p.month = %s AND p.year = %s
+
+                GROUP BY
+                    p.id,
+                    p.prothesist_name,
+                    p.prothesist_number,
+                    p.total_khedma,
+                    p.khalsin,
+                    p.machi_khalsin
+
+                ORDER BY p.prothesist_name
+            """, (session['id'], month, year))
+
+            rows = cursor.fetchall()
+
+            prothesists_data = []
+
+            for row in rows:
+                prothesists_data.append({
+                    "name": row[0],
+                    "number": row[1],
+                    "total_khedma": int(row[2] or 0),
+                    "total_finished": int(row[3] or 0),
+                    "total_not_finished": int(row[4] or 0),
+                    "paid": float(row[5] or 0),
+                    "unpaid": float(row[6] or 0)
+                })
+
+            return jsonify({
+                "success": True,
+                "month": month,
+                "year": year,
+                "prothesists": prothesists_data
+            })
+
+        finally:
+            cursor.close()
+            conn.close()
+
+    except (ValueError, TypeError):
+        return jsonify({
+            "success": False,
+            "message": "Invalid parameters"
+        }), 400
+
+    except Exception:
+        #app.logger.exception("ProStatByPeriod failed")
+        return jsonify({
+            "success": False,
+            "message": "An internal error occurred"
+        }), 500
 
 @prothesists.route("/ProSearch", methods=["POST", "GET"])
 def ProSearchPage():

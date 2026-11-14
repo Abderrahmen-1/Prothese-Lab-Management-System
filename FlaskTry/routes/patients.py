@@ -718,18 +718,44 @@ def PatietStat():
                         AND machi_khalsin = 0  
                         AND user_id = %s  
                         """, (session['id'],))
+
+        cursor.execute("""
+                        SELECT ps.id, ps.patients_number, COUNT(CASE WHEN ph.status = 'finished' AND ph.b9aw = 0 THEN 1 END) AS total_finished
+                        FROM patient_stat ps 
+                        JOIN patient_history ph ON ph.user_id = ps.user_id AND MONTH(ph.pDate) = ps.month AND YEAR(ph.pDate) = ps.year 
+                        WHERE 
+                        ps.user_id = %s AND ph.pDate >= DATE_SUB(CURDATE() , INTERVAL 18 MONTH) 
+                        GROUP BY 
+                        ps.id , ps.patients_number 
+                        """,(session['id'],))
+        deleted = cursor.fetchall()
+
+        hiders = [delete[0] for delete in deleted if delete[1] == delete[2]]
+
+        placeheaders = ','.join(['%s']*len(hiders))
+
         conn.commit()
 
-        cursor.execute(""" 
-            SELECT * 
-            FROM patient_stat 
-            WHERE user_id = %s 
-            ORDER BY year DESC, month DESC 
-        """, (session['id'],))
+        if hiders :
+            cursor.execute(f""" 
+                SELECT * 
+                FROM patient_stat 
+                WHERE 
+                id NOT IN ({placeheaders}) AND user_id = %s 
+                ORDER BY year DESC, month DESC 
+            """, (*hiders, session['id']))
 
-        row = cursor.fetchall()
+            row = cursor.fetchall()
 
-        print("PATIENT STAT:", row)
+        else :
+            cursor.execute(""" 
+                            SELECT * 
+                            FROM patient_stat 
+                            WHERE user_id = %s 
+                            ORDER BY year DESC, month DESC 
+                        """, (session['id'],))
+
+            row = cursor.fetchall()
 
         return render_template(
             "PatientsFile.html",

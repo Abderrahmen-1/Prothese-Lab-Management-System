@@ -1718,8 +1718,60 @@ def AllTotal():
             if time.time() - cach[session['id']]['total_finished']['time'] > 60:
                 cach[session['id']].pop('total_finished' , None)
 
+        if 'patients_period' not in cach[session['id']] or time.time() - cach[session['id']]['patients_period']['time'] < 60 :
+            cursor.execute("""
+                            SELECT DISTINCT YEAR(pDate) AS year
+                            FROM patient_history 
+                            WHERE user_id = %s """,(session['id'],))
+            patients_period = cursor.fetchall()
+            cach[session['id']]['patients_period'] = {
+                'value': patients_period,
+                'time': time.time()
+            }
+
+        else :
+            patients_period = cach[session['id']]['patients_period']['value']
+            if time.time() - cach[session['id']]['patients_period']['time'] > 60:
+                cach[session['id']].pop('patients_period' , None)
+
+        if 'dentists_period' not in cach[session['id']] or time.time() - cach[session['id']]['dentists_period'][
+            'time'] < 60:
+            cursor.execute("""
+                            SELECT DISTINCT YEAR(pDate) AS year
+                            FROM dentist_history 
+                            WHERE user_id = %s """, (session['id'],))
+            dentists_period = cursor.fetchall()
+            cach[session['id']]['dentists_period'] = {
+                'value': dentists_period,
+                'time': time.time()
+            }
+
+        else:
+            dentists_period = cach[session['id']]['dentists_period']['value']
+            if time.time() - cach[session['id']]['dentists_period']['time'] > 60:
+                cach[session['id']].pop('dentists_period', None)
+
+        if 'prothesists_period' not in cach[session['id']] or time.time() - cach[session['id']]['prothesists_period'][
+            'time'] < 60:
+            cursor.execute("""
+                            SELECT DISTINCT YEAR(pDate) AS year
+                            FROM other_prothesists_history 
+                            WHERE user_id = %s """, (session['id'],))
+            prothesists_period = cursor.fetchall()
+            cach[session['id']]['prothesists_period'] = {
+                'value': prothesists_period,
+                'time': time.time()
+            }
+
+        else:
+            prothesists_period = cach[session['id']]['prothesists_period']['value']
+            if time.time() - cach[session['id']]['prothesists_period']['time'] > 60:
+                cach[session['id']].pop('prothesists_period', None)
+
+
         return render_template("AllTotalStats.html", result=result, result_table=result_table, patients=total_patients,
-                               dentists=total_dentists, Total_khedma=total_khedma, total_finished=total_finished)
+                               dentists=total_dentists, Total_khedma=total_khedma, total_finished=total_finished,
+                               patients_period=patients_period, dentists_period=dentists_period, prothesists_periode=prothesists_period)
 
 
     except Exception as e:

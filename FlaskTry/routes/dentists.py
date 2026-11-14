@@ -1232,22 +1232,51 @@ def DentistsStat():
               AND user_id = %s 
         """, (session['id'],))
 
+        cursor.execute("""
+                        SELECT ds.id, ds.total_khedma, COUNT(CASE WHEN dh.status = 'finished' AND dh.b9aw = 0 THEN 1 END) AS total_finished
+                        FROM dentist_stat ds 
+                        JOIN dentist_history dh ON dh.dentistname = ds.dentist_name AND 
+                              MONTH(dh.pDate) = ds.month AND YEAR(dh.pDate) = ds.year AND 
+                             dh.user_id = ds.user_id                         
+                        WHERE 
+                            ds.user_id = %s AND dh.pDate >= DATE_SUB(CURDATE() , INTERVAL 18 MONTH )
+                        GROUP BY 
+                        ds.id , ds.total_khedma 
+                        """,(session['id'],))
+        deleted = cursor.fetchall()
+
         conn.commit()
+
+        hiders = [delete[0] for delete in deleted if delete[1] == delete[2]]
 
         # Get all dentists
         dentists_list = GetAllDentistTables(cursor)
         result = {}
+
+        placeholders = ','.join(['%s']*len(hiders))
+
         for dentist in dentists_list:
+            if hiders:
+                cursor.execute(f""" 
+                                SELECT * 
+                                FROM dentist_stat 
+                                WHERE 
+                                 id NOT IN ({placeholders}) AND user_id = %s AND dentist_name = %s 
+                                ORDER BY year DESC, month ASC 
+                """, (*hiders, session['id'], dentist))
 
-            cursor.execute(""" 
-                SELECT * 
-                FROM dentist_stat 
-                WHERE user_id = %s 
-                  AND dentist_name = %s 
-                ORDER BY year DESC, month ASC 
-            """, (session['id'], dentist))
+                rows = cursor.fetchall()
+            else :
+                cursor.execute(f""" 
+                               SELECT * 
+                               FROM dentist_stat 
+                               WHERE 
+                               user_id = %s AND dentist_name = %s 
+                               ORDER BY year DESC, month ASC 
+                  """, (session['id'], dentist))
 
-            rows = cursor.fetchall()
+                rows = cursor.fetchall()
+
 
             # Only add dentist if statistics exist
             if rows:
@@ -1274,6 +1303,73 @@ def DentistsStat():
     finally:
         cursor.close()
         conn.close()
+
+@dentists.route("/DentistsStatByPeriod")
+def DentistsStatByPeriod():
+
+    if not is_logged_in():
+        return jsonify({
+            "success": False,
+            "message": "Authentication required"
+        }), 401
+
+    try:
+        month = int(request.args.get("month", 0))
+        year = int(request.args.get("year", 0))
+
+        if not 1 <= month <= 12 or year < 2000:
+            return jsonify({
+                "success": False,
+                "message": "Invalid month or year"
+            }), 400
+
+        conn = get_connection()
+        cursor = conn.cursor(buffered=True)
+
+        try:
+            cursor.execute("""
+                SELECT dentist_name, total_khedma, khalsin, machi_khalsin
+                FROM dentist_stat
+                WHERE 
+                user_id = %s AND month = %s AND year = %s
+                ORDER BY dentist_name
+            """, (session['id'], month, year))
+
+            rows = cursor.fetchall()
+
+            dentists_data = []
+
+            for row in rows:
+                dentists_data.append({
+                    "name": row[0],
+                    "total_khedma": int(row[1] or 0),
+                    "paid": float(row[2] or 0),
+                    "unpaid": float(row[3] or 0)
+                })
+
+            return jsonify({
+                "success": True,
+                "month": month,
+                "year": year,
+                "dentists": dentists_data
+            })
+
+        finally:
+            cursor.close()
+            conn.close()
+
+    except (ValueError, TypeError):
+        return jsonify({
+            "success": False,
+            "message": "Invalid parameters"
+        }), 400
+
+    except Exception:
+        #app.logger.exception("DentistsStatByPeriod failed")
+        return jsonify({
+            "success": False,
+            "message": "An internal error occurred"
+        }), 500
 
 
 @dentists.route("/UpdateDentistStatus", methods=['POST', 'GET'])
@@ -1416,5 +1512,3 @@ def DentistFacture():
     except Exception as e:
         print("Erreur DentistFacture:", e)
         return "Erreur lors de la génération de la facture.", 500
-
-
