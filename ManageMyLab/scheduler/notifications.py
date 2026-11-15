@@ -1,9 +1,9 @@
 from datetime import date, timedelta, datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 from dotenv import load_dotenv
-from FlaskTry.scheduler.email_service import send_deadline_emails, send_quantity_email, send_prothesists_email, send_abonnement_email
-from FlaskTry.flasktry import app, mail
-from FlaskTry.FunctionFile import get_connection
+from ManageMyLab.scheduler.email_service import send_deadline_emails, send_quantity_email, send_prothesists_email, send_abonnement_email
+from ManageMyLab.manageMyLab import app, mail
+from ManageMyLab.FunctionFile import get_connection
 
 load_dotenv()
 

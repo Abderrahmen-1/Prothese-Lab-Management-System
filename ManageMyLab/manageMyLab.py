@@ -1,21 +1,21 @@
 import time
 from flask import Flask, request, render_template, session, redirect, url_for, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-from FlaskTry.FunctionFile import *
-from FlaskTry.ConnectToSql import get_connection
+from ManageMyLab.FunctionFile import *
+from ManageMyLab.ConnectToSql import get_connection
 import os
 from dotenv import load_dotenv
 from datetime import datetime, timedelta, date
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import secrets
-from FlaskTry.routes.users import users
-from FlaskTry.routes.patients import patients
-from FlaskTry.routes.dentists import dentists
-from FlaskTry.routes.prothesists import prothesists
-from FlaskTry.routes.payment import payments
-from FlaskTry.routes.sel3a import products
-from FlaskTry.routes.services import services
+from ManageMyLab.routes.users import users
+from ManageMyLab.routes.patients import patients
+from ManageMyLab.routes.dentists import dentists
+from ManageMyLab.routes.prothesists import prothesists
+from ManageMyLab.routes.payment import payments
+from ManageMyLab.routes.sel3a import products
+from ManageMyLab.routes.services import services
 import random
 from flask_mail import Mail, Message
 from flask_compress import Compress

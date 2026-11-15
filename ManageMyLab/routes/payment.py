@@ -3,7 +3,7 @@ import os
 import json
 import secrets
 from dotenv import load_dotenv
-from FlaskTry.FunctionFile import *
+from ManageMyLab.FunctionFile import *
 from chargily_pay import ChargilyClient
 from chargily_pay.settings import CHARGILIY_TEST_URL
 from chargily_pay.entity import Checkout

@@ -1,7 +1,7 @@
 import secrets
 from flask import Blueprint, request, render_template, redirect, url_for, session
-from FlaskTry.FunctionFile import *
-from FlaskTry.ConnectToSql import get_connection
+from ManageMyLab.FunctionFile import *
+from ManageMyLab.ConnectToSql import get_connection
 import os
 
 users = Blueprint('users', __name__, url_prefix='/users')
