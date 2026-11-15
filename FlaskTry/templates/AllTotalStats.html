@@ -1832,33 +1832,90 @@ document.addEventListener("DOMContentLoaded", function () {
        EXPAND / COLLAPSE MONTHLY PAYMENT DETAILS
     ========================================================== */
 
+
+    /* =========================================================
+       EXPAND / COLLAPSE MONTHLY DETAILS
+
+       The main button controls:
+       1. Payment details
+       2. Dentist statistics
+       3. Prothesist statistics
+    ========================================================== */
+
+
+    /* =========================================================
+       MAIN EXPAND / COLLAPSE BUTTON
+       Closes all sections belonging to the selected month.
+    ========================================================== */
+
     monthRows.forEach(function (row) {
 
-        const button =
-            row.querySelector(".expand-row");
+        const button = row.querySelector(".expand-row");
 
-        if (!button) {
-            return;
-        }
+        if (!button) return;
 
         button.addEventListener("click", function () {
 
-            const index =
-                row.dataset.index;
+            const index = row.dataset.index;
 
             const details = document.querySelector(
                 `.details-row[data-details="${index}"]`
             );
 
-            if (!details) {
-                return;
+            const dentistRow = document.querySelector(
+                `.dentist-stats-row[data-stats-index="${index}"]`
+            );
+
+            const proRow = document.querySelector(
+                `.pro-stats-row[data-stats-index="${index}"]`
+            );
+
+            const isOpen = row.classList.contains("expanded");
+
+            if (isOpen) {
+
+                // Close payment details
+                if (details) {
+                    details.classList.remove("open");
+                }
+
+                // Close dentist statistics
+                if (dentistRow) {
+                    dentistRow.classList.remove("open");
+                }
+
+                // Close prothesist statistics
+                if (proRow) {
+                    proRow.classList.remove("open");
+                }
+
+                // Reset individual buttons
+                row.querySelectorAll(".individual-expand-btn")
+                    .forEach(function (individualButton) {
+
+                        individualButton.classList.remove("active");
+
+                        const icon = individualButton.querySelector(".toggle-icon");
+
+                        if (icon) {
+                            icon.className =
+                                "fa-solid fa-chevron-down toggle-icon";
+                        }
+
+                    });
+
+                row.classList.remove("expanded");
+
+            } else {
+
+                // Open only payment details
+                if (details) {
+                    details.classList.add("open");
+                }
+
+                row.classList.add("expanded");
+
             }
-
-            const isOpen =
-                details.classList.contains("open");
-
-            details.classList.toggle("open", !isOpen);
-            row.classList.toggle("expanded", !isOpen);
 
         });
 
