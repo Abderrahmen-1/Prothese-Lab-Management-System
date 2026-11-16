@@ -1,12 +1,10 @@
 import time
 from flask import Flask, request, render_template, session, redirect, url_for, jsonify
-from locust.stats import resize_handler
 from werkzeug.security import generate_password_hash, check_password_hash
 from ManageMyLab.FunctionFile import *
 from ManageMyLab.ConnectToSql import get_connection
 import os
 from dotenv import load_dotenv
-from datetime import datetime, timedelta, date
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import secrets
@@ -17,7 +15,6 @@ from ManageMyLab.routes.prothesists import prothesists
 from ManageMyLab.routes.payment import payments
 from ManageMyLab.routes.sel3a import products
 from ManageMyLab.routes.services import services
-import random
 from flask_mail import Mail, Message
 from flask_compress import Compress
 
@@ -121,16 +118,16 @@ def home():
                 csrf_token=new_token
             )
 
-        row = ConfirmLogIn(email, username)
+        UserAccess = ConfirmLogIn(email, username)
 
-        if not row or not check_password_hash(row[1], password):
+        if not UserAccess or not check_password_hash(UserAccess[1], password):
             return render_template(
                 "Log-in.html",
                 error="Informations invalides",
                 csrf_token=new_token
             )
 
-        session["id"] = row[0]
+        session["id"] = UserAccess[0]
         session["username"] = username
 
         conn = get_connection()
@@ -148,9 +145,9 @@ def home():
                             SELECT is_paid, status, date_inscription, paid_at
                             FROM users 
                             WHERE id = %s """,(session['id'],))
-            result = cursor.fetchone()
+            UserPaimentStatus = cursor.fetchone()
 
-            if result[3] == None:
+            if UserPaimentStatus[3] == None:
                 cursor.execute(""" 
                             UPDATE users 
                             SET status = 'out of limits' , is_paid = %s
@@ -169,7 +166,7 @@ def home():
                                 """, (False, 1))
             conn.commit()
 
-            if not row[2]:
+            if not UserAccess[2]:
                 return render_template(
                     "Log-in.html",
                     error="Veuillez d'abord vérifier votre adresse e-mail Va dans la creation du nouveau compte et insere exactement votre informations",
@@ -181,9 +178,9 @@ def home():
                 FROM users 
                 WHERE id = %s 
             """, (session["id"],))
-            found = cursor.fetchone()
+            UserStatus = cursor.fetchone()
 
-            if not found:
+            if not UserStatus:
                 session.clear()
                 return render_template(
                     "Log-in.html",
@@ -191,8 +188,8 @@ def home():
                     csrf_token=new_token
                 )
 
-            status = found[0]
-            is_paid = found[1]
+            status = UserStatus[0]
+            is_paid = UserStatus[1]
 
             if status == "block":
                 session.clear()
@@ -326,85 +323,53 @@ def Create():
         cursor = conn.cursor(buffered=True)
         try:
             password = generate_password_hash(password)
+            code = str(secrets.randbelow(900000) + 100000)
+            code_hash = generate_password_hash(code)
 
             cursor.execute("""
-                            SELECT user_email 
+                            SELECT id, email_confirmed 
                             FROM users 
                             WHERE user_email = %s """,(email,))
-            email_found = cursor.fetchone()
+            row = cursor.fetchone()
 
-            if email_found:
-                return render_template("Log-in.html", error="Email deja utiliser", csrf_token=new_token)
+            if row and row[1]:
+                return render_template("CreateAccount.html",
+                                       error="Impossible de créer ce compte", csrf_token=new_token)
 
-            cursor.execute(""" 
-                           SELECT id, email_confirmed, user_name, user_email, user_phoneNumber
-                           FROM users  
-                           WHERE user_name = %s AND user_phoneNumber = %s AND user_email = %s  
-                           """, (username, phone, email))
-            result = cursor.fetchone()
-
-            if not result:
-                session['user_name'] = username
-                session['email'] = email
-                session['phoneNumber'] = phone
-
-                code = str(random.randint(10000, 99999))
-
-                cursor.execute(""" 
-                    INSERT INTO users 
-                    ( user_name, user_password,  user_email, user_phoneNumber, date_inscription, email_confirmed, verification_code) 
-                    VALUES (%s, %s, %s, %s, NOW(), FALSE, %s) 
-                """, (username, password, email, phone, code))
-
-                conn.commit()
-
-                # Send verification email
-                msg = Message(
-                    subject="Code de vérification de l'adresse e-mail",
-                    sender=app.config["MAIL_USERNAME"],
-                    recipients=[email]
-                )
-
-                msg.body = f""" 
-                Bonjour {username}, 
-                Votre code de vérification de l'adresse e-mail est : 
-                {code} 
-                Saisissez ce code dans la page de vérification pour activer votre compte. 
-                Ne partagez ce code avec personne. 
-                """
-
-                mail.send(msg)
-
-                return redirect(url_for(
-                    "verify_email",
-                    email=email
-                ))
-
-            elif result and not result[1]:
-                session['user_name'] = result[2]
-                session['email'] = result[3]
-                session['phoneNumber'] = result[4]
-
-                code = str(random.randint(10000,99999))
-                msg = Message(
-                    subject="Code de vérification de l'adresse e-mail",
-                    sender=app.config["MAIL_USERNAME"],
-                    recipients=[email]
-                )
-
-                msg.body = f""" 
-                                Bonjour {username}, 
-                                Votre code de vérification de l'adresse e-mail est : 
-                                {code} 
-                                Saisissez ce code dans la page de vérification pour activer votre compte. 
-                                Ne partagez ce code avec personne. 
-                                """
-                mail.send(msg)
-
-                return redirect(url_for("verify_email", email=email))
-
+            if row:
+                cursor.execute("""
+                                UPDATE users 
+                                SET 
+                                    user_name = %s, user_phoneNumber = %s, user_password = %s, 
+                                    verification_code = %s, verification_expires = DATE_ADD(NOW(), INTERVAL 5 MINUTE), 
+                                    verification_attempts = 0 
+                                WHERE id = %s """,(username, phone, password, code_hash, row[0]))
             else:
-                return render_template("Log-in.html", message="Ce compte existe déjà", csrf_token=new_token)
+                cursor.execute("""
+                                INSERT INTO users(user_name, user_password, user_email, user_phoneNumber, date_inscription, email_confirmed, verification_code,
+                                                    verification_expires, verification_attempts)            
+                                VALUES(%s, %s, %s, %s, NOW(), FALSE, %s, DATE_ADD(NOW() , INTERVAL 5 MINUTE) , 0)      
+                                """,(username, password, email, phone, code_hash))
+
+            conn.commit()
+
+            # Send verification email
+            msg = Message(
+                subject="Code de vérification de l'adresse e-mail",
+                sender=app.config["MAIL_USERNAME"],
+                recipients=[email]
+            )
+
+            msg.body = f"""
+                            Bonjour {username},
+                            Votre code de vérification de l'adresse e-mail est :
+                            {code}
+                            Saisissez ce code dans la page de vérification pour activer votre compte.
+                            Ne partagez ce code avec personne.
+                            """
+            mail.send(msg)
+            session['email'] = email
+            return redirect(url_for('verify_email', email=email))
 
         except Exception as e:
             conn.rollback()
@@ -416,7 +381,11 @@ def Create():
 
 
 @app.route("/VerifyEmail/<email>", methods=["GET", "POST"])
+@limiter.limit('10 per 15 minutes')
 def verify_email(email):
+    if not session.get('email') or 'email' not in session:
+        return redirect(url_for('Create'))
+
     if request.method == "GET":
         token = secrets.token_hex(16)
         session["csrf_token"] = token
@@ -444,42 +413,38 @@ def verify_email(email):
 
         try:
             cursor.execute(""" 
-                SELECT id, verification_code, email_confirmed 
+                SELECT id, verification_code, email_confirmed, verification_attempts 
                 FROM users 
-                WHERE user_email = %s AND user_name = %s AND user_phoneNumber = %s 
-            """, (session['email'], session['user_name'], session['user_phoneNumber']))
+                WHERE user_email = %s AND verification_expires > NOW() 
+            """, (session['email'],))
 
             user = cursor.fetchone()
 
             if not user:
-                return render_template(
-                    "VerifyEmail.html",
-                    email=email,
-                    error="Utilisateur introuvable",
-                    csrf_token=new_token
-                )
+                return render_template("VerifyEmail.html", email=email,
+                    error="Utilisateur introuvable", csrf_token=new_token)
 
-            user_id = user[0]
-            stored_code = user[1]
-            confirmed = user[2]
+            if user[2]:
+                return redirect(url_for('home'))
 
-            if confirmed:
-                return redirect(url_for("home"))
+            if user[3] >= 5 :
+                return render_template("VerifyEmail.html", email=email,
+                                       error="Code expiré, recréez le compte", csrf_token=new_token)
 
-            if code != stored_code:
-                return render_template(
-                    "VerifyEmail.html",
-                    email=email,
-                    error="Code de vérification invalide",
-                    csrf_token=new_token
-                )
+            if not user[1] or not check_password_hash(user[1], (code or '').strip()):
+                cursor.execute("UPDATE users SET verification_attempts = verification_attempts + 1 WHERE id = %s",
+                               (user[0],))
+                conn.commit()
+                return render_template("VerifyEmail.html", email=email,
+                                       error="Code de vérification invalide", csrf_token=new_token)
 
             cursor.execute(""" 
                 UPDATE users 
                 SET email_confirmed = TRUE, 
-                    verification_code = NULL 
+                    verification_code = NULL,
+                    verification_expires = NULL  
                 WHERE id = %s 
-            """, (user_id,))
+            """, (user[0],))
 
             conn.commit()
 
@@ -502,10 +467,10 @@ def verify_email(email):
             cursor.close()
             conn.close()
 
-        # ===================================== Change password =======================
-
+# ===================================== Change password =======================
 
 @app.route("/ForgotPassword", methods=["POST", "GET"])
+@limiter.limit('5 per 15 minutes')
 def ChangePassword():
     if request.method == "GET":
         token = secrets.token_hex(16)
@@ -526,9 +491,9 @@ def ChangePassword():
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
 
-        email = request.form.get('email')
-        phone = request.form.get('phoneNumber')
-        name = request.form.get('userName')
+        email = request.form.get('email', None)
+        phone = request.form.get('phoneNumber', None)
+        name = request.form.get('userName', None)
 
         try:
             CheckData(email, name, None, phone)
@@ -553,9 +518,16 @@ def ChangePassword():
                 return render_template("ForgotPassword.html", error="Utilisateur introuvable", csrf_token=new_token)
 
             code = str(secrets.randbelow(900000) + 100000)
+            code_hash = generate_password_hash(code)
+
             cursor.execute("""
-                            REPLACE INTO password_reset (user_id, code_hash, expired_at, attemps)
-                            VALUES(%s, %s, DATE_ADD(NOW() , INTERVAL 5 MINUTE), 0) """, (result[0], code))
+                            DELETE FROM password_reset 
+                             WHERE user_id = %s """,(result[0],))
+
+            cursor.execute("""
+                    INSERT INTO password_reset (user_id, code_hash, expired_at, attempts)
+                    VALUES(%s, %s, DATE_ADD(NOW(), INTERVAL 5 MINUTE), 0) """
+                ,(result[0], code_hash))
 
             msg = Message(
                 subject="Le Code de verification pour le changement du mode de passe",
@@ -571,6 +543,8 @@ def ChangePassword():
                             Ne partagez ce code avec personne. 
                         """
             mail.send(msg)
+
+            conn.commit()
 
             session.pop('reset_verified', None)
             session['reset_userID'] = result[0]
@@ -610,7 +584,7 @@ def VerifyEmail():
 
         try :
             cursor.execute("""
-                            SELECT id, code_hash, attemps 
+                            SELECT id, code_hash, attempts 
                             FROM password_reset 
                             WHERE user_id = %s AND expired_at > NOW() """
                            ,(session['reset_userID'],))
@@ -621,11 +595,11 @@ def VerifyEmail():
                 return render_template("NewPassEmailCode.html",
                     message="Code expiré, recommencez", csrf_token=new_token)
 
-            if not check_password_hash(row[1], user_code):
+            if not check_password_hash(row[1], (user_code or '').strip()):
                 cursor.execute("""
                                 UPDATE password_reset 
                                 SET 
-                                attemps = attemps + 1 
+                                attempts = attempts + 1 
                                 WHERE user_id = %s AND id = %s """,(session['reset_userID'], row[0]))
                 conn.commit()
                 return render_template("NewPassEmailCode.html",
@@ -635,6 +609,7 @@ def VerifyEmail():
                             DELETE FROM password_reset 
                             WHERE id = %s AND user_id = %s """,(row[0], session['reset_userID']))
             conn.commit()
+            session['reset_verified'] = True
             return redirect(url_for('NewPassword'))
 
         finally:
@@ -642,8 +617,9 @@ def VerifyEmail():
             conn.close()
 
 @app.route("/NewPassword", methods=["POST", "GET"])
+@limiter.limit('5 per 15 minutes')
 def NewPassword():
-    if not session.get('reset_userID') or 'reset_userID' not in session:
+    if not session.get('reset_verified') or 'reset_userID' not in session:
         return redirect(url_for('home'))
 
     if request.method == "GET":
@@ -665,9 +641,6 @@ def NewPassword():
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
 
-        conn = get_connection()
-        cursor = conn.cursor(buffered=True)
-
         password = request.form.get('password')
         confirmP = request.form.get('confirmP')
 
@@ -684,14 +657,14 @@ def NewPassword():
         cursor = conn.cursor(buffered=True)
 
         try:
-            NewPassword = generate_password_hash(password)
+            password = generate_password_hash(password)
 
             cursor.execute(""" 
                             UPDATE users  
                             SET  
                             user_password = %s 
                             WHERE id = %s 
-                    """, (NewPassword, session['reset_userID']))
+                    """, (password, session['reset_userID']))
 
             conn.commit()
             session.pop('reset_verified', None)
