@@ -1,5 +1,6 @@
 import time
 from flask import Flask, request, render_template, session, redirect, url_for, jsonify
+from locust.stats import resize_handler
 from werkzeug.security import generate_password_hash, check_password_hash
 from ManageMyLab.FunctionFile import *
 from ManageMyLab.ConnectToSql import get_connection
@@ -28,11 +29,17 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 limiter = Limiter(get_remote_address, app=app, default_limits=["200 per hour"])
 
+#============== Compression Configuration ==============================
 app.config['COMPRESS_LEVEL'] = os.getenv('COMPRESS_LEVEL')
 app.config['COMPRESS_MIN_SIZE'] = int(os.getenv('COMPRESS_MIN_SIZE'))
-
 Compress(app)
 
+#============== Cookeis Session Configuration ===========================
+SESSION_COOKIE_SECURE=True
+SESSION_COOKIE_HTTPONLY=True
+SESSION_COOKIE_SAMESITE="Lax"
+
+#======================== BluePrints Declaration ========================
 app.register_blueprint(users)
 app.register_blueprint(patients)
 app.register_blueprint(dentists)
@@ -41,14 +48,14 @@ app.register_blueprint(services)
 app.register_blueprint(payments)
 app.register_blueprint(products)
 
-# ============== Email configuration ===================
+# ============== Email configuration ====================================
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
 app.config["MAIL_USERNAME"] = os.getenv("email_account")
 app.config["MAIL_PASSWORD"] = os.getenv("email_password")
-
 mail = Mail(app)
+
 
 
 def is_logged_in():
@@ -273,7 +280,7 @@ def getHome():
 # ============================ CREATE ACCOUNT =================================
 
 @app.route("/CreateAnAccount", methods=["POST", "GET"])
-@limiter.limit("15 per minute")
+@limiter.limit("10 per 15 minute")
 def Create():
     if request.method == "GET":
         token = secrets.token_hex(16)
@@ -312,7 +319,7 @@ def Create():
         except InvalideEmailException:
             return render_template("CreateAccount.html", error="Adresse e-mail invalide", csrf_token=new_token)
 
-        if not phone.isdigit() or not phone.strip() or len(phone) != 10:
+        if not (phone or '').isdigit() or len(phone) != 10:
             return render_template("CreateAccount.html", error="Numéro de téléphone invalide", csrf_token=new_token)
 
         conn = get_connection()
@@ -545,7 +552,11 @@ def ChangePassword():
             if not result:
                 return render_template("ForgotPassword.html", error="Utilisateur introuvable", csrf_token=new_token)
 
-            code = random.randint(10000, 99999)
+            code = str(secrets.randbelow(900000) + 100000)
+            cursor.execute("""
+                            REPLACE INTO password_reset (user_id, code_hash, expired_at, attemps)
+                            VALUES(%s, %s, DATE_ADD(NOW() , INTERVAL 5 MINUTE), 0) """, (result[0], code))
+
             msg = Message(
                 subject="Le Code de verification pour le changement du mode de passe",
                 sender=app.config['MAIL_USERNAME'],
@@ -561,20 +572,8 @@ def ChangePassword():
                         """
             mail.send(msg)
 
-            session['user_infos'] = {}
-
-            if 'username' not in session['user_infos']:
-                session['user_infos'] = { 'username': name }
-
-            if 'email' not in session['user_infos']:
-                session['user_infos']['email'] = email
-
-            if 'phoneNumber' not in session['user_infos']:
-                session['user_infos']['phoneNumber'] = phone
-
-            if 'email_code' not in session['user_infos']:
-                session['user_infos']['email_code'] = code
-
+            session.pop('reset_verified', None)
+            session['reset_userID'] = result[0]
 
             return redirect(url_for('VerifyEmail'))
 
@@ -584,7 +583,11 @@ def ChangePassword():
 
 
 @app.route("/VerifyEmail", methods=["POST", "GET"])
+@limiter.limit('10 per 15 minutes')
 def VerifyEmail():
+    if 'reset_userID' not in session:
+        return redirect(url_for('home'))
+
     if request.method == "GET":
         token = secrets.token_hex(16)
         session['csrf_token'] = token
@@ -597,23 +600,52 @@ def VerifyEmail():
         if not form_token or form_token != session_token :
             return "erreur CSRF attack!",403
 
-        user_code = int(request.form.get('code'))
+        new_token = secrets.token_hex(16)
+        session['csrf_token'] = new_token
 
-        print(session['user_infos']['username'])
+        user_code = (request.form.get('code') or '').strip()
 
-        print(f"user code = {user_code} with type : {type(user_code)}")
-        print(f"session_code = {session['user_infos']['email_code']} with type : {type(session['user_infos']['email_code'])}")
-        print(user_code == session['user_infos']['email_code'])
+        conn = get_connection()
+        cursor = conn.cursor(buffered=True)
 
+        try :
+            cursor.execute("""
+                            SELECT id, code_hash, attemps 
+                            FROM password_reset 
+                            WHERE user_id = %s AND expired_at > NOW() """
+                           ,(session['reset_userID'],))
+            row = cursor.fetchone()
 
-        if user_code == session['user_infos']['email_code']:
+            if not row or row[2] >= 5 :
+                session.pop('reset_userID', None)
+                return render_template("NewPassEmailCode.html",
+                    message="Code expiré, recommencez", csrf_token=new_token)
+
+            if not check_password_hash(row[1], user_code):
+                cursor.execute("""
+                                UPDATE password_reset 
+                                SET 
+                                attemps = attemps + 1 
+                                WHERE user_id = %s AND id = %s """,(session['reset_userID'], row[0]))
+                conn.commit()
+                return render_template("NewPassEmailCode.html",
+                                       message="Code incorrect", csrf_token=new_token)
+
+            cursor.execute("""
+                            DELETE FROM password_reset 
+                            WHERE id = %s AND user_id = %s """,(row[0], session['reset_userID']))
+            conn.commit()
             return redirect(url_for('NewPassword'))
-        else :
-            return render_template("NewPassEmailCode.html", csrf_token=session_token, message="Incorret email code Check ur email")
 
+        finally:
+            cursor.close()
+            conn.close()
 
 @app.route("/NewPassword", methods=["POST", "GET"])
 def NewPassword():
+    if not session.get('reset_userID') or 'reset_userID' not in session:
+        return redirect(url_for('home'))
+
     if request.method == "GET":
         token = secrets.token_hex(16)
         session["csrf_token"] = token
@@ -633,14 +665,11 @@ def NewPassword():
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
 
-        data = session.get('user_infos')
+        conn = get_connection()
+        cursor = conn.cursor(buffered=True)
 
         password = request.form.get('password')
         confirmP = request.form.get('confirmP')
-
-        username = data['username']
-        email = data['email']
-        phoneNumber = data['phoneNumber']
 
         if password != confirmP:
             return render_template("NewPassword.html", error="Confirmation incorrecte", csrf_token=new_token)
@@ -658,25 +687,17 @@ def NewPassword():
             NewPassword = generate_password_hash(password)
 
             cursor.execute(""" 
-                            SELECT id  
-                            FROM users 
-                            WHERE user_name = %s AND user_email = %s AND user_phoneNumber = %s   
-                            """, (username, email, phoneNumber))
-            found = cursor.fetchone()
+                            UPDATE users  
+                            SET  
+                            user_password = %s 
+                            WHERE id = %s 
+                    """, (NewPassword, session['reset_userID']))
 
-            if found:
-                cursor.execute(""" 
-                                UPDATE users  
-                                SET  
-                                user_password = %s 
-                                WHERE id = %s 
-                                """, (NewPassword, found[0]))
-                conn.commit()
-                session['user_infos'].pop('email_code')
-                return render_template("Log-in.html", message="Informations mises à jour", csrf_token=new_token)
+            conn.commit()
+            session.pop('reset_verified', None)
+            session.pop('reset_userID', None)
 
-            else:
-                return render_template("Log-in.html", error="Utilisateur introuvable", csrf_token=new_token)
+            return render_template("Log-in.html", message="Informations mises à jour", csrf_token=new_token)
 
         except Exception as e:
             conn.rollback()
@@ -687,9 +708,7 @@ def NewPassword():
             conn.close()
 
 
-        # ============================== KHEDMA =======================================
-
-
+# ============================== KHEDMA =======================================
 @app.route("/Khedma", methods=["POST", "GET"])
 def KhedmaPage():
     if not is_logged_in():
