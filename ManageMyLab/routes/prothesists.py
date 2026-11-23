@@ -46,7 +46,7 @@ def AddProthesist():
             form_token = request.form.get("csrf_token")
             session_token = session.get("csrf_token")
 
-            if not secrets.compare_digest(form_token, session_token):
+            if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
                 return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)
@@ -104,7 +104,8 @@ def getProthesistHistory():
 
         except Exception as e :
             conn.rollback()
-            return f"Erreur : {str(e)}"
+            print(f"{str(e)}")
+            return "Erreur database error"
 
         cursor.execute("SELECT * FROM other_prothesists_history WHERE user_id = %s", (session['id'],))
         result = cursor.fetchall()
@@ -126,7 +127,7 @@ def getProthesistHistory():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -215,7 +216,7 @@ def khedmaProMkemla():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -398,7 +399,8 @@ def khedmaProMkemla():
 
         except Exception as e :
             conn.rollback()
-            return render_template("FinishedProKhedma.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("FinishedProKhedma.html", error="Erreur database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -423,7 +425,7 @@ def KhedmaProKhalsa():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -644,7 +646,8 @@ def KhedmaProKhalsa():
 
         except Exception as e :
             conn.rollback()
-            return render_template("KhedmaProKhalsa.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("KhedmaProKhalsa.html", error="Erreur database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -671,7 +674,7 @@ def GetProthesistKhedma():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -703,7 +706,7 @@ def GetProthesistKhedma():
                                    error="❌ Le prix ne peut pas être négatif !",
                                    csrf_token=new_token)
 
-        if khalsa.lower() not in ["yes", "no"]:
+        if not khalsa or khalsa.lower() not in ["yes", "no"]:
             return render_template("ProthesistGetKhedma.html",
                                    error="❌ Khalsa doit être « yes » ou « no » !",
                                    csrf_token=new_token)
@@ -1047,8 +1050,9 @@ def GetProthesistKhedma():
 
         except Exception as e:
             conn.rollback()
+            print(f"{str(e)}")
             return render_template("ProthesistGetKhedma.html",
-                                   error=f"❌ Erreur de base de données : {str(e)}", csrf_token=new_token)
+                                   error="❌ Erreur de base de données database error", csrf_token=new_token)
         finally:
             cursor.close()
             conn.close()
@@ -1191,7 +1195,8 @@ def DeleteProKhedma():
 
         except Exception as e :
             conn.rollback()
-            return render_template("DeleteProthesistPatient.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("DeleteProthesistPatient.html", error="Erreur database error", csrf_token=new_token)
 
         finally :
             cursor.close()
@@ -1217,7 +1222,7 @@ def ProModifyVersement():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -1420,7 +1425,8 @@ def ProModifyVersement():
 
         except Exception as e :
             conn.rollback()
-            return render_template("ProthesistModifyVersement.html", error=f"Erreur : {str(e)}", csrf_token=new_token )
+            print(f"{str(e)}")
+            return render_template("ProthesistModifyVersement.html", error="Erreur database error", csrf_token=new_token )
 
         finally :
             cursor.close()
@@ -1501,7 +1507,7 @@ def FindMostProKhedma():
     if not is_logged_in():
         return redirect(url_for('home'))
 
-    new_token = session['csrf_token']
+    new_token = session.get("csrf_token")
 
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
@@ -1526,7 +1532,7 @@ def FindLessProKhedma():
     if not is_logged_in():
         return redirect(url_for('home'))
 
-    new_token = session['csrf_token']
+    new_token = session.get('csrf_token')
 
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
@@ -1683,9 +1689,10 @@ def ProStat():
 
     except Exception as e:
         conn.rollback()
+        print(f"{str(e)}")
         return render_template(
             "ProStats.html",
-            message=f"Erreur : {str(e)}",
+            message="Erreur database error",
             csrf_token=token
         )
 
@@ -1812,7 +1819,7 @@ def ProSearchPage():
             form_token = request.form.get("csrf_token")
             session_token = session.get("csrf_token")
 
-            if not secrets.compare_digest(form_token, session_token):
+            if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
                 return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)

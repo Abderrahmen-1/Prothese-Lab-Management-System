@@ -84,7 +84,7 @@ def home():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -206,9 +206,10 @@ def home():
 
         except Exception as e:
             conn.rollback()
+            print(f"{str(e)}")
             return render_template(
                 "Log-in.html",
-                error=f"Erreur de base de données : {str(e)}",
+                error=f"Erreur de base de données : database error",
                 csrf_token=new_token
             )
 
@@ -253,9 +254,10 @@ def getHome():
 
     except Exception as e:
         conn.rollback()
+        print(f"{str(e)}")
         return render_template(
             "Log-in.html",
-            message=f"Erreur : {str(e)}"
+            message=f"Erreur : database error"
         )
 
     finally:
@@ -292,7 +294,7 @@ def Create():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -373,7 +375,8 @@ def Create():
 
         except Exception as e:
             conn.rollback()
-            return render_template("CreateAccount.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("CreateAccount.html", error=f"Erreur : database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -400,7 +403,7 @@ def verify_email(email):
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -456,10 +459,11 @@ def verify_email(email):
 
         except Exception as e:
             conn.rollback()
+            print(f"{str(e)}")
             return render_template(
                 "VerifyEmail.html",
                 email=email,
-                error=f"Erreur : {str(e)}",
+                error=f"Erreur : database error",
                 csrf_token=new_token
             )
 
@@ -485,7 +489,7 @@ def ChangePassword():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -571,7 +575,7 @@ def VerifyEmail():
         form_token = request.form.get('csrf_token')
         session_token = session.get('csrf_token')
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "erreur CSRF attack!",403
 
         new_token = secrets.token_hex(16)
@@ -635,7 +639,7 @@ def NewPassword():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -674,7 +678,8 @@ def NewPassword():
 
         except Exception as e:
             conn.rollback()
-            return render_template("NewPassword.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("NewPassword.html", error=f"Erreur : database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -700,7 +705,7 @@ def KhedmaPage():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -750,7 +755,7 @@ def khedmaMkemla():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -967,7 +972,8 @@ def khedmaMkemla():
 
         except Exception as e:
             conn.rollback()
-            return render_template("FinishedKhedma.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("FinishedKhedma.html", error=f"Erreur : database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -992,7 +998,7 @@ def KhedmaKhalsa():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -1209,7 +1215,8 @@ def KhedmaKhalsa():
 
         except Exception as e:
             conn.rollback()
-            return render_template("KhedmaKhalsa.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("KhedmaKhalsa.html", error=f"Erreur : database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -1283,14 +1290,11 @@ def AllTotal():
     if not is_logged_in():
         return redirect(url_for('home'))
 
-    #conn = get_connection()
-    #cursor = conn.cursor(buffered=True)
-
     timestamp = time.time()
 
+    conn = get_connection()
+    cursor = conn.cursor(buffered=True)
     try:
-        conn = get_connection()
-        cursor = conn.cursor(buffered=True)
 
         if session['id'] not in cach:
             cach[session['id']] = {}
@@ -1760,6 +1764,5 @@ def AllTotal():
         conn.close()
 
 # ========================================================================================
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=os.getenv("FLASK_DEBUG" , 'false').lower() == 'true')

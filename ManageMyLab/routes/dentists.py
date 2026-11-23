@@ -52,7 +52,7 @@ def DentistPage():
         session_token = session.get("csrf_token")
 
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         token = secrets.token_hex(16)
@@ -107,7 +107,7 @@ def AddDentist():
             form_token = request.form.get("csrf_token")
             session_token = session.get("csrf_token")
 
-            if not secrets.compare_digest(form_token, session_token):
+            if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
                 return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)
@@ -150,7 +150,7 @@ def DeleteDentist():
             form_token = request.form.get("csrf_token")
             session_token = session.get("csrf_token")
 
-            if not secrets.compare_digest(form_token, session_token):
+            if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
                 return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)
@@ -180,7 +180,8 @@ def DeleteDentist():
 
     except Exception as e:
         conn.rollback()
-        return render_template("DeleteDentist.html", message=f"Erreur : {str(e)}", csrf_token=new_token)
+        print(f"{str(e)}")
+        return render_template("DeleteDentist.html", message="Erreur : database error", csrf_token=new_token)
 
     finally:
         cursor.close()
@@ -189,16 +190,8 @@ def DeleteDentist():
 
 @dentists.route("/GetFromDentist", methods=["POST", "GET"])
 def Get_From_Dentist():
-    # ==========================================
-    # CHECK LOGIN
-    # ==========================================
-
     if not is_logged_in():
         return redirect(url_for('home'))
-
-        # ==========================================
-    # GET REQUEST
-    # ==========================================
 
     if request.method == "GET":
         token = secrets.token_hex(16)
@@ -207,16 +200,12 @@ def Get_From_Dentist():
             "GetFromDentist.html",
             csrf_token=token)
 
-        # ==========================================
-    # POST REQUEST
-    # ==========================================
-
     if request.method == "POST":
 
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -345,7 +334,7 @@ def Get_From_Dentist():
             if cursor.fetchone():
                 return render_template("GetFromDentist.html", message="Le numéro unique existe déjà", csrf_token=new_token)
 
-                # ==================================
+            # ==================================
             # CHECK OTHER PROTHESIST
             # ==================================
 
@@ -356,7 +345,7 @@ def Get_From_Dentist():
                     csrf_token=new_token
                 )
 
-                # ==================================
+            # ==================================
             # DENTIST PAYMENT VALUES
             # ==================================
 
@@ -659,9 +648,10 @@ def Get_From_Dentist():
 
         except Exception as e:
             conn.rollback()
+            print(f"{str(e)}")
             return render_template(
                 "GetFromDentist.html",
-                error=f"Une erreur s'est produite : {str(e)}",
+                error="Une erreur s'est produite : database error",
                 csrf_token=new_token
             )
 
@@ -688,7 +678,7 @@ def ModifyDentistVersement():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -830,7 +820,8 @@ def ModifyDentistVersement():
 
         except Exception as e:
             conn.rollback()
-            return render_template("ModifyDentistVersement.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("ModifyDentistVersement.html", error="Erreur : database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -855,7 +846,7 @@ def DeleteDentistKhedma():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -959,7 +950,8 @@ def DeleteDentistKhedma():
 
         except Exception as e:
             conn.rollback()
-            return render_template("DeleteDentistPatient.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("DeleteDentistPatient.html", error="Erreur : database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -998,7 +990,8 @@ def getDentistHistory():
 
         except Exception as e:
             conn.rollback()
-            return f"Erreur : {str(e)}"
+            print(f"{str(e)}")
+            return "Erreur : database error"
 
         finally:
             cursor.close()
@@ -1008,7 +1001,7 @@ def getDentistHistory():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -1276,9 +1269,10 @@ def DentistsStat():
 
     except Exception as e:
         conn.rollback()
+        print(f"{str(e)}")
         return render_template(
             "DentistFile.html",
-            message=f"Erreur : {str(e)}")
+            message="Erreur : database error")
 
     finally:
         cursor.close()
@@ -1406,9 +1400,10 @@ def UpdateDentistStatus():
 
     except Exception as e:
         conn.rollback()
+        print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'message': f'Erreur : {str(e)}'
+            'message': 'Erreur : database error'
         })
 
     finally:

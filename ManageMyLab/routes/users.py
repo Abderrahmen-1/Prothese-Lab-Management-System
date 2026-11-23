@@ -23,7 +23,7 @@ def ModifyStatus():
         token_form = request.form.get('csrf_token')
         session_token = session.get('csrf_token')
 
-        if not token_form or token_form != session_token :
+        if not token_form or not session_token or not secrets.compare_digest(token_form, session_token):
             return "error CSRF attack",403
 
         new_token = secrets.token_hex(16)
@@ -68,7 +68,8 @@ def ModifyStatus():
 
         except Exception as e :
             conn.rollback()
-            return render_template("ModifyUsersStatus.html", error=f"error {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("ModifyUsersStatus.html", error="Error: database error", csrf_token=new_token)
 
         finally :
             cursor.close()
@@ -90,7 +91,7 @@ def DeleteUser():
         token_form = request.form.get('csrf_token')
         session_token = session.get('csrf_token')
 
-        if not token_form or token_form != session_token :
+        if not token_form or not session_token or not secrets.compare_digest(token_form, session_token) :
             return "error CSRF attack",403
 
         new_token = secrets.token_hex(16)
@@ -169,7 +170,8 @@ def DeleteUser():
 
         except Exception as e :
             conn.rollback()
-            return render_template("DeleteUser.html", error=f"error {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("DeleteUser.html", error="Error :database error", csrf_token=new_token)
 
         finally :
             cursor.close()
@@ -190,7 +192,7 @@ def ConfirmOwnerData():
         token_form = request.form.get('csrf_token')
         session_token = session.get('csrf_token')
 
-        if not token_form or token_form != session_token :
+        if not token_form or not session_token or not secrets.compare_digest(token_form, session_token) :
             return "error CSRF attack",403
 
         new_token = secrets.token_hex(16)
