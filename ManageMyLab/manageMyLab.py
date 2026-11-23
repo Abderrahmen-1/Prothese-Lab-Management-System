@@ -32,9 +32,9 @@ app.config['COMPRESS_MIN_SIZE'] = int(os.getenv('COMPRESS_MIN_SIZE'))
 Compress(app)
 
 #============== Cookeis Session Configuration ===========================
-SESSION_COOKIE_SECURE=True
-SESSION_COOKIE_HTTPONLY=True
-SESSION_COOKIE_SAMESITE="Lax"
+app.config['SESSION_COOKIE_SECURE']=True
+app.config['SESSION_COOKIE_HTTPONLY']=True
+app.config['SESSION_COOKIE_SAMESITE']="Lax"
 
 #======================== BluePrints Declaration ========================
 app.register_blueprint(users)
@@ -84,7 +84,7 @@ def home():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -292,7 +292,7 @@ def Create():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -400,7 +400,7 @@ def verify_email(email):
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -485,7 +485,7 @@ def ChangePassword():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -571,7 +571,7 @@ def VerifyEmail():
         form_token = request.form.get('csrf_token')
         session_token = session.get('csrf_token')
 
-        if not form_token or form_token != session_token :
+        if not secrets.compare_digest(form_token, session_token):
             return "erreur CSRF attack!",403
 
         new_token = secrets.token_hex(16)
@@ -635,7 +635,7 @@ def NewPassword():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -700,7 +700,7 @@ def KhedmaPage():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -750,7 +750,7 @@ def khedmaMkemla():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -992,7 +992,7 @@ def KhedmaKhalsa():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -1022,7 +1022,6 @@ def KhedmaKhalsa():
                 if not result:
                     return render_template("KhedmaKhalsa.html", message="Patient introuvable", csrf_token=new_token)
 
-                print("DONE 1")
 
                 patient_price = result[0]
                 patient_b9aw = result[1]
@@ -1079,7 +1078,6 @@ def KhedmaKhalsa():
                             WHERE id = %s AND user_id = %s 
                         """, ('yes', 0, patient_price, service[0], session['id']))
 
-                print("DONE 2")
 
                 cursor.execute(""" 
                             UPDATE khedma  
@@ -1087,21 +1085,18 @@ def KhedmaKhalsa():
                             WHERE id = %s  
                         """, ('yes', service[1]))
 
-                print("DONE 3")
 
                 cursor.execute(""" 
                             DELETE FROM patient 
                             WHERE user_id = %s AND finished = %s AND khalsa = %s 
                         """, (session['id'], 'yes', 'yes'))
 
-                print("DONE 4 ")
 
                 cursor.execute(""" 
                             DELETE FROM khedma 
                             WHERE khedma_wajda = %s AND user_id = %s 
                         """, ('yes', session['id']))
 
-                print("DONE 5")
 
                 if old_khalsa.lower() == 'no':
                     UpdateKhalsaStat(cursor, conn, table="patient", b9aw=patient_b9aw, date=patient_date)
@@ -1229,7 +1224,6 @@ def allkhedma():
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
     try:
-        # Fetch all 4 datasets at once
 
         # Main Table - All items
         cursor.execute("SELECT * FROM khedma WHERE user_id = %s", (session['id'],))
@@ -1294,16 +1288,7 @@ def AllTotal():
 
     timestamp = time.time()
 
-    print(timestamp)
-    print(time.ctime(timestamp))
-
-    print("cach1", cach)
-
-    conn = None
-    cursor = None
-
     try:
-
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
 
@@ -1774,7 +1759,7 @@ def AllTotal():
         cursor.close()
         conn.close()
 
-    # ========================================================================================
+# ========================================================================================
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=os.getenv("FLASK_DEBUG" , 'false').lower() == 'true')

@@ -19,7 +19,6 @@ def DentistPage():
     if request.method == "GET":
         token = secrets.token_hex(16)
         session["csrf_token"] = token
-        print(f"GET - Generated token: {token}")  # Debug
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -52,12 +51,8 @@ def DentistPage():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        # Debug prints
-        print(f"POST - Form token: {form_token}")
-        print(f"POST - Session token: {session_token}")
-        print(f"POST - Tokens match: {form_token == session_token}")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         token = secrets.token_hex(16)
@@ -112,7 +107,7 @@ def AddDentist():
             form_token = request.form.get("csrf_token")
             session_token = session.get("csrf_token")
 
-            if not form_token or form_token != session_token:
+            if not secrets.compare_digest(form_token, session_token):
                 return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)
@@ -155,7 +150,7 @@ def DeleteDentist():
             form_token = request.form.get("csrf_token")
             session_token = session.get("csrf_token")
 
-            if not form_token or form_token != session_token:
+            if not secrets.compare_digest(form_token, session_token):
                 return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)
@@ -208,7 +203,6 @@ def Get_From_Dentist():
     if request.method == "GET":
         token = secrets.token_hex(16)
         session["csrf_token"] = token
-        print("GET - Generated token:", token)
         return render_template(
             "GetFromDentist.html",
             csrf_token=token)
@@ -222,10 +216,7 @@ def Get_From_Dentist():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        print("POST - Form token:", form_token)
-        print("POST - Session token:", session_token)
-
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -249,7 +240,6 @@ def Get_From_Dentist():
         # This is now .get() instead of ['OtherPro']
         ProCheck = request.form.get("OtherPro")
 
-        print("FORM DATA:", request.form)
 
         # ======================================
         # BASIC VALIDATION
@@ -669,7 +659,6 @@ def Get_From_Dentist():
 
         except Exception as e:
             conn.rollback()
-            print("ERROR IN /GetFromDentist:", e)
             return render_template(
                 "GetFromDentist.html",
                 error=f"Une erreur s'est produite : {str(e)}",
@@ -699,7 +688,7 @@ def ModifyDentistVersement():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -866,7 +855,7 @@ def DeleteDentistKhedma():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -986,10 +975,6 @@ def getDentistHistory():
         token = secrets.token_hex(16)
         session["csrf_token"] = token
 
-        print("========== GET /DentistHistory ==========")
-        print("GENERATED TOKEN:", repr(token))
-        print("SESSION TOKEN:", repr(session.get("csrf_token")))
-
         conn = get_connection()
         cursor = conn.cursor()
 
@@ -1023,11 +1008,7 @@ def getDentistHistory():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        print("FORM TOKEN --> ", form_token)
-        print("SESSION TOKEN --> ", session['csrf_token'])
-        print(form_token == session['csrf_token'])
-
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -1203,7 +1184,6 @@ def ShowTotal():
                 row = cursor.fetchone()
                 result[dentist_name] = row[0] if row and row[0] is not None else 0
             except Exception as e:
-                print(f"Error on {dentist_name}: {e}")
                 result[dentist_name] = 0
         if result:
             return render_template("DentistFile.html", total=result)
@@ -1510,5 +1490,4 @@ def DentistFacture():
         return "Mois ou année invalide", 400
 
     except Exception as e:
-        print("Erreur DentistFacture:", e)
         return "Erreur lors de la génération de la facture.", 500

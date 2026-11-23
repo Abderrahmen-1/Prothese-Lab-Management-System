@@ -39,11 +39,7 @@ def PatientPage():
         token = request.form.get('csrf_token')
         check = session.get('csrf_token')
 
-        print('toke ->',token)
-        print('check ->',check)
-        print( token == check)
-
-        if not token or token != check:
+        if not secrets.compare_digest(token, check):
             return "Erreur : attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -114,7 +110,7 @@ def AddPatient():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -396,7 +392,7 @@ def DeletePatient():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -517,7 +513,7 @@ def ModifyVersaPatient():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -815,12 +811,7 @@ def getHistory():
             form_token = request.form.get("csrf_token")
             session_token = session.get("csrf_token")
 
-            # print("FORM TOKEN --> ",form_token)
-            # print("SESSION TOKEN --> ",session['csrf_token'])
-
-            # print( form_token == session['csrf_token'])
-
-            if not form_token or form_token != session_token:
+            if not secrets.compare_digest(form_token, session_token):
                 return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)
@@ -1020,10 +1011,6 @@ def UpdatePatientStatus():
                         WHERE user_id = %s AND patient_number = %s """,
                        (status, session['id'], patientID))
         conn.commit()
-
-        print("Patient ID:", patientID)
-        print("New status:", status)
-        print("Rows updated:", cursor.rowcount)
 
     except Exception as e:
         conn.rollback()

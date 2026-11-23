@@ -46,7 +46,7 @@ def AddProthesist():
             form_token = request.form.get("csrf_token")
             session_token = session.get("csrf_token")
 
-            if not form_token or form_token != session_token:
+            if not secrets.compare_digest(form_token, session_token):
                 return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)
@@ -90,10 +90,6 @@ def getProthesistHistory():
         token = secrets.token_hex(16)
         session["csrf_token"] = token
 
-        print("========== GET /ProthesistHistory ==========")
-        print("GENERATED TOKEN:", repr(token))
-        print("SESSION TOKEN:", repr(session.get("csrf_token")))
-
         conn = get_connection()
         cursor = conn.cursor()
 
@@ -130,11 +126,7 @@ def getProthesistHistory():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        print("FORM TOKEN --> ",form_token)
-        print("SESSION TOKEN --> ",session['csrf_token'])
-        print(form_token == session['csrf_token'])
-
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -223,7 +215,7 @@ def khedmaProMkemla():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -431,7 +423,7 @@ def KhedmaProKhalsa():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -490,8 +482,6 @@ def KhedmaProKhalsa():
 
                 result = cursor.fetchone()
 
-                print(result)
-
                 if not result:
                     return render_template("KhedmaProKhalsa.html", message="Service introuvable", csrf_token=new_token)
 
@@ -502,7 +492,6 @@ def KhedmaProKhalsa():
                                 """,(ProName, ProNumber, patientId, session['id']))
                 data = cursor.fetchone()
 
-                print(result)
                 if not data :
                     return render_template("KhedmaProKhalsa.html", message="Patient introuvable", csrf_token=new_token)
 
@@ -627,9 +616,6 @@ def KhedmaProKhalsa():
                 else :
                     return render_template("KhedmaProKhalsa.html", message="Service déjà payé", csrf_token=new_token)
 
-                print(result)
-
-
                 cursor.execute("""
                             DELETE FROM dentists
                             WHERE finished = %s AND khalsa = %s AND user_id = %s AND dentist_name = %s
@@ -685,7 +671,7 @@ def GetProthesistKhedma():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -881,7 +867,6 @@ def GetProthesistKhedma():
                 found2 = cursor.fetchone()
 
                 if found2:
-                    print("FOUND")
                     cursor.execute("""
                         UPDATE prothesist_stat 
                         SET 
@@ -891,7 +876,6 @@ def GetProthesistKhedma():
                         WHERE user_id = %s AND month = %s AND year = %s AND prothesist_name = %s AND prothesist_number = %s """,
                                    (versaValue, b9aw, session['id'], month, year, ProthesistName, ProthesistNumber))
                 else:
-                    print("NOT FOUND")
                     cursor.execute("""
                         INSERT INTO prothesist_stat(prothesist_name, prothesist_number, total_khedma, khalsin, machi_khalsin, month, year, user_id)
                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s) """,
@@ -1233,7 +1217,7 @@ def ProModifyVersement():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -1556,10 +1540,10 @@ def FindLessProKhedma():
                        (session['id'], name))
         result = cursor.fetchall()
         if not result :
-            print("Invalide result")
+            render_template("ALLProKhedma.html", message="Invalid result")
+            
         return render_template("ALLProKhedma.html", less=result, less_name=name, csrf_token= new_token)
     finally:
-        print("DONE")
         cursor.close()
         conn.close()
 
@@ -1590,7 +1574,6 @@ def ShowProTotal():
                 row = cursor.fetchone()
                 result[Pro] = row if row[0] else (Pro[1], '-', 0, 0)
             except Exception as e:
-                print(f"Error on {Pro[1]}: {e}")
                 result[Pro[1]] = (Pro[1], '-', 0, 0)
         if result:
             return render_template("ProStats.html", total=result, csrf_token= token)
@@ -1678,9 +1661,6 @@ def ProStat():
                        """, ( session['id'], Pro[1], Pro[0]))
 
                 rows = cursor.fetchall()
-
-
-            print(rows[0])
 
             # Only add the prothesist if statistics exist
             if rows:
@@ -1832,7 +1812,7 @@ def ProSearchPage():
             form_token = request.form.get("csrf_token")
             session_token = session.get("csrf_token")
 
-            if not form_token or form_token != session_token:
+            if not secrets.compare_digest(form_token, session_token):
                 return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)
@@ -1965,8 +1945,6 @@ def ProthesistFacture():
     except Exception as e:
 
         conn.rollback()
-        print("Prothesist invoice error:", e)
-
         return redirect(url_for("prothesists.ProStat"))
 
     finally:
