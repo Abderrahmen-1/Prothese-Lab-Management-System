@@ -3,7 +3,7 @@ import os
 import json
 import secrets
 from dotenv import load_dotenv
-from FlaskTry.FunctionFile import *
+from ManageMyLab.FunctionFile import *
 from chargily_pay import ChargilyClient
 from chargily_pay.settings import CHARGILIY_TEST_URL
 from chargily_pay.entity import Checkout
@@ -92,8 +92,6 @@ def create_payment():
 
     generate_csrf_token()
 
-    print("Create a Payment")
-
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
 
@@ -130,13 +128,6 @@ def create_payment():
         #failure_url = url_for("payments.payment_failure", _external=True)
         success_url = f"{PUBLIC_BASE_URL.rstrip('/')}/payments/success"
         failure_url = f"{PUBLIC_BASE_URL.rstrip('/')}/payments/failure"
-
-        print("WEBHOOK URL:", webhook_url)
-        print("=" * 50)
-        print("WEBHOOK URL =", webhook_url)
-        print("SUCCESS URL =", success_url)
-        print("FAILURE URL =", failure_url)
-        print("=" * 50)
 
         checkout = Checkout(
             success_url=success_url,
@@ -184,16 +175,6 @@ def create_payment():
     except Exception as e:
         conn.rollback()
 
-        print("================================")
-        print("CHARGILY ERROR")
-        print("TYPE:", type(e))
-        print("ERROR:", e)
-
-        if hasattr(e, "response") and e.response is not None:
-            print("STATUS:", e.response.status_code)
-            print("BODY:", e.response.text)
-
-        print("================================")
 
         return render_template(
             "payment_error.html",
@@ -232,7 +213,6 @@ def chargily_webhook():
         valid = chargily.validate_signature(signature, payload)
 
     except Exception as e:
-        print("Webhook signature error:", e)
         return "Invalid signature", 403
 
     if not valid:
@@ -243,7 +223,6 @@ def chargily_webhook():
 
     except json.JSONDecodeError:
         return "Invalid JSON", 400
-    print("Chargily webhook received:", event)
 
     data = event.get("data", {})
     if not isinstance(data, dict):
@@ -258,7 +237,6 @@ def chargily_webhook():
         checkout = chargily.retrieve_checkout(checkout_id)
 
     except Exception as e:
-        print("Could not retrieve checkout:", e)
         return ("Unable to retrieve checkout",500)
 
     if isinstance(checkout, dict):
@@ -281,7 +259,6 @@ def chargily_webhook():
                     break
 
     if not payment_id:
-        print("No payment_id in Chargily metadata")
         return ("Missing payment metadata",400)
 
     try:
@@ -317,7 +294,6 @@ def chargily_webhook():
 
         if float(amount) != float(DENTAFLOW_PRICE):
             conn.rollback()
-            print("Payment amount mismatch")
             return ("Amount mismatch", 400)
 
         if currency.lower() != "dzd":
@@ -343,12 +319,10 @@ def chargily_webhook():
 
         conn.commit()
 
-        print(f"Payment {payment_id} successfully processed")
         return "OK", 200
 
     except Exception as e:
         conn.rollback()
-        print("Webhook database error:", e)
         return ("Database error", 500)
 
     finally:

@@ -1,4 +1,4 @@
-from FlaskTry.flasktry import app
+from ManageMyLab.manageMyLab import app
 from waitress import serve
 
 if __name__ == "__main__":

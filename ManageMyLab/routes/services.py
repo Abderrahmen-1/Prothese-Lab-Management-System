@@ -1,7 +1,7 @@
 import secrets
 from flask import Blueprint, request, render_template, redirect, url_for, session, jsonify
-from FlaskTry.FunctionFile import *
-from FlaskTry.ConnectToSql import get_connection
+from ManageMyLab.FunctionFile import *
+from ManageMyLab.ConnectToSql import get_connection
 
 services = Blueprint("services", __name__, url_prefix="/services")
 
@@ -46,7 +46,7 @@ def OtherServices():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -58,7 +58,7 @@ def OtherServices():
         cursor = conn.cursor(buffered=True)
 
         try:
-            if SearchBar.isdigit():
+            if SearchBar and SearchBar.isdigit():
                 cursor.execute(""" 
                                 SELECT * FROM others_services  
                                 WHERE user_id = %s AND number = %s """,
@@ -79,6 +79,16 @@ def OtherServices():
 
             return render_template("OtherServices.html", result=result, message=f"Tableau de {SearchBar}",
                                    csrf_token=session['csrf_token'])
+
+        except Exception as e:
+            conn.rollback()
+            print(f"Database error: {e}")
+
+            return render_template(
+                "OtherServices.html",
+                error="Erreur database error",
+                csrf_token=new_token
+            )
 
         finally:
             cursor.close()
@@ -138,7 +148,7 @@ def AddService():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -149,13 +159,16 @@ def AddService():
         function = request.form.get('ServiceFunction', '').strip()
         date = request.form.get('ServiceDate')
         khalsa = request.form.get('ServiceKhalsa', 'no').lower()
-        price = float(request.form.get('ServicePrice', 0))
+        try:
+            price = float(request.form.get('ServicePrice', 0))
+        except (ValueError, TypeError):
+            return render_template("AddService.html", error="Prix invalide", csrf_token=new_token)
 
         # ---------------- VALIDATION ----------------
         if not name:
             return render_template("AddService.html", error="Nom invalide", csrf_token=new_token)
 
-        if not number.isdigit() or len(number) != 10:
+        if not number or not number.isdigit() or len(number) != 10:
             return render_template("AddService.html", error="Numéro invalide", csrf_token=new_token)
 
         if not function:
@@ -244,13 +257,17 @@ def AddService():
             return render_template("OtherServices.html", result=result, message="Service ajouté avec succès",
                                    csrf_token=new_token)
 
+        except Exception as e:
+            conn.rollback()
+            print(f'{str(e)}')
+            return render_template("OtherServices.html", error="Erreur database error",
+                                   csrf_token=session['csrf_token'])
+
         finally:
             cursor.close()
             conn.close()
 
-        # -------------------------------
-
-
+# -------------------------------
 # MARK AS PAID
 # -------------------------------
 
@@ -310,9 +327,10 @@ def ServicePaid(service_id):
 
     except Exception as e:
         conn.rollback()
+        print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'error': f'Erreur : {str(e)}'
+            'error': 'Erreur database error'
         }), 500
 
     finally:
@@ -410,9 +428,10 @@ def ModifyServiceVersement(service_id):
 
     except Exception as e:
         conn.rollback()
+        print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'error': f'Erreur : {str(e)}'
+            'error': 'Erreur database error'
         }), 500
 
     finally:
@@ -466,18 +485,17 @@ def DeleteService(service_id):
 
     except Exception as e:
         conn.rollback()
+        print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'error': f'Erreur : {str(e)}'
+            'error': 'Erreur database error'
         }), 500
 
     finally:
         cursor.close()
         conn.close()
 
-    # -------------------------------
-
-
+# -------------------------------
 # STATS
 # -------------------------------
 @services.route("/ServicesStats")

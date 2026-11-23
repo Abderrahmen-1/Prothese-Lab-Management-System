@@ -5291,3 +5291,25 @@ def webhook_chargily():
 if __name__ == "__main__":
     serve(app, host="127.0.0.1", port=5000)
     #app.run(debug=True)
+
+
+
+
+
+
+# Send verification email
+                msg = Message(
+                    subject="Code de vérification de l'adresse e-mail",
+                    sender=app.config["MAIL_USERNAME"],
+                    recipients=[email]
+                )
+
+                msg.body = f"""
+                Bonjour {username},
+                Votre code de vérification de l'adresse e-mail est :
+                {code}
+                Saisissez ce code dans la page de vérification pour activer votre compte.
+                Ne partagez ce code avec personne.
+                """
+
+                mail.send(msg)

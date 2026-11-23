@@ -1,6 +1,6 @@
 from flask import session
 from datetime import datetime , timedelta
-from FlaskTry.ConnectToSql import get_connection
+from ManageMyLab.ConnectToSql import get_connection
 
 # =============================================================================
 # CUSTOM EXCEPTIONS

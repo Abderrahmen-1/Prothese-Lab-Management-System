@@ -1,7 +1,7 @@
 import secrets
 from flask import Blueprint, request, render_template, redirect, url_for, session, jsonify
-from FlaskTry.FunctionFile import *
-from FlaskTry.ConnectToSql import get_connection
+from ManageMyLab.FunctionFile import *
+from ManageMyLab.ConnectToSql import get_connection
 
 patients = Blueprint("patients", __name__, url_prefix="/patients")
 
@@ -39,11 +39,7 @@ def PatientPage():
         token = request.form.get('csrf_token')
         check = session.get('csrf_token')
 
-        print('toke ->',token)
-        print('check ->',check)
-        print( token == check)
-
-        if not token or token != check:
+        if not token or not check or not secrets.compare_digest(token, check):
             return "Erreur : attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -114,7 +110,7 @@ def AddPatient():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -371,7 +367,8 @@ def AddPatient():
 
         except Exception as e:
             conn.rollback()
-            return render_template("AddPatient.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("AddPatient.html", error="Erreur database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -396,7 +393,7 @@ def DeletePatient():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -492,7 +489,8 @@ def DeletePatient():
 
         except Exception as e:
             conn.rollback()
-            return render_template("DeletePatient.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("DeletePatient.html", error="Erreur database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -517,7 +515,7 @@ def ModifyVersaPatient():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -690,9 +688,10 @@ def ModifyVersaPatient():
 
         except Exception as e:
             conn.rollback()
+            print(f"{str(e)}")
             return render_template(
                 "ModifyPatientVersa.html",
-                error=f"Erreur : {str(e)}",
+                error="Erreur database error",
                 csrf_token=new_token
             )
 
@@ -805,7 +804,8 @@ def getHistory():
 
             except Exception as e:
                 conn.rollback()
-                return f"Erreur : {str(e)}"
+                print(f"{str(e)}")
+                return "Erreur database error"
 
             finally:
                 cursor.close()
@@ -815,12 +815,7 @@ def getHistory():
             form_token = request.form.get("csrf_token")
             session_token = session.get("csrf_token")
 
-            # print("FORM TOKEN --> ",form_token)
-            # print("SESSION TOKEN --> ",session['csrf_token'])
-
-            # print( form_token == session['csrf_token'])
-
-            if not form_token or form_token != session_token:
+            if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
                 return "Attaque CSRF détectée", 403
 
             new_token = secrets.token_hex(16)
@@ -1021,15 +1016,12 @@ def UpdatePatientStatus():
                        (status, session['id'], patientID))
         conn.commit()
 
-        print("Patient ID:", patientID)
-        print("New status:", status)
-        print("Rows updated:", cursor.rowcount)
-
     except Exception as e:
         conn.rollback()
+        print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'message': f'Erreur : {str(e)}'
+            'message': 'Erreur database error'
         })
 
     finally:

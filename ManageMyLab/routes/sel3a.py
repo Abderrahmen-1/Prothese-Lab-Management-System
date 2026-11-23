@@ -1,7 +1,7 @@
 import secrets
 from flask import Blueprint, request, render_template, redirect, url_for, session, jsonify
-from FlaskTry.FunctionFile import *
-from FlaskTry.ConnectToSql import get_connection
+from ManageMyLab.FunctionFile import *
+from ManageMyLab.ConnectToSql import get_connection
 
 products = Blueprint("products", __name__, url_prefix="/products")
 
@@ -78,7 +78,7 @@ def addsel3a():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -107,7 +107,7 @@ def addsel3a():
             return render_template("AddSel3a.html", error="L'unité et la quantité sont obligatoires ",
                                    csrf_token=new_token)
 
-        if khalsa.lower() not in ['yes', 'no']:
+        if not khalsa or khalsa.lower() not in ['yes', 'no']:
             return render_template("AddSel3a.html", error="Dans le champ Khalsa, saisissez 'yes' ou 'no' ",
                                    csrf_token=new_token)
 
@@ -138,12 +138,13 @@ def addsel3a():
             """, (session['id'], name, quantity, quantity, unit, price, date, khalsa, versa, b9aw))
             conn.commit()
 
-            return redirect(url_for("Sel3aPage"))
+            return redirect(url_for("products.Sel3aPage"))
 
         except Exception as e:
             conn.rollback()
+            print(f"{str(e)}")
             return render_template("AddSel3a.html",
-                                   error=f"Erreur : {str(e)}", csrf_token=new_token)
+                                   error="Erreur database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -197,9 +198,10 @@ def ModifySel3aQuantity(sel3a_id):
 
     except Exception as e:
         conn.rollback()
+        print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'message': f"Erreur : {str(e)}"
+            'message': "Erreur database error"
         }), 500
 
     finally:
@@ -232,21 +234,21 @@ def DeleteSel3a(sel3a_id):
 def Sel3aStat():
     if not is_logged_in():
         return redirect(url_for('home'))
-    return redirect(url_for('Sel3aPage'))
+    return redirect(url_for('products.Sel3aPage'))
 
 
 @products.route("/ShowByPrice")
 def ShowSel3aByPrice():
     if not is_logged_in():
         return redirect(url_for('home'))
-    return redirect(url_for('Sel3aPage'))
+    return redirect(url_for('products.Sel3aPage'))
 
 
 @products.route("/ShowByDateASC")
 def ShowSel3aByDate():
     if not is_logged_in():
         return redirect(url_for('home'))
-    return redirect(url_for('Sel3aPage'))
+    return redirect(url_for('products.Sel3aPage'))
 
 
 @products.route("/Sel3aPaid/<int:sel3a_id>", methods=["POST"])
@@ -277,9 +279,10 @@ def Sel3aPaid(sel3a_id):
 
     except Exception as e:
         conn.rollback()
+        print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'message': f'Erreur : {str(e)}'
+            'message': 'Erreur database error'
         }), 500
 
     finally:
@@ -360,9 +363,10 @@ def ModifySel3aVersement(sel3a_id):
 
     except Exception as e:
         conn.rollback()
+        print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'error': f'Erreur : {str(e)}'
+            'error': 'Erreur database error'
         }), 500
 
     finally:

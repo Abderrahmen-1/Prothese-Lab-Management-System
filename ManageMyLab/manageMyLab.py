@@ -1,22 +1,20 @@
 import time
 from flask import Flask, request, render_template, session, redirect, url_for, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-from FlaskTry.FunctionFile import *
-from FlaskTry.ConnectToSql import get_connection
+from ManageMyLab.FunctionFile import *
+from ManageMyLab.ConnectToSql import get_connection
 import os
 from dotenv import load_dotenv
-from datetime import datetime, timedelta, date
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import secrets
-from FlaskTry.routes.users import users
-from FlaskTry.routes.patients import patients
-from FlaskTry.routes.dentists import dentists
-from FlaskTry.routes.prothesists import prothesists
-from FlaskTry.routes.payment import payments
-from FlaskTry.routes.sel3a import products
-from FlaskTry.routes.services import services
-import random
+from ManageMyLab.routes.users import users
+from ManageMyLab.routes.patients import patients
+from ManageMyLab.routes.dentists import dentists
+from ManageMyLab.routes.prothesists import prothesists
+from ManageMyLab.routes.payment import payments
+from ManageMyLab.routes.sel3a import products
+from ManageMyLab.routes.services import services
 from flask_mail import Mail, Message
 from flask_compress import Compress
 
@@ -28,11 +26,17 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 limiter = Limiter(get_remote_address, app=app, default_limits=["200 per hour"])
 
+#============== Compression Configuration ==============================
 app.config['COMPRESS_LEVEL'] = os.getenv('COMPRESS_LEVEL')
 app.config['COMPRESS_MIN_SIZE'] = int(os.getenv('COMPRESS_MIN_SIZE'))
-
 Compress(app)
 
+#============== Cookeis Session Configuration ===========================
+app.config['SESSION_COOKIE_SECURE']=True
+app.config['SESSION_COOKIE_HTTPONLY']=True
+app.config['SESSION_COOKIE_SAMESITE']="Lax"
+
+#======================== BluePrints Declaration ========================
 app.register_blueprint(users)
 app.register_blueprint(patients)
 app.register_blueprint(dentists)
@@ -41,14 +45,14 @@ app.register_blueprint(services)
 app.register_blueprint(payments)
 app.register_blueprint(products)
 
-# ============== Email configuration ===================
+# ============== Email configuration ====================================
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
 app.config["MAIL_USERNAME"] = os.getenv("email_account")
 app.config["MAIL_PASSWORD"] = os.getenv("email_password")
-
 mail = Mail(app)
+
 
 
 def is_logged_in():
@@ -80,7 +84,7 @@ def home():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -114,16 +118,16 @@ def home():
                 csrf_token=new_token
             )
 
-        row = ConfirmLogIn(email, username)
+        UserAccess = ConfirmLogIn(email, username)
 
-        if not row or not check_password_hash(row[1], password):
+        if not UserAccess or not check_password_hash(UserAccess[1], password):
             return render_template(
                 "Log-in.html",
                 error="Informations invalides",
                 csrf_token=new_token
             )
 
-        session["id"] = row[0]
+        session["id"] = UserAccess[0]
         session["username"] = username
 
         conn = get_connection()
@@ -141,9 +145,9 @@ def home():
                             SELECT is_paid, status, date_inscription, paid_at
                             FROM users 
                             WHERE id = %s """,(session['id'],))
-            result = cursor.fetchone()
+            UserPaimentStatus = cursor.fetchone()
 
-            if result[3] == None:
+            if UserPaimentStatus[3] == None:
                 cursor.execute(""" 
                             UPDATE users 
                             SET status = 'out of limits' , is_paid = %s
@@ -162,7 +166,7 @@ def home():
                                 """, (False, 1))
             conn.commit()
 
-            if not row[2]:
+            if not UserAccess[2]:
                 return render_template(
                     "Log-in.html",
                     error="Veuillez d'abord vérifier votre adresse e-mail Va dans la creation du nouveau compte et insere exactement votre informations",
@@ -174,9 +178,9 @@ def home():
                 FROM users 
                 WHERE id = %s 
             """, (session["id"],))
-            found = cursor.fetchone()
+            UserStatus = cursor.fetchone()
 
-            if not found:
+            if not UserStatus:
                 session.clear()
                 return render_template(
                     "Log-in.html",
@@ -184,8 +188,8 @@ def home():
                     csrf_token=new_token
                 )
 
-            status = found[0]
-            is_paid = found[1]
+            status = UserStatus[0]
+            is_paid = UserStatus[1]
 
             if status == "block":
                 session.clear()
@@ -202,9 +206,10 @@ def home():
 
         except Exception as e:
             conn.rollback()
+            print(f"{str(e)}")
             return render_template(
                 "Log-in.html",
-                error=f"Erreur de base de données : {str(e)}",
+                error=f"Erreur de base de données : database error",
                 csrf_token=new_token
             )
 
@@ -249,9 +254,10 @@ def getHome():
 
     except Exception as e:
         conn.rollback()
+        print(f"{str(e)}")
         return render_template(
             "Log-in.html",
-            message=f"Erreur : {str(e)}"
+            message=f"Erreur : database error"
         )
 
     finally:
@@ -273,7 +279,7 @@ def getHome():
 # ============================ CREATE ACCOUNT =================================
 
 @app.route("/CreateAnAccount", methods=["POST", "GET"])
-@limiter.limit("15 per minute")
+@limiter.limit("10 per 15 minute")
 def Create():
     if request.method == "GET":
         token = secrets.token_hex(16)
@@ -288,7 +294,7 @@ def Create():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -312,96 +318,65 @@ def Create():
         except InvalideEmailException:
             return render_template("CreateAccount.html", error="Adresse e-mail invalide", csrf_token=new_token)
 
-        if not phone.isdigit() or not phone.strip() or len(phone) != 10:
+        if not (phone or '').isdigit() or len(phone) != 10:
             return render_template("CreateAccount.html", error="Numéro de téléphone invalide", csrf_token=new_token)
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
         try:
             password = generate_password_hash(password)
+            code = str(secrets.randbelow(900000) + 100000)
+            code_hash = generate_password_hash(code)
 
             cursor.execute("""
-                            SELECT user_email 
+                            SELECT id, email_confirmed 
                             FROM users 
                             WHERE user_email = %s """,(email,))
-            email_found = cursor.fetchone()
+            row = cursor.fetchone()
 
-            if email_found:
-                return render_template("Log-in.html", error="Email deja utiliser", csrf_token=new_token)
+            if row and row[1]:
+                return render_template("CreateAccount.html",
+                                       error="Impossible de créer ce compte", csrf_token=new_token)
 
-            cursor.execute(""" 
-                           SELECT id, email_confirmed, user_name, user_email, user_phoneNumber
-                           FROM users  
-                           WHERE user_name = %s AND user_phoneNumber = %s AND user_email = %s  
-                           """, (username, phone, email))
-            result = cursor.fetchone()
-
-            if not result:
-                session['user_name'] = username
-                session['email'] = email
-                session['phoneNumber'] = phone
-
-                code = str(random.randint(10000, 99999))
-
-                cursor.execute(""" 
-                    INSERT INTO users 
-                    ( user_name, user_password,  user_email, user_phoneNumber, date_inscription, email_confirmed, verification_code) 
-                    VALUES (%s, %s, %s, %s, NOW(), FALSE, %s) 
-                """, (username, password, email, phone, code))
-
-                conn.commit()
-
-                # Send verification email
-                msg = Message(
-                    subject="Code de vérification de l'adresse e-mail",
-                    sender=app.config["MAIL_USERNAME"],
-                    recipients=[email]
-                )
-
-                msg.body = f""" 
-                Bonjour {username}, 
-                Votre code de vérification de l'adresse e-mail est : 
-                {code} 
-                Saisissez ce code dans la page de vérification pour activer votre compte. 
-                Ne partagez ce code avec personne. 
-                """
-
-                mail.send(msg)
-
-                return redirect(url_for(
-                    "verify_email",
-                    email=email
-                ))
-
-            elif result and not result[1]:
-                session['user_name'] = result[2]
-                session['email'] = result[3]
-                session['phoneNumber'] = result[4]
-
-                code = str(random.randint(10000,99999))
-                msg = Message(
-                    subject="Code de vérification de l'adresse e-mail",
-                    sender=app.config["MAIL_USERNAME"],
-                    recipients=[email]
-                )
-
-                msg.body = f""" 
-                                Bonjour {username}, 
-                                Votre code de vérification de l'adresse e-mail est : 
-                                {code} 
-                                Saisissez ce code dans la page de vérification pour activer votre compte. 
-                                Ne partagez ce code avec personne. 
-                                """
-                mail.send(msg)
-
-                return redirect(url_for("verify_email", email=email))
-
+            if row:
+                cursor.execute("""
+                                UPDATE users 
+                                SET 
+                                    user_name = %s, user_phoneNumber = %s, user_password = %s, 
+                                    verification_code = %s, verification_expires = DATE_ADD(NOW(), INTERVAL 5 MINUTE), 
+                                    verification_attempts = 0 
+                                WHERE id = %s """,(username, phone, password, code_hash, row[0]))
             else:
-                return render_template("Log-in.html", message="Ce compte existe déjà", csrf_token=new_token)
+                cursor.execute("""
+                                INSERT INTO users(user_name, user_password, user_email, user_phoneNumber, date_inscription, email_confirmed, verification_code,
+                                                    verification_expires, verification_attempts)            
+                                VALUES(%s, %s, %s, %s, NOW(), FALSE, %s, DATE_ADD(NOW() , INTERVAL 5 MINUTE) , 0)      
+                                """,(username, password, email, phone, code_hash))
+
+            conn.commit()
+
+            # Send verification email
+            msg = Message(
+                subject="Code de vérification de l'adresse e-mail",
+                sender=app.config["MAIL_USERNAME"],
+                recipients=[email]
+            )
+
+            msg.body = f"""
+                            Bonjour {username},
+                            Votre code de vérification de l'adresse e-mail est :
+                            {code}
+                            Saisissez ce code dans la page de vérification pour activer votre compte.
+                            Ne partagez ce code avec personne.
+                            """
+            mail.send(msg)
+            session['email'] = email
+            return redirect(url_for('verify_email', email=email))
 
         except Exception as e:
             conn.rollback()
-            return render_template("CreateAccount.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("CreateAccount.html", error=f"Erreur : database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -409,7 +384,11 @@ def Create():
 
 
 @app.route("/VerifyEmail/<email>", methods=["GET", "POST"])
+@limiter.limit('10 per 15 minutes')
 def verify_email(email):
+    if not session.get('email') or 'email' not in session:
+        return redirect(url_for('Create'))
+
     if request.method == "GET":
         token = secrets.token_hex(16)
         session["csrf_token"] = token
@@ -424,7 +403,7 @@ def verify_email(email):
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -437,42 +416,38 @@ def verify_email(email):
 
         try:
             cursor.execute(""" 
-                SELECT id, verification_code, email_confirmed 
+                SELECT id, verification_code, email_confirmed, verification_attempts 
                 FROM users 
-                WHERE user_email = %s AND user_name = %s AND user_phoneNumber = %s 
-            """, (session['email'], session['user_name'], session['user_phoneNumber']))
+                WHERE user_email = %s AND verification_expires > NOW() 
+            """, (session['email'],))
 
             user = cursor.fetchone()
 
             if not user:
-                return render_template(
-                    "VerifyEmail.html",
-                    email=email,
-                    error="Utilisateur introuvable",
-                    csrf_token=new_token
-                )
+                return render_template("VerifyEmail.html", email=email,
+                    error="Utilisateur introuvable", csrf_token=new_token)
 
-            user_id = user[0]
-            stored_code = user[1]
-            confirmed = user[2]
+            if user[2]:
+                return redirect(url_for('home'))
 
-            if confirmed:
-                return redirect(url_for("home"))
+            if user[3] >= 5 :
+                return render_template("VerifyEmail.html", email=email,
+                                       error="Code expiré, recréez le compte", csrf_token=new_token)
 
-            if code != stored_code:
-                return render_template(
-                    "VerifyEmail.html",
-                    email=email,
-                    error="Code de vérification invalide",
-                    csrf_token=new_token
-                )
+            if not user[1] or not check_password_hash(user[1], (code or '').strip()):
+                cursor.execute("UPDATE users SET verification_attempts = verification_attempts + 1 WHERE id = %s",
+                               (user[0],))
+                conn.commit()
+                return render_template("VerifyEmail.html", email=email,
+                                       error="Code de vérification invalide", csrf_token=new_token)
 
             cursor.execute(""" 
                 UPDATE users 
                 SET email_confirmed = TRUE, 
-                    verification_code = NULL 
+                    verification_code = NULL,
+                    verification_expires = NULL  
                 WHERE id = %s 
-            """, (user_id,))
+            """, (user[0],))
 
             conn.commit()
 
@@ -484,10 +459,11 @@ def verify_email(email):
 
         except Exception as e:
             conn.rollback()
+            print(f"{str(e)}")
             return render_template(
                 "VerifyEmail.html",
                 email=email,
-                error=f"Erreur : {str(e)}",
+                error=f"Erreur : database error",
                 csrf_token=new_token
             )
 
@@ -495,10 +471,10 @@ def verify_email(email):
             cursor.close()
             conn.close()
 
-        # ===================================== Change password =======================
-
+# ===================================== Change password =======================
 
 @app.route("/ForgotPassword", methods=["POST", "GET"])
+@limiter.limit('10 per 15 minutes')
 def ChangePassword():
     if request.method == "GET":
         token = secrets.token_hex(16)
@@ -513,15 +489,15 @@ def ChangePassword():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
 
-        email = request.form.get('email')
-        phone = request.form.get('phoneNumber')
-        name = request.form.get('userName')
+        email = request.form.get('email', None)
+        phone = request.form.get('phoneNumber', None)
+        name = request.form.get('userName', None)
 
         try:
             CheckData(email, name, None, phone)
@@ -545,7 +521,18 @@ def ChangePassword():
             if not result:
                 return render_template("ForgotPassword.html", error="Utilisateur introuvable", csrf_token=new_token)
 
-            code = random.randint(10000, 99999)
+            code = str(secrets.randbelow(900000) + 100000)
+            code_hash = generate_password_hash(code)
+
+            cursor.execute("""
+                            DELETE FROM password_reset 
+                             WHERE user_id = %s """,(result[0],))
+
+            cursor.execute("""
+                    INSERT INTO password_reset (user_id, code_hash, expired_at, attempts)
+                    VALUES(%s, %s, DATE_ADD(NOW(), INTERVAL 5 MINUTE), 0) """
+                ,(result[0], code_hash))
+
             msg = Message(
                 subject="Le Code de verification pour le changement du mode de passe",
                 sender=app.config['MAIL_USERNAME'],
@@ -561,20 +548,10 @@ def ChangePassword():
                         """
             mail.send(msg)
 
-            session['user_infos'] = {}
+            conn.commit()
 
-            if 'username' not in session['user_infos']:
-                session['user_infos'] = { 'username': name }
-
-            if 'email' not in session['user_infos']:
-                session['user_infos']['email'] = email
-
-            if 'phoneNumber' not in session['user_infos']:
-                session['user_infos']['phoneNumber'] = phone
-
-            if 'email_code' not in session['user_infos']:
-                session['user_infos']['email_code'] = code
-
+            session.pop('reset_verified', None)
+            session['reset_userID'] = result[0]
 
             return redirect(url_for('VerifyEmail'))
 
@@ -584,7 +561,11 @@ def ChangePassword():
 
 
 @app.route("/VerifyEmail", methods=["POST", "GET"])
+@limiter.limit('10 per 15 minutes')
 def VerifyEmail():
+    if 'reset_userID' not in session:
+        return redirect(url_for('home'))
+
     if request.method == "GET":
         token = secrets.token_hex(16)
         session['csrf_token'] = token
@@ -594,26 +575,57 @@ def VerifyEmail():
         form_token = request.form.get('csrf_token')
         session_token = session.get('csrf_token')
 
-        if not form_token or form_token != session_token :
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "erreur CSRF attack!",403
 
-        user_code = int(request.form.get('code'))
+        new_token = secrets.token_hex(16)
+        session['csrf_token'] = new_token
 
-        print(session['user_infos']['username'])
+        user_code = (request.form.get('code') or '').strip()
 
-        print(f"user code = {user_code} with type : {type(user_code)}")
-        print(f"session_code = {session['user_infos']['email_code']} with type : {type(session['user_infos']['email_code'])}")
-        print(user_code == session['user_infos']['email_code'])
+        conn = get_connection()
+        cursor = conn.cursor(buffered=True)
 
+        try :
+            cursor.execute("""
+                            SELECT id, code_hash, attempts 
+                            FROM password_reset 
+                            WHERE user_id = %s AND expired_at > NOW() """
+                           ,(session['reset_userID'],))
+            row = cursor.fetchone()
 
-        if user_code == session['user_infos']['email_code']:
+            if not row or row[2] >= 5 :
+                session.pop('reset_userID', None)
+                return render_template("NewPassEmailCode.html",
+                    message="Code expiré, recommencez", csrf_token=new_token)
+
+            if not check_password_hash(row[1], (user_code or '').strip()):
+                cursor.execute("""
+                                UPDATE password_reset 
+                                SET 
+                                attempts = attempts + 1 
+                                WHERE user_id = %s AND id = %s """,(session['reset_userID'], row[0]))
+                conn.commit()
+                return render_template("NewPassEmailCode.html",
+                                       message="Code incorrect", csrf_token=new_token)
+
+            cursor.execute("""
+                            DELETE FROM password_reset 
+                            WHERE id = %s AND user_id = %s """,(row[0], session['reset_userID']))
+            conn.commit()
+            session['reset_verified'] = True
             return redirect(url_for('NewPassword'))
-        else :
-            return render_template("NewPassEmailCode.html", csrf_token=session_token, message="Incorret email code Check ur email")
 
+        finally:
+            cursor.close()
+            conn.close()
 
 @app.route("/NewPassword", methods=["POST", "GET"])
+@limiter.limit('10 per 15 minutes')
 def NewPassword():
+    if not session.get('reset_verified') or 'reset_userID' not in session:
+        return redirect(url_for('home'))
+
     if request.method == "GET":
         token = secrets.token_hex(16)
         session["csrf_token"] = token
@@ -627,20 +639,14 @@ def NewPassword():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
 
-        data = session.get('user_infos')
-
         password = request.form.get('password')
         confirmP = request.form.get('confirmP')
-
-        username = data['username']
-        email = data['email']
-        phoneNumber = data['phoneNumber']
 
         if password != confirmP:
             return render_template("NewPassword.html", error="Confirmation incorrecte", csrf_token=new_token)
@@ -655,41 +661,32 @@ def NewPassword():
         cursor = conn.cursor(buffered=True)
 
         try:
-            NewPassword = generate_password_hash(password)
+            password = generate_password_hash(password)
 
             cursor.execute(""" 
-                            SELECT id  
-                            FROM users 
-                            WHERE user_name = %s AND user_email = %s AND user_phoneNumber = %s   
-                            """, (username, email, phoneNumber))
-            found = cursor.fetchone()
+                            UPDATE users  
+                            SET  
+                            user_password = %s 
+                            WHERE id = %s 
+                    """, (password, session['reset_userID']))
 
-            if found:
-                cursor.execute(""" 
-                                UPDATE users  
-                                SET  
-                                user_password = %s 
-                                WHERE id = %s 
-                                """, (NewPassword, found[0]))
-                conn.commit()
-                session['user_infos'].pop('email_code')
-                return render_template("Log-in.html", message="Informations mises à jour", csrf_token=new_token)
+            conn.commit()
+            session.pop('reset_verified', None)
+            session.pop('reset_userID', None)
 
-            else:
-                return render_template("Log-in.html", error="Utilisateur introuvable", csrf_token=new_token)
+            return render_template("Log-in.html", message="Informations mises à jour", csrf_token=new_token)
 
         except Exception as e:
             conn.rollback()
-            return render_template("NewPassword.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("NewPassword.html", error=f"Erreur : database error", csrf_token=new_token)
 
         finally:
             cursor.close()
             conn.close()
 
 
-        # ============================== KHEDMA =======================================
-
-
+# ============================== KHEDMA =======================================
 @app.route("/Khedma", methods=["POST", "GET"])
 def KhedmaPage():
     if not is_logged_in():
@@ -708,7 +705,7 @@ def KhedmaPage():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -758,7 +755,7 @@ def khedmaMkemla():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -975,7 +972,8 @@ def khedmaMkemla():
 
         except Exception as e:
             conn.rollback()
-            return render_template("FinishedKhedma.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("FinishedKhedma.html", error=f"Erreur : database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -1000,7 +998,7 @@ def KhedmaKhalsa():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or form_token != session_token:
+        if not form_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -1030,7 +1028,6 @@ def KhedmaKhalsa():
                 if not result:
                     return render_template("KhedmaKhalsa.html", message="Patient introuvable", csrf_token=new_token)
 
-                print("DONE 1")
 
                 patient_price = result[0]
                 patient_b9aw = result[1]
@@ -1087,7 +1084,6 @@ def KhedmaKhalsa():
                             WHERE id = %s AND user_id = %s 
                         """, ('yes', 0, patient_price, service[0], session['id']))
 
-                print("DONE 2")
 
                 cursor.execute(""" 
                             UPDATE khedma  
@@ -1095,21 +1091,18 @@ def KhedmaKhalsa():
                             WHERE id = %s  
                         """, ('yes', service[1]))
 
-                print("DONE 3")
 
                 cursor.execute(""" 
                             DELETE FROM patient 
                             WHERE user_id = %s AND finished = %s AND khalsa = %s 
                         """, (session['id'], 'yes', 'yes'))
 
-                print("DONE 4 ")
 
                 cursor.execute(""" 
                             DELETE FROM khedma 
                             WHERE khedma_wajda = %s AND user_id = %s 
                         """, ('yes', session['id']))
 
-                print("DONE 5")
 
                 if old_khalsa.lower() == 'no':
                     UpdateKhalsaStat(cursor, conn, table="patient", b9aw=patient_b9aw, date=patient_date)
@@ -1222,7 +1215,8 @@ def KhedmaKhalsa():
 
         except Exception as e:
             conn.rollback()
-            return render_template("KhedmaKhalsa.html", error=f"Erreur : {str(e)}", csrf_token=new_token)
+            print(f"{str(e)}")
+            return render_template("KhedmaKhalsa.html", error=f"Erreur : database error", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -1237,7 +1231,6 @@ def allkhedma():
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
     try:
-        # Fetch all 4 datasets at once
 
         # Main Table - All items
         cursor.execute("SELECT * FROM khedma WHERE user_id = %s", (session['id'],))
@@ -1297,23 +1290,11 @@ def AllTotal():
     if not is_logged_in():
         return redirect(url_for('home'))
 
-    #conn = get_connection()
-    #cursor = conn.cursor(buffered=True)
-
     timestamp = time.time()
 
-    print(timestamp)
-    print(time.ctime(timestamp))
-
-    print("cach1", cach)
-
-    conn = None
-    cursor = None
-
+    conn = get_connection()
+    cursor = conn.cursor(buffered=True)
     try:
-
-        conn = get_connection()
-        cursor = conn.cursor(buffered=True)
 
         if session['id'] not in cach:
             cach[session['id']] = {}
@@ -1782,7 +1763,6 @@ def AllTotal():
         cursor.close()
         conn.close()
 
-    # ========================================================================================
-
+# ========================================================================================
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=os.getenv("FLASK_DEBUG" , 'false').lower() == 'true')

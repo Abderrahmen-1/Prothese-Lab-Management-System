@@ -1,6 +1,6 @@
 from datetime import timedelta, date
 from flask_mail import Message, Mail
-from FlaskTry.flasktry import app
+from ManageMyLab.manageMyLab import app
 
 Gmail = app.config['MAIL_USERNAME']
 
