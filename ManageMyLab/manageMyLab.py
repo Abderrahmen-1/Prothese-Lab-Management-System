@@ -470,7 +470,7 @@ def verify_email(email):
 # ===================================== Change password =======================
 
 @app.route("/ForgotPassword", methods=["POST", "GET"])
-@limiter.limit('5 per 15 minutes')
+@limiter.limit('10 per 15 minutes')
 def ChangePassword():
     if request.method == "GET":
         token = secrets.token_hex(16)
@@ -617,7 +617,7 @@ def VerifyEmail():
             conn.close()
 
 @app.route("/NewPassword", methods=["POST", "GET"])
-@limiter.limit('5 per 15 minutes')
+@limiter.limit('10 per 15 minutes')
 def NewPassword():
     if not session.get('reset_verified') or 'reset_userID' not in session:
         return redirect(url_for('home'))
