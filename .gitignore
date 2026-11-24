@@ -5,3 +5,4 @@ __pycache__/
 .idea/
 labo_web.sql
 reserve.txt
+ManageMyLab/templates/Terms.html
