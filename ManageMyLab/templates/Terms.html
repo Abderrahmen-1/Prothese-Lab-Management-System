@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+{# ===== À MODIFIER ICI UNIQUEMENT ===== #}
+{% set site_name = "ManageMyLab" %}
+{% set site_url = "ManageMyLab.com" %}
+{% set owner = "Khelfouni Abderrahmen" %}
+{% set numéro = "----------" %}
+{% set owner_status = "Éditeur du service" %}
+{% set contact_email = "managemylabo@gmail.com" %}
+{% set city = "Alger, Algérie" %}
+{% set last_update = "24 novembre 2026" %}
+{% set min_age = 18 %}
+{# ===================================== #}
+
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conditions générales et confidentialité – {{ site_name }}</title>
+<style>
+  :root {
+    --bg: #ffffff; --surface: #f4f6f9; --text: #1d2430; --muted: #5b6574;
+    --line: #dde2ea; --accent: #1f4f8f; --accent-soft: #e8eff8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12161d; --surface: #1a2029; --text: #e6e9ef; --muted: #9aa4b2;
+      --line: #2a3340; --accent: #7fb0ec; --accent-soft: #1b2635;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.7 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  header.top { border-bottom: 1px solid var(--line); background: var(--surface); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+  header.top .wrap { padding-top: 2.5rem; padding-bottom: 2rem; }
+  header.top a.back { color: var(--muted); font-size: .9rem; text-decoration: none; }
+  header.top a.back:hover { color: var(--accent); }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.2; margin: .8rem 0 .5rem; letter-spacing: -.01em; }
+  .meta { color: var(--muted); font-size: .95rem; margin: 0; }
+  .layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 3.5rem; padding-top: 2.5rem; padding-bottom: 4rem; }
+  nav.toc { position: sticky; top: 1.5rem; align-self: start; font-size: .92rem; }
+  nav.toc p { margin: 0 0 .6rem; font-weight: 600; }
+  nav.toc ol { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--line); }
+  nav.toc a { display: block; padding: .3rem 0 .3rem .9rem; margin-left: -2px; border-left: 2px solid transparent; color: var(--muted); text-decoration: none; }
+  nav.toc a:hover, nav.toc a.active { color: var(--accent); border-left-color: var(--accent); }
+  main { max-width: 70ch; }
+  .notice { background: var(--accent-soft); border-left: 4px solid var(--accent); padding: 1rem 1.2rem; border-radius: 4px; margin-bottom: 2.5rem; }
+  section { margin-bottom: 2.6rem; }
+  h2 { font-size: 1.3rem; margin: 0 0 .8rem; line-height: 1.3; }
+  p { margin: 0 0 1rem; }
+  ul { margin: 0 0 1rem; padding-left: 1.3rem; }
+  li { margin-bottom: .35rem; }
+  a { color: var(--accent); }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  dl { margin: 0 0 1rem; }
+  dt { font-weight: 600; }
+  dd { margin: 0 0 .6rem; color: var(--muted); }
+  .contact { border: 1px solid var(--line); border-radius: 6px; padding: 1.2rem 1.4rem; background: var(--surface); }
+  .contact p { margin: 0 0 .3rem; }
+  footer { border-top: 1px solid var(--line); padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: .88rem; }
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; gap: 1.5rem; }
+    nav.toc { position: static; border: 1px solid var(--line); border-radius: 6px; padding: 1rem 1.2rem; }
+  }
+  @media print {
+    nav.toc, header.top a.back { display: none; }
+    .layout { display: block; }
+    body { font-size: 11pt; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="back" href="/CreateAnAccount" onclick="if (history.length > 1) { history.back(); return false; }">← Retour</a>
+    <h1>Conditions générales d’utilisation et politique de confidentialité</h1>
+    <p class="meta">{{ site_name }} · Dernière mise à jour : {{ last_update }}</p>
+  </div>
+</header>
+
+<div class="wrap layout">
+
+  <nav class="toc" aria-label="Sommaire">
+    <p>Sommaire</p>
+    <ol>
+      <li><a href="#presentation">Présentation et acceptation</a></li>
+      <li><a href="#definitions">Définitions</a></li>
+      <li><a href="#service">Description du service</a></li>
+      <li><a href="#compte">Compte utilisateur</a></li>
+      <li><a href="#regles">Règles d’utilisation</a></li>
+      <li><a href="#paiements">Paiements et abonnement</a></li>
+      <li><a href="#propriete">Propriété intellectuelle</a></li>
+      <li><a href="#donnees">Données personnelles et confidentialité</a></li>
+      <li><a href="#responsabilite">Limitation de responsabilité</a></li>
+      <li><a href="#resiliation">Suspension et résiliation</a></li>
+      <li><a href="#modifications">Modification des conditions</a></li>
+      <li><a href="#droit">Droit applicable et litiges</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <div class="notice">
+      Merci de lire attentivement ces conditions avant d’utiliser {{ site_name }}.
+      En créant un compte ou en utilisant le service, vous acceptez ces conditions.
+    </div>
+
+    <section id="presentation">
+      <h2>1. Présentation et acceptation</h2>
+      <p>{{ site_name }} (« le Service ») est édité par {{ owner }}, {{ owner_status|lower }}, basé à {{ city }}.</p>
+      <p>Les présentes conditions générales d’utilisation (« CGU ») définissent les règles d’accès et d’utilisation du Service. L’utilisation du Service implique l’acceptation complète et sans réserve des CGU. Si vous n’êtes pas d’accord, vous ne devez pas utiliser le Service.</p>
+    </section>
+
+    <section id="definitions">
+      <h2>2. Définitions</h2>
+      <dl>
+        <dt>Service</dt><dd>Le site web et l’ensemble des fonctionnalités proposées par {{ site_name }}.</dd>
+        <dt>Utilisateur</dt><dd>Le prothésiste dentaire qui s’inscrit au Service pour gérer son laboratoire.</dd>
+        <dt>Compte</dt><dd>L’espace personnel du laboratoire, créé par l’Utilisateur après inscription.</dd>
+        <dt>Patient</dt><dd>Personne dont le travail de prothèse est enregistré par l’Utilisateur dans le Service.</dd>
+        <dt>Dentiste</dt><dd>Praticien qui confie des travaux de prothèse au laboratoire de l’Utilisateur.</dd>
+        <dt>Contenu</dt><dd>Toute information ou donnée que l’Utilisateur saisit dans le Service.</dd>
+      </dl>
+    </section>
+
+    <section id="service">
+      <h2>3. Description du service</h2>
+      <p>{{ site_name }} est une plateforme en ligne de gestion de laboratoire réservée aux prothésistes dentaires. Elle leur permet de gérer leurs dentistes, leurs patients, leurs travaux de prothèse, les versements, le stock et les statistiques de leur laboratoire.</p>
+      <p>Le Service ne gère pas la prise de rendez-vous. Chaque laboratoire dispose d’un espace isolé : les données d’un laboratoire ne sont pas accessibles aux autres laboratoires.</p>
+      <p>Le Service est fourni « en l’état ». L’éditeur peut faire évoluer, modifier ou retirer certaines fonctionnalités à tout moment pour des raisons techniques ou de maintenance.</p>
+    </section>
+
+    <section id="compte">
+      <h2>4. Compte utilisateur</h2>
+      <ul>
+        <li>Le Service est réservé aux professionnels (prothésistes dentaires) agissant pour leur laboratoire, âgés d’au moins {{ min_age }} ans.</li>
+        <li>Les informations fournies à l’inscription doivent être exactes, complètes et tenues à jour.</li>
+        <li>L’Utilisateur est responsable de la confidentialité de son mot de passe et de toute activité réalisée depuis son Compte.</li>
+        <li>En cas de perte ou d’utilisation frauduleuse de ses identifiants, l’Utilisateur doit prévenir l’éditeur sans délai à l’adresse indiquée à la section Contact.</li>
+        <li>Un Compte est personnel et ne peut pas être cédé ou partagé.</li>
+      </ul>
+    </section>
+
+    <section id="regles">
+      <h2>5. Règles d’utilisation</h2>
+      <p>L’Utilisateur s’engage à utiliser le Service de manière légale et loyale. Sont notamment interdits :</p>
+      <ul>
+        <li>toute tentative d’accès non autorisé au Service, à ses serveurs ou aux comptes d’autres utilisateurs ;</li>
+        <li>l’utilisation de scripts, robots ou outils automatisés pour extraire des données ou perturber le fonctionnement du Service ;</li>
+        <li>la publication de contenus illicites, diffamatoires, trompeurs ou portant atteinte aux droits de tiers ;</li>
+        <li>l’usurpation d’identité et la fourniture de fausses informations ;</li>
+        <li>tout usage contraire à la législation algérienne en vigueur.</li>
+      </ul>
+    </section>
+
+    <section id="paiements">
+      <h2>6. Paiements et abonnement</h2>
+      <p>L’accès au Service est soumis à un abonnement mensuel, précédé d’un mois d’essai gratuit.</p>
+      <ul>
+        <li>Les prix sont indiqués en dinars algériens (DZD), taxes comprises sauf mention contraire.</li>
+        <li>Les paiements en ligne sont traités par un prestataire de paiement tiers (Chargily Pay : CIB / Edahabia). L’éditeur ne stocke pas les données de carte bancaire.</li>
+        <li>Le premier mois est gratuit, afin de permettre à l’Utilisateur d’essayer le Service. Aucun paiement n’est dû pendant cette période d’essai.</li>
+        <li>Ensuite, l’abonnement est d’un mois et coûte 4 500 DZD. Chaque période d’un mois est calculée à partir de la date d’inscription pour le premier mois, puis à partir de la date du dernier paiement.</li>
+        <li>L’abonnement ne peut pas être interrompu ni résilié en cours de période : le mois payé est dû en entier et n’est pas remboursable. L’Utilisateur est donc invité à utiliser le premier mois gratuit pour tester le Service avant de payer.</li>
+        <li>Si le mois suivant n’est pas payé à la fin de la période, le Compte est bloqué : l’Utilisateur ne peut plus utiliser le Service et voit uniquement la page de paiement. Ses données sont conservées pendant le blocage, et l’accès est rétabli dès le paiement.</li>
+        <li>L’éditeur peut modifier le prix de l’abonnement avec un préavis d’au moins 30 jours, communiqué par e-mail ou dans le Service.</li>
+      </ul>
+    </section>
+
+    <section id="propriete">
+      <h2>7. Propriété intellectuelle</h2>
+      <p>Le Service, son code, son design, ses textes, logos et marques sont la propriété de l’éditeur et protégés par la législation sur la propriété intellectuelle. Toute reproduction ou réutilisation sans autorisation écrite est interdite.</p>
+      <p>L’Utilisateur conserve la propriété de son Contenu. Il accorde à l’éditeur une licence limitée, non exclusive, uniquement pour héberger et afficher ce Contenu dans le cadre du Service.</p>
+    </section>
+
+    <section id="donnees">
+      <h2>8. Données personnelles et confidentialité</h2>
+      <p>L’éditeur collecte et traite uniquement les données nécessaires au fonctionnement du Service, conformément à la loi n° 18-07 relative à la protection des personnes physiques dans le traitement des données à caractère personnel.</p>
+      <ul>
+        <li><strong>Données de l’Utilisateur (prothésiste) :</strong> nom, adresse e-mail, numéro de téléphone et informations du laboratoire.</li>
+        <li><strong>Données saisies par l’Utilisateur :</strong>
+          <ul>
+            <li>Patient : nom, prénom et numéro de téléphone s’il s’agit d’un patient direct, ou un simple numéro à 10 chiffres servant d’identifiant unique. Si le patient est suivi par un dentiste, il est identifié par le numéro de la fiche du dentiste.</li>
+            <li>Dentiste : nom.</li>
+            <li>Prothésiste : nom et numéro unique (numéro de téléphone, pour faciliter le contact), ou un numéro à 10 chiffres servant d’identifiant unique.</li>
+            <li>Travaux de prothèse, versements et données du stock.</li>
+          </ul>
+        </li>
+        <li><strong>Finalités :</strong> création et gestion du Compte, fourniture du Service, sécurité, et envoi d’e-mails de rappel et de notification liés au Service. Ces e-mails sont des messages de service et non de la publicité.</li>
+        <li><strong>Responsabilité des données saisies :</strong> le laboratoire est responsable des données de ses patients et dentistes qu’il enregistre dans le Service. L’éditeur les traite uniquement pour fournir le Service. L’Utilisateur est invité à ne saisir que les informations nécessaires à son activité.</li>
+        <li><strong>Durée de conservation :</strong> les données sont conservées tant que le Compte existe, y compris pendant un blocage pour non-paiement. Lorsque le Compte est supprimé, toutes les données qui lui sont liées (dentistes, patients, travaux, versements, stock, historique) sont supprimées de façon définitive et ne peuvent pas être récupérées.</li>
+        <li><strong>Vos droits :</strong> accès, rectification, opposition et suppression de vos données sur simple demande à l’adresse de contact. Vous pouvez demander à ne plus recevoir les e-mails de rappel, sous réserve des messages indispensables au fonctionnement du Compte.</li>
+        <li><strong>Sécurité :</strong> les mots de passe sont stockés sous forme chiffrée (hachée) et les échanges sont protégés.</li>
+      </ul>
+      <p>Les données ne sont pas vendues à des tiers ; elles ne sont partagées qu’avec les prestataires techniques nécessaires au Service (hébergement, envoi d’e-mails, paiement).</p>
+    </section>
+
+    <section id="responsabilite">
+      <h2>9. Limitation de responsabilité</h2>
+      <p>L’éditeur met tout en œuvre pour assurer un Service fiable, mais ne garantit pas une disponibilité continue ni l’absence d’erreurs. L’éditeur ne peut être tenu responsable des interruptions, pertes de données, dommages indirects, ou des événements de force majeure.</p>
+      <p>L’Utilisateur est seul responsable de l’usage qu’il fait du Service et de son Contenu.</p>
+    </section>
+
+    <section id="resiliation">
+      <h2>10. Suspension et résiliation</h2>
+      <p>L’éditeur peut suspendre ou supprimer un Compte, avec ou sans préavis, en cas de violation des présentes CGU, de fraude ou d’atteinte à la sécurité du Service.</p>
+      <p>L’Utilisateur peut demander la fermeture de son Compte à tout moment en écrivant à l’adresse de contact. Cette fermeture ne donne droit à aucun remboursement du mois en cours. La suppression du Compte est définitive : toutes les données sont effacées et ne peuvent pas être restaurées.</p>
+    </section>
+
+    <section id="modifications">
+      <h2>11. Modification des conditions</h2>
+      <p>Les CGU peuvent être modifiées à tout moment. La date de dernière mise à jour figure en haut de cette page. Les Utilisateurs seront informés des changements importants par e-mail ou par un message dans le Service. La poursuite de l’utilisation après modification vaut acceptation.</p>
+    </section>
+
+    <section id="droit">
+      <h2>12. Droit applicable et litiges</h2>
+      <p>Les présentes CGU sont régies par le droit algérien. En cas de litige, les parties chercheront d’abord une solution amiable. À défaut, les tribunaux compétents d’{{ city.split(',')[0] }} seront seuls compétents.</p>
+    </section>
+
+    <section id="contact">
+      <h2>13. Contact</h2>
+      <div class="contact">
+        <p>numéro de telephone: <strong>{{ numéro }}</strong> – {{ site_url }}</p>
+        <p>{{ city }}</p>
+        <p>E-mail : <a href="mailto:{{ contact_email }}">{{ contact_email }}</a></p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div class="wrap">© {{ now.year if now is defined else 2026 }} {{ site_name }}. Tous droits réservés.</div>
+</footer>
+
+<script>
+  // Surligne la section visible dans le sommaire
+  (function () {
+    var links = document.querySelectorAll('nav.toc a');
+    if (!('IntersectionObserver' in window)) return;
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          links.forEach(function (l) {
+            l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '0px 0px -70% 0px' });
+    document.querySelectorAll('main section').forEach(function (s) { obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

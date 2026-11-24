@@ -1763,6 +1763,10 @@ def AllTotal():
         cursor.close()
         conn.close()
 
+@app.route("/terms")
+def terms():
+    return render_template('Terms.html')
+
 # ========================================================================================
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=os.getenv("FLASK_DEBUG" , 'false').lower() == 'true')
