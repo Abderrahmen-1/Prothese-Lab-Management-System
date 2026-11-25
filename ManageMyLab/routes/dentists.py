@@ -219,7 +219,7 @@ def Get_From_Dentist():
         firstName = request.form.get("PatientFirstName")
         lastName = request.form.get("PatientLastName")
         unique = request.form.get("PatientUnique")
-        choice = request.form.get("KhedmaChoice")
+        choice = request.form.get("KhedmaChoice" , '')
         price = request.form.get("KhedmaPrice")
         khalsa = request.form.get("Khalsa")
         date = request.form.get("date")

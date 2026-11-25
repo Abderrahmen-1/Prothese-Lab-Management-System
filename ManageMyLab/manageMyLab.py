@@ -32,9 +32,9 @@ app.config['COMPRESS_MIN_SIZE'] = int(os.getenv('COMPRESS_MIN_SIZE'))
 Compress(app)
 
 #============== Cookeis Session Configuration ===========================
-app.config['SESSION_COOKIE_SECURE']=True
-app.config['SESSION_COOKIE_HTTPONLY']=True
-app.config['SESSION_COOKIE_SAMESITE']="Lax"
+#app.config['SESSION_COOKIE_SECURE']=True
+#app.config['SESSION_COOKIE_HTTPONLY']=True
+#app.config['SESSION_COOKIE_SAMESITE']="Lax"
 
 #======================== BluePrints Declaration ========================
 app.register_blueprint(users)
@@ -84,7 +84,13 @@ def home():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or not secrets.compare_digest(form_token, session_token):
+        print("FORM TOKEN:", form_token)
+        print("SESSION TOKEN:", session_token)
+        print("SESSION COOKIE:", request.cookies.get(
+            app.config.get('SESSION_COOKIE_NAME', 'session')
+        ))
+
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -147,23 +153,14 @@ def home():
                             WHERE id = %s """,(session['id'],))
             UserPaimentStatus = cursor.fetchone()
 
-            if UserPaimentStatus[3] == None:
-                cursor.execute(""" 
+            cursor.execute(""" 
                             UPDATE users 
                             SET status = 'out of limits' , is_paid = %s
-                            WHERE date_inscription <= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) 
-                              AND status != 'block' 
-                              AND id != %s 
-                        """, (False, 1))
+                            WHERE COALESCE(paid_at, date_inscription) <= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+                            AND status != 'block' 
+                            AND id != %s 
+                """, (False, 1))
 
-            else :
-                cursor.execute(""" 
-                                UPDATE users 
-                                SET status = 'out of limits' , is_paid = %s 
-                                WHERE paid_at <= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) 
-                                    AND status != 'block' 
-                                    AND id != %s  
-                                """, (False, 1))
             conn.commit()
 
             if not UserAccess[2]:
@@ -403,7 +400,7 @@ def verify_email(email):
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -489,7 +486,7 @@ def ChangePassword():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -575,7 +572,7 @@ def VerifyEmail():
         form_token = request.form.get('csrf_token')
         session_token = session.get('csrf_token')
 
-        if not form_token or not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "erreur CSRF attack!",403
 
         new_token = secrets.token_hex(16)
@@ -639,7 +636,7 @@ def NewPassword():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -705,7 +702,7 @@ def KhedmaPage():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -755,7 +752,7 @@ def khedmaMkemla():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
@@ -998,17 +995,17 @@ def KhedmaKhalsa():
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
 
-        if not form_token or not secrets.compare_digest(form_token, session_token):
+        if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
 
-        choice = request.form.get('Choice')
+        choice = request.form.get('Choice' , '').lower()
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
         try:
-            if choice.lower() == "patient":
+            if choice == "patient":
                 patientId = request.form.get('PatientID')
                 khedmaID = request.form.get('ServiceID')
 
@@ -1107,7 +1104,7 @@ def KhedmaKhalsa():
                 if old_khalsa.lower() == 'no':
                     UpdateKhalsaStat(cursor, conn, table="patient", b9aw=patient_b9aw, date=patient_date)
 
-            elif choice.lower() == "dentist":
+            elif choice == "dentist":
                 name = request.form.get('Dentist')
                 patientId = request.form.get('DPatientID')
                 khedmaID = request.form.get('DServiceID')

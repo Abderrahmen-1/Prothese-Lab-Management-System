@@ -225,7 +225,7 @@ def khedmaProMkemla():
 
         ProthesistName   = request.form.get('ProthesistName')
         ProthesistNumber = request.form.get('ProthesistNumber')
-        choice           = request.form.get('Choice')
+        choice           = request.form.get('Choice' , '').lower()
 
         if not ProthesistNumber or not ProthesistNumber.isdigit() or len(ProthesistNumber) != 10:
             return render_template("FinishedProKhedma.html", error="Numéro du prothésiste invalide", csrf_token=new_token)
@@ -242,7 +242,7 @@ def khedmaProMkemla():
             if not row:
                 return render_template("FinishedProKhedma.html", message="Prothésiste introuvable", csrf_token=new_token)
 
-            if choice.lower() == "patient":
+            if choice == "patient":
                 patientId = request.form.get('PatientID')
                 khedmaID = request.form.get('ServiceID')
 
@@ -308,7 +308,7 @@ def khedmaProMkemla():
                             WHERE user_id = %s AND pFinished = %s AND pKhalsa = %s
                         """, (session['id'], 'yes', 'yes'))
 
-            elif choice.lower() == "dentist":
+            elif choice == "dentist":
                 dentistName = request.form.get('Dentist')
                 patientId   = request.form.get('DPatientID')
                 khedmaID      = request.form.get('DServiceID')
@@ -434,7 +434,7 @@ def KhedmaProKhalsa():
 
         ProName = request.form.get('ProthesistChoice')
         ProNumber = request.form.get('ProthesistNumber')
-        choice    = request.form.get('Choice')
+        choice    = request.form.get('Choice' , '').lower()
 
         if not ProNumber or not ProNumber.isdigit() or len(ProNumber) != 10:
             return render_template("KhedmaProKhalsa.html", error="Numéro du prothésiste invalide", csrf_token=new_token)
@@ -455,7 +455,7 @@ def KhedmaProKhalsa():
                 return render_template("KhedmaProKhalsa.html" , message="Prothésiste introuvable" , csrf_token=new_token)
 
 
-            if choice.lower() == "patient":
+            if choice == "patient":
                 patientId = request.form.get('PatientID')
                 khedmaID = request.form.get('ServiceID')
 
@@ -541,7 +541,7 @@ def KhedmaProKhalsa():
                     UpdateProKhalsaStat(cursor, conn, ProName=ProName, ProNumber=ProNumber,
                                         b9aw=old_b9aw, date=prothesist_date)
 
-            elif choice.lower() == "dentist":
+            elif choice == "dentist":
                 Dentistname      = request.form.get('Dentist')
                 patientId = request.form.get('DPatientID')
                 khedmaID = request.form.get('DServiceID')
