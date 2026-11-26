@@ -7,7 +7,8 @@ products = Blueprint("products", __name__, url_prefix="/products")
 
 
 def is_logged_in():
-    return 'id' in session
+    return "id" in session and session['id'] and "email_confirmed" in session and session['email_confirmed'] 
+
 
 
 @products.route("/Sel3a", methods=["GET"])

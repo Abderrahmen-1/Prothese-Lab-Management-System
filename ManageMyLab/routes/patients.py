@@ -7,7 +7,8 @@ patients = Blueprint("patients", __name__, url_prefix="/patients")
 
 
 def is_logged_in():
-    return "id" in session
+    return "id" in session and session['id'] and "email_confirmed" in session and session['email_confirmed'] 
+
 
 
 @patients.route("/Patient", methods=["POST", "GET"])
@@ -62,7 +63,7 @@ def PatientPage():
                 if data:
                     return render_template("PatientsFile.html", data=data, csrf_token=new_token)
                 else:
-                    return render_template("PatientsFile.html", message="Patient introuvable", csrf_toke=new_token)
+                    return render_template("PatientsFile.html", message="Patient introuvable", csrf_token=new_token)
 
             else:
                 cursor.execute(""" 
@@ -327,9 +328,9 @@ def AddPatient():
                 """, (unique, None, ProName, ProNumber, ProDate, choice, ProPrice, ProVersa, Prob9aw, ProKhalsa, 'no',
                       session['id'], ProDeadLine))
 
-                ProthesistsStat(cursor, conn, ProPrice, ProNumber, ProName, ProKhalsa, ProDate, ProVersa)
+                ProthesistsStat(cursor, ProPrice, ProNumber, ProName, ProKhalsa, ProDate, ProVersa)
 
-                Prothesist_History(cursor, conn, ProName, ProNumber, unique, firstName, lastName)
+                Prothesist_History(cursor, ProName, ProNumber, unique, firstName, lastName)
 
             exist = checkExistPatient(cursor, firstName, unique, choice)
 
@@ -349,8 +350,8 @@ def AddPatient():
                 """, (
                 choice, price, date, 'NO', unique, 'no', patient_khalsa, ProName, ProNumber, session['id'], deadLine))
 
-                Patient_History(cursor, conn, unique)
-                PatientStats(cursor, conn, price, khalsa, date, Versa)
+                Patient_History(cursor, unique)
+                PatientStats(cursor, price, khalsa, date, Versa)
 
                 conn.commit()
 

@@ -1,31 +1,67 @@
-from flask import (Blueprint, render_template, request, redirect, url_for, session)
 import os
 import json
 import secrets
+import uuid
+from decimal import Decimal, InvalidOperation
+from urllib.parse import urlparse
+
 from dotenv import load_dotenv
-from ManageMyLab.FunctionFile import *
+from flask import (Blueprint, render_template, request, redirect,
+                   url_for, session, current_app)
 from chargily_pay import ChargilyClient
 from chargily_pay.settings import CHARGILIY_TEST_URL
 from chargily_pay.entity import Checkout
 
-payments = Blueprint("payments", __name__, url_prefix="/payments")
+from ManageMyLab.ConnectToSql import get_connection
+
 load_dotenv()
 
-PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL")
+payments = Blueprint("payments", __name__, url_prefix="/payments")
 
-CHARGILY_KEY = os.getenv("CHARGILY_API_KEY")
-CHARGILY_SECRET = os.getenv("CHARGILY_API_SECRET")
-chargily = ChargilyClient( CHARGILY_KEY, CHARGILY_SECRET, CHARGILIY_TEST_URL)
 
-DENTAFLOW_PRICE = int(os.getenv("DENTAFLOW_PRICE", "70000"))
+# =========================================================
+# CONFIGURATION (fail fast if something is missing)
+# =========================================================
+
+def _require_env(name):
+    value = os.getenv(name)
+    if not value:
+        raise RuntimeError(f"Missing required environment variable: {name}")
+    return value
+
+
+PUBLIC_BASE_URL = _require_env("PUBLIC_BASE_URL").rstrip("/")
+CHARGILY_KEY = _require_env("CHARGILY_API_KEY")
+CHARGILY_SECRET = _require_env("CHARGILY_API_SECRET")
+
+CHARGILY_MODE = os.getenv("CHARGILY_MODE", "test").lower()
+
+if CHARGILY_MODE == "live":
+    if not PUBLIC_BASE_URL.startswith("https://"):
+        raise RuntimeError("PUBLIC_BASE_URL must use https in live mode")
+    CHARGILY_API_URL = os.getenv("CHARGILY_API_URL", "https://pay.chargily.net/api/v2/")
+else:
+    CHARGILY_API_URL = CHARGILIY_TEST_URL
+
+chargily = ChargilyClient(CHARGILY_KEY, CHARGILY_SECRET, CHARGILY_API_URL)
+
+DENTAFLOW_PRICE = int(os.getenv("DENTAFLOW_PRICE"))
+CURRENCY = "dzd"
+
+
+# =========================================================
+# HELPERS
+# =========================================================
 
 def is_logged_in():
-    return "id" in session
+    return bool(session.get("id") and session.get("email_confirmed"))
+
 
 def generate_csrf_token():
     token = secrets.token_hex(16)
     session["csrf_token"] = token
     return token
+
 
 def verify_csrf():
     token = request.form.get("csrf_token")
@@ -35,6 +71,21 @@ def verify_csrf():
         return False
 
     return secrets.compare_digest(token, session_token)
+
+
+def _get(obj, name, default=None):
+    """Read a field from a dict or from an SDK object."""
+    if isinstance(obj, dict):
+        return obj.get(name, default)
+    return getattr(obj, name, default)
+
+
+def _to_decimal(value):
+    try:
+        return Decimal(str(value))
+    except (InvalidOperation, TypeError, ValueError):
+        return None
+
 
 # =========================================================
 # PAYMENT PAGE
@@ -60,14 +111,14 @@ def payment():
             session.clear()
             return redirect(url_for("home"))
 
-        status = user[0]
-        is_paid = user[1]
+        status, is_paid = user[0], user[1]
 
         if status == "block":
             session.clear()
             return redirect(url_for("home"))
 
         if is_paid:
+            session.pop("payment_required", None)
             return redirect(url_for("getHome"))
 
         token = generate_csrf_token()
@@ -77,6 +128,7 @@ def payment():
     finally:
         cursor.close()
         conn.close()
+
 
 # =========================================================
 # CREATE CHARGILY PAYMENT
@@ -107,61 +159,48 @@ def create_payment():
             session.clear()
             return redirect(url_for("home"))
 
-        status = user[0]
-        is_paid = user[1]
+        status, is_paid = user[0], user[1]
 
         if status == "block":
+            session.clear()
             return "Account blocked", 403
 
         if is_paid:
+            session.pop("payment_required", None)
             return redirect(url_for("getHome"))
 
+        # Unique placeholder: avoids collisions if chargily_id has a UNIQUE index.
         cursor.execute("""
             INSERT INTO payments(user_id, chargily_id, amount, currency, status)
             VALUES(%s, %s, %s, %s, 'pending')
-            """, (session["id"], "TEMP", DENTAFLOW_PRICE, "dzd"))
+            """, (session["id"], f"TEMP-{uuid.uuid4().hex[:16]}", DENTAFLOW_PRICE, CURRENCY))
         payment_id = cursor.lastrowid
 
-        #webhook_url = url_for("payments.chargily_webhook", _external=True)
-        webhook_url = f"{PUBLIC_BASE_URL.rstrip('/')}/payments/chargily/webhook"
-        #success_url = url_for("payments.payment_success", _external=True)
-        #failure_url = url_for("payments.payment_failure", _external=True)
-        success_url = f"{PUBLIC_BASE_URL.rstrip('/')}/payments/success"
-        failure_url = f"{PUBLIC_BASE_URL.rstrip('/')}/payments/failure"
-
         checkout = Checkout(
-            success_url=success_url,
+            success_url=f"{PUBLIC_BASE_URL}/payments/success",
             amount=DENTAFLOW_PRICE,
-            currency="dzd",
-            failure_url=failure_url,
-            description=(
-                "DentaFlow Permanent License"
-            ),
+            currency=CURRENCY,
+            failure_url=f"{PUBLIC_BASE_URL}/payments/failure",
+            description="DentaFlow Permanent License",
             locale="en",
-            webhook_endpoint=webhook_url,
-            metadata=[
-                {
-                    "payment_id": str(payment_id)
-                }
-            ]
+            webhook_endpoint=f"{PUBLIC_BASE_URL}/payments/chargily/webhook",
+            metadata=[{"payment_id": str(payment_id)}]
         )
 
         response = chargily.create_checkout(checkout)
 
-        if isinstance(response, dict):
-            chargily_id = response.get("id")
-            checkout_url = response.get("checkout_url")
-
-        else:
-            chargily_id = getattr(response, "id", None)
-            checkout_url = getattr(response, "checkout_url", None)
+        chargily_id = _get(response, "id")
+        checkout_url = _get(response, "checkout_url")
 
         if not chargily_id:
-            raise Exception("Chargily checkout ID missing")
+            raise ValueError("Chargily checkout ID missing")
 
         if not checkout_url:
-            raise Exception("Chargily checkout URL missing")
+            raise ValueError("Chargily checkout URL missing")
 
+        parsed = urlparse(str(checkout_url))
+        if parsed.scheme != "https" or not parsed.netloc:
+            raise ValueError("Unexpected checkout URL")
 
         cursor.execute("""
             UPDATE payments
@@ -172,13 +211,14 @@ def create_payment():
 
         return redirect(checkout_url)
 
-    except Exception as e:
+    except Exception:
         conn.rollback()
+        current_app.logger.exception("create_payment failed")
 
-
+        # Never show str(e) to the user: it can leak internals.
         return render_template(
             "payment_error.html",
-            error=str(e)
+            error="Le paiement n'a pas pu être initialisé. Veuillez réessayer plus tard."
         ), 500
 
     finally:
@@ -186,12 +226,33 @@ def create_payment():
         conn.close()
 
 
+# =========================================================
+# RETURN PAGES
+# =========================================================
+
 @payments.route("/success")
 def payment_success():
     if not is_logged_in():
         return redirect(url_for("home"))
 
-    return render_template("payment_success.html")
+    conn = get_connection()
+    cursor = conn.cursor(buffered=True)
+
+    try:
+        cursor.execute("SELECT is_paid FROM users WHERE id = %s", (session["id"],))
+        row = cursor.fetchone()
+        paid = bool(row and row[0])
+
+        # The webhook may not have arrived yet: `paid` tells the template which message to show.
+        if paid:
+            session.pop("payment_required", None)
+
+        return render_template("payment_success.html", paid=paid)
+
+    finally:
+        cursor.close()
+        conn.close()
+
 
 @payments.route("/failure")
 def payment_failure():
@@ -199,6 +260,11 @@ def payment_failure():
         return redirect(url_for("home"))
 
     return render_template("payment_failure.html")
+
+
+# =========================================================
+# CHARGILY WEBHOOK
+# =========================================================
 
 @payments.route("/chargily/webhook", methods=["POST"])
 def chargily_webhook():
@@ -211,8 +277,7 @@ def chargily_webhook():
 
     try:
         valid = chargily.validate_signature(signature, payload)
-
-    except Exception as e:
+    except Exception:
         return "Invalid signature", 403
 
     if not valid:
@@ -220,85 +285,92 @@ def chargily_webhook():
 
     try:
         event = json.loads(payload)
-
     except json.JSONDecodeError:
         return "Invalid JSON", 400
 
-    data = event.get("data", {})
+    data = event.get("data") if isinstance(event, dict) else None
     if not isinstance(data, dict):
         return "Invalid event", 400
 
     checkout_id = data.get("id")
-
     if not checkout_id:
         return "Missing checkout ID", 400
 
+    # Never trust the webhook body alone: ask Chargily for the real state.
     try:
         checkout = chargily.retrieve_checkout(checkout_id)
+    except Exception:
+        current_app.logger.exception("Unable to retrieve Chargily checkout")
+        return "Unable to retrieve checkout", 500
 
-    except Exception as e:
-        return ("Unable to retrieve checkout",500)
-
-    if isinstance(checkout, dict):
-        checkout_status = checkout.get("status")
-        metadata = checkout.get("metadata", [])
-
-    else:
-        checkout_status = getattr(checkout, "status", None)
-        metadata = getattr(checkout, "metadata", [])
-
-    if checkout_status != "paid":
-        return "Webhook received", 200
+    remote_status = _get(checkout, "status")
+    remote_amount = _to_decimal(_get(checkout, "amount"))
+    remote_currency = str(_get(checkout, "currency", "") or "").lower()
+    metadata = _get(checkout, "metadata", []) or []
 
     payment_id = None
     if isinstance(metadata, list):
         for item in metadata:
-            if isinstance(item, dict):
-                if "payment_id" in item:
-                    payment_id = item["payment_id"]
-                    break
+            if isinstance(item, dict) and "payment_id" in item:
+                payment_id = item["payment_id"]
+                break
+    elif isinstance(metadata, dict):
+        payment_id = metadata.get("payment_id")
 
     if not payment_id:
-        return ("Missing payment metadata",400)
+        return "Missing payment metadata", 400
 
     try:
         payment_id = int(payment_id)
-
     except (TypeError, ValueError):
-        return ("Invalid payment ID", 400)
+        return "Invalid payment ID", 400
 
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
 
     try:
         cursor.execute("""
-            SELECT user_id, amount, currency, status
+            SELECT user_id, amount, currency, status, chargily_id
             FROM payments
             WHERE id = %s
             FOR UPDATE
             """, (payment_id,))
-        payment_row = cursor.fetchone()
+        row = cursor.fetchone()
 
-        if not payment_row:
+        if not row:
             conn.rollback()
-            return ("Payment not found",404)
+            return "Payment not found", 404
 
-        user_id = payment_row[0]
-        amount = payment_row[1]
-        currency = payment_row[2]
-        local_status = payment_row[3]
+        user_id, amount, currency, local_status, local_chargily_id = row
+
+        # The checkout must be the one we created for this payment.
+        if str(local_chargily_id) != str(checkout_id):
+            conn.rollback()
+            current_app.logger.warning(
+                "Webhook checkout mismatch for payment %s", payment_id)
+            return "Checkout mismatch", 400
 
         if local_status == "paid":
             conn.commit()
-            return ("Already processed", 200)
+            return "Already processed", 200
 
-        if float(amount) != float(DENTAFLOW_PRICE):
+        if remote_status != "paid":
             conn.rollback()
-            return ("Amount mismatch", 400)
+            return "Webhook received", 200
 
-        if currency.lower() != "dzd":
+        # Compare Chargily's data with what we stored when creating the payment.
+        if remote_amount is None:
+            current_app.logger.warning(
+                "Chargily amount missing for payment %s: amount not verified", payment_id)
+        elif remote_amount != _to_decimal(amount):
             conn.rollback()
-            return ("Currency mismatch",400)
+            current_app.logger.error("Amount mismatch for payment %s", payment_id)
+            return "Amount mismatch", 400
+
+        if remote_currency and remote_currency != str(currency).lower():
+            conn.rollback()
+            current_app.logger.error("Currency mismatch for payment %s", payment_id)
+            return "Currency mismatch", 400
 
         cursor.execute("""
             UPDATE payments
@@ -308,12 +380,13 @@ def chargily_webhook():
             WHERE id = %s
             """, (payment_id,))
 
+        # A blocked account stays blocked: paying must not lift an admin block.
         cursor.execute("""
             UPDATE users
             SET
                 is_paid = TRUE,
                 paid_at = NOW(),
-                status = 'active'
+                status = CASE WHEN status = 'block' THEN status ELSE 'active' END
             WHERE id = %s
             """, (user_id,))
 
@@ -321,9 +394,10 @@ def chargily_webhook():
 
         return "OK", 200
 
-    except Exception as e:
+    except Exception:
         conn.rollback()
-        return ("Database error", 500)
+        current_app.logger.exception("Webhook database error")
+        return "Database error", 500
 
     finally:
         cursor.close()

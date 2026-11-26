@@ -7,7 +7,8 @@ import os
 users = Blueprint('users', __name__, url_prefix='/users')
 
 def is_logged_in():
-    return "id" in session
+    return "id" in session and session['id'] and "email_confirmed" in session and session['email_confirmed'] 
+
 
 @users.route("/ModifyStatus", methods=["POST", "GET"])
 def ModifyStatus():

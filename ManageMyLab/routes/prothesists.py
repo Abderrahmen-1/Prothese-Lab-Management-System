@@ -7,7 +7,8 @@ from datetime import date
 prothesists = Blueprint("prothesists", __name__, url_prefix="/prothesists")
 
 def is_logged_in():
-    return "id" in session
+    return "id" in session and session['id'] and "email_confirmed" in session and session['email_confirmed'] 
+
 
 @prothesists.route("/ProKhedma", methods=["GET"])
 def ProKhedmaPage():
@@ -73,6 +74,7 @@ def AddProthesist():
                 cursor.execute("""
                                 INSERT INTO other_prothesists (pName, pNumber, user_id)
                                 VALUES(%s, %s, %s)""",(prothesist_name, prothesist_number, session['id']))
+                conn.commit()
                 return render_template("AddProthesist.html", message=f"Prothésiste {prothesist_name} ajouté avec succès", csrf_token=new_token)
             else:
                 return render_template("AddProthesist.html", message=f"Le prothésiste {prothesist_name} - {prothesist_number} existe déjà", csrf_token=new_token)
@@ -538,7 +540,7 @@ def KhedmaProKhalsa():
                         """, ('yes', session['id']))
 
                 if old_khalsa.lower() == 'no':
-                    UpdateProKhalsaStat(cursor, conn, ProName=ProName, ProNumber=ProNumber,
+                    UpdateProKhalsaStat(cursor, ProName=ProName, ProNumber=ProNumber,
                                         b9aw=old_b9aw, date=prothesist_date)
 
             elif choice == "dentist":
@@ -605,7 +607,7 @@ def KhedmaProKhalsa():
                                 UPDATE other_prothesists_khedma
                                 SET pKhalsa = %s, pVersa = %s, pB9aw = %s
                                 WHERE id = %s
-                            """, ('yes', 0, old[1], result[2]))
+                            """, ('yes', old[1], 0, result[2]))
 
                     cursor.execute("""
                                     UPDATE other_prothesists_history 
@@ -631,7 +633,7 @@ def KhedmaProKhalsa():
 
 
                 if old_khalsa.lower() == 'no':
-                    UpdateProKhalsaStat(cursor, conn, ProName=ProName, ProNumber=ProNumber,
+                    UpdateProKhalsaStat(cursor, ProName=ProName, ProNumber=ProNumber,
                                         b9aw=old_b9aw, date=prothesist_date)
             else:
                 return render_template("KhedmaProKhalsa.html", error="Vous devez saisir (patient / dentist)", csrf_token=new_token)
@@ -780,7 +782,6 @@ def GetProthesistKhedma():
                                            error="⚠️ Date limite incorrecte."
                                            , csrf_token=new_token)
 
-
                 # Calculate payment amounts
                 if khalsa.lower() == "no":
                     versaChoice = request.form.get("VersaChoice", "no")
@@ -835,7 +836,7 @@ def GetProthesistKhedma():
                                (session['id'], patientNumber, None, ProthesistName, ProthesistNumber, result[1], price,
                                 versaValue, b9aw, khalsa, "no", date, deadLine))
 
-                Prothesist_History(cursor, conn, ProthesistName, ProthesistNumber,
+                Prothesist_History(cursor, ProthesistName, ProthesistNumber,
                                    patientNumber, result[4], result[5])
 
                 cursor.execute("""
@@ -847,7 +848,7 @@ def GetProthesistKhedma():
                 cursor.execute("""
                                 SELECT ph.id 
                                 FROM patient_history ph
-                                JOIN patient p ON p.user_id = ph.user_id AND DATE(p.la_date) = DATE(ph.pDate) = 0 AND p.patient_number = ph.pNumber
+                                JOIN patient p ON p.user_id = ph.user_id AND DATE(p.la_date) = DATE(ph.pDate) AND p.patient_number = ph.pNumber
                                 WHERE ph.user_id = %s AND ph.pNumber = %s
                                 """,(session['id'], patientNumber))
                 ph_id = cursor.fetchone()
@@ -987,7 +988,7 @@ def GetProthesistKhedma():
                                (session['id'], patientNumber, dentistName, ProthesistName, ProthesistNumber, result[1], price,
                                 versaValue, b9aw, khalsa, "no", date, deadLine))
 
-                Prothesist_History(cursor, conn, ProthesistName, ProthesistNumber,
+                Prothesist_History(cursor, ProthesistName, ProthesistNumber,
                                    patientNumber, result[4], result[5])
 
                 cursor.execute("""
@@ -997,18 +998,18 @@ def GetProthesistKhedma():
                                (dentistName, patientNumber, session['id']))
 
                 cursor.execute("""
-                                SELECT ph.id 
+                                SELECT dh.id 
                                 FROM dentist_history dh
-                                JOIN dentists d ON d.user_id = dh.user_id AND DATE(d.date) = DATE(dh.pDate) = 0 AND d.patient_number = dh.pNumber AND d.dentist_name = dh.dentistname
+                                JOIN dentists d ON d.user_id = dh.user_id AND DATE(d.date) = DATE(dh.pDate) AND d.patient_number = dh.pNumber AND d.dentist_name = dh.dentistname
                                 WHERE dh.user_id = %s AND dh.pNumber = %s AND dh.dentistname = %s
                                 """, (session['id'], patientNumber, dentistName))
-                ph_id = cursor.fetchone()
+                dh_id = cursor.fetchone()
 
                 cursor.execute("""
                                 UPDATE dentist_history
                                 SET status = 'prothesist' 
                                 WHERE id = %s AND user_id = %s """
-                               , (ph_id[0], session['id']))
+                               , (dh_id[0], session['id']))
 
                 # Update statistics
                 month = date.month
@@ -1514,7 +1515,7 @@ def FindMostProKhedma():
     try:
         Pro_dics = ProthesistDics(cursor)
         if not Pro_dics:
-            return render_template("ALLProKhedma.html", error="Aucun tableau de prothésiste trouvé.", csrf_toke= new_token)
+            return render_template("ALLProKhedma.html", error="Aucun tableau de prothésiste trouvé.", csrf_token= new_token)
         name, count = max(Pro_dics.items(), key=lambda x: x[1], default=('none', 0))
         if count == 0:
             return render_template("ALLProKhedma.html", message="Tous les tableaux sont vides.", csrf_token= new_token)

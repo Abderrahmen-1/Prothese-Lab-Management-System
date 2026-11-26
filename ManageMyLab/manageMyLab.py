@@ -32,9 +32,9 @@ app.config['COMPRESS_MIN_SIZE'] = int(os.getenv('COMPRESS_MIN_SIZE'))
 Compress(app)
 
 #============== Cookeis Session Configuration ===========================
-#app.config['SESSION_COOKIE_SECURE']=True
-#app.config['SESSION_COOKIE_HTTPONLY']=True
-#app.config['SESSION_COOKIE_SAMESITE']="Lax"
+app.config['SESSION_COOKIE_SECURE']=True
+app.config['SESSION_COOKIE_HTTPONLY']=True
+app.config['SESSION_COOKIE_SAMESITE']="Lax"
 
 #======================== BluePrints Declaration ========================
 app.register_blueprint(users)
@@ -56,7 +56,7 @@ mail = Mail(app)
 
 
 def is_logged_in():
-    return "id" in session
+    return "id" in session and session['id'] and "email_confirmed" in session and session['email_confirmed'] 
 
 
 def login_required():
@@ -64,6 +64,9 @@ def login_required():
         return redirect(url_for('home'))
     return None
 
+def reset_session(token):
+    session.clear()
+    session["csrf_token"] = token
 
 # ============================== HOME =========================================
 
@@ -83,12 +86,6 @@ def home():
     if request.method == "POST":
         form_token = request.form.get("csrf_token")
         session_token = session.get("csrf_token")
-
-        print("FORM TOKEN:", form_token)
-        print("SESSION TOKEN:", session_token)
-        print("SESSION COOKIE:", request.cookies.get(
-            app.config.get('SESSION_COOKIE_NAME', 'session')
-        ))
 
         if not form_token or not session_token or not secrets.compare_digest(form_token, session_token):
             return "Attaque CSRF détectée", 403
@@ -133,11 +130,12 @@ def home():
                 csrf_token=new_token
             )
 
-        session["id"] = UserAccess[0]
-        session["username"] = username
-
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
+
+        session["id"] = UserAccess[0]
+        session["email_confirmed"] = UserAccess[2]
+        session["username"] = username
 
         try:
             cursor.execute(""" 
@@ -164,6 +162,7 @@ def home():
             conn.commit()
 
             if not UserAccess[2]:
+                reset_session(new_token)
                 return render_template(
                     "Log-in.html",
                     error="Veuillez d'abord vérifier votre adresse e-mail Va dans la creation du nouveau compte et insere exactement votre informations",
@@ -178,7 +177,7 @@ def home():
             UserStatus = cursor.fetchone()
 
             if not UserStatus:
-                session.clear()
+                reset_session(new_token)
                 return render_template(
                     "Log-in.html",
                     error="Utilisateur introuvable.",
@@ -189,7 +188,7 @@ def home():
             is_paid = UserStatus[1]
 
             if status == "block":
-                session.clear()
+                reset_session(new_token)
                 return render_template(
                     "Log-in.html",
                     error="Accès à la connexion refusé",
@@ -199,6 +198,7 @@ def home():
             if status == "out of limits" and not is_paid:
                 return redirect(url_for("payments.payment"))
 
+
             return redirect(url_for("getHome"))
 
         except Exception as e:
@@ -206,7 +206,7 @@ def home():
             print(f"{str(e)}")
             return render_template(
                 "Log-in.html",
-                error=f"Erreur de base de données : database error",
+                error="Erreur de base de données : database error",
                 csrf_token=new_token
             )
 
@@ -706,7 +706,7 @@ def KhedmaPage():
             return "Attaque CSRF détectée", 403
 
         new_token = secrets.token_hex(16)
-        session["csrf_token"] = secrets.token_hex(16)
+        session["csrf_token"] = new_token
 
         conn = get_connection()
         cursor = conn.cursor(buffered=True)
@@ -1102,7 +1102,7 @@ def KhedmaKhalsa():
 
 
                 if old_khalsa.lower() == 'no':
-                    UpdateKhalsaStat(cursor, conn, table="patient", b9aw=patient_b9aw, date=patient_date)
+                    UpdateKhalsaStat(cursor, table="patient", b9aw=patient_b9aw, date=patient_date)
 
             elif choice == "dentist":
                 name = request.form.get('Dentist')
@@ -1201,7 +1201,7 @@ def KhedmaKhalsa():
                         """, (session['id'], 'yes', 'yes'))
 
                 if old_khalsa.lower() == 'no':
-                    UpdateKhalsaStat(cursor, conn, table="dentist", dentistName=name,
+                    UpdateKhalsaStat(cursor, table="dentist", dentistName=name,
                                      b9aw=dentist_b9aw, date=dentist_date)
             else:
                 return render_template("KhedmaKhalsa.html", error="Vous devez saisir « patient / dentiste »",

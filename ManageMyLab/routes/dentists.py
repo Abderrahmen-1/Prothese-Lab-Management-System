@@ -8,7 +8,8 @@ dentists = Blueprint("dentists", __name__, url_prefix="/dentists")
 
 
 def is_logged_in():
-    return "id" in session
+    return "id" in session and session['id'] and "email_confirmed" in session and session['email_confirmed'] 
+
 
 
 @dentists.route("/Dentist", methods=["POST", "GET"])
@@ -118,11 +119,17 @@ def AddDentist():
                 return render_template("AddDentist.html", message="Nom du dentiste invalide", csrf_token=new_token)
 
             if not SearcheTable(cursor, dentist_name):
-                AddDentistTable(cursor, conn, dentist_name)
+                AddDentistTable(cursor, dentist_name)
+                conn.commit()
                 return render_template("AddDentist.html", message=f"Dentiste {dentist_name} ajouté avec succès",
                                        csrf_token=new_token)
             else:
                 return render_template("AddDentist.html", message="Le dentiste existe déjà", csrf_token=new_token)
+
+    except Exception as e:
+        conn.rollback()
+        return render_template("AddDentist.html", message="Error de l'addition", csrf_token=new_token)
+            
     finally:
         cursor.close()
         conn.close()
@@ -585,9 +592,9 @@ def Get_From_Dentist():
                     (session['id'], unique, dentist, ProName, ProNumber, ProDate, choice, ProPrice, ProVersa,
                      Prob9aw, ProKhalsa, "no", ProDeadLine))
 
-                Prothesist_History(cursor, conn, ProName, ProNumber, unique, firstName, lastName)
+                Prothesist_History(cursor, ProName, ProNumber, unique, firstName, lastName)
 
-                ProthesistsStat(cursor, conn, ProPrice, ProNumber, ProName,
+                ProthesistsStat(cursor, ProPrice, ProNumber, ProName,
                                 ProKhalsa, ProDate, ProVersa)
 
             status = 'in process'
@@ -623,9 +630,9 @@ def Get_From_Dentist():
                 (choice, price, date, dentist, unique, "no", dentist_khalsa,
                  prothesist_name, prothesist_number, session["id"], deadLine))
 
-            Dentist_History(cursor, conn, dentist)
+            Dentist_History(cursor, dentist)
 
-            DentistStats(cursor, conn, dentist, price, khalsa, date)
+            DentistStats(cursor, dentist, price, khalsa, date)
 
             conn.commit()
 
@@ -716,7 +723,7 @@ def ModifyDentistVersement():
                 return render_template("ModifyDentistVersement.html", message="Tâche introuvable ",
                                        csrf_token=new_token)
 
-            price = result[0]
+            price = float(result[0])
             oldkhalsa = result[1]
             oldversement = float(result[2])
             month = result[4]
@@ -911,9 +918,9 @@ def DeleteDentistKhedma():
                                 UPDATE dentist_stat  
                                 SET  
                                 total_khedma = total_khedma - 1 , 
-                                khalsin = khalsin - %s ,  
+                                khalsin = khalsin - %s   
                                 WHERE dentist_name = %s AND user_id = %s AND month = %s AND year = %s  
-                                """, (price, price, Dentist_name, session['id'], month, year))
+                                """, (price, Dentist_name, session['id'], month, year))
             else:
                 cursor.execute(""" 
                                 UPDATE dentist_stat  
@@ -1053,7 +1060,7 @@ def getAllDentistHistory():
     cursor = conn.cursor(buffered=True)
     try:
         cursor.execute(""" 
-                        DELETE FROM other_prothesists_history  
+                        DELETE FROM dentist_history  
                         WHERE  
                             pDate <= DATE_SUB(CURDATE() , INTERVAL 25 MONTH) AND user_id = %s 
                             AND ( (b9aw = 0 AND status = 'finished') OR (status = 'deleted'))""",
