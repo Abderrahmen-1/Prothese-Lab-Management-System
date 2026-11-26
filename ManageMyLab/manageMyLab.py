@@ -1406,8 +1406,8 @@ def AllTotal():
             ) AS combined 
     
             GROUP BY month, year 
-            ORDER BY year, month DESC
-            LIMIT 12 
+            ORDER BY year, month ASC
+            LIMIT 13 
             """, (session['id'], session['id'], session['id'], session['id'], session['id']))
 
             result = cursor.fetchall()
