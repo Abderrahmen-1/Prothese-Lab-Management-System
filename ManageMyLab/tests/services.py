@@ -83,7 +83,7 @@ class TestKnownBugs:
                 `OtherServices` wraps its DB work in `try: ... finally: ...`
                 with NO `except Exception` at all -- unlike every single other
                 route in this project, which catches the exception and returns
-                a generic "database error" message. Any DB failure here (a
+                a generic "An internal error occurred" message. Any DB failure here (a
                 dropped connection, a bad query, anything) propagates as a raw,
                 unhandled 500 straight to the client. Worse: a missing
                 `SearchBar` field crashes with AttributeError even before any
@@ -95,7 +95,7 @@ class TestKnownBugs:
                 assert on), that confirms the missing except block. Fix: wrap
                 the try body with `except Exception as e: conn.rollback();
                 return render_template("OtherServices.html", error="Erreur
-                database error", csrf_token=new_token)` like every other route.
+                An internal error occurred", csrf_token=new_token)` like every other route.
                 """
         conn, cursor = mock_db
 
@@ -346,7 +346,7 @@ class TestServicePaid:
         doesn't belong to this user (filtered out by WHERE user_id = %s,
         so no IDOR) returns None, and `result[3]` crashes with
         TypeError. Caught by the except block, so it surfaces as a
-        generic 500 "database error" instead of a clean "not found"."""
+        generic 500 "An internal error occurred" instead of a clean "not found"."""
         conn, cursor = mock_db
         cursor.fetchone.return_value = None
         resp = logged_in_session.post(

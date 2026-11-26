@@ -119,7 +119,7 @@ class TestKnownBugs:
 
     def test_bug2_delete_sel3a_leaks_raw_exception(self, logged_in_session, mock_db):
         """BUG (info leak): unlike every other route in this project
-        (which catch the exception and return a generic "database error"
+        (which catch the exception and return a generic "An internal error occurred"
         message), DeleteSel3a does:
             return {"success": False, "error": str(e)}, 500
         -- putting the raw exception text directly in the JSON response.
@@ -296,7 +296,7 @@ class TestAddSel3a:
         resp = logged_in_session.post("/products/AddSel3a", data=payload)
         body = resp.get_data(as_text=True)
         assert "Unknown column" not in body
-        assert "database error" in body.lower()
+        assert "An internal error occurred" in body.lower()
 
 
 # ---------------------------------------------------------------------------
@@ -329,7 +329,7 @@ class TestModifySel3aQuantity:
         WHERE user_id = %s clause, so no IDOR risk) returns None from
         fetchone(), and `float(result[0])` then crashes with TypeError.
         Caught by the generic except, so the user just sees
-        "Erreur database error" instead of a proper 404 "produit
+        "An internal error occurred" instead of a proper 404 "produit
         introuvable" message. Worth adding that explicit check for a
         cleaner UX, even though it's not a security issue."""
         conn, cursor = mock_db

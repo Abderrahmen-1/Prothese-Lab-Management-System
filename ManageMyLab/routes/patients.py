@@ -369,7 +369,7 @@ def AddPatient():
         except Exception as e:
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("AddPatient.html", error="Erreur database error", csrf_token=new_token)
+            return render_template("AddPatient.html", error="An internal error occurred", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -491,7 +491,7 @@ def DeletePatient():
         except Exception as e:
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("DeletePatient.html", error="Erreur database error", csrf_token=new_token)
+            return render_template("DeletePatient.html", error="An internal error occurred", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -692,7 +692,7 @@ def ModifyVersaPatient():
             print(f"{str(e)}")
             return render_template(
                 "ModifyPatientVersa.html",
-                error="Erreur database error",
+                error="An internal error occurred",
                 csrf_token=new_token
             )
 
@@ -806,7 +806,7 @@ def getHistory():
             except Exception as e:
                 conn.rollback()
                 print(f"{str(e)}")
-                return "Erreur database error"
+                return "An internal error occurred"
 
             finally:
                 cursor.close()
@@ -1022,7 +1022,7 @@ def UpdatePatientStatus():
         print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'message': 'Erreur database error'
+            'message': 'An internal error occurred'
         })
 
     finally:

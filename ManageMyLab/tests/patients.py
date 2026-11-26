@@ -195,7 +195,7 @@ class TestAddPatient:
 
         body = resp.get_data(as_text=True)
         assert "Unknown column" not in body          # raw exception text must never reach the client
-        assert "database error" in body.lower()
+        assert "An internal error occurred" in body.lower()
 
 
 # ---------------------------------------------------------------------------

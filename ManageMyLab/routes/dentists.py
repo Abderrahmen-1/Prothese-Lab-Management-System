@@ -188,7 +188,7 @@ def DeleteDentist():
     except Exception as e:
         conn.rollback()
         print(f"{str(e)}")
-        return render_template("DeleteDentist.html", message="Erreur : database error", csrf_token=new_token)
+        return render_template("DeleteDentist.html", message="Erreur : An internal error occurred", csrf_token=new_token)
 
     finally:
         cursor.close()
@@ -658,7 +658,7 @@ def Get_From_Dentist():
             print(f"{str(e)}")
             return render_template(
                 "GetFromDentist.html",
-                error="Une erreur s'est produite : database error",
+                error="Une erreur s'est produite : An internal error occurred",
                 csrf_token=new_token
             )
 
@@ -828,7 +828,7 @@ def ModifyDentistVersement():
         except Exception as e:
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("ModifyDentistVersement.html", error="Erreur : database error", csrf_token=new_token)
+            return render_template("ModifyDentistVersement.html", error="Erreur : An internal error occurred", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -958,7 +958,7 @@ def DeleteDentistKhedma():
         except Exception as e:
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("DeleteDentistPatient.html", error="Erreur : database error", csrf_token=new_token)
+            return render_template("DeleteDentistPatient.html", error="Erreur : An internal error occurred", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -998,7 +998,7 @@ def getDentistHistory():
         except Exception as e:
             conn.rollback()
             print(f"{str(e)}")
-            return "Erreur : database error"
+            return "Erreur : An internal error occurred"
 
         finally:
             cursor.close()
@@ -1279,7 +1279,7 @@ def DentistsStat():
         print(f"{str(e)}")
         return render_template(
             "DentistFile.html",
-            message="Erreur : database error")
+            message="Erreur : An internal error occurred")
 
     finally:
         cursor.close()
@@ -1410,7 +1410,7 @@ def UpdateDentistStatus():
         print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'message': 'Erreur : database error'
+            'message': 'Erreur : An internal error occurred'
         })
 
     finally:

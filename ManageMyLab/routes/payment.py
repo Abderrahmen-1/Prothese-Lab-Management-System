@@ -396,7 +396,7 @@ def chargily_webhook():
 
     except Exception:
         conn.rollback()
-        current_app.logger.exception("Webhook database error")
+        current_app.logger.exception("Webhook An internal error occurred")
         return "Database error", 500
 
     finally:

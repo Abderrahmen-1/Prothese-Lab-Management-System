@@ -292,7 +292,7 @@ class TestGetFromDentist:
             resp = logged_in_session.post("/dentists/GetFromDentist", data=payload)
         body = resp.get_data(as_text=True)
         assert "doesn't exist" not in body
-        assert "database error" in body.lower()
+        assert "An internal error occurred" in body.lower()
 
 
 # ---------------------------------------------------------------------------

@@ -157,7 +157,7 @@ class TestKnownBugs:
         body = resp.get_data(as_text=True)
         # Documents CURRENT (buggy) behavior: falls into the generic
         # error path instead of a clean "service introuvable" message.
-        assert "database error" in body.lower()
+        assert "An internal error occurred" in body.lower()
 
     def test_bug3_find_less_pro_khedma_missing_return(self, logged_in_session, mock_db):
         """BUG (minor, functional not security): `if not result:

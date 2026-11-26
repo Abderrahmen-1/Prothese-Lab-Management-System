@@ -23,7 +23,7 @@ def Sel3aPage():
         cursor.execute(""" 
                         DELETE FROM sel3a  
                         WHERE  
-                        buy_date <= DATE_SUB(CURDATE() , INTERVAL 6 MONTH) AND user_id = %s  
+                        buy_date <= DATE_SUB(CURDATE() , INTERVAL 13 MONTH) AND user_id = %s  
                         """, (session['id'],))
         conn.commit()
 
@@ -145,7 +145,7 @@ def addsel3a():
             conn.rollback()
             print(f"{str(e)}")
             return render_template("AddSel3a.html",
-                                   error="Erreur database error", csrf_token=new_token)
+                                   error="An internal error occurred", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -202,7 +202,7 @@ def ModifySel3aQuantity(sel3a_id):
         print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'message': "Erreur database error"
+            'message': "An internal error occurred"
         }), 500
 
     finally:
@@ -283,7 +283,7 @@ def Sel3aPaid(sel3a_id):
         print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'message': 'Erreur database error'
+            'message': 'An internal error occurred'
         }), 500
 
     finally:
@@ -367,7 +367,7 @@ def ModifySel3aVersement(sel3a_id):
         print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'error': 'Erreur database error'
+            'error': 'An internal error occurred'
         }), 500
 
     finally:

@@ -87,7 +87,7 @@ def OtherServices():
 
             return render_template(
                 "OtherServices.html",
-                error="Erreur database error",
+                error="An internal error occurred",
                 csrf_token=new_token
             )
 
@@ -261,7 +261,7 @@ def AddService():
         except Exception as e:
             conn.rollback()
             print(f'{str(e)}')
-            return render_template("OtherServices.html", error="Erreur database error",
+            return render_template("OtherServices.html", error="An internal error occurred",
                                    csrf_token=session['csrf_token'])
 
         finally:
@@ -331,7 +331,7 @@ def ServicePaid(service_id):
         print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'error': 'Erreur database error'
+            'error': 'An internal error occurred'
         }), 500
 
     finally:
@@ -432,7 +432,7 @@ def ModifyServiceVersement(service_id):
         print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'error': 'Erreur database error'
+            'error': 'An internal error occurred'
         }), 500
 
     finally:
@@ -489,7 +489,7 @@ def DeleteService(service_id):
         print(f"{str(e)}")
         return jsonify({
             'success': False,
-            'error': 'Erreur database error'
+            'error': 'An internal error occurred'
         }), 500
 
     finally:
@@ -513,10 +513,10 @@ def ServicesStat():
                         WHERE 
                             user_id = %s 
                             AND ( 
-                                year < YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH)) 
+                                year < YEAR(DATE_SUB(CURDATE(), INTERVAL 13 MONTH)) 
                                 OR ( 
-                                    year = YEAR(DATE_SUB(CURDATE(), INTERVAL 12 MONTH)) 
-                                    AND month <= MONTH(DATE_SUB(CURDATE(), INTERVAL 12 MONTH)) 
+                                    year = YEAR(DATE_SUB(CURDATE(), INTERVAL 13 MONTH)) 
+                                    AND month <= MONTH(DATE_SUB(CURDATE(), INTERVAL 13 MONTH)) 
                                 ) 
                             ) 
                         """, (session['id'],))

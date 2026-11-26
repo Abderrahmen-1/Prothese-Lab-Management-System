@@ -70,7 +70,7 @@ def ModifyStatus():
         except Exception as e :
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("ModifyUsersStatus.html", error="Error: database error", csrf_token=new_token)
+            return render_template("ModifyUsersStatus.html", error="Error: An internal error occurred", csrf_token=new_token)
 
         finally :
             cursor.close()
@@ -172,7 +172,7 @@ def DeleteUser():
         except Exception as e :
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("DeleteUser.html", error="Error :database error", csrf_token=new_token)
+            return render_template("DeleteUser.html", error="Error :An internal error occurred", csrf_token=new_token)
 
         finally :
             cursor.close()

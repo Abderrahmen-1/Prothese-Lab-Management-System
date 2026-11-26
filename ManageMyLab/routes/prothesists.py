@@ -107,7 +107,7 @@ def getProthesistHistory():
         except Exception as e :
             conn.rollback()
             print(f"{str(e)}")
-            return "Erreur database error"
+            return "An internal error occurred"
 
         cursor.execute("SELECT * FROM other_prothesists_history WHERE user_id = %s", (session['id'],))
         result = cursor.fetchall()
@@ -402,7 +402,7 @@ def khedmaProMkemla():
         except Exception as e :
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("FinishedProKhedma.html", error="Erreur database error", csrf_token=new_token)
+            return render_template("FinishedProKhedma.html", error="An internal error occurred", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -649,7 +649,7 @@ def KhedmaProKhalsa():
         except Exception as e :
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("KhedmaProKhalsa.html", error="Erreur database error", csrf_token=new_token)
+            return render_template("KhedmaProKhalsa.html", error="An internal error occurred", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -1053,7 +1053,7 @@ def GetProthesistKhedma():
             conn.rollback()
             print(f"{str(e)}")
             return render_template("ProthesistGetKhedma.html",
-                                   error="❌ Erreur de base de données database error", csrf_token=new_token)
+                                   error="❌ Erreur de base de données An internal error occurred", csrf_token=new_token)
         finally:
             cursor.close()
             conn.close()
@@ -1113,7 +1113,21 @@ def DeleteProKhedma():
         cursor = conn.cursor(buffered=True)
 
         try :
+            cursor.execute("""
+                            SELECT k.khedma_patient, k.khedma_dentist, k.prothesist_name, k.prothesist_number,
+                                    pr.id, k.id 
+                            FROM other_prothesists_khedma pr 
+                            JOIN khedma k ON k.user_id = pr.user_id AND k.khedma_patient = pr.patient_number 
+                                        AND k.prothesist_name = pr.pName  AND k.prothesist_number = pr.pNumber 
+                            WHERE 
+                            pr.user_id = %s AND pr.patient_number = %s AND pr.pName = %s AND pr.pNumber = %s
+            """,(session['id'], PatientNumber, ProName, ProNumber))
+            dentist = cursor.fetchone()
+            print("1")
 
+            if not dentist :
+                return render_template("DeleteProthesistPatient.html", message=f"Service introuvable dans le laboratoire", csrf_token=new_token)
+            
             cursor.execute("""
                             SELECT id, pVersa, pB9aw, MONTH(pDate) AS month, YEAR(pDate) AS year, pFinished 
                             FROM other_prothesists_khedma 
@@ -1121,6 +1135,7 @@ def DeleteProKhedma():
                             user_id = %s AND patient_number = %s AND pName = %s AND pNumber = %s 
                             """,(session['id'], PatientNumber, ProName, ProNumber))
             found = cursor.fetchone()
+            print("2")
 
             if not found :
                 return render_template("DeleteProthesistPatient.html", message=f"Service introuvable pour le prothésiste {ProName}", csrf_token=new_token)
@@ -1129,22 +1144,13 @@ def DeleteProKhedma():
                 cursor.execute("""
                                 SELECT * FROM other_prothesists_khedma WHERE user_id = %s """,(session['id'],))
                 result = cursor.fetchall()
+                print("3")
                 return render_template("ALLProKhedma.html", result=result, message=f"Service déjà terminé", csrf_token=new_token)
-
-            cursor.execute("""
-                            SELECT k.khedma_patient, k.khedma_dentist, k.prothesist_name, k.prothesist_number,
-                                    pr.id, k.id 
-                            FROM other_prothesists_khedma pr 
-                            JOIN khedma k ON k.user_id = pr.user_id AND k.khedma_patient = pr.patient_number 
-                                            AND k.prothesist_name = pr.pName  AND k.prothesist_number = pr.pNumber 
-                            WHERE 
-                            pr.user_id = %s AND pr.patient_number = %s AND pr.pName = %s AND pr.pNumber = %s
-                            """,(session['id'], PatientNumber, ProName, ProNumber))
-            dentist = cursor.fetchone()
 
             cursor.execute("""
                             DELETE FROM other_prothesists_khedma 
                             WHERE id = %s AND user_id = %s """,(found[0], session['id']))
+            print("4")
 
             cursor.execute("""
                             UPDATE prothesist_stat 
@@ -1155,6 +1161,7 @@ def DeleteProKhedma():
                             WHERE 
                             user_id = %s AND prothesist_name = %s AND prothesist_number = %s AND month = %s AND year = %s
                             """,(found[1], found[2], session['id'], ProName, ProNumber, found[3], found[4]))
+            print("5")
 
             cursor.execute("""
                             UPDATE other_prothesists_history 
@@ -1162,6 +1169,7 @@ def DeleteProKhedma():
                             WHERE 
                             user_id = %s AND patient_number = %s AND prothesist = %s AND pNumber = %s 
                             """,(session['id'], PatientNumber, ProName, ProNumber))
+            print("6")
 
             cursor.execute("""
                             UPDATE khedma
@@ -1170,12 +1178,14 @@ def DeleteProKhedma():
                             WHERE 
                             id = %s AND user_id = %s 
                             """, (None, dentist[5], session['id']))
+            print("7")
 
             if dentist[1] == 'NO':
                 cursor.execute("""
                                 UPDATE patient 
                                 SET status = %s 
                                 WHERE patient_number = %s AND user_id = %s""",('in process', PatientNumber, session['id']))
+                print("8")
 
             else :
                 name = dentist[1][3:]
@@ -1184,11 +1194,13 @@ def DeleteProKhedma():
                                 SET status = %s 
                                 WHERE patient_number = %s AND dentist_name = %s AND user_id = %s""",
                                ('in process', PatientNumber, name, session['id']))
+                print("9")
 
             conn.commit()
 
             cursor.execute(""" SELECT * FROM other_prothesists_khedma WHERE user_id = %s """,
                            (session['id'],))
+            print("10")
             result = cursor.fetchall()
 
             return render_template("ALLProKhedma.html", result=result, message="Service supprimé avec succès", csrf_token=new_token)
@@ -1197,7 +1209,7 @@ def DeleteProKhedma():
         except Exception as e :
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("DeleteProthesistPatient.html", error="Erreur database error", csrf_token=new_token)
+            return render_template("DeleteProthesistPatient.html", error="An internal error occurred", csrf_token=new_token)
 
         finally :
             cursor.close()
@@ -1427,7 +1439,7 @@ def ProModifyVersement():
         except Exception as e :
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("ProthesistModifyVersement.html", error="Erreur database error", csrf_token=new_token )
+            return render_template("ProthesistModifyVersement.html", error="An internal error occurred", csrf_token=new_token )
 
         finally :
             cursor.close()
@@ -1693,7 +1705,7 @@ def ProStat():
         print(f"{str(e)}")
         return render_template(
             "ProStats.html",
-            message="Erreur database error",
+            message="An internal error occurred",
             csrf_token=token
         )
 
@@ -1951,7 +1963,6 @@ def ProthesistFacture():
         )
 
     except Exception as e:
-
         conn.rollback()
         return redirect(url_for("prothesists.ProStat"))
 

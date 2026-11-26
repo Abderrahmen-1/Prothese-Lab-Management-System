@@ -53,8 +53,7 @@ app.config["MAIL_USERNAME"] = os.getenv("email_account")
 app.config["MAIL_PASSWORD"] = os.getenv("email_password")
 mail = Mail(app)
 
-
-
+# ======================= Helpers functions() =============================
 def is_logged_in():
     return "id" in session and session['id'] and "email_confirmed" in session and session['email_confirmed'] 
 
@@ -206,7 +205,7 @@ def home():
             print(f"{str(e)}")
             return render_template(
                 "Log-in.html",
-                error="Erreur de base de données : database error",
+                error="Erreur de base de données : An internal error occurred",
                 csrf_token=new_token
             )
 
@@ -254,7 +253,7 @@ def getHome():
         print(f"{str(e)}")
         return render_template(
             "Log-in.html",
-            message=f"Erreur : database error"
+            message=f"Erreur : An internal error occurred"
         )
 
     finally:
@@ -373,7 +372,7 @@ def Create():
         except Exception as e:
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("CreateAccount.html", error=f"Erreur : database error", csrf_token=new_token)
+            return render_template("CreateAccount.html", error=f"Erreur : An internal error occurred", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -460,7 +459,7 @@ def verify_email(email):
             return render_template(
                 "VerifyEmail.html",
                 email=email,
-                error=f"Erreur : database error",
+                error=f"Erreur : An internal error occurred",
                 csrf_token=new_token
             )
 
@@ -676,7 +675,7 @@ def NewPassword():
         except Exception as e:
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("NewPassword.html", error=f"Erreur : database error", csrf_token=new_token)
+            return render_template("NewPassword.html", error=f"Erreur : An internal error occurred", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -970,7 +969,7 @@ def khedmaMkemla():
         except Exception as e:
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("FinishedKhedma.html", error=f"Erreur : database error", csrf_token=new_token)
+            return render_template("FinishedKhedma.html", error=f"Erreur : An internal error occurred", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -1213,7 +1212,7 @@ def KhedmaKhalsa():
         except Exception as e:
             conn.rollback()
             print(f"{str(e)}")
-            return render_template("KhedmaKhalsa.html", error=f"Erreur : database error", csrf_token=new_token)
+            return render_template("KhedmaKhalsa.html", error=f"Erreur : An internal error occurred", csrf_token=new_token)
 
         finally:
             cursor.close()
@@ -1292,6 +1291,33 @@ def AllTotal():
     conn = get_connection()
     cursor = conn.cursor(buffered=True)
     try:
+        cursor.execute(""" 
+                    DELETE FROM dentist_stat 
+                    WHERE total_khedma = 0 
+                      AND khalsin = 0 
+                      AND machi_khalsin = 0 
+                      AND user_id = %s 
+        """, (session['id'],))
+
+        cursor.execute(""" 
+                    DELETE FROM patient_stat  
+                    WHERE  
+                        patients_number = 0  
+                        AND khalsin = 0  
+                        AND machi_khalsin = 0  
+                        AND user_id = %s  
+        """, (session['id'],))
+
+        cursor.execute("""
+                    DELETE FROM prothesist_stat
+                    WHERE
+                        user_id = %s
+                        AND total_khedma = 0
+                        AND khalsin = 0
+                        AND machi_khalsin = 0
+        """, (session['id'],))
+
+        conn.commit()
 
         if session['id'] not in cach:
             cach[session['id']] = {}
