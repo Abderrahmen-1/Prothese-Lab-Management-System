@@ -85,7 +85,7 @@ def addsel3a():
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
 
-        name = request.form.get("SName")
+        name = request.form.get("SName").lower()
         price = request.form.get("SPrice")
         quantity = request.form.get("SQuantity")
         unit = request.form.get("SUnit")

@@ -222,9 +222,9 @@ def Get_From_Dentist():
         # GET BASIC FORM VALUES
         # ======================================
 
-        dentist = request.form.get("Dentistinput")
-        firstName = request.form.get("PatientFirstName")
-        lastName = request.form.get("PatientLastName")
+        dentist = request.form.get("Dentistinput").lower()
+        firstName = request.form.get("PatientFirstName").lower()
+        lastName = request.form.get("PatientLastName").lower()
         unique = request.form.get("PatientUnique")
         choice = request.form.get("KhedmaChoice" , '')
         price = request.form.get("KhedmaPrice")
@@ -389,7 +389,7 @@ def Get_From_Dentist():
                 # GET PROTHESIST FORM VALUES
                 # ----------------------------------
 
-                ProName = request.form.get("ProName")
+                ProName = request.form.get("ProName").lower()
                 ProNumber = request.form.get("ProNumber")
                 ProPrice = request.form.get("ProPrice")
                 ProDate = request.form.get("ProDate")
@@ -691,7 +691,7 @@ def ModifyDentistVersement():
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
 
-        DentistName = request.form.get('DName')
+        DentistName = request.form.get('DName').lower()
         KhedmaId = request.form.get('KhedmaId')
         Versement = request.form.get('Versement')
 
@@ -859,11 +859,11 @@ def DeleteDentistKhedma():
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
 
-        Dentist_name = request.form.get("DentistName")
-        PatientF_deleted = request.form.get("DeleteF")
-        Confirm_PatientF = request.form.get("ConfirmDeletePatientF")
-        PatientL_deleted = request.form.get("DeleteL")
-        Confirm_PatientL = request.form.get("ConfirmDeletePatientL")
+        Dentist_name = request.form.get("DentistName").lower()
+        PatientF_deleted = request.form.get("DeleteF").lower()
+        Confirm_PatientF = request.form.get("ConfirmDeletePatientF").lower()
+        PatientL_deleted = request.form.get("DeleteL").lower()
+        Confirm_PatientL = request.form.get("ConfirmDeletePatientL").lower()
         Patient_unique = request.form.get("uniquepatient")
         Confirm_Unique = request.form.get("confirmunique")
 

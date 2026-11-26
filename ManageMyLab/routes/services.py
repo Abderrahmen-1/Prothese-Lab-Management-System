@@ -155,9 +155,9 @@ def AddService():
         new_token = secrets.token_hex(16)
         session["csrf_token"] = new_token
 
-        name = request.form.get('ServiceName', '').strip()
+        name = request.form.get('ServiceName', '').strip().lower()
         number = request.form.get('ServiceNumber', '').strip()
-        function = request.form.get('ServiceFunction', '').strip()
+        function = request.form.get('ServiceFunction', '').strip().lower()
         date = request.form.get('ServiceDate')
         khalsa = request.form.get('ServiceKhalsa', 'no').lower()
         try:

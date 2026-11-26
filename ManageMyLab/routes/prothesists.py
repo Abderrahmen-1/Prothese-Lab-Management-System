@@ -53,7 +53,7 @@ def AddProthesist():
             new_token = secrets.token_hex(16)
             session["csrf_token"] = new_token
 
-            prothesist_name = request.form.get("prothesistName")
+            prothesist_name = request.form.get("prothesistName").lower()
             prothesist_number = request.form.get('prothesistNumber')
 
             if not prothesist_name or prothesist_name.isdigit():
@@ -225,7 +225,7 @@ def khedmaProMkemla():
         session["csrf_token"] = new_token
 
 
-        ProthesistName   = request.form.get('ProthesistName')
+        ProthesistName   = request.form.get('ProthesistName').lower()
         ProthesistNumber = request.form.get('ProthesistNumber')
         choice           = request.form.get('Choice' , '').lower()
 
@@ -311,7 +311,7 @@ def khedmaProMkemla():
                         """, (session['id'], 'yes', 'yes'))
 
             elif choice == "dentist":
-                dentistName = request.form.get('Dentist')
+                dentistName = request.form.get('Dentist').lower()
                 patientId   = request.form.get('DPatientID')
                 khedmaID      = request.form.get('DServiceID')
 
@@ -434,7 +434,7 @@ def KhedmaProKhalsa():
         session["csrf_token"] = new_token
 
 
-        ProName = request.form.get('ProthesistChoice')
+        ProName = request.form.get('ProthesistChoice').lower()
         ProNumber = request.form.get('ProthesistNumber')
         choice    = request.form.get('Choice' , '').lower()
 
@@ -544,7 +544,7 @@ def KhedmaProKhalsa():
                                         b9aw=old_b9aw, date=prothesist_date)
 
             elif choice == "dentist":
-                Dentistname      = request.form.get('Dentist')
+                Dentistname      = request.form.get('Dentist').lower()
                 patientId = request.form.get('DPatientID')
                 khedmaID = request.form.get('DServiceID')
 
@@ -683,7 +683,7 @@ def GetProthesistKhedma():
         session["csrf_token"] = new_token
 
 
-        ProthesistName = request.form.get("ProthesistName")
+        ProthesistName = request.form.get("ProthesistName").lower()
         ProthesistNumber = request.form.get("ProthesistNumber")
         source = request.form.get("khedmaSource")
         date = request.form.get("GetDate")
@@ -898,7 +898,7 @@ def GetProthesistKhedma():
 
             # ========== DENTIST SOURCE ==========
             else:
-                dentistName = request.form.get("DentistSource", "")
+                dentistName = request.form.get("DentistSource", "").lower()
                 patientNumber = request.form.get("Dentistnumber", "")
 
                 if not dentistName or not patientNumber:
@@ -1082,8 +1082,8 @@ def DeleteProKhedma():
         new_token = secrets.token_hex(16)
         session['csrf_token'] = new_token
 
-        ProName = request.form.get('ProName')
-        checkProName = request.form.get('CheckProName')
+        ProName = request.form.get('ProName').lower()
+        checkProName = request.form.get('CheckProName').lower()
         ProNumber = request.form.get('ProNumber')
         checkProNumber = request.form.get('CheckProNumber')
         PatientNumber = request.form.get('PatientNumber')
@@ -1230,7 +1230,7 @@ def ProModifyVersement():
         session["csrf_token"] = new_token
 
 
-        ProthesistName = request.form.get("ProthesistName")
+        ProthesistName = request.form.get("ProthesistName").lower()
         ProthesistNumber = request.form.get("ProthesistNumber")
         khedmaSource = request.form.get("khedmaSource")
         versaValue = request.form.get("VersaValue")
@@ -1306,7 +1306,7 @@ def ProModifyVersement():
                     return render_template("ProthesistModifyVersement.html" , message="Service introuvable", csrf_token=new_token)
 
             else :
-                DentistName = request.form.get("DentistName")
+                DentistName = request.form.get("DentistName").lower()
                 PatientNumber = request.form.get("DentistNumber")
                 khedmaID = request.form.get('DServiceID')
 

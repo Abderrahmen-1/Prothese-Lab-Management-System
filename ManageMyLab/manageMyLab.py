@@ -1337,9 +1337,9 @@ def AllTotal():
                 UNION ALL 
     
                 SELECT month, year, 
-                       SUM(khalsin), 
-                       SUM(machi_khalsin), 
-                       'dentists' 
+                       SUM(khalsin) AS khalsin, 
+                       SUM(machi_khalsin) AS b9aw, 
+                       'dentists' AS source
                 FROM dentist_stat 
                 WHERE user_id = %s 
                 GROUP BY month, year 
@@ -1347,9 +1347,9 @@ def AllTotal():
                 UNION ALL 
     
                 SELECT month, year, 
-                       SUM(khalsin), 
-                       SUM(machi_khalsin), 
-                       'prothesists' 
+                       SUM(khalsin) AS khalsin, 
+                       SUM(machi_khalsin) AS b9aw, 
+                       'prothesists' AS source
                 FROM prothesist_stat 
                 WHERE user_id = %s 
                 GROUP BY month, year 
@@ -1359,9 +1359,9 @@ def AllTotal():
                 SELECT  
                     MONTH(buy_date), 
                     YEAR(buy_date), 
-                    SUM(versement) AS khalsa, 
+                    SUM(versement) AS khalsin, 
                     SUM(b9aw) AS b9aw, 
-                    'sel3a' 
+                    'sel3a' AS source 
                 FROM sel3a 
                 WHERE user_id = %s 
                 GROUP BY MONTH(buy_date), YEAR(buy_date) 
@@ -1380,7 +1380,7 @@ def AllTotal():
             ) AS combined 
     
             GROUP BY month, year 
-            ORDER BY year, month 
+            ORDER BY year, month DESC
             LIMIT 12 
             """, (session['id'], session['id'], session['id'], session['id'], session['id']))
 
@@ -1437,9 +1437,9 @@ def AllTotal():
                         UNION ALL 
     
                         SELECT month, year, 
-                               SUM(khalsin), 
-                               SUM(machi_khalsin), 
-                               'dentists' 
+                               SUM(khalsin) AS khalsin, 
+                               SUM(machi_khalsin) AS b9aw, 
+                               'dentists' AS source
                         FROM dentist_stat 
                         WHERE user_id = %s 
                         GROUP BY month, year 
@@ -1447,9 +1447,9 @@ def AllTotal():
                         UNION ALL 
     
                         SELECT month, year, 
-                               SUM(khalsin), 
-                               SUM(machi_khalsin), 
-                               'prothesists' 
+                               SUM(khalsin) AS khalsin, 
+                               SUM(machi_khalsin) AS b9aw, 
+                               'prothesists' AS source
                         FROM prothesist_stat 
                         WHERE user_id = %s 
                         GROUP BY month, year 
@@ -1459,9 +1459,9 @@ def AllTotal():
                         SELECT  
                             MONTH(buy_date), 
                             YEAR(buy_date), 
-                            SUM(versement) AS khalsa, 
+                            SUM(versement) AS khalsin, 
                             SUM(b9aw) AS b9aw, 
-                            'sel3a' 
+                            'sel3a' AS source
                         FROM sel3a 
                         WHERE user_id = %s 
                         GROUP BY MONTH(buy_date), YEAR(buy_date) 
